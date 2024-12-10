@@ -1,0 +1,49 @@
+/* start category area css
+============================================================================================ */
+.single-deal {
+    position: relative;
+    margin-bottom: 30px; }
+    .single-deal .overlay {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      content: "";
+      background: #000;
+      opacity: 0;
+      visibility: hidden;
+      -webkit-transition: all 0.3s ease 0s;
+      -moz-transition: all 0.3s ease 0s;
+      -o-transition: all 0.3s ease 0s;
+      transition: all 0.3s ease 0s; }
+    .single-deal .deal-details {
+      position: absolute;
+      left: 50%;
+      top: 115%;
+      display: inline-block;
+      text-align: center;
+      -webkit-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      -o-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      visibility: hidden;
+      -webkit-transition: all 0.3s ease 0s;
+      -moz-transition: all 0.3s ease 0s;
+      -o-transition: all 0.3s ease 0s;
+      transition: all 0.3s ease 0s; }
+      .single-deal .deal-details h6 {
+        color: #fff;
+        text-transform: uppercase; }
+    .single-deal:hover .overlay {
+      opacity: .5;
+      visibility: visible; }
+    .single-deal:hover .deal-details {
+      top: 50%;
+      opacity: 1;
+      visibility: visible; }
+  
+  /* end category area css
+  ============================================================================================ */

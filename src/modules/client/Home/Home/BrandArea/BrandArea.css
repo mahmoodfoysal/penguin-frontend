@@ -1,0 +1,14 @@
+@media (max-width: 767px) {
+    .single-img {
+      min-width: 50%; } }
+  .single-img img {
+    opacity: .2;
+    -webkit-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s; }
+    @media (max-width: 800px) {
+      .single-img img {
+        margin-bottom: 40px; } }
+    .single-img img:hover {
+      opacity: .8; }

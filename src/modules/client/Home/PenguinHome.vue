@@ -1,11 +1,21 @@
 <script setup>
 import NavBar from '@/modules/Shared/NavBar/NavBar.vue';
-import HomeBanner from '../Banner/HomeBanner.vue';
+import HomeBanner from './Home/Banner/HomeBanner.vue';
+import HomeFeatures from './Home/Features/HomeFeatures.vue';
+import HomeCategory from './Home/HomeCategory/HomeCategory.vue';
+import LatestProducts from './Home/Products/LatestProducts.vue';
+import ExclusiveDeal from './Home/ExclusiveDeal/ExclusiveDeal.vue';
+import BrandArea from './Home/BrandArea/BrandArea.vue';
 </script>
 
 <template>
 <NavBar></NavBar>
 <HomeBanner></HomeBanner>
+<HomeFeatures></HomeFeatures>
+<HomeCategory></HomeCategory>
+<LatestProducts></LatestProducts>
+<ExclusiveDeal></ExclusiveDeal>
+<BrandArea></BrandArea>
 </template>
 
 <style scoped>
