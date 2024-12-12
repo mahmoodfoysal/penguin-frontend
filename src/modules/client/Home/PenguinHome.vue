@@ -6,6 +6,7 @@ import HomeCategory from './Home/HomeCategory/HomeCategory.vue';
 import LatestProducts from './Home/Products/LatestProducts.vue';
 import ExclusiveDeal from './Home/ExclusiveDeal/ExclusiveDeal.vue';
 import BrandArea from './Home/BrandArea/BrandArea.vue';
+import DealsOfTheWeek from './Home/DealsOfTheWeek/DealsOfTheWeek.vue';
 </script>
 
 <template>
@@ -16,6 +17,7 @@ import BrandArea from './Home/BrandArea/BrandArea.vue';
 <LatestProducts></LatestProducts>
 <ExclusiveDeal></ExclusiveDeal>
 <BrandArea></BrandArea>
+<DealsOfTheWeek></DealsOfTheWeek>
 </template>
 
 <style scoped>
