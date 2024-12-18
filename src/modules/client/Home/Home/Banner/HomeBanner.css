@@ -47,11 +47,8 @@
     border-radius: 50%;
     box-shadow: 0 10px 20px rgba(255, 108, 0, 0.2); }
     .add-bag .add-btn span {
-      -webkit-transform: rotate(45deg);
-      -moz-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-      -o-transform: rotate(45deg);
-      transform: rotate(45deg);
+      position: relative;
+      top: 5px;
       display: inline-block;
       color: #fff; }
   .add-bag .add-text {
