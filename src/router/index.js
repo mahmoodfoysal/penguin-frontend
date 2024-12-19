@@ -12,6 +12,11 @@ const routes = [
     component: () => import("@/Authentication/Login/PenguinLogin.vue"),
     name: 'Login'
   },
+  {
+    path: '/registration',
+    component: () => import("@/Authentication/Registration/PenguinRegistration.vue"),
+    name: 'Registration'
+  },
 
 ]
 
