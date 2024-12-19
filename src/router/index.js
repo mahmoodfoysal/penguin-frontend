@@ -5,19 +5,18 @@ const routes = [
   {
     path: '/',
     component: PenguinHome,
-    name: 'Home'
+    name: 'Home',
   },
   {
     path: '/login',
-    component: () => import("@/Authentication/Login/PenguinLogin.vue"),
-    name: 'Login'
+    component: () => import('@/components/Authentication/Login/PenguinLogin.vue'),
+    name: 'Login',
   },
   {
     path: '/registration',
-    component: () => import("@/Authentication/Registration/PenguinRegistration.vue"),
-    name: 'Registration'
+    component: () => import('@/components/Authentication/Registration/PenguinRegistration.vue'),
+    name: 'Registration',
   },
-
 ]
 
 const router = createRouter({
