@@ -1,5 +1,4 @@
 <script setup>
-import NavBar from '@/modules/Shared/NavBar/NavBar.vue';
 import HomeBanner from './Home/Banner/HomeBanner.vue';
 import HomeFeatures from './Home/Features/HomeFeatures.vue';
 import HomeCategory from './Home/HomeCategory/HomeCategory.vue';
@@ -10,7 +9,6 @@ import DealsOfTheWeek from './Home/DealsOfTheWeek/DealsOfTheWeek.vue';
 </script>
 
 <template>
-<NavBar></NavBar>
 <HomeBanner></HomeBanner>
 <HomeFeatures></HomeFeatures>
 <HomeCategory></HomeCategory>

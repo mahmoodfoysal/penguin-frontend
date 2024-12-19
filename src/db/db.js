@@ -13,7 +13,8 @@ console.log(banner);
 const category_image = [
   {
     cat_id: 1,
-    cat_img: 'dd'
+    cat_img: 'dd',
+    cat_name: 'Cat name'
   }
 ];
 

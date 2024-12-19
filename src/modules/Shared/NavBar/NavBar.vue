@@ -58,6 +58,13 @@
                     search
                   </span></button>
               </li>
+              <RouterLink :to="{name: 'Login'}">
+                <li class="nav-item">
+                <button class="search"><span class="material-icons">
+                  person
+                  </span></button>
+              </li>
+              </RouterLink>
             </ul>
           </div>
         </div>
