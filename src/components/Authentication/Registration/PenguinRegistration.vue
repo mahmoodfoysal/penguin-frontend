@@ -1,23 +1,22 @@
 <script setup>
-import initilizationAuthentication from '@/firebase/firebase.init.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
-initilizationAuthentication()
+import { ref } from 'vue';
+import { googleSignIn, userCreate } from '../authentication.js';
 
-const googleProvider = new GoogleAuthProvider()
+const inputData = ref({})
 
-const auth = getAuth()
-auth.languageCode = 'it';
-const handleGoogleLogin2222 = async () => {
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const user = result.user;
-    console.log('User:', user);
-    console.log('Credential:', credential);
-  } catch (error) {
-    console.error('Error during Google sign-in:', error);
-  }
+const handleGoogleLogin = async () => {
+  googleSignIn()
 };
+
+const handleCreateNewUser = () => {
+  userCreate(
+    inputData.value?.email,
+    inputData.value?.password,
+    inputData.value?.displayName,
+    inputData.value?.photoURL,
+    inputData.value?.phone
+  )
+}
 </script>
 
 <template>
@@ -40,33 +39,33 @@ const handleGoogleLogin2222 = async () => {
         <div class="col-lg-6">
           <div class="login_form_inner">
             <h3>Please Registration</h3>
-            <form class="row login_form" action="contact_process.php" method="post" id="contactForm"
+            <div class="row login_form" action="contact_process.php" method="post" id="contactForm"
               novalidate="novalidate">
               <div class="col-md-12 form-group">
-                <input type="text" class="form-control" id="name" name="name" placeholder="Full Name"
-                  @onfocus="placeholder = 'Full name'" @onblur="placeholder = 'Full name'">
+                <input v-model="inputData.displayName" type="text" class="form-control" id="name" name="name"
+                  placeholder="Full Name" @onfocus="placeholder = 'Full name'" @onblur="placeholder = 'Full name'">
               </div>
               <div class="col-md-12 form-group">
-                <input type="email" class="form-control" id="name" name="name" placeholder="Email"
-                  @onfocus="placeholder = ''" @onblur="placeholder = 'Email'">
+                <input v-model="inputData.email" type="email" class="form-control" id="name" name="name"
+                  placeholder="Email" @onfocus="placeholder = ''" @onblur="placeholder = 'Email'">
               </div>
               <div class="col-md-12 form-group">
-                <input type="text" class="form-control" id="name" name="name" placeholder="Photo url"
-                  @onfocus="placeholder = ''" @onblur="placeholder = 'Photo url'">
+                <input v-model="inputData.photoURL" type="text" class="form-control" id="name" name="name"
+                  placeholder="Photo url" @onfocus="placeholder = ''" @onblur="placeholder = 'Photo url'">
               </div>
               <div class="col-md-12 form-group">
-                <input type="tel" class="form-control" id="name" name="name" placeholder="Phone no"
-                  @onfocus="placeholder = ''" @onblur="placeholder = 'Phone no'">
+                <input v-model="inputData.phone" type="tel" class="form-control" id="name" name="name"
+                  placeholder="Phone no" @onfocus="placeholder = ''" @onblur="placeholder = 'Phone no'">
               </div>
               <div class="col-md-12 form-group">
-                <input type="text" class="form-control" id="name" name="name" placeholder="Password"
-                  @onfocus="placeholder = ''" @onblur="placeholder = 'Password'">
+                <input v-model="inputData.password" type="password" class="form-control" id="name" name="name"
+                  placeholder="Password" @onfocus="placeholder = ''" @onblur="placeholder = 'Password'">
               </div>
               <div class="col-md-12 form-group">
-                <button type="submit" value="submit" class="primary-btn">Sign Up</button>
+                <button @click="handleCreateNewUser" type="submit" value="submit" class="primary-btn">Sign Up</button>
                 <p class="mt-2">or</p>
                 <!-- google signin start -->
-                <button @click="handleGoogleLogin2222" class="gsi-material-button">
+                <button @click="handleGoogleLogin" class="gsi-material-button">
                   <div class="gsi-material-button-state"></div>
                   <div class="gsi-material-button-content-wrapper">
                     <div class="gsi-material-button-icon">
@@ -93,7 +92,7 @@ const handleGoogleLogin2222 = async () => {
                 </button>
                 <!-- google signin end -->
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
