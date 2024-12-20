@@ -1,9 +1,16 @@
 <script setup>
+import { ref } from 'vue';
 import { logOut } from '@/components/Authentication/authentication.js';
 
+const isUser = ref(null)
+
 const handleLogOut = () => {
-  logOut()
-}
+  logOut();
+  isUser.value = null;
+};
+
+isUser.value = sessionStorage.getItem('berer')
+
 </script>
 
 <template>
@@ -71,14 +78,14 @@ const handleLogOut = () => {
                   </span></button>
               </li>
               <RouterLink :to="{ name: 'Login' }">
-                <li class="nav-item">
+                <li v-if="!isUser" class="nav-item">
                   <button class="search"><span class="material-icons">
                       person
                     </span></button>
                 </li>
               </RouterLink>
 
-              <li class="nav-item">
+              <li v-if="isUser" class="nav-item">
                 <button @click="handleLogOut" class="search"><span class="material-icons">
                     logout
                   </span></button>

@@ -1,8 +1,12 @@
 <script setup>
-import { googleSignIn, signIn } from '../authentication.js';
-import { ref } from 'vue';
+import { googleSignIn, signIn, authChange } from '../authentication.js';
+import { onMounted, ref } from 'vue';
 
 const inputData = ref({});
+
+onMounted(() => {
+  authChange()
+})
 
 const handleGoogleLogin = async () => {
   googleSignIn()

@@ -1,8 +1,12 @@
 <script setup>
-import { ref } from 'vue';
-import { googleSignIn, userCreate } from '../authentication.js';
+import { onMounted, ref } from 'vue';
+import { googleSignIn, userCreate, authChange } from '../authentication.js';
 
-const inputData = ref({})
+const inputData = ref({});
+
+onMounted(() => {
+  authChange()
+})
 
 const handleGoogleLogin = async () => {
   googleSignIn()
@@ -16,7 +20,8 @@ const handleCreateNewUser = () => {
     inputData.value?.photoURL,
     inputData.value?.phone
   )
-}
+};
+
 </script>
 
 <template>

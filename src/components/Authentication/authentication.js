@@ -1,4 +1,5 @@
 import initilizationAuthentication from '@/firebase/firebase.init.js'
+import router from '@/router'
 import {
   getAuth,
   GoogleAuthProvider,
@@ -7,6 +8,7 @@ import {
   updateProfile,
   signInWithEmailAndPassword,
   signOut,
+  onAuthStateChanged,
 } from 'firebase/auth'
 initilizationAuthentication()
 
@@ -78,4 +80,20 @@ export const logOut = async () => {
       // An error happened.
       console.log(error)
     })
+}
+
+export const authChange = () => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      const uid = user.uid
+      console.log(uid)
+      router.push('/')
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  })
 }
