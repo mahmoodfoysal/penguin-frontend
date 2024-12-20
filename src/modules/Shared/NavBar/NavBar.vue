@@ -1,5 +1,9 @@
 <script setup>
+import { logOut } from '@/components/Authentication/authentication.js';
 
+const handleLogOut = () => {
+  logOut()
+}
 </script>
 
 <template>
@@ -73,6 +77,12 @@
                     </span></button>
                 </li>
               </RouterLink>
+
+              <li class="nav-item">
+                <button @click="handleLogOut" class="search"><span class="material-icons">
+                    logout
+                  </span></button>
+              </li>
             </ul>
           </div>
         </div>

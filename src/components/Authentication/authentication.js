@@ -6,6 +6,7 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
   signInWithEmailAndPassword,
+  signOut,
 } from 'firebase/auth'
 initilizationAuthentication()
 
@@ -17,8 +18,10 @@ export const googleSignIn = async () => {
     const result = await signInWithPopup(auth, googleProvider)
     const credential = GoogleAuthProvider.credentialFromResult(result)
     const user = result.user
+    const berer = user.accessToken
     console.log('User:', user)
     console.log('Credential:', credential)
+    sessionStorage.setItem('berer', berer)
   } catch (error) {
     console.error('Error during Google sign-in:', error)
   }
@@ -35,7 +38,7 @@ export const userCreate = async (email, password, displayName, photoURL, phoneNu
         photoURL: photoURL,
         phoneNumber: phoneNumber,
       })
-
+      sessionStorage.setItem('berer', berer)
       console.log('user', user)
       console.log('token', berer)
       // ...
@@ -56,11 +59,23 @@ export const signIn = async (email, password) => {
       const berer = user?.accessToken
       console.log('user', user)
       console.log('berer', berer)
+      sessionStorage.setItem('berer', berer)
       // ...
     })
     .catch((error) => {
       const errorCode = error.code
       const errorMessage = error.message
       console.log(errorCode, errorMessage)
+    })
+}
+
+export const logOut = async () => {
+  signOut(auth)
+    .then(() => {
+      sessionStorage.removeItem('berer')
+    })
+    .catch((error) => {
+      // An error happened.
+      console.log(error)
     })
 }
