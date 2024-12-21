@@ -15,8 +15,6 @@ initilizationAuthentication()
 
 const googleProvider = new GoogleAuthProvider()
 
-// const store = useStore()
-
 const auth = getAuth()
 export const googleSignIn = async () => {
   const store = useStore()
@@ -25,11 +23,16 @@ export const googleSignIn = async () => {
     const credential = GoogleAuthProvider.credentialFromResult(result)
     const user = result.user
     const berer = user.accessToken
-    store.setUserInfo(user);
-    store.setBerer(berer);
-    console.log('User:', user)
+    store.setUserInfo({
+      displayName: user?.displayName,
+      email: user?.email,
+      photoURL: user?.photoURL,
+      phoneNumber: user?.phoneNumber,
+    })
+    store.setBerer(berer)
     console.log('Credential:', credential)
-    sessionStorage.setItem('berer', berer)
+    sessionStorage.setItem('berer', JSON.stringify(berer))
+    router.push('/')
   } catch (error) {
     console.error('Error during Google sign-in:', error)
   }
@@ -45,11 +48,17 @@ export const userCreate = (email, password, displayName, photoURL, phoneNumber) 
         photoURL: photoURL,
         phoneNumber: phoneNumber,
       })
-      const user = userCredential.user;
-      const berer = user.accessToken;
-      sessionStorage.setItem('berer', berer);
-      store.setUserInfo(user);
-      store.setBerer(berer);
+      const user = userCredential.user
+      const berer = user.accessToken
+      sessionStorage.setItem('berer', JSON.stringify(berer))
+      store.setUserInfo({
+        displayName: user?.displayName,
+        email: user?.email,
+        photoURL: user?.photoURL,
+        phoneNumber: user?.phoneNumber,
+      })
+      store.setBerer(berer)
+      router.push('/')
     })
     .catch((error) => {
       const errorCode = error.code
@@ -66,9 +75,15 @@ export const signIn = async (email, password) => {
       // Signed in
       const user = userCredential.user
       const berer = user?.accessToken
-      sessionStorage.setItem('berer', berer);
-      store.setUserInfo(user);
-      store.setBerer(berer);
+      sessionStorage.setItem('berer', JSON.stringify(berer))
+      store.setUserInfo({
+        displayName: user?.displayName,
+        email: user?.email,
+        photoURL: user?.photoURL,
+        phoneNumber: user?.phoneNumber,
+      })
+      store.setBerer(berer)
+      router.push('/')
     })
     .catch((error) => {
       const errorCode = error.code
@@ -92,9 +107,10 @@ export const authChange = () => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const userData = user
-      store.setUserInfo(userData);
-      store.setBerer(user.accessToken);
+      store.setUserInfo(userData)
+      store.setBerer(user.accessToken)
       router.push('/')
+      console.log(userData)
       // ...
     } else {
       // User is signed out
