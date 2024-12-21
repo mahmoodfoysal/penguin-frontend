@@ -1,13 +1,18 @@
 <script setup>
 import { ref } from 'vue';
 import { logOut } from '@/components/Authentication/authentication.js';
+import { useStore } from '@/store/index';
 
-const isUser = ref(null)
+const isUser = ref(null);
+
+
 
 const handleLogOut = () => {
   logOut();
   isUser.value = null;
 };
+
+const store = useStore()
 
 isUser.value = sessionStorage.getItem('berer')
 
@@ -78,14 +83,14 @@ isUser.value = sessionStorage.getItem('berer')
                   </span></button>
               </li>
               <RouterLink :to="{ name: 'Login' }">
-                <li v-if="!isUser" class="nav-item">
+                <li v-if="!store.berer" class="nav-item">
                   <button class="search"><span class="material-icons">
                       person
                     </span></button>
                 </li>
               </RouterLink>
 
-              <li v-if="isUser" class="nav-item">
+              <li v-if="store.berer" class="nav-item">
                 <button @click="handleLogOut" class="search"><span class="material-icons">
                     logout
                   </span></button>

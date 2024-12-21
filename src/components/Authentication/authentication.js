@@ -1,5 +1,6 @@
 import initilizationAuthentication from '@/firebase/firebase.init.js'
 import router from '@/router'
+import { useStore } from '@/store/index'
 import {
   getAuth,
   GoogleAuthProvider,
@@ -14,13 +15,18 @@ initilizationAuthentication()
 
 const googleProvider = new GoogleAuthProvider()
 
+// const store = useStore()
+
 const auth = getAuth()
 export const googleSignIn = async () => {
+  const store = useStore()
   try {
     const result = await signInWithPopup(auth, googleProvider)
     const credential = GoogleAuthProvider.credentialFromResult(result)
     const user = result.user
     const berer = user.accessToken
+    store.setUserInfo(user);
+    store.setBerer(berer);
     console.log('User:', user)
     console.log('Credential:', credential)
     sessionStorage.setItem('berer', berer)
@@ -29,21 +35,21 @@ export const googleSignIn = async () => {
   }
 }
 
-export const userCreate = async (email, password, displayName, photoURL, phoneNumber) => {
+export const userCreate = (email, password, displayName, photoURL, phoneNumber) => {
+  const store = useStore()
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed up
-      const user = userCredential.user
-      const berer = user.accessToken
       updateProfile(user, {
         displayName: displayName,
         photoURL: photoURL,
         phoneNumber: phoneNumber,
       })
-      sessionStorage.setItem('berer', berer)
-      console.log('user', user)
-      console.log('token', berer)
-      // ...
+      const user = userCredential.user;
+      const berer = user.accessToken;
+      sessionStorage.setItem('berer', berer);
+      store.setUserInfo(user);
+      store.setBerer(berer);
     })
     .catch((error) => {
       const errorCode = error.code
@@ -54,15 +60,15 @@ export const userCreate = async (email, password, displayName, photoURL, phoneNu
 }
 
 export const signIn = async (email, password) => {
+  const store = useStore()
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user
       const berer = user?.accessToken
-      console.log('user', user)
-      console.log('berer', berer)
-      sessionStorage.setItem('berer', berer)
-      // ...
+      sessionStorage.setItem('berer', berer);
+      store.setUserInfo(user);
+      store.setBerer(berer);
     })
     .catch((error) => {
       const errorCode = error.code
@@ -77,18 +83,17 @@ export const logOut = async () => {
       sessionStorage.removeItem('berer')
     })
     .catch((error) => {
-      // An error happened.
       console.log(error)
     })
 }
 
 export const authChange = () => {
+  const store = useStore()
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      const uid = user.uid
-      console.log(uid)
+      const userData = user
+      store.setUserInfo(userData);
+      store.setBerer(user.accessToken);
       router.push('/')
       // ...
     } else {
