@@ -43,3 +43,68 @@ const products = [
 ]
 
 console.log(products)
+
+const parentCategory = [
+  {
+    par_cat_id: 1,
+    par_cat_name: 'Fruits and Vegetables',
+  },
+  {
+    par_cat_id: 2,
+    par_cat_name: 'Meat and Fish',
+  },
+  {
+    par_cat_id: 3,
+    par_cat_name: 'Cooking',
+  },
+  {
+    par_cat_id: 4,
+    par_cat_name: 'Brevarages',
+  },
+  {
+    par_cat_id: 5,
+    par_cat_name: 'Home and Cleaning',
+  },
+]
+
+console.log(parentCategory)
+
+const subCategory = [
+  {
+    par_cat_id: 1,
+    sub_cat_id: 104,
+    sub_cat_name: 'Potato',
+  },
+  {
+    par_cat_id: 1,
+    sub_cat_id: 105,
+    sub_cat_name: 'Tomato',
+  },
+  {
+    par_cat_id: 2,
+    sub_cat_id: 100,
+    sub_cat_name: 'Frozen Fish',
+  },
+  {
+    par_cat_id: 2,
+    sub_cat_id: 101,
+    sub_cat_name: 'Dish Fish',
+  },
+  {
+    par_cat_id: 2,
+    sub_cat_id: 102,
+    sub_cat_name: 'Fresh Fish',
+  },
+  {
+    par_cat_id: 2,
+    sub_cat_id: 103,
+    sub_cat_name: 'Beef',
+  },
+  {
+    par_cat_id: 2,
+    sub_cat_id: 103,
+    sub_cat_name: 'Chicken',
+  },
+]
+
+console.log(subCategory)
