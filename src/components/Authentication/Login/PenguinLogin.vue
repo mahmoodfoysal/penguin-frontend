@@ -6,7 +6,7 @@ const inputData = ref({});
 
 onMounted(() => {
   authChange()
-})
+});
 
 const handleGoogleLogin = async () => {
   googleSignIn()

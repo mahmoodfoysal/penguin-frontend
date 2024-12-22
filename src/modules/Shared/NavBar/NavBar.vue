@@ -1,21 +1,23 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { logOut } from '@/components/Authentication/authentication.js';
 import { useStore } from '@/store/index';
 
 const isUser = ref(null);
 
-
-
 const handleLogOut = () => {
   logOut();
   isUser.value = null;
+  store?.setBerer(null)
 };
 
 const store = useStore()
 
 isUser.value = sessionStorage.getItem('berer')
 
+// const displayName = computed(() => store.userInfo?.displayName || 'Guest');
+const photoURL = computed(() => store.userInfo?.photoURL);
+// const email = computed(() => store.userInfo?.email || 'Guest');
 </script>
 
 <template>
@@ -83,18 +85,29 @@ isUser.value = sessionStorage.getItem('berer')
                   </span></button>
               </li>
               <RouterLink :to="{ name: 'Login' }">
-                <li v-if="!store.berer" class="nav-item">
+                <li v-if="!store.berer" class="nav-item ">
                   <button class="search"><span class="material-icons">
                       person
                     </span></button>
                 </li>
               </RouterLink>
+              <div v-if="store.berer" class="dropdown d-flex align-items-center ms-3">
+                <img :src="photoURL" alt="Avatar" class="dropdown-toggle avatar" data-bs-toggle="dropdown" />
+                <ul class="dropdown-menu dropdown-menu-style">
+                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <li><a class="dropdown-item" href="#">Address</a></li>
+                  <li><a class="dropdown-item" href="#">Orders</a></li>
+                  <li @click="handleLogOut"><a class="dropdown-item" href="#">Log Out</a></li>
+                </ul>
+              </div>
 
-              <li v-if="store.berer" class="nav-item">
+              <li title="Log Out" v-if="store.berer" class="nav-item m-0 p-0">
                 <button @click="handleLogOut" class="search"><span class="material-icons">
                     logout
+
                   </span></button>
               </li>
+
             </ul>
           </div>
         </div>
@@ -102,11 +115,11 @@ isUser.value = sessionStorage.getItem('berer')
     </div>
     <!-- <div class="search_input" id="search_input_box">
       <div class="container">
-        <form class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center">
           <input type="text" class="form-control" id="search_input" placeholder="Search Here">
           <button type="submit" class="btn"></button>
           <span class="material-icons" title="Close Search">search</span>
-        </form>
+        </div>
       </div>
     </div> -->
   </div>
