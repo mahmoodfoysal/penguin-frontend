@@ -1,7 +1,7 @@
 <script setup>
-
+import SideBar from './SideBar/SideBar.vue';
 </script>
 
 <template>
-  <h1>Dashboard</h1>
+  <SideBar></SideBar>
 </template>
