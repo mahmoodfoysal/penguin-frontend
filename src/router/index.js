@@ -1,8 +1,8 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import PenguinHome from '../modules/client/Home/PenguinHome.vue'
-import axios from 'axios';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import initilizationAuthentication from '@/firebase/firebase.init';
+import axios from 'axios'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import initilizationAuthentication from '@/firebase/firebase.init'
 initilizationAuthentication()
 
 const routes = [
@@ -25,6 +25,7 @@ const routes = [
     path: '/dashboard/features',
     name: 'DashboardHome',
     component: () => import('@/modules/dashboard/DashboardHome.vue'),
+
     meta: { requiresAuth: true, requiresAdminCheck: true },
   },
 ]
@@ -32,37 +33,37 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  linkActiveClass: 'active-link'
+  linkActiveClass: 'active-link',
 })
 
 router.beforeEach((to, from, next) => {
-  const auth = getAuth();
+  const auth = getAuth()
   if (to.meta.requiresAuth) {
-      onAuthStateChanged(auth, async (user) => {
-          if (user) {
-              if (to.meta.requiresAdminCheck) {
-                  try {
-                      const response = await axios.get(`http://localhost:5000/admin/${user.email}`);
-                      console.log(response)
-                      if (response.data.admin) {
-                          next();
-                      } else {
-                          next('/login');
-                      }
-                  } catch (error) {
-                      console.error('Error checking admin status:', error);
-                      next('/login');
-                  }
-              } else {
-                  next();
-              }
-          } else {
-              next('/login');
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        if (to.meta.requiresAdminCheck) {
+          try {
+            const response = await axios.get(`http://localhost:5000/admin/${user.email}`)
+            console.log(response)
+            if (response.data.admin) {
+              next()
+            } else {
+              next('/login')
+            }
+          } catch (error) {
+            console.error('Error checking admin status:', error)
+            next('/login')
           }
-      });
+        } else {
+          next()
+        }
+      } else {
+        next('/login')
+      }
+    })
   } else {
-      next();
+    next()
   }
-});
+})
 
 export default router

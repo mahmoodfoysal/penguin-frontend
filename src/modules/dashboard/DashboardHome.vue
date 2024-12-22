@@ -1,7 +1,18 @@
 <script setup>
-import SideBar from './SideBar/SideBar.vue';
+import DashboardSideBar from './DashboardSideBar/DashboardSideBar.vue';
+import DashboardDetails from './DashboardDetails/DashboardDetails.vue';
 </script>
 
 <template>
-  <SideBar></SideBar>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-3 col-lg-4 col-md-5">
+        <DashboardSideBar></DashboardSideBar>
+      </div>
+      <div class="col-xl-9 col-lg-8 col-md-7">
+        <DashboardDetails></DashboardDetails>
+      </div>
+    </div>
+  </div>
 </template>

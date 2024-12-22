@@ -1,0 +1,55 @@
+.sidebar-categories .head {
+  line-height: 44px;
+  background: #828bb3;
+  padding: 0 30px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #fff;
+}
+.sidebar-categories .main-categories {
+  padding: 0 20px;
+  background: #fff;
+  box-shadow: 0 10px 10px rgba(153, 153, 153, 0.1);
+}
+.sidebar-categories .main-nav-list a {
+  font-size: 14px;
+  display: block;
+  line-height: 50px;
+  padding-left: 10px;
+  border-bottom: 1px solid #eee;
+}
+.sidebar-categories .main-nav-list a:hover {
+  color: #ffba00;
+}
+.sidebar-categories .main-nav-list a .number {
+  color: #cccccc;
+  margin-left: 10px;
+}
+.sidebar-categories .main-nav-list a .lnr {
+  margin-right: 10px;
+  display: none;
+}
+.sidebar-categories .main-nav-list.child a {
+  padding-left: 32px;
+}
+
+.main-categories a {
+  color: #000;
+  text-decoration: none;
+}
+
+.sidebar-categories .main-nav-list.child a {
+  padding-left: 32px;
+}
+
+.sidebar-categories .main-nav-list a {
+  font-size: 14px;
+  display: block;
+  line-height: 50px;
+  padding-left: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.main-nav-list ul {
+  padding: 0 !important;
+}

@@ -23,11 +23,11 @@ export const googleSignIn = async () => {
     const credential = GoogleAuthProvider.credentialFromResult(result)
     const user = result.user
     const berer = user.accessToken
-    sessionStorage.setItem('berer', JSON.stringify(berer));
+    sessionStorage.setItem('berer', JSON.stringify(berer))
     store.setUserInfo(user)
     store.setBerer(berer)
     console.log('Credential:', credential)
-    store.setAdmin(user?.email);
+    store.setAdmin(user?.email)
     router.push('/')
   } catch (error) {
     console.error('Error during Google sign-in:', error)
@@ -49,7 +49,7 @@ export const userCreate = (email, password, displayName, photoURL, phoneNumber) 
       sessionStorage.setItem('berer', JSON.stringify(berer))
       store.setUserInfo(user)
       store.setBerer(berer)
-      store.setAdmin(user?.email);
+      store.setAdmin(user?.email)
       router.push('/')
     })
     .catch((error) => {
@@ -70,7 +70,7 @@ export const signIn = async (email, password) => {
       sessionStorage.setItem('berer', JSON.stringify(berer))
       store.setUserInfo(user)
       store.setBerer(berer)
-      store.setAdmin(user?.email);
+      store.setAdmin(user?.email)
       router.push('/')
     })
     .catch((error) => {
@@ -97,8 +97,7 @@ export const authChange = () => {
       const userData = user
       store.setUserInfo(userData)
       store.setBerer(user.accessToken)
-      store.setAdmin(userData?.email);
-      router.push('/')
+      store.setAdmin(userData?.email)
       console.log(userData)
       // ...
     } else {
