@@ -32,3 +32,10 @@
   .sidebar-categories .main-nav-list.child a {
     padding-left: 32px;
   }
+
+  .main-categories a {
+    color: #000;
+    text-decoration: none;
+}
+
+  
