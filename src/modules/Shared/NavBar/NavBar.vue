@@ -100,7 +100,7 @@ isUser.value = sessionStorage.getItem('berer')
         </div>
       </nav>
     </div>
-    <div class="search_input" id="search_input_box">
+    <!-- <div class="search_input" id="search_input_box">
       <div class="container">
         <form class="d-flex justify-content-between align-items-center">
           <input type="text" class="form-control" id="search_input" placeholder="Search Here">
@@ -108,7 +108,7 @@ isUser.value = sessionStorage.getItem('berer')
           <span class="material-icons" title="Close Search">search</span>
         </form>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
