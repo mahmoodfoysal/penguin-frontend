@@ -5,6 +5,7 @@ export const useStore = defineStore({
   state: () => ({
     berer: JSON.parse(sessionStorage.getItem('berer')) || null,
     userInfo: null,
+    admin: null,
   }),
   actions: {
     setBerer(data) {
@@ -13,6 +14,9 @@ export const useStore = defineStore({
     setUserInfo(data) {
       this.userInfo = data
     },
+    setAdmin(data) {
+      this.admin = data;
+    }
   },
   getters: {},
 })

@@ -23,15 +23,11 @@ export const googleSignIn = async () => {
     const credential = GoogleAuthProvider.credentialFromResult(result)
     const user = result.user
     const berer = user.accessToken
-    store.setUserInfo({
-      displayName: user?.displayName,
-      email: user?.email,
-      photoURL: user?.photoURL,
-      phoneNumber: user?.phoneNumber,
-    })
+    sessionStorage.setItem('berer', JSON.stringify(berer));
+    store.setUserInfo(user)
     store.setBerer(berer)
     console.log('Credential:', credential)
-    sessionStorage.setItem('berer', JSON.stringify(berer))
+    store.setAdmin(user?.email);
     router.push('/')
   } catch (error) {
     console.error('Error during Google sign-in:', error)
@@ -51,13 +47,9 @@ export const userCreate = (email, password, displayName, photoURL, phoneNumber) 
       const user = userCredential.user
       const berer = user.accessToken
       sessionStorage.setItem('berer', JSON.stringify(berer))
-      store.setUserInfo({
-        displayName: user?.displayName,
-        email: user?.email,
-        photoURL: user?.photoURL,
-        phoneNumber: user?.phoneNumber,
-      })
+      store.setUserInfo(user)
       store.setBerer(berer)
+      store.setAdmin(user?.email);
       router.push('/')
     })
     .catch((error) => {
@@ -76,13 +68,9 @@ export const signIn = async (email, password) => {
       const user = userCredential.user
       const berer = user?.accessToken
       sessionStorage.setItem('berer', JSON.stringify(berer))
-      store.setUserInfo({
-        displayName: user?.displayName,
-        email: user?.email,
-        photoURL: user?.photoURL,
-        phoneNumber: user?.phoneNumber,
-      })
+      store.setUserInfo(user)
       store.setBerer(berer)
+      store.setAdmin(user?.email);
       router.push('/')
     })
     .catch((error) => {
@@ -109,6 +97,7 @@ export const authChange = () => {
       const userData = user
       store.setUserInfo(userData)
       store.setBerer(user.accessToken)
+      store.setAdmin(userData?.email);
       router.push('/')
       console.log(userData)
       // ...

@@ -1,23 +1,59 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { logOut } from '@/components/Authentication/authentication.js';
 import { useStore } from '@/store/index';
+import { getAdmin } from '@/modules/client/api/admin.js';
 
 const isUser = ref(null);
+const isAdmin = ref(false);
+const store = useStore()
+
+onMounted(() => {
+  handleGetAdmin();
+});
+
+const handleGetAdmin = async () => {
+  try {
+    const result = await getAdmin(store.userInfo ? store.userInfo?.email : null);
+    isAdmin.value = result.data?.admin
+  }
+  catch(error) {
+    console.log(error);
+    isAdmin.value = false;
+  }
+}
 
 const handleLogOut = () => {
   logOut();
   isUser.value = null;
   store?.setBerer(null)
+  isAdmin.value = false;
 };
 
-const store = useStore()
-
-isUser.value = sessionStorage.getItem('berer')
+isUser.value = JSON.parse(sessionStorage.getItem('berer'));
 
 // const displayName = computed(() => store.userInfo?.displayName || 'Guest');
 const photoURL = computed(() => store.userInfo?.photoURL);
 // const email = computed(() => store.userInfo?.email || 'Guest');
+
+watch(
+  () => isUser,
+  (newVal) => {
+    if (newVal) {
+      handleGetAdmin();
+    }
+  },
+  { deep: true }
+);
+watch(
+  () => store.admin,
+  (newVal) => {
+    if (newVal) {
+      handleGetAdmin();
+    }
+  },
+  { deep: true }
+);
 </script>
 
 <template>
@@ -43,6 +79,14 @@ const photoURL = computed(() => store.userInfo?.photoURL);
               <li class="nav-item active">
                 <RouterLink :to="{ name: 'Home' }">
                   <a class="nav-link" href="">Home</a>
+                </RouterLink>
+              </li>
+
+              <li
+              v-if="isAdmin"
+              class="nav-item">
+                <RouterLink :to="{ name: 'DashboardHome' }">
+                  <a class="nav-link" href="">Dashboard</a>
                 </RouterLink>
               </li>
               <li class="nav-item submenu dropdown">

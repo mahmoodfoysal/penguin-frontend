@@ -1,27 +1,68 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import PenguinHome from '../modules/client/Home/PenguinHome.vue'
+import axios from 'axios';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import initilizationAuthentication from '@/firebase/firebase.init';
+initilizationAuthentication()
 
 const routes = [
   {
     path: '/',
-    component: PenguinHome,
     name: 'Home',
+    component: PenguinHome,
   },
   {
     path: '/login',
-    component: () => import('@/components/Authentication/Login/PenguinLogin.vue'),
     name: 'Login',
+    component: () => import('@/components/Authentication/Login/PenguinLogin.vue'),
   },
   {
     path: '/registration',
-    component: () => import('@/components/Authentication/Registration/PenguinRegistration.vue'),
     name: 'Registration',
+    component: () => import('@/components/Authentication/Registration/PenguinRegistration.vue'),
+  },
+  {
+    path: '/dashboard/features',
+    name: 'DashboardHome',
+    component: () => import('@/modules/dashboard/DashboardHome.vue'),
+    meta: { requiresAuth: true, requiresAdminCheck: true },
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  linkActiveClass: 'active-link'
 })
+
+router.beforeEach((to, from, next) => {
+  const auth = getAuth();
+  if (to.meta.requiresAuth) {
+      onAuthStateChanged(auth, async (user) => {
+          if (user) {
+              if (to.meta.requiresAdminCheck) {
+                  try {
+                      const response = await axios.get(`http://localhost:5000/admin/${user.email}`);
+                      console.log(response)
+                      if (response.data.admin) {
+                          next();
+                      } else {
+                          next('/login');
+                      }
+                  } catch (error) {
+                      console.error('Error checking admin status:', error);
+                      next('/login');
+                  }
+              } else {
+                  next();
+              }
+          } else {
+              next('/login');
+          }
+      });
+  } else {
+      next();
+  }
+});
 
 export default router
