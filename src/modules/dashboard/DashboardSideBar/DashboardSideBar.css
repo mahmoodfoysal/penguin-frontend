@@ -30,7 +30,7 @@
   display: none;
 }
 .sidebar-categories .main-nav-list.child a {
-  padding-left: 32px;
+  padding-left: 8px; 
 }
 
 .main-categories a {
@@ -38,15 +38,11 @@
   text-decoration: none;
 }
 
-.sidebar-categories .main-nav-list.child a {
-  padding-left: 32px;
-}
-
 .sidebar-categories .main-nav-list a {
   font-size: 14px;
   display: block;
   line-height: 50px;
-  padding-left: 10px;
+  padding-left: 2px;
   border-bottom: 1px solid #eee;
 }
 
