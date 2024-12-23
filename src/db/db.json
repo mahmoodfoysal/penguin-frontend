@@ -1,0 +1,106 @@
+[
+  {
+    "menu_id": 101,
+    "name": "Controllers",
+    "logo": "gamepad",
+    "sub_menu": [
+      {
+        "sub_menu_id": 1001,
+        "name": "Make Admin",
+        "logo": "admin_panel_settings",
+        "route_name": "Admin"
+      },
+      {
+        "sub_menu_id": 1002,
+        "name": "Category Maping",
+        "logo": "polyline",
+        "route_name": "CategoryMap"
+      },
+      {
+        "sub_menu_id": 1003,
+        "name": "Products",
+        "logo": "photo_library",
+        "route_name": "Products"
+      },
+      { "sub_menu_id": 1004, "name": "Footer", "logo": "remove", "route_name": "Footer" }
+    ]
+  },
+  {
+    "menu_id": 102,
+    "name": "Category",
+    "logo": "category",
+    "sub_menu": [
+      {
+        "sub_menu_id": 2001,
+        "name": "Parent Category",
+        "logo": "account_tree",
+        "route_name": "ParentCat"
+      },
+      {
+        "sub_menu_id": 2002,
+        "name": "Sub Category",
+        "logo": "account_tree",
+        "route_name": "SubCat"
+      },
+      {
+        "sub_menu_id": 2003,
+        "name": "Sub Sub Category",
+        "logo": "account_tree",
+        "route_name": "SubSubCat"
+      },
+      {
+        "sub_menu_id": 2004,
+        "name": "Sub Sub Sub Category",
+        "logo": "account_tree",
+        "route_name": "SubSUbSubCat"
+      }
+    ]
+  },
+  {
+    "menu_id": 103,
+    "name": "Home Control",
+    "logo": "tune",
+    "sub_menu": [
+      { "sub_menu_id": 3001, "name": "Banner", "logo": "image", "route_name": "Banner" },
+      {
+        "sub_menu_id": 3002,
+        "name": "Image Category",
+        "logo": "photo_library",
+        "route_name": "ImageCat"
+      },
+      {
+        "sub_menu_id": 3003,
+        "name": "Hot Deals",
+        "logo": "calendar_view_week",
+        "route_name": "HotDeals"
+      }
+    ]
+  },
+  {
+    "menu_id": 104,
+    "name": "Orders",
+    "logo": "list_alt",
+    "sub_menu": [
+      {
+        "sub_menu_id": 4001,
+        "name": "Pending",
+        "logo": "pending_actions",
+        "route_name": "Pending"
+      },
+      { "sub_menu_id": 4002, "name": "Warehouse", "logo": "warehouse", "route_name": "Warehouse" },
+      {
+        "sub_menu_id": 4003,
+        "name": "Shipping",
+        "logo": "local_shipping",
+        "route_name": "Shipping"
+      },
+      { "sub_menu_id": 4004, "name": "Delivery", "logo": "moped", "route_name": "Delivery" },
+      {
+        "sub_menu_id": 4005,
+        "name": "Tracking",
+        "logo": "location_searching",
+        "route_name": "Tracking"
+      }
+    ]
+  }
+]

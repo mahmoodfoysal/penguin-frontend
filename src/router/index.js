@@ -32,6 +32,11 @@ const routes = [
         path: 'home',
         name: 'DashboardHomeDefault',
         component: () => import('@/modules/dashboard/Features/DashhomeHome/DashHome.vue')
+      },
+      {
+        path: 'admin',
+        name: 'Admin',
+        component: () => import('@/modules/dashboard/Features/MakeAdmin/MakeAdmin.vue')
       }
     ]
   },
