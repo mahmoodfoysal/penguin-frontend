@@ -1,3 +1,8 @@
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+    padding: 0;
+}
+
 .filter-bar {
     padding: 0 30px;
     background: #828bb3;
@@ -5,4 +10,8 @@
     font-size: 16px;
     font-weight: 400;
     color: #fff;
+  }
+
+  .cursor {
+    cursor: pointer;
   }
