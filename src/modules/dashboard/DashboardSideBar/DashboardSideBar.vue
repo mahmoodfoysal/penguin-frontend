@@ -8,18 +8,12 @@
   <div class="sidebar-categories">
     <div class="head">Dashboard</div>
     <ul class="main-categories">
-      <li class="main-nav-list"><a data-toggle="collapse" href="#fruitsVegetable" aria-expanded="false"
-          aria-controls="fruitsVegetable"><span class="lnr lnr-arrow-right"></span>Fruits and Vegetables<span
-            class="number">(53)</span></a>
-        <ul class="collapse" id="fruitsVegetable" data-toggle="collapse" aria-expanded="false"
-          aria-controls="fruitsVegetable">
-          <li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
-          <li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
-          <li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
-          <li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
-          <li class="main-nav-list child"><a href="#">Meat<span class="number">(11)</span></a></li>
-        </ul>
+
+<RouterLink :to="{name: 'DashboardHomeDefault'}">
+  <li class="main-nav-list"><a data-toggle="collapse" href="" aria-expanded="false"
+          aria-controls="fruitsVegetable"><span class="lnr lnr-arrow-right"></span>Home</a>
       </li>
+</RouterLink>
 
       <li class="main-nav-list">
         <a data-bs-toggle="collapse" href="#meatFish" aria-expanded="false" aria-controls="meatFish">
@@ -29,19 +23,19 @@
         </a>
         <ul class="collapse" id="meatFish" aria-labelledby="meatFish" data-bs-parent=".main-nav-list">
           <li class="main-nav-list child">
-            <a href="#">Frozen Fish <span class="number">(13)</span></a>
+            <a href="#">Frozen Fish </a>
           </li>
           <li class="main-nav-list child">
-            <a href="#">Dried Fish <span class="number">(09)</span></a>
+            <a href="#">Dried Fish </a>
           </li>
           <li class="main-nav-list child">
-            <a href="#">Fresh Fish <span class="number">(17)</span></a>
+            <a href="#">Fresh Fish </a>
           </li>
           <li class="main-nav-list child">
-            <a href="#">Meat Alternatives <span class="number">(01)</span></a>
+            <a href="#">Meat Alternatives</a>
           </li>
           <li class="main-nav-list child">
-            <a href="#">Meat <span class="number">(11)</span></a>
+            <a href="#">Meat</a>
           </li>
         </ul>
       </li>

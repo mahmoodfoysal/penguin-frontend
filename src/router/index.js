@@ -24,9 +24,16 @@ const routes = [
   {
     path: '/dashboard/features',
     name: 'DashboardHome',
-    component: () => import('@/modules/dashboard/DashboardHome.vue'),
-
+    component: () => import('@/modules/dashboard/DashboardIndex.vue'),
+    redirect: '/dashboard/features/home',
     meta: { requiresAuth: true, requiresAdminCheck: true },
+    children: [
+      {
+        path: 'home',
+        name: 'DashboardHomeDefault',
+        component: () => import('@/modules/dashboard/Features/DashhomeHome/DashHome.vue')
+      }
+    ]
   },
 ]
 
