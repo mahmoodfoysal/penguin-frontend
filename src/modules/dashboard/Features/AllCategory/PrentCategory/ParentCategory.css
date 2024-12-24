@@ -1,0 +1,41 @@
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+    padding: 0;
+}
+
+.filter-bar {
+    padding: 0 30px;
+    background: #828bb3;
+    line-height: 44px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+  }
+
+  .cursor {
+    cursor: pointer;
+  }
+
+  .submit-btn {
+    background: -webkit-linear-gradient(90deg, #ffba00 0%, #ff6c00 100%);
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+    padding: 5px 19px;
+    /* line-height: 35px; */
+    font-size: 14px;
+    border-radius: 50px;
+    display: inline-block;
+    /* text-transform: uppercase; */
+    font-weight: 500;
+    transition: all 0.3s ease 0s;
+    border: none;
+}
+
+.input-field-style {
+  box-shadow: none;
+}
+
+.is-invalid {
+  border: 1px solid red !important;
+}

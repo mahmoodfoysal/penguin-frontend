@@ -37,6 +37,11 @@ const routes = [
         path: 'admin',
         name: 'Admin',
         component: () => import('@/modules/dashboard/Features/MakeAdmin/MakeAdmin.vue')
+      },
+      {
+        path: 'parent-category',
+        name: 'ParentCat',
+        component: () => import('@/modules/dashboard/Features/AllCategory/PrentCategory/ParentCategory.vue')
       }
     ]
   },

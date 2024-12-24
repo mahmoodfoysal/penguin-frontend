@@ -4,7 +4,7 @@ import { getAdmin, postAdmin } from '../../api/make-admin.js';
 
 const adminList = ref([]);
 const inputData = ref({});
-const isValidation = ref([]);
+const isValidation = ref(false);
 
 const admin_role = ref([
   {
@@ -84,7 +84,7 @@ const handleEdit = (roleInfo) => {
   <div class="filter-bar d-flex flex-wrap align-items-center justify-content-between">
     <span>Admin List</span>
     <div class="d-flex align-items-center">
-      <span class="material-icons" @click="handlePostAdmin">edit</span>
+      <span class="material-icons">edit</span>
     </div>
   </div>
 
