@@ -3,7 +3,8 @@ import { onMounted, ref } from 'vue';
 import { getAdmin, postAdmin } from '../../api/make-admin.js';
 
 const adminList = ref([]);
-const inputData = ref({})
+const inputData = ref({});
+const isValidation = ref([]);
 
 const admin_role = ref([
   {
@@ -31,6 +32,13 @@ const handleGetAdmin = async () => {
 };
 
 const handleSubmit = async () => {
+  isValidation.value = false;
+  if(!inputData.value?.email ||
+    !inputData.value?.roleInfo
+  ) {
+    isValidation.value = true;
+    return;
+  };
   const data = {
     _id: inputData.value.id || null,
     email: inputData.value?.email,
@@ -55,6 +63,7 @@ const handleSubmit = async () => {
       }
 
     }
+    isValidation.value = false;
     inputData.value = {};
   }
   catch (error) {
@@ -85,14 +94,18 @@ const handleEdit = (roleInfo) => {
         <label for="exampleInputEmail1" class="form-label">Email</label>
         <input
         v-model="inputData.email"
-        type="text" class="form-control form-control-sm" id="exampleInputEmail1" aria-describedby="emailHelp"
+        :class="{'is-invalid': isValidation && !inputData.email}"
+        type="text" class="form-control form-control-sm input-field-style" id="exampleInputEmail1" aria-describedby="emailHelp"
           placeholder="Enter email">
       </div>
     </div>
     <div class="col-md-6">
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Select role</label>
-        <select v-model="inputData.role_info" class="form-select form-select-sm" aria-label=".form-select-sm example">
+        <select
+        v-model="inputData.role_info"
+        :class="{'is-invalid': isValidation && !inputData.role_info}"
+        class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
           <option
           v-for="(item, index) in admin_role"
           :key="index"
