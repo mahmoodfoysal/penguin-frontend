@@ -41,8 +41,21 @@ const handleSubmit = async () => {
     const result = await postAdmin(data)
     if (result?.status === 201) {
       alert(result.data?.message);
-      inputData.value = {};
+      const obj = {
+        email: inputData.value?.email,
+        role: inputData.value?.role_info?.role_name,
+        role_id: inputData.value?.role_info?.id
+      };
+      const index = adminList.value?.findIndex((item) => item._id == result.data?.id);
+      if(index > -1) {
+        adminList.value[index] = obj;
+      }
+      else {
+        adminList.value.unshift(obj);
+      }
+
     }
+    inputData.value = {};
   }
   catch (error) {
     console.log(error);
@@ -91,15 +104,15 @@ const handleEdit = (roleInfo) => {
     <div class="col-md-6">
       <button
       @click="handleSubmit"
-      type="submit" class="btn btn-primary">Submit</button>
+      type="submit" class="submit-btn">Submit</button>
     </div>
   </div>
-  <h4 class="text-center"><u>Admin List</u></h4>
+  <h4 class="text-center mb-2"><u>Admin List</u></h4>
   <div class="row">
     <div
     v-for="(item, index) in adminList"
     :key="index"
-    class="col-md-6">
+    class="col-md-6 mb-2">
       <h6
       class="d-flex align-items-center">
       <span>
