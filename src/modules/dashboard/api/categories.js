@@ -1,11 +1,23 @@
-import axios from "axios";
+import axios from 'axios'
 
+// parent category
 export const getParentCategory = async () => {
-  const url = 'http://localhost:5000/parent-category';
-  return await axios.get(url);
-};
+  const url = 'http://localhost:5000/api/admin/get-parent-category'
+  return await axios.get(url)
+}
 
 export const postParentCategory = async (data) => {
-  const url = 'http://localhost:5000/parent-category';
+  const url = 'http://localhost:5000/api/admin/insert-update-parent-category'
   return await axios.post(url, data)
+}
+
+// sub category
+export const getSubCategory = async () => {
+  const url = 'http://localhost:5000/api/admin/get-sub-category'
+  return await axios.get(url)
 };
+
+export const postSubCategory = async (data) => {
+  const url = 'http://localhost:5000/api/admin/insert-update/sub-categoty'
+  return await axios.post(url, data)
+}

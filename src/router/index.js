@@ -45,6 +45,12 @@ const routes = [
         name: 'ParentCat',
         component: () => import('@/modules/dashboard/Features/AllCategory/PrentCategory/ParentCategory.vue'),
         meta: { hideFooter: true },
+      },
+      {
+        path: 'sub-category',
+        name: 'SubCat',
+        component: () => import('@/modules/dashboard/Features/AllCategory/SubCategory/SubCategory.vue'),
+        meta: { hideFooter: true },
       }
     ]
   },
