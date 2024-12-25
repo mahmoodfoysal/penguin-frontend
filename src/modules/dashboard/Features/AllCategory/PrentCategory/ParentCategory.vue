@@ -101,30 +101,30 @@ const handleEdit = (item) => {
       <button @click="handleSubmit" type="submit" class="submit-btn">Submit</button>
     </div>
   </div>
-  <h4 class="text-center mb-2"><u>Parent Category List</u></h4>
-  <table class="table">
+  <h4 class="text-center mb-3 heading-style">Parent Category List</h4>
+  <table class="table table-style">
     <thead>
       <tr>
-        <th scope="col">SL</th>
-        <th scope="col">Category Name</th>
-        <th scope="col">Category ID</th>
-        <th scope="col">Actions</th>
+        <th>SL</th>
+        <th>Category Name</th>
+        <th>Category ID</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="(item, index) in categoryList" :key="index">
-        <th scope="row">{{ index + 1 }}</th>
+        <td>{{ index + 1 }}</td>
         <td>{{ item?.par_cat_name }}</td>
         <td>{{ item?.par_cat_id }}</td>
         <td>
-          <div class="d-flex align-items-center">
-            <span @click="handleEdit(item)" class="material-icons ms-2 cursor me-2">
+            <span @click="handleEdit(item)"
+            class="material-icons ms-2 cursor me-2 edit-icon">
               edit
             </span>
-            <span class="material-icons ms-2 cursor">
+            <span
+            class="material-icons ms-2 cursor delete-icon">
               delete
             </span>
-          </div>
         </td>
       </tr>
     </tbody>
