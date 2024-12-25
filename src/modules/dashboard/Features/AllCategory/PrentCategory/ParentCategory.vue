@@ -60,7 +60,12 @@ const handleSubmit = async () => {
   catch (error) {
     console.log(error);
   }
-}
+};
+
+const handleCancel = () => {
+  inputData.value = {
+  }
+};
 
 const handleEdit = (item) => {
   inputData.value = {
@@ -73,7 +78,7 @@ const handleEdit = (item) => {
 
 <template>
   <div class="filter-bar d-flex flex-wrap align-items-center justify-content-between">
-    <span>Parent Category List</span>
+    <span>Parent Category</span>
     <div class="d-flex align-items-center">
       <span class="material-icons">edit</span>
     </div>
@@ -98,7 +103,19 @@ const handleEdit = (item) => {
     </div>
 
     <div class="col-md-6">
-      <button @click="handleSubmit" type="submit" class="submit-btn">Submit</button>
+      <button @click="handleSubmit"
+      type="submit"
+      class="submit-btn">
+      Submit
+      </button>
+
+      <button
+      @click="handleCancel"
+      type="cencel"
+      class="cancel-btn ms-2">
+      Cancel
+      </button>
+
     </div>
   </div>
   <h4 class="text-center mb-3 heading-style">Parent Category List</h4>

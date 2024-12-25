@@ -23,16 +23,27 @@ p {
 }
 
 .submit-btn {
-  background: -webkit-linear-gradient(90deg, #ffba00 0%, #ff6c00 100%);
+  background: #026cd1;
   position: relative;
   overflow: hidden;
   color: #fff;
   padding: 5px 19px;
-  /* line-height: 35px; */
   font-size: 14px;
   border-radius: 50px;
   display: inline-block;
-  /* text-transform: uppercase; */
+  font-weight: 500;
+  transition: all 0.3s ease 0s;
+  border: none;
+}
+.cancel-btn {
+  background: gray;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  padding: 5px 19px;
+  font-size: 14px;
+  border-radius: 50px;
+  display: inline-block;
   font-weight: 500;
   transition: all 0.3s ease 0s;
   border: none;

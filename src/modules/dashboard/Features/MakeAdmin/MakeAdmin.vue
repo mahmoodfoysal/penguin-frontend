@@ -69,7 +69,12 @@ const handleSubmit = async () => {
   catch (error) {
     console.log(error);
   }
-}
+};
+
+const handleCancel = () => {
+  inputData.value = {
+  }
+};
 
 const handleEdit = (roleInfo) => {
   inputData.value = {
@@ -77,12 +82,12 @@ const handleEdit = (roleInfo) => {
     email: roleInfo?.email,
     role_info: admin_role.value?.find((item) => item.id == roleInfo.role_id)
   }
-}
+};
 </script>
 
 <template>
   <div class="filter-bar d-flex flex-wrap align-items-center justify-content-between">
-    <span>Admin List</span>
+    <span>Admin</span>
     <div class="d-flex align-items-center">
       <span class="material-icons">edit</span>
     </div>
@@ -117,30 +122,53 @@ const handleEdit = (roleInfo) => {
     <div class="col-md-6">
       <button
       @click="handleSubmit"
-      type="submit" class="submit-btn">Submit</button>
+      type="submit"
+      class="submit-btn">
+      Submit
+      </button>
+
+      <button
+      @click="handleCancel"
+      type="cencel"
+      class="cancel-btn ms-2">
+      Cancel
+      </button>
     </div>
   </div>
-  <h4 class="text-center mb-2"><u>Admin List</u></h4>
-  <div class="row">
-    <div
-    v-for="(item, index) in adminList"
-    :key="index"
-    class="col-md-6 mb-2">
-      <h6
-      class="d-flex align-items-center">
-      <span>
-        Email: {{ item?.email }}
-      </span>
-      <span
-      @click="handleEdit(item)"
-      class="material-icons ms-2 cursor">
-      edit
-    </span>
-  </h6>
-      <p>Role: {{ item?.role }}</p>
-      <p>Id: {{ item?.role_id }}</p>
-    </div>
-  </div>
+
+  <h4 class="text-center mb-3 heading-style">Admin List</h4>
+  <table class="table table-style">
+    <thead>
+      <tr>
+        <th>SL</th>
+        <th>Role ID</th>
+        <th>Email</th>
+        <th>Role Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(item, index) in adminList" :key="index">
+        <td>{{ index + 1 }}</td>
+        <td>{{ item?.role_id }}</td>
+        <td>{{ item?.email }}</td>
+        <td>{{ item?.role }}</td>
+        <td>
+            <span @click="handleEdit(item)"
+            class="material-icons ms-2 cursor me-2 edit-icon">
+              edit
+            </span>
+            <span
+            class="material-icons ms-2 cursor delete-icon">
+              delete
+            </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+
 </template>
 
 <style scoped src="./MakeAdmin.css"></style>
