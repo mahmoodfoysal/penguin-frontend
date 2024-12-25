@@ -26,22 +26,25 @@ const routes = [
     name: 'DashboardHome',
     component: () => import('@/modules/dashboard/DashboardIndex.vue'),
     redirect: '/dashboard/features/home',
-    meta: { requiresAuth: true, requiresAdminCheck: true },
+    meta: { requiresAuth: true, requiresAdminCheck: true,  hideFooter: true },
     children: [
       {
         path: 'home',
         name: 'DashboardHomeDefault',
-        component: () => import('@/modules/dashboard/Features/DashhomeHome/DashHome.vue')
+        component: () => import('@/modules/dashboard/Features/DashhomeHome/DashHome.vue'),
+        meta: { hideFooter: true },
       },
       {
         path: 'admin',
         name: 'Admin',
-        component: () => import('@/modules/dashboard/Features/MakeAdmin/MakeAdmin.vue')
+        component: () => import('@/modules/dashboard/Features/MakeAdmin/MakeAdmin.vue'),
+        meta: { hideFooter: true },
       },
       {
         path: 'parent-category',
         name: 'ParentCat',
-        component: () => import('@/modules/dashboard/Features/AllCategory/PrentCategory/ParentCategory.vue')
+        component: () => import('@/modules/dashboard/Features/AllCategory/PrentCategory/ParentCategory.vue'),
+        meta: { hideFooter: true },
       }
     ]
   },
