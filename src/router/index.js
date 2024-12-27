@@ -41,6 +41,12 @@ const routes = [
         meta: { hideFooter: true },
       },
       {
+        path: 'category-mapping',
+        name: 'CategoryMap',
+        component: () => import('@/modules/dashboard/Features/CategoryMapping/CategoryMapping.vue'),
+        meta: { hideFooter: true },
+      },
+      {
         path: 'parent-category',
         name: 'ParentCat',
         component: () => import('@/modules/dashboard/Features/AllCategory/PrentCategory/ParentCategory.vue'),

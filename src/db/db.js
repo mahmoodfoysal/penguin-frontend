@@ -123,7 +123,7 @@ const dashboardMenu = [
       },
       {
         sub_menu_id: 1002,
-        name: 'Category Maping',
+        name: 'Category Mapping',
         logo: 'polyline',
         route_name: 'CategoryMap'
       },

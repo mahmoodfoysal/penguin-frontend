@@ -20,4 +20,10 @@ export const getSubCategory = async () => {
 export const postSubCategory = async (data) => {
   const url = 'http://localhost:5000/api/admin/insert-update/sub-categoty'
   return await axios.post(url, data)
-}
+};
+
+// get add categories
+export const getCategories = async () => {
+  const url = 'http://localhost:5000/api/client/get-all-categories';
+  return await axios.get(url);
+};
