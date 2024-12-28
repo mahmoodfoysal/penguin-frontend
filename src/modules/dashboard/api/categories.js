@@ -27,3 +27,8 @@ export const getCategories = async () => {
   const url = 'http://localhost:5000/api/client/get-all-categories';
   return await axios.get(url);
 };
+
+export const updateStatus = async (id ,data) => {
+  const url = `http://localhost:5000/api/admin/update-parent-category-status/${id}`;
+  return await axios.patch(url, data)
+}

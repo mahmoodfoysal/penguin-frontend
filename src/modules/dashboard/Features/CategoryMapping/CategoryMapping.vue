@@ -31,44 +31,40 @@ const handleGetCategories = async () => {
 
 
   <h4 class="text-center mb-3 heading-style">Category Mapping List</h4>
+
   <table class="table table-style">
     <thead>
       <tr>
-        <th>SL</th>
-        <th>Parent ID</th>
-        <th>Parent Category Name</th>
-        <th>Sub ID</th>
-        <th>Sub Category Name</th>
-        <th>Actions</th>
+        <th>#</th>
+        <th class="text-center">Parent ID</th>
+        <th>Parent Name</th>
+        <th>Subcat ID</th>
+        <th>Subcat Name</th>
       </tr>
     </thead>
     <tbody>
-
-      <tr v-for="(item, index) in categoryList" :key="index">
-        <td>{{ index + 1 }}</td>
-        <td>{{ item?.par_cat_id }}</td>
-        <td>{{ item?.par_cat_name }}</td>
-
-
-        <template v-for="(subItem, subIndex) in item?.sub_categories" :key="subIndex">
-          <td>{{ subItem?.sub_cat_id }}</td>
-          <td>{{ subItem?.sub_cat_name }}</td>
-        </template>
-
-
-        <td>
-            <span @click="handleEdit(item)"
-            class="material-icons ms-2 cursor me-2 edit-icon">
-              edit
-            </span>
-            <span
-            class="material-icons ms-2 cursor delete-icon">
-              delete
-            </span>
-        </td>
-      </tr>
+      <template v-for="(item, index) in categoryList" :key="index">
+        <tr>
+          <td :rowspan="item.sub_categories.length || 1">{{ index + 1 }}</td>
+          <td class="text-center" :rowspan="item.sub_categories.length || 1">{{ item.par_cat_id }}</td>
+          <td :rowspan="item.sub_categories.length || 1">{{ item.par_cat_name }}</td>
+          <td>{{ item.sub_categories[0]?.sub_cat_id }}</td>
+          <td>{{ item.sub_categories[0]?.sub_cat_name }}</td>
+        </tr>
+        <tr v-for="(subItem, subIndex) in item.sub_categories.slice(1)" :key="subIndex">
+          <td>{{ subItem.sub_cat_id }}</td>
+          <td >{{ subItem.sub_cat_name }}</td>
+        </tr>
+      </template>
     </tbody>
   </table>
+
+
+
+
+
+
+
 </template>
 
 <style scoped src="./CategoryMapping.css"></style>

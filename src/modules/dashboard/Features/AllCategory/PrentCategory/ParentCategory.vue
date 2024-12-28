@@ -1,10 +1,21 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { getParentCategory, postParentCategory } from '@/modules/dashboard/api/categories.js';
+import { getParentCategory, postParentCategory, updateStatus } from '@/modules/dashboard/api/categories.js';
 
 const categoryList = ref([]);
 const inputData = ref({});
 const isValidation = ref(false);
+
+const statusList = ref([
+  {
+    id: 1,
+    name: 'Active'
+  },
+  {
+    id: 0,
+    name: 'Inactive'
+  }
+])
 
 onMounted(() => {
   handleGetParentCategory();
@@ -20,11 +31,23 @@ const handleGetParentCategory = async () => {
   }
 };
 
+const handleUpdateStatus = async (item) => {
+  try {
+    const data = {status: Number(item.status)};
+    const result = await updateStatus(item._id, data);
+    alert(result.data?.message)
+  }
+  catch(error) {
+    console.log(error);
+  };
+};
+
 const handleSubmit = async () => {
   isValidation.value = false;
   if (
     !inputData.value?.par_cat_id ||
-    !inputData.value?.par_cat_name
+    !inputData.value?.par_cat_name ||
+    !inputData.value.status
   ) {
     isValidation.value = true;
     return;
@@ -33,6 +56,7 @@ const handleSubmit = async () => {
     _id: inputData.value.id || null,
     par_cat_id: Number(inputData.value?.par_cat_id),
     par_cat_name: inputData.value?.par_cat_name,
+    status: inputData.value?.status
   }
   try {
     const text = "Are you want to sure?";
@@ -44,6 +68,7 @@ const handleSubmit = async () => {
           _id: result.data?.id,
           par_cat_id: inputData.value?.par_cat_id,
           par_cat_name: inputData.value?.par_cat_name,
+          status: inputData.value?.status
         };
         const index = categoryList.value?.findIndex((item) => item._id == result.data?.id);
         if (index > -1) {
@@ -73,6 +98,7 @@ const handleEdit = (item) => {
     id: item?._id,
     par_cat_id: item?.par_cat_id,
     par_cat_name: item?.par_cat_name,
+    status: item?.status
   }
 }
 </script>
@@ -102,22 +128,28 @@ const handleEdit = (item) => {
           aria-describedby="emailHelp" placeholder="Give category id">
       </div>
     </div>
-
     <div class="col-md-6">
-      <button @click="handleSubmit"
-      type="submit"
-      class="submit-btn">
-      Submit
-      </button>
-
-      <button
-      @click="handleCancel"
-      type="cencel"
-      class="cancel-btn ms-2">
-      Cancel
-      </button>
-
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Status *</label>
+        <select v-model="inputData.status" :class="{ 'is-invalid': isValidation && !inputData.status }"
+          class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
+          <option v-for="(item, index) in statusList" :key="index" :value="item.id">{{ item?.id }} - {{ item?.name }}
+          </option>
+        </select>
+      </div>
     </div>
+
+
+  </div>
+  <div>
+    <button @click="handleSubmit" type="submit" class="submit-btn">
+      Submit
+    </button>
+
+    <button @click="handleCancel" type="cencel" class="cancel-btn ms-2">
+      Cancel
+    </button>
+
   </div>
   <h4 class="text-center mb-3 heading-style">Parent Category List</h4>
   <table class="table table-style">
@@ -126,6 +158,7 @@ const handleEdit = (item) => {
         <th>SL</th>
         <th>Category Name</th>
         <th>Category ID</th>
+        <th>Status</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -135,14 +168,27 @@ const handleEdit = (item) => {
         <td>{{ item?.par_cat_name }}</td>
         <td>{{ item?.par_cat_id }}</td>
         <td>
-            <span @click="handleEdit(item)"
-            class="material-icons ms-2 cursor me-2 edit-icon">
-              edit
-            </span>
-            <span
-            class="material-icons ms-2 cursor delete-icon">
-              delete
-            </span>
+          <div class="form-check form-switch">
+            <input
+            v-model="item.status"
+            :value="item"
+            :true-value="1"
+            :false-value="0"
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="flexSwitchCheckDisabled"
+            @change="handleUpdateStatus(item)"
+            />
+          </div>
+        </td>
+        <td>
+          <span @click="handleEdit(item)" class="material-icons ms-2 cursor me-2 edit-icon">
+            edit
+          </span>
+          <span class="material-icons ms-2 cursor delete-icon">
+            delete
+          </span>
         </td>
       </tr>
     </tbody>
