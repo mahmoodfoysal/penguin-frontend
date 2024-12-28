@@ -1,11 +1,12 @@
 .sidebar-categories .head {
   line-height: 44px;
-  background: #828bb3;
+  background: #026cd1;
   padding: 0 30px;
   font-size: 16px;
   font-weight: 400;
-  color: #fff;
+  color: #ffffff;
 }
+
 .sidebar-categories .main-categories {
   padding: 0 20px;
   background: #fff;
@@ -30,7 +31,7 @@
   display: none;
 }
 .sidebar-categories .main-nav-list.child a {
-  padding-left: 8px; 
+  padding-left: 8px;
 }
 
 .main-categories a {

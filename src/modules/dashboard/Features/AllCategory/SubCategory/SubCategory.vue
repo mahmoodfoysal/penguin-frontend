@@ -169,7 +169,8 @@ const user_email = computed(() => store.userInfo?.email);
         <label for="exampleInputEmail1" class="form-label">status *</label>
         <select v-model="inputData.status" :class="{ 'is-invalid': isValidation && !inputData.status }"
           class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
-          <option v-for="(item, index) in statusList" :key="index" :value="item.id">{{ item?.id }} - {{ item?.name }}</option>
+          <option v-for="(item, index) in statusList" :key="index" :value="item.id">{{ item?.id }} - {{ item?.name }}
+          </option>
         </select>
       </div>
     </div>

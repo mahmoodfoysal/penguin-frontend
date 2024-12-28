@@ -1,46 +1,52 @@
-h1, h2, h3, h4, h5, h6, p {
-    margin: 0;
-    padding: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  padding: 0;
 }
 
 .filter-bar {
-    padding: 0 30px;
-    background: #828bb3;
-    line-height: 44px;
-    font-size: 16px;
-    font-weight: 400;
-    color: #fff;
-  }
-
-  .cursor {
-    cursor: pointer;
-  }
-
-  .submit-btn {
-    background: #026cd1;
-    position: relative;
-    overflow: hidden;
-    color: #fff;
-    padding: 5px 19px;
-    font-size: 14px;
-    border-radius: 50px;
-    display: inline-block;
-    font-weight: 500;
-    transition: all 0.3s ease 0s;
-    border: none;
+  padding: 0 30px;
+  background: #026cd1;
+  line-height: 44px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #ffffff;
 }
-  .cancel-btn {
-    background: gray;
-    position: relative;
-    overflow: hidden;
-    color: #fff;
-    padding: 5px 19px;
-    font-size: 14px;
-    border-radius: 50px;
-    display: inline-block;
-    font-weight: 500;
-    transition: all 0.3s ease 0s;
-    border: none;
+
+.cursor {
+  cursor: pointer;
+}
+
+.submit-btn {
+  background: #026cd1;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  padding: 5px 19px;
+  font-size: 14px;
+  border-radius: 50px;
+  display: inline-block;
+  font-weight: 500;
+  transition: all 0.3s ease 0s;
+  border: none;
+}
+.cancel-btn {
+  background: gray;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  padding: 5px 19px;
+  font-size: 14px;
+  border-radius: 50px;
+  display: inline-block;
+  font-weight: 500;
+  transition: all 0.3s ease 0s;
+  border: none;
 }
 
 .input-field-style {
@@ -54,9 +60,7 @@ h1, h2, h3, h4, h5, h6, p {
 .heading-style {
   color: #026cd1 !important;
   text-decoration: underline;
-
 }
-
 
 .edit-icon {
   color: #026cd1;
@@ -87,7 +91,6 @@ h1, h2, h3, h4, h5, h6, p {
 }
 .table-style tbody tr {
   border-bottom: 1px solid #e2edfa;
-
 }
 
 .table-style thead tr th {

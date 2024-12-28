@@ -92,7 +92,7 @@ const handleEdit = (roleInfo) => {
 
 <template>
   <div class="filter-bar d-flex flex-wrap align-items-center justify-content-between">
-    <span>Admin</span>
+    <span>Admin List</span>
     <div class="d-flex align-items-center">
       <span class="material-icons">edit</span>
     </div>

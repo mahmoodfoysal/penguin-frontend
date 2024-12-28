@@ -11,11 +11,11 @@ p {
 
 .filter-bar {
   padding: 0 30px;
-  background: #828bb3;
+  background: #026cd1;
   line-height: 44px;
   font-size: 16px;
   font-weight: 400;
-  color: #fff;
+  color: #ffffff;
 }
 
 .cursor {
@@ -52,7 +52,6 @@ p {
 .heading-style {
   color: #026cd1 !important;
   text-decoration: underline;
-
 }
 
 .input-field-style {
@@ -92,7 +91,6 @@ p {
 }
 .table-style tbody tr {
   border-bottom: 1px solid #e2edfa;
-
 }
 
 .table-style thead tr th {
@@ -125,4 +123,3 @@ p {
   width: 30%;
   text-align: start;
 }
-
