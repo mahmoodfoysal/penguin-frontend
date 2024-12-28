@@ -50,3 +50,24 @@
 .main-nav-list ul {
   padding: 0 !important;
 }
+
+.sidebar-style {
+  height: calc(100vh - 158px);
+  overflow-y: auto;
+  scrollbar-width: thin; /* For modern browsers (Firefox) */
+  scrollbar-color: #cccccc #f5f5f5; /* For modern browsers (Firefox) */
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+.sidebar-style::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar-style::-webkit-scrollbar-thumb {
+  background-color: #cccccc;
+  border-radius: 4px;
+}
+
+.sidebar-style::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
