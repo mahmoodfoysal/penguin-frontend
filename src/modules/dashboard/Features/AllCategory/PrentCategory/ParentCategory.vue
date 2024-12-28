@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { getParentCategory, postParentCategory, updateStatus } from '@/modules/dashboard/api/categories.js';
+import { getParentCategory, postParentCategory, updateParentCategoryStatus } from '@/modules/dashboard/api/categories.js';
 
 const categoryList = ref([]);
 const inputData = ref({});
@@ -15,7 +15,7 @@ const statusList = ref([
     id: 0,
     name: 'Inactive'
   }
-])
+]);
 
 onMounted(() => {
   handleGetParentCategory();
@@ -31,10 +31,10 @@ const handleGetParentCategory = async () => {
   }
 };
 
-const handleUpdateStatus = async (item) => {
+const handleUpdateParentCategoryStatus = async (item) => {
   try {
     const data = {status: Number(item.status)};
-    const result = await updateStatus(item._id, data);
+    const result = await updateParentCategoryStatus(item._id, data);
     alert(result.data?.message)
   }
   catch(error) {
@@ -178,7 +178,7 @@ const handleEdit = (item) => {
             type="checkbox"
             role="switch"
             id="flexSwitchCheckDisabled"
-            @change="handleUpdateStatus(item)"
+            @change="handleUpdateParentCategoryStatus(item)"
             />
           </div>
         </td>

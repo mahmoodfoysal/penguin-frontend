@@ -1,13 +1,24 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue';
-import { getParentCategory, getSubCategory , postSubCategory } from '@/modules/dashboard/api/categories.js';
+import { getParentCategory, getSubCategory, postSubCategory, updateSubCategoryStatus } from '@/modules/dashboard/api/categories.js';
 import { useStore } from '@/store/index';
 
 const categoryList = ref([]);
 const parentCategoryList = ref([])
 const inputData = ref({});
 const isValidation = ref(false);
-const store = useStore()
+const store = useStore();
+
+const statusList = ref([
+  {
+    id: 1,
+    name: 'Active'
+  },
+  {
+    id: 0,
+    name: 'Inactive'
+  }
+]);
 
 
 onMounted(() => {
@@ -35,13 +46,24 @@ const handleGetParentCategory = async () => {
   }
 };
 
+const handleUpdateSubCategoryStatus = async (item) => {
+  try {
+    const data = { status: Number(item.status) };
+    const result = await updateSubCategoryStatus(item._id, data);
+    alert(result.data?.message)
+  }
+  catch (error) {
+    console.log(error);
+  };
+};
+
 const handleSubmit = async () => {
   isValidation.value = false;
   if (
     !inputData.value?.sub_cat_id ||
     !inputData.value?.sub_cat_name ||
-    !inputData.value?.parent_cat_info
-
+    !inputData.value?.parent_cat_info ||
+    !inputData.value?.status
   ) {
     isValidation.value = true;
     return;
@@ -52,7 +74,8 @@ const handleSubmit = async () => {
     sub_cat_id: Number(inputData.value?.sub_cat_id),
     sub_cat_name: inputData.value?.sub_cat_name,
     par_cat_name: inputData.value?.parent_cat_info?.par_cat_name,
-    userInfo: user_email.value
+    userInfo: user_email.value,
+    status: inputData.value?.status
   }
   try {
     const text = "Are you want to sure?";
@@ -63,9 +86,10 @@ const handleSubmit = async () => {
         const obj = {
           _id: result.data?.id,
           par_cat_id: Number(inputData.value?.parent_cat_info?.par_cat_id),
-    sub_cat_id: Number(inputData.value?.sub_cat_id),
-    sub_cat_name: inputData.value?.sub_cat_name,
-    par_cat_name: inputData.value?.parent_cat_info?.par_cat_name,
+          sub_cat_id: Number(inputData.value?.sub_cat_id),
+          sub_cat_name: inputData.value?.sub_cat_name,
+          par_cat_name: inputData.value?.parent_cat_info?.par_cat_name,
+          status: inputData.value?.status
         };
         const index = categoryList.value?.findIndex((item) => item._id == result.data?.id);
         if (index > -1) {
@@ -93,9 +117,10 @@ const handleCancel = () => {
 const handleEdit = (item) => {
   inputData.value = {
     id: item?._id,
-    parent_cat_info: parentCategoryList.value.find((parCatItem) => parCatItem.par_cat_id === item.par_cat_id) ,
+    parent_cat_info: parentCategoryList.value.find((parCatItem) => parCatItem.par_cat_id === item.par_cat_id),
     sub_cat_id: item?.sub_cat_id,
     sub_cat_name: item?.sub_cat_name,
+    status: item?.status
   }
 };
 
@@ -104,7 +129,7 @@ const user_email = computed(() => store.userInfo?.email);
 
 <template>
   <div class="filter-bar d-flex flex-wrap align-items-center justify-content-between">
-    <span>Parent Category</span>
+    <span>Sub Category</span>
     <div class="d-flex align-items-center">
       <span class="material-icons">edit</span>
     </div>
@@ -114,9 +139,11 @@ const user_email = computed(() => store.userInfo?.email);
     <div class="col-md-6">
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Parent Category *</label>
-        <select v-model="inputData.parent_cat_info" :class="{ 'is-invalid': isValidation && !inputData.parent_cat_info }"
+        <select v-model="inputData.parent_cat_info"
+          :class="{ 'is-invalid': isValidation && !inputData.parent_cat_info }"
           class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
-          <option v-for="(item, index) in parentCategoryList" :key="index" :value="item">{{ item?.par_cat_id }} - {{ item?.par_cat_name }}</option>
+          <option v-for="(item, index) in parentCategoryList" :key="index" :value="item">{{ item?.par_cat_id }} - {{
+            item?.par_cat_name }}</option>
         </select>
       </div>
     </div>
@@ -137,32 +164,38 @@ const user_email = computed(() => store.userInfo?.email);
       </div>
     </div>
 
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">status *</label>
+        <select v-model="inputData.status" :class="{ 'is-invalid': isValidation && !inputData.status }"
+          class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
+          <option v-for="(item, index) in statusList" :key="index" :value="item.id">{{ item?.id }} - {{ item?.name }}</option>
+        </select>
+      </div>
+    </div>
+
   </div>
 
   <div>
-      <button @click="handleSubmit"
-      type="submit"
-      class="submit-btn">
+    <button @click="handleSubmit" type="submit" class="submit-btn">
       Submit
-      </button>
+    </button>
 
-      <button
-      @click="handleCancel"
-      type="cencel"
-      class="cancel-btn ms-2">
+    <button @click="handleCancel" type="cencel" class="cancel-btn ms-2">
       Cancel
-      </button>
+    </button>
 
-    </div>
-  <h4 class="text-center mb-3 heading-style">Parent Category List</h4>
+  </div>
+  <h4 class="text-center mb-3 heading-style">Sub Category List</h4>
   <table class="table table-style">
     <thead>
       <tr>
         <th>SL</th>
         <th>Parent ID</th>
-        <th>Parent Category Name</th>
+        <th>Parent Name</th>
         <th>Sub ID</th>
-        <th>Sub Category Name</th>
+        <th>Sub Name</th>
+        <th>Status</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -174,14 +207,19 @@ const user_email = computed(() => store.userInfo?.email);
         <td>{{ item?.sub_cat_id }}</td>
         <td>{{ item?.sub_cat_name }}</td>
         <td>
-            <span @click="handleEdit(item)"
-            class="material-icons ms-2 cursor me-2 edit-icon">
-              edit
-            </span>
-            <span
-            class="material-icons ms-2 cursor delete-icon">
-              delete
-            </span>
+          <div class="form-check form-switch">
+            <input v-model="item.status" :value="item" :true-value="1" :false-value="0" class="form-check-input"
+              type="checkbox" role="switch" id="flexSwitchCheckDisabled"
+              @change="handleUpdateSubCategoryStatus(item)" />
+          </div>
+        </td>
+        <td>
+          <span @click="handleEdit(item)" class="material-icons ms-2 cursor me-2 edit-icon">
+            edit
+          </span>
+          <span class="material-icons ms-2 cursor delete-icon">
+            delete
+          </span>
         </td>
       </tr>
     </tbody>

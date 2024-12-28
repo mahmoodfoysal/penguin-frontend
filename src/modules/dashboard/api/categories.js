@@ -28,7 +28,14 @@ export const getCategories = async () => {
   return await axios.get(url);
 };
 
-export const updateStatus = async (id ,data) => {
+// update parent category status
+export const updateParentCategoryStatus = async (id ,data) => {
   const url = `http://localhost:5000/api/admin/update-parent-category-status/${id}`;
   return await axios.patch(url, data)
-}
+};
+
+// update sub category status
+export const updateSubCategoryStatus = async (id, data) => {
+  const url = `http://localhost:5000/api/admin/update-sub-category-status/${id}`;
+  return await axios.patch(url, data);
+};
