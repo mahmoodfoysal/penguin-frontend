@@ -24,6 +24,7 @@ onMounted(() => {
 
 const handleCreate = () => {
   isCreateModal.value = true;
+  inputData.value = {}
 };
 
 const handleGetAdmin = async () => {
@@ -159,7 +160,7 @@ const handleEdit = (roleInfo) => {
             </div>
             <div class="col-md-6">
               <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Select role *-</label>
+                <label for="exampleInputPassword1" class="form-label">Select role *</label>
                 <select v-model="inputData.role_info" :class="{ 'is-invalid': isValidation && !inputData.role_info }"
                   class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
                   <option v-for="(item, index) in admin_role" :key="index" :value="item">{{ item?.role_name }}</option>

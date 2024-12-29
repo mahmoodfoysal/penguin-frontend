@@ -29,6 +29,9 @@ onMounted(() => {
 
 const handleCreate = () => {
   isCreateModal.value = true;
+  inputData.value = {
+    status: 1
+  }
 };
 
 const handleGetSubCategory = async () => {
