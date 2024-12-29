@@ -21,29 +21,6 @@ const category_image = [
 
 console.log(category_image)
 
-const products = [
-  {
-    parent_cat_id: 1,
-    sub_cat_id: 10,
-    sub_sub_cat_id: 100,
-    sub_sub_sub_cat_id: 1000,
-    prod_id: 10000,
-    prod_image: 'https://fabrilife.com/products/642045d214885-square.jpg?v=20',
-    prod_name: 'Cotton Panjabi',
-    price: 20,
-    prod_type: 'R',
-    rating: 5,
-    stock: 100,
-    prod_brand: 'Easy',
-    description: ` am magni architecto ipsa earum dignissimos aspernatur expedita quidem, itaque modi.`,
-    currency_id: 302,
-    currency_name: 'USD',
-    status: 1,
-  },
-]
-
-console.log(products)
-
 const parentCategory = [
   {
     par_cat_id: 1,
@@ -119,27 +96,27 @@ const dashboardMenu = [
         sub_menu_id: 1001,
         name: 'Make Admin',
         logo: 'admin_panel_settings',
-        route_name: 'Admin'
+        route_name: 'Admin',
       },
       {
         sub_menu_id: 1002,
         name: 'Category Mapping',
         logo: 'polyline',
-        route_name: 'CategoryMap'
+        route_name: 'CategoryMap',
       },
       {
         sub_menu_id: 1003,
         name: 'Products',
         logo: 'photo_library',
-        route_name: 'Products'
+        route_name: 'Products',
       },
       {
         sub_menu_id: 1004,
         name: 'Footer',
         logo: 'remove',
-        route_name: 'Footer'
-      }
-    ]
+        route_name: 'Footer',
+      },
+    ],
   },
   {
     menu_id: 102,
@@ -150,27 +127,27 @@ const dashboardMenu = [
         sub_menu_id: 2001,
         name: 'Parent Category',
         logo: 'account_tree',
-        route_name: 'ParentCat'
+        route_name: 'ParentCat',
       },
       {
         sub_menu_id: 2002,
         name: 'Sub Category',
         logo: 'account_tree',
-        route_name: 'SubCat'
+        route_name: 'SubCat',
       },
       {
         sub_menu_id: 2003,
         name: 'Sub Sub Category',
         logo: 'account_tree',
-        route_name: 'SubSubCat'
+        route_name: 'SubSubCat',
       },
       {
         sub_menu_id: 2004,
         name: 'Sub Sub Sub Category',
         logo: 'account_tree',
-        route_name: 'SubSUbSubCat'
-      }
-    ]
+        route_name: 'SubSUbSubCat',
+      },
+    ],
   },
 
   {
@@ -182,21 +159,21 @@ const dashboardMenu = [
         sub_menu_id: 3001,
         name: 'Banner',
         logo: 'image',
-        route_name: 'Banner'
+        route_name: 'Banner',
       },
       {
         sub_menu_id: 3002,
         name: 'Image Category',
         logo: 'photo_library',
-        route_name: 'ImageCat'
+        route_name: 'ImageCat',
       },
       {
         sub_menu_id: 3003,
         name: 'Hot Deals',
         logo: 'calendar_view_week',
-        route_name: 'HotDeals'
-      }
-    ]
+        route_name: 'HotDeals',
+      },
+    ],
   },
   {
     menu_id: 104,
@@ -207,34 +184,139 @@ const dashboardMenu = [
         sub_menu_id: 4001,
         name: 'Pending',
         logo: 'pending_actions',
-        route_name: 'Pending'
+        route_name: 'Pending',
       },
       {
         sub_menu_id: 4002,
         name: 'Warehouse',
         logo: 'warehouse',
-        route_name: 'Warehouse'
+        route_name: 'Warehouse',
       },
       {
         sub_menu_id: 4003,
         name: 'Shipping',
         logo: 'local_shipping',
-        route_name: 'Shipping'
+        route_name: 'Shipping',
       },
       {
         sub_menu_id: 4004,
         name: 'Delivery',
         logo: 'moped',
-        route_name: 'Delivery'
+        route_name: 'Delivery',
       },
       {
         sub_menu_id: 4005,
         name: 'Tracking',
         logo: 'location_searching',
-        route_name: 'Tracking'
-      }
-    ]
-  }
-];
+        route_name: 'Tracking',
+      },
+    ],
+  },
+]
 
-console.log(dashboardMenu);
+console.log(dashboardMenu)
+
+const products = [
+  {
+    parent_cat_id: 1,
+    sub_cat_id: 10,
+    sub_sub_cat_id: 100,
+    sub_sub_sub_cat_id: 1000,
+    prod_id: 10000,
+    prod_image: 'https://fabrilife.com/products/642045d214885-square.jpg?v=20',
+    prod_more_image: {},
+    prod_name: 'Cotton Panjabi',
+    price: 20,
+    prod_type: 'R',
+    prod_type_name: 'Regular',
+    rating: 5,
+    stock: 100,
+    prod_brand: 'Easy',
+    description: ` am magni architecto ipsa earum dignissimos aspernatur expedita quidem, itaque modi.`,
+    currency_id: 302,
+    currency_name: 'USD',
+    status: 1,
+  },
+  {
+    parent_cat_id: 1,
+    sub_cat_id: 10,
+    sub_sub_cat_id: 100,
+    sub_sub_sub_cat_id: 1000,
+    prod_id: 10000,
+    prod_image: 'https://fabrilife.com/products/642045d214885-square.jpg?v=20',
+    prod_more_image: {},
+    prod_name: 'Cotton Panjabi',
+    price: 20,
+    prod_type: 'R',
+    prod_type_name: 'Regular',
+    rating: 5,
+    stock: 100,
+    prod_brand: 'Easy',
+    description: ` am magni architecto ipsa earum dignissimos aspernatur expedita quidem, itaque modi.`,
+    currency_id: 302,
+    currency_name: 'USD',
+    status: 1,
+  },
+  {
+    parent_cat_id: 1,
+    sub_cat_id: 10,
+    sub_sub_cat_id: 100,
+    sub_sub_sub_cat_id: 1000,
+    prod_id: 10000,
+    prod_image: 'https://fabrilife.com/products/642045d214885-square.jpg?v=20',
+    prod_more_image: {},
+    prod_name: 'Cotton Panjabi',
+    price: 20,
+    prod_type: 'R',
+    prod_type_name: 'Regular',
+    rating: 5,
+    stock: 100,
+    prod_brand: 'Easy',
+    description: ` am magni architecto ipsa earum dignissimos aspernatur expedita quidem, itaque modi.`,
+    currency_id: 302,
+    currency_name: 'USD',
+    status: 1,
+  },
+  {
+    parent_cat_id: 1,
+    sub_cat_id: 10,
+    sub_sub_cat_id: 100,
+    sub_sub_sub_cat_id: 1000,
+    prod_id: 10000,
+    prod_image: 'https://fabrilife.com/products/642045d214885-square.jpg?v=20',
+    prod_more_image: {},
+    prod_name: 'Cotton Panjabi',
+    price: 20,
+    prod_type: 'R',
+    prod_type_name: 'Regular',
+    rating: 5,
+    stock: 100,
+    prod_brand: 'Easy',
+    description: ` am magni architecto ipsa earum dignissimos aspernatur expedita quidem, itaque modi.`,
+    currency_id: 302,
+    currency_name: 'USD',
+    status: 1,
+  },
+  {
+    parent_cat_id: 1,
+    sub_cat_id: 10,
+    sub_sub_cat_id: 100,
+    sub_sub_sub_cat_id: 1000,
+    prod_id: 10000,
+    prod_image: 'https://fabrilife.com/products/642045d214885-square.jpg?v=20',
+    prod_more_image: {},
+    prod_name: 'Cotton Panjabi',
+    price: 20,
+    prod_type: 'R',
+    prod_type_name: 'Regular',
+    rating: 5,
+    stock: 100,
+    prod_brand: 'Easy',
+    description: ` am magni architecto ipsa earum dignissimos aspernatur expedita quidem, itaque modi.`,
+    currency_id: 302,
+    currency_name: 'USD',
+    status: 1,
+  },
+]
+
+console.log(products)
