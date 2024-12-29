@@ -18,6 +18,18 @@ p {
   color: #ffffff;
 }
 
+.filter-bar h6 {
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.filter-bar button {
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
 .cursor {
   cursor: pointer;
 }
@@ -131,4 +143,8 @@ p {
 
 .create-modal {
   width: 580px;
+}
+
+.offcanvas.show {
+  transform: translateX(0);
 }
