@@ -56,6 +56,7 @@ const handleSubmit = async () => {
       const result = await postAdmin(data)
       if (result?.status === 201) {
         alert(result.data?.message);
+        isCreateModal.value = false;
         const obj = {
           _id: result.data?.id,
           email: inputData.value?.email,
@@ -93,51 +94,17 @@ const handleEdit = (roleInfo) => {
     email: roleInfo?.email,
     role_info: admin_role.value?.find((item) => item.id == roleInfo.role_id)
   }
+  isCreateModal.value = true;
 };
 </script>
 
 <template>
   <div class="filter-bar d-flex flex-wrap align-items-center justify-content-between">
     <h6>Admin List</h6>
-    <button
-    @click="handleCreate"
-    class="d-flex align-items-center"
-    >
+    <button @click="handleCreate" class="d-flex align-items-center">
       Create New <span class="material-icons">add</span>
     </button>
   </div>
-
-  <div class="row">
-    <div class="col-md-6">
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email *</label>
-        <input v-model="inputData.email" :class="{ 'is-invalid': isValidation && !inputData.email }" type="text"
-          class="form-control form-control-sm input-field-style" id="exampleInputEmail1" aria-describedby="emailHelp"
-          placeholder="Enter email">
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Select role *-</label>
-        <select v-model="inputData.role_info" :class="{ 'is-invalid': isValidation && !inputData.role_info }"
-          class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
-          <option v-for="(item, index) in admin_role" :key="index" :value="item">{{ item?.role_name }}</option>
-        </select>
-      </div>
-
-    </div>
-    <div class="col-md-6">
-      <button @click="handleSubmit" type="submit" class="submit-btn">
-        Submit
-      </button>
-
-      <button @click="handleCancel" type="cencel" class="cancel-btn ms-2">
-        Cancel
-      </button>
-    </div>
-  </div>
-
-  <h4 class="text-center mb-3 heading-style">Admin List</h4>
   <table class="table table-style">
     <thead>
       <tr>
@@ -166,11 +133,6 @@ const handleEdit = (roleInfo) => {
     </tbody>
   </table>
 
-
-
-
-
-
   <nav class="navbar bg-light fixed-top">
     <div class="container-fluid">
       <div class="offcanvas offcanvas-end create-modal" tabindex="-1" id="offcanvasNavbar"
@@ -186,8 +148,35 @@ const handleEdit = (roleInfo) => {
         </div>
         <div class="offcanvas-body">
           <!-- code write here  -->
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email *</label>
+                <input v-model="inputData.email" :class="{ 'is-invalid': isValidation && !inputData.email }" type="text"
+                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
+                  aria-describedby="emailHelp" placeholder="Enter email">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Select role *-</label>
+                <select v-model="inputData.role_info" :class="{ 'is-invalid': isValidation && !inputData.role_info }"
+                  class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
+                  <option v-for="(item, index) in admin_role" :key="index" :value="item">{{ item?.role_name }}</option>
+                </select>
+              </div>
 
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center mb-4 pt-4 modal-footer-style">
+          <button @click="handleSubmit" type="submit" class="submit-btn">
+            Submit
+          </button>
 
+          <button @click="handleCancel" type="cencel" class="cancel-btn ms-2">
+            Cancel
+          </button>
         </div>
       </div>
     </div>

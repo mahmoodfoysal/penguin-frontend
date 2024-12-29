@@ -79,6 +79,7 @@ p {
 .table-style {
   width: 100%;
   border: 1px solid #e2edfa;
+  margin-top: 10px;
 }
 
 .table-style td,

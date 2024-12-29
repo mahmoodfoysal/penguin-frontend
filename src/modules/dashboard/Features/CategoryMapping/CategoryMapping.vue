@@ -13,7 +13,7 @@ const handleGetCategories = async () => {
     const result = await getCategories();
     categoryList.value = result.data?.list_data
   }
-  catch(error) {
+  catch (error) {
     console.log(error)
   }
 }
@@ -23,14 +23,9 @@ const handleGetCategories = async () => {
   <div class="filter-bar d-flex flex-wrap align-items-center justify-content-between">
     <span>Category Mapping</span>
     <div class="d-flex align-items-center">
-      <span class="material-icons">edit</span>
+      <!-- <span class="material-icons">edit</span> -->
     </div>
   </div>
-
-
-
-
-  <h4 class="text-center mb-3 heading-style">Category Mapping List</h4>
 
   <table class="table table-style">
     <thead>
@@ -53,18 +48,11 @@ const handleGetCategories = async () => {
         </tr>
         <tr v-for="(subItem, subIndex) in item.sub_categories.slice(1)" :key="subIndex">
           <td>{{ subItem.sub_cat_id }}</td>
-          <td >{{ subItem.sub_cat_name }}</td>
+          <td>{{ subItem.sub_cat_name }}</td>
         </tr>
       </template>
     </tbody>
   </table>
-
-
-
-
-
-
-
 </template>
 
 <style scoped src="./CategoryMapping.css"></style>

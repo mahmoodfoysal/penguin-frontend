@@ -18,6 +18,42 @@ p {
   color: #ffffff;
 }
 
+.filter-bar h6 {
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.filter-bar button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.modal-header-style {
+  border-bottom: 1px solid gray !important;
+}
+
+.create-modal {
+  width: 580px;
+}
+
+.offcanvas.show {
+  transform: translateX(0);
+}
+
+.modal-footer-style {
+  border-top: 1px solid gray;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.btn-close {
+  box-shadow: none;
+}
+
 .cursor {
   cursor: pointer;
 }
@@ -79,6 +115,7 @@ p {
 .table-style {
   width: 100%;
   border: 1px solid #e2edfa;
+  margin-top: 10px;
 }
 
 .table-style td,

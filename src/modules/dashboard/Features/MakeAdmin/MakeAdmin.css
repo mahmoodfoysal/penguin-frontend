@@ -26,12 +26,32 @@ p {
 .filter-bar button {
   background: none;
   border: none;
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 500;
+}
+
+.modal-header-style {
+  border-bottom: 1px solid gray !important;
+}
+
+.create-modal {
+  width: 580px;
+}
+
+.offcanvas.show {
+  transform: translateX(0);
+}
+
+.modal-footer-style {
+  border-top: 1px solid gray;
 }
 
 .cursor {
   cursor: pointer;
+}
+
+.btn-close {
+  box-shadow: none;
 }
 
 .submit-btn {
@@ -69,11 +89,6 @@ p {
   border: 1px solid red !important;
 }
 
-.heading-style {
-  color: #026cd1 !important;
-  text-decoration: underline;
-}
-
 .edit-icon {
   color: #026cd1;
 }
@@ -91,6 +106,7 @@ p {
 .table-style {
   width: 100%;
   border: 1px solid #e2edfa;
+  margin-top: 10px;
 }
 
 .table-style td,
@@ -135,16 +151,4 @@ p {
 .table-style tbody td:nth-child(5) {
   width: 20%;
   text-align: end;
-}
-
-.modal-header-style {
-  border-bottom: 2px solid gray !important;
-}
-
-.create-modal {
-  width: 580px;
-}
-
-.offcanvas.show {
-  transform: translateX(0);
 }
