@@ -57,6 +57,12 @@ const routes = [
         name: 'SubCat',
         component: () => import('@/modules/dashboard/Features/AllCategory/SubCategory/SubCategory.vue'),
         meta: { hideFooter: true },
+      },
+      {
+        path: 'sub-sub-category',
+        name: 'SubSubCat',
+        component: () => import('@/modules/dashboard/Features/AllCategory/SubSubCategory/SubSubCategory.vue'),
+        meta: { hideFooter: true },
       }
     ]
   },

@@ -51,40 +51,61 @@ const subCategory = [
     par_cat_id: 1,
     sub_cat_id: 104,
     sub_cat_name: 'Potato',
+    status: 1
   },
   {
     par_cat_id: 1,
     sub_cat_id: 105,
     sub_cat_name: 'Tomato',
+    status: 1
   },
   {
     par_cat_id: 2,
     sub_cat_id: 100,
     sub_cat_name: 'Frozen Fish',
+    status: 1
   },
   {
     par_cat_id: 2,
     sub_cat_id: 101,
     sub_cat_name: 'Dish Fish',
+    status: 1
   },
   {
     par_cat_id: 2,
     sub_cat_id: 102,
     sub_cat_name: 'Fresh Fish',
+    status: 1
   },
   {
     par_cat_id: 2,
     sub_cat_id: 103,
     sub_cat_name: 'Beef',
+    status: 1
   },
   {
     par_cat_id: 2,
     sub_cat_id: 103,
     sub_cat_name: 'Chicken',
+    status: 1
   },
 ]
 
 console.log(subCategory)
+
+const subSubCategoty = () =>  [
+  {
+    par_cat_id: 2,
+    sub_cat_id: 103,
+    sub_cat_sub_id: 103,
+    par_cat_name: 'Murgi',
+    sub_cat_name: 'Chicken',
+    sub_sub_cat_name: 'Chicken',
+    status: 1
+  }
+];
+
+console.log(subSubCategoty)
 
 const dashboardMenu = [
   {
