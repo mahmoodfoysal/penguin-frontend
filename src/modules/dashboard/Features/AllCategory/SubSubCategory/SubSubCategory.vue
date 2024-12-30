@@ -145,8 +145,9 @@ const handleEdit = (item) => {
   inputData.value = {
     id: item?._id,
     parent_cat_info: parentCategoryList.value.find((parCatItem) => parCatItem.par_cat_id === item.par_cat_id),
-    sub_cat_id: item?.sub_cat_id,
-    sub_cat_name: item?.sub_cat_name,
+    sub_cat_info: subCatList.value.find((subItem) => subItem.sub_cat_id === item.sub_cat_id ),
+    sub_sub_cat_id: item?.sub_sub_cat_id,
+    sub_sub_cat_name: item?.sub_sub_cat_name,
     status: item?.status
   }
   isCreateModal.value = true;
@@ -172,6 +173,8 @@ const user_email = computed(() => store.userInfo?.email);
         <th>Parent Name</th>
         <th>Sub ID</th>
         <th>Sub Name</th>
+        <th>Sub Sub ID</th>
+        <th>Sub Sub Name</th>
         <th>Status</th>
         <th>Actions</th>
       </tr>
@@ -183,6 +186,8 @@ const user_email = computed(() => store.userInfo?.email);
         <td>{{ item?.par_cat_name }}</td>
         <td>{{ item?.sub_cat_id }}</td>
         <td>{{ item?.sub_cat_name }}</td>
+        <td>{{ item?.sub_sub_cat_id }}</td>
+        <td>{{ item?.sub_sub_cat_name }}</td>
         <td>
           <div class="form-check form-switch">
             <input v-model="item.status" :value="item" :true-value="1" :false-value="0" class="form-check-input"
@@ -194,7 +199,7 @@ const user_email = computed(() => store.userInfo?.email);
           <span @click="handleEdit(item)" class="material-icons ms-2 cursor me-2 edit-icon">
             edit
           </span>
-          <span class="material-icons ms-2 cursor delete-icon">
+          <span class="material-icons cursor delete-icon">
             delete
           </span>
         </td>
