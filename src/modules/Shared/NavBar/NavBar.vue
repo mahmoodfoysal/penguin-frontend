@@ -17,7 +17,7 @@ const handleGetAdmin = async () => {
     const result = await getAdmin(store.userInfo ? store.userInfo?.email : null);
     isAdmin.value = result.data?.admin
   }
-  catch(error) {
+  catch (error) {
     console.log(error);
     isAdmin.value = false;
   }
@@ -82,13 +82,75 @@ watch(
                 </RouterLink>
               </li>
 
-              <li
-              v-if="isAdmin"
-              class="nav-item">
+              <li v-if="isAdmin" class="nav-item">
                 <RouterLink :to="{ name: 'DashboardHome' }">
                   <a class="nav-link" href="">Dashboard</a>
                 </RouterLink>
               </li>
+
+
+
+              <!-- mega menu  -->
+
+              <!-- <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle navbar-text" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  Dropdown
+                </a>
+                <div class="dropdown-menu-style d-flex">
+                  <ul>
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 1</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 2</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 3</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 4</a></li>
+                  </ul>
+                  <ul>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 1</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 2</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 3</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 4</a></li>
+                  </ul>
+                  <ul>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 1</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 2</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 3</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 4</a></li>
+                  </ul>
+                  <ul>
+                    <li><a class="dropdown-item" href="#">menu menu</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 1</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 2</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 3</a></li>
+                    <li><a class="dropdown-item" href="">Drop menu 4</a></li>
+                  </ul>
+                </div>
+              </li> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               <li class="nav-item submenu dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                   aria-expanded="false">Shop</a>
