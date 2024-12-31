@@ -22,6 +22,11 @@ const routes = [
     component: () => import('@/components/Authentication/Registration/PenguinRegistration.vue'),
   },
   {
+    path: '/features/products',
+    name: 'Products',
+    component: () => import('@/modules/client/AllProducts/AllProducts.vue'),
+  },
+  {
     path: '/dashboard/features',
     name: 'DashboardHome',
     component: () => import('@/modules/dashboard/DashboardIndex.vue'),

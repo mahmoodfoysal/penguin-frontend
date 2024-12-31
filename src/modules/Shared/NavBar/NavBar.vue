@@ -76,9 +76,14 @@ watch(
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
             <ul class="nav navbar-nav menu_nav ml-auto">
-              <li class="nav-item active">
-                <RouterLink :to="{ name: 'Home' }">
+              <li class="nav-item" >
+                <RouterLink :to="{ name: 'Home' }" class="link-decor-style">
                   <a class="nav-link" href="">Home</a>
+                </RouterLink>
+              </li>
+              <li class="nav-item ">
+                <RouterLink :to="{ name: 'Products' }" class="link-decor-style">
+                  <a class="nav-link" href="">Products</a>
                 </RouterLink>
               </li>
 

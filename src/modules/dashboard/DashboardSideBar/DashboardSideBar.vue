@@ -22,8 +22,6 @@ const handleGetDashboardMenu = async () => {
 </script>
 
 <template>
-
-
   <div class="sidebar-categories">
     <div class="head">Dashboard</div>
     <ul class="main-categories sidebar-style">
@@ -58,7 +56,6 @@ const handleGetDashboardMenu = async () => {
       </li>
     </ul>
   </div>
-
 </template>
 
 <style scoped src="./DashboardSideBar.css"></style>
