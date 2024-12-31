@@ -42,9 +42,14 @@ const modules = [Navigation, Autoplay]
           <a href="" class="primary-btn">Shop Now</a>
         </div>
         <div class="col-lg-6 no-padding exclusive-right">
-          <div class="active-exclusive-product-slider">
 
-            <swiper :navigation="true" :modules="modules" :autoplay="{
+
+          <div class="active-exclusive-product-slider">
+    <span class="material-icons custom-prev">arrow_back</span>
+            <swiper :navigation="{
+                nextEl: '.custom-next',
+                prevEl: '.custom-prev'
+              }" :modules="modules" :autoplay="{
               delay: 2500,
               disableOnInteraction: false,
             }" class="mySwiper">
@@ -87,15 +92,13 @@ const modules = [Navigation, Autoplay]
               </swiper-slide>
 
             </swiper>
-
-
-
-
-
+            <span class="material-icons custom-next">arrow_forward</span>
           </div>
+</div>
+
         </div>
       </div>
-    </div>
+
   </section>
   <!-- End exclusive deal Area -->
 </template>

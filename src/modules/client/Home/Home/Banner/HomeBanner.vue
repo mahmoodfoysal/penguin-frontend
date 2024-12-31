@@ -16,7 +16,10 @@ const modules = [Navigation, Autoplay]
           <div class="active-banner-slider owl-carousel">
             <!-- single-slide -->
 
-            <swiper :navigation="true" :modules="modules" :autoplay="{
+            <swiper :navigation="{
+      nextEl: '.custom-next',
+      prevEl: '.custom-prev'
+    }" :modules="modules" :autoplay="{
               delay: 2500,
               disableOnInteraction: false,
             }" class="mySwiper">
@@ -33,7 +36,12 @@ const modules = [Navigation, Autoplay]
                             add
                           </span></a>
                         <span class="add-text text-uppercase">Add to Bag</span>
+
                       </div>
+
+                          <span class="material-icons custom-prev me-5">arrow_back</span>
+                          <span class="material-icons custom-next">arrow_forward</span>
+
                     </div>
                   </div>
                   <div class="col-lg-7">

@@ -78,6 +78,26 @@
   color: #222222;
 }
 
+/* custom navigation  */
+
+.custom-prev,
+.custom-next {
+  margin-top: 10px;
+  color: #FFAD00;
+  border: none;
+  cursor: pointer;
+  font-size: 30px;
+}
+
+.custom-prev:hover,
+.custom-next:hover {
+  opacity: 0.8;
+}
+
+.custon-div span {
+font-size: 40px;
+}
+
 .organic-breadcrumb {
   background: url(../../../../../img/banner/common-banner.jpg) center no-repeat;
   background-size: cover;
