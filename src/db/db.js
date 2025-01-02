@@ -361,7 +361,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 10,
-    sub_sub_cat_id: 103,
+    sub_sub_cat_id: 102,
     prod_id: 1006,
     prod_image:
       'https://images.pexels.com/photos/1232459/pexels-photo-1232459.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -381,7 +381,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 10,
-    sub_sub_cat_id: 103,
+    sub_sub_cat_id: 102,
     prod_id: 1007,
     prod_image:
       'https://images.pexels.com/photos/3777556/pexels-photo-3777556.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -401,7 +401,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 10,
-    sub_sub_cat_id: 103,
+    sub_sub_cat_id: 102,
     prod_id: 1008,
     prod_image:
       'https://images.pexels.com/photos/20798143/pexels-photo-20798143/free-photo-of-man-in-sunglasses.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -421,7 +421,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 10,
-    sub_sub_cat_id: 104,
+    sub_sub_cat_id: 103,
     prod_id: 1008,
     prod_image:
       'https://images.pexels.com/photos/13155760/pexels-photo-13155760.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -441,7 +441,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 10,
-    sub_sub_cat_id: 104,
+    sub_sub_cat_id: 103,
     prod_id: 1009,
     prod_image:
       'https://images.pexels.com/photos/16968335/pexels-photo-16968335/free-photo-of-pre-wedding-shoot.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -461,7 +461,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 10,
-    sub_sub_cat_id: 104,
+    sub_sub_cat_id: 103,
     prod_id: 1010,
     prod_image:
       'https://images.pexels.com/photos/8217705/pexels-photo-8217705.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -481,7 +481,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 10,
-    sub_sub_cat_id: 105,
+    sub_sub_cat_id: 104,
     prod_id: 1011,
     prod_image:
       'https://images.pexels.com/photos/3209639/pexels-photo-3209639.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -501,7 +501,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 10,
-    sub_sub_cat_id: 105,
+    sub_sub_cat_id: 104,
     prod_id: 1012,
     prod_image:
       'https://images.pexels.com/photos/29945903/pexels-photo-29945903/free-photo-of-confident-young-man-in-stylish-red-blazer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -521,7 +521,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 10,
-    sub_sub_cat_id: 105,
+    sub_sub_cat_id: 104,
     prod_id: 1013,
     prod_image:
       'https://images.pexels.com/photos/2955376/pexels-photo-2955376.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -541,7 +541,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 11,
-    sub_sub_cat_id: 106,
+    sub_sub_cat_id: 105,
     prod_id: 1014,
     prod_image:
       'https://images.pexels.com/photos/730055/pexels-photo-730055.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -561,7 +561,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 11,
-    sub_sub_cat_id: 106,
+    sub_sub_cat_id: 105,
     prod_id: 1015,
     prod_image:
       'https://images.pexels.com/photos/1999895/pexels-photo-1999895.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -581,7 +581,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 11,
-    sub_sub_cat_id: 106,
+    sub_sub_cat_id: 105,
     prod_id: 1016,
     prod_image:
       'https://images.pexels.com/photos/1999895/pexels-photo-1999895.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -601,7 +601,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 11,
-    sub_sub_cat_id: 106,
+    sub_sub_cat_id: 105,
     prod_id: 1017,
     prod_image:
       'https://images.pexels.com/photos/1446161/pexels-photo-1446161.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -621,7 +621,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 11,
-    sub_sub_cat_id: 107,
+    sub_sub_cat_id: 106,
     prod_id: 1018,
     prod_image:
       'https://images.pexels.com/photos/904117/pexels-photo-904117.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -641,7 +641,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 11,
-    sub_sub_cat_id: 107,
+    sub_sub_cat_id: 106,
     prod_id: 1019,
     prod_image:
       'https://images.pexels.com/photos/20777203/pexels-photo-20777203/free-photo-of-model-in-blue-embroidered-shalwar-kameez-dress-with-scarf.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -661,7 +661,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 11,
-    sub_sub_cat_id: 107,
+    sub_sub_cat_id: 106,
     prod_id: 1020,
     prod_image:
       'https://images.pexels.com/photos/19281544/pexels-photo-19281544/free-photo-of-western-dress-2024-shoot-by-dhanno.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -681,7 +681,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 11,
-    sub_sub_cat_id: 108,
+    sub_sub_cat_id: 107,
     prod_id: 1021,
     prod_image:
       'https://images.pexels.com/photos/2072583/pexels-photo-2072583.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -701,7 +701,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 11,
-    sub_sub_cat_id: 108,
+    sub_sub_cat_id: 107,
     prod_id: 1022,
     prod_image:
       'https://images.pexels.com/photos/1386897/pexels-photo-1386897.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -721,7 +721,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 11,
-    sub_sub_cat_id: 109,
+    sub_sub_cat_id: 108,
     prod_id: 1023,
     prod_image:
       'https://images.pexels.com/photos/1488507/pexels-photo-1488507.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -741,7 +741,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 11,
-    sub_sub_cat_id: 109,
+    sub_sub_cat_id: 108,
     prod_id: 1024,
     prod_image:
       'https://images.pexels.com/photos/1007018/pexels-photo-1007018.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -761,7 +761,7 @@ const products = [
   {
     parent_cat_id: 1,
     sub_cat_id: 11,
-    sub_sub_cat_id: 109,
+    sub_sub_cat_id: 108,
     prod_id: 1025,
     prod_image:
       'https://images.pexels.com/photos/1007019/pexels-photo-1007019.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -773,6 +773,26 @@ const products = [
     rating: 5,
     stock: 100,
     prod_brand: 'LE REVE',
+    description: ` am magni architecto ipsa earum dignissimos aspernatur expedita quidem, itaque modi.`,
+    currency_id: 302,
+    currency_name: 'USD',
+    status: 1,
+  },
+  {
+    parent_cat_id: 1,
+    sub_cat_id: 11,
+    sub_sub_cat_id: 109,
+    prod_id: 1078455,
+    prod_image:
+      'https://images.pexels.com/photos/27155546/pexels-photo-27155546/free-photo-of-portrait-of-smiling-woman-in-traditional-clothing.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_more_image: {},
+    prod_name: 'Lehenga',
+    price: 90,
+    prod_type: 'R',
+    prod_type_name: 'Regular',
+    rating: 5,
+    stock: 100,
+    prod_brand: 'BharatSthali',
     description: ` am magni architecto ipsa earum dignissimos aspernatur expedita quidem, itaque modi.`,
     currency_id: 302,
     currency_name: 'USD',
@@ -1081,7 +1101,7 @@ const products = [
   {
     parent_cat_id: 2,
     sub_cat_id: 13,
-    sub_sub_cat_id: 1014,
+    sub_sub_cat_id: 1015,
     prod_id: 1041,
     prod_image:
       'https://images.pexels.com/photos/19376850/pexels-photo-19376850/free-photo-of-young-man-sitting-at-the-desk-and-reading-a-book.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -1101,7 +1121,7 @@ const products = [
   {
     parent_cat_id: 2,
     sub_cat_id: 13,
-    sub_sub_cat_id: 1014,
+    sub_sub_cat_id: 1015,
     prod_id: 1042,
     prod_image:
       'https://images.pexels.com/photos/9845869/pexels-photo-9845869.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -1121,7 +1141,7 @@ const products = [
   {
     parent_cat_id: 2,
     sub_cat_id: 14,
-    sub_sub_cat_id: 1015,
+    sub_sub_cat_id: 1016,
     prod_id: 1043,
     prod_image:
       'https://images.pexels.com/photos/400678/pexels-photo-400678.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -1141,7 +1161,7 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 15,
-    sub_sub_cat_id: 1016,
+    sub_sub_cat_id: 1017,
     prod_id: 1044,
     prod_image:
       'https://images.pexels.com/photos/28606674/pexels-photo-28606674/free-photo-of-stylish-green-sneakers-on-patterned-carpet-indoors.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -1161,7 +1181,7 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 15,
-    sub_sub_cat_id: 1016,
+    sub_sub_cat_id: 1017,
     prod_id: 1045,
     prod_image:
       'https://images.pexels.com/photos/13449652/pexels-photo-13449652.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -1181,7 +1201,7 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 15,
-    sub_sub_cat_id: 1016,
+    sub_sub_cat_id: 1017,
     prod_id: 1046,
     prod_image:
       'https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -1201,7 +1221,7 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 15,
-    sub_sub_cat_id: 1016,
+    sub_sub_cat_id: 1017,
     prod_id: 1044,
     prod_image:
       'https://images.pexels.com/photos/28606674/pexels-photo-28606674/free-photo-of-stylish-green-sneakers-on-patterned-carpet-indoors.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -1221,7 +1241,7 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 15,
-    sub_sub_cat_id: 1016,
+    sub_sub_cat_id: 1017,
     prod_id: 1045,
     prod_image:
       'https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -1241,7 +1261,7 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 15,
-    sub_sub_cat_id: 1016,
+    sub_sub_cat_id: 1017,
     prod_id: 1046,
     prod_image:
       'https://images.pexels.com/photos/13449652/pexels-photo-13449652.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -1261,7 +1281,7 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 15,
-    sub_sub_cat_id: 1016,
+    sub_sub_cat_id: 1017,
     prod_id: 1047,
     prod_image:
       'https://images.pexels.com/photos/10419944/pexels-photo-10419944.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',

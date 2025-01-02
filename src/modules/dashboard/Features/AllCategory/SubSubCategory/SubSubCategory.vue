@@ -25,7 +25,6 @@ const statusList = ref([
 
 onMounted(() => {
   handleGetSubSubCategory()
-  handleGetSubCategory();
   handleGetParentCategory();
 });
 
@@ -50,9 +49,9 @@ const handleGetSubSubCategory = async () => {
 const handleGetSubCategory = async () => {
   try {
     const result = await getSubCategory();
-    subCatList.value = result.data?.list_data;
+    subCatList.value = result.data?.list_data.filter((item) => item.par_cat_id === inputData.value?.parent_cat_info?.par_cat_id);
   }
-  catch(error) {
+  catch (error) {
     console.log(error);
   }
 };
@@ -145,7 +144,7 @@ const handleEdit = (item) => {
   inputData.value = {
     id: item?._id,
     parent_cat_info: parentCategoryList.value.find((parCatItem) => parCatItem.par_cat_id === item.par_cat_id),
-    sub_cat_info: subCatList.value.find((subItem) => subItem.sub_cat_id === item.sub_cat_id ),
+    sub_cat_info: subCatList.value.find((subItem) => subItem.sub_cat_id === item.sub_cat_id),
     sub_sub_cat_id: item?.sub_sub_cat_id,
     sub_sub_cat_name: item?.sub_sub_cat_name,
     status: item?.status
@@ -228,7 +227,7 @@ const user_email = computed(() => store.userInfo?.email);
             <div class="col-md-6">
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Parent Category *</label>
-                <select v-model="inputData.parent_cat_info"
+                <select @input="handleGetSubCategory" v-model="inputData.parent_cat_info"
                   :class="{ 'is-invalid': isValidation && !inputData.parent_cat_info }"
                   class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
                   <option v-for="(item, index) in parentCategoryList" :key="index" :value="item">{{ item?.par_cat_id }}
@@ -263,8 +262,9 @@ const user_email = computed(() => store.userInfo?.email);
             <div class="col-md-6">
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Category ID *</label>
-                <input v-model="inputData.sub_sub_cat_id" :class="{ 'is-invalid': isValidation && !inputData.sub_sub_cat_id }"
-                  type="number" class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
+                <input v-model="inputData.sub_sub_cat_id"
+                  :class="{ 'is-invalid': isValidation && !inputData.sub_sub_cat_id }" type="number"
+                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
                   aria-describedby="emailHelp" placeholder="Give sub category id">
               </div>
             </div>
