@@ -1,11 +1,14 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { getParentCategory, postParentCategory, updateParentCategoryStatus } from '@/modules/dashboard/api/categories.js';
+import { useStore } from '@/store/index';
+
 
 const categoryList = ref([]);
 const inputData = ref({});
 const isValidation = ref(false);
 const isCreateModal = ref(false);
+const store = useStore();
 
 const statusList = ref([
   {
@@ -55,7 +58,8 @@ const handleSubmit = async () => {
   if (
     !inputData.value?.par_cat_id ||
     !inputData.value?.par_cat_name ||
-    !inputData.value.status
+    !inputData.value.status ||
+    !user_email.value
   ) {
     isValidation.value = true;
     return;
@@ -64,7 +68,8 @@ const handleSubmit = async () => {
     _id: inputData.value.id || null,
     par_cat_id: Number(inputData.value?.par_cat_id),
     par_cat_name: inputData.value?.par_cat_name,
-    status: inputData.value?.status
+    status: inputData.value?.status,
+    userInfo: user_email.value,
   }
   try {
     const text = "Are you want to sure?";
@@ -112,6 +117,8 @@ const handleEdit = (item) => {
   };
   isCreateModal.value = true;
 }
+
+const user_email = computed(() => store.userInfo?.email);
 </script>
 
 <template>

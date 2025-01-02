@@ -1,45 +1,42 @@
 <script setup>
+import { getCategories } from '@/modules/dashboard/api/categories';
+import { onMounted, ref } from 'vue';
 
+const categoryList = ref([]);
+
+onMounted(() => {
+  handleCategoryList()
+});
+
+const handleCategoryList = async () => {
+  try {
+    const result = await getCategories();
+    categoryList.value = result.data?.list_data;
+  }
+  catch(error) {
+    console.log(error);
+  }
+};
 </script>
 
 <template>
   <div class="sidebar-categories">
     <div class="head">Browse Categories</div>
     <ul class="main-categories sidebar-style">
-      <li class="main-nav-list"><a data-toggle="collapse" href="" aria-expanded="false"
-          aria-controls="fruitsVegetable"><span class="lnr lnr-arrow-right"></span>Home</a>
-      </li>
-      <li class="main-nav-list"><a data-toggle="collapse" href="" aria-expanded="false"
-          aria-controls="fruitsVegetable"><span class="lnr lnr-arrow-right"></span>Home</a>
-      </li>
-      <li class="main-nav-list"><a data-toggle="collapse" href="" aria-expanded="false"
-          aria-controls="fruitsVegetable"><span class="lnr lnr-arrow-right"></span>Home</a>
-      </li>
-      <li class="main-nav-list"><a data-toggle="collapse" href="" aria-expanded="false"
-          aria-controls="fruitsVegetable"><span class="lnr lnr-arrow-right"></span>Home</a>
-      </li>
-      <!-- <li v-for="(item, index) in menuList" :key="index" class="main-nav-list">
+      <li v-for="(item, index) in categoryList || []" :key="index" class="main-nav-list">
         <a class="d-flex align-items-center" data-bs-toggle="collapse" :href="`#collapse-${index}`"
           :aria-expanded="false" :aria-controls="`collapse-${index}`">
-          <span class="material-icons me-1">
-            {{ item?.logo }}
-          </span>
-          {{ item?.name }}
+          {{ item?.par_cat_name }} <span class="ms-1">(2)***</span>
         </a>
         <ul class="collapse" :id="`collapse-${index}`" :aria-labelledby="`collapse-${index}`"
           data-bs-parent=".main-nav-list">
-          <li v-for="(subItem, subIndex) in item?.sub_menu" :key="subIndex" class="main-nav-list child">
-            <RouterLink :to="{ name: subItem?.route_name }">
-              <a href="" class="d-flex align-items-center">
-                <span class="material-icons me-1">
-                  {{ subItem?.logo }}
-                </span>
-                {{ subItem?.name }}
+          <li v-for="(subItem, subIndex) in item?.sub_categories" :key="subIndex" class="main-nav-list child">
+              <a href="#" class="d-flex align-items-center">
+                {{ subItem?.sub_cat_name }} <span class="ms-1">(2)***</span>
               </a>
-            </RouterLink>
           </li>
         </ul>
-      </li> -->
+      </li>
     </ul>
   </div>
 </template>
