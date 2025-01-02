@@ -51,49 +51,49 @@ const subCategory = [
     par_cat_id: 1,
     sub_cat_id: 104,
     sub_cat_name: 'Potato',
-    status: 1
+    status: 1,
   },
   {
     par_cat_id: 1,
     sub_cat_id: 105,
     sub_cat_name: 'Tomato',
-    status: 1
+    status: 1,
   },
   {
     par_cat_id: 2,
     sub_cat_id: 100,
     sub_cat_name: 'Frozen Fish',
-    status: 1
+    status: 1,
   },
   {
     par_cat_id: 2,
     sub_cat_id: 101,
     sub_cat_name: 'Dish Fish',
-    status: 1
+    status: 1,
   },
   {
     par_cat_id: 2,
     sub_cat_id: 102,
     sub_cat_name: 'Fresh Fish',
-    status: 1
+    status: 1,
   },
   {
     par_cat_id: 2,
     sub_cat_id: 103,
     sub_cat_name: 'Beef',
-    status: 1
+    status: 1,
   },
   {
     par_cat_id: 2,
     sub_cat_id: 103,
     sub_cat_name: 'Chicken',
-    status: 1
+    status: 1,
   },
 ]
 
 console.log(subCategory)
 
-const subSubCategoty = () =>  [
+const subSubCategoty = () => [
   {
     par_cat_id: 2,
     sub_cat_id: 103,
@@ -101,9 +101,9 @@ const subSubCategoty = () =>  [
     par_cat_name: 'Murgi',
     sub_cat_name: 'Chicken',
     sub_sub_cat_name: 'Chicken',
-    status: 1
-  }
-];
+    status: 1,
+  },
+]
 
 console.log(subSubCategoty)
 
@@ -243,7 +243,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 100,
     prod_id: 1000,
-    prod_image: 'https://images.pexels.com/photos/769749/pexels-photo-769749.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/769749/pexels-photo-769749.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Casual Cotton Shirt',
     price: 20,
@@ -262,7 +263,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 100,
     prod_id: 1001,
-    prod_image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Formal Shirt',
     price: 22,
@@ -281,7 +283,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 100,
     prod_id: 1002,
-    prod_image: 'https://images.pexels.com/photos/769728/pexels-photo-769728.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/769728/pexels-photo-769728.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Casual Shirt',
     price: 19,
@@ -300,7 +303,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 101,
     prod_id: 1003,
-    prod_image: 'https://images.pexels.com/photos/1356271/pexels-photo-1356271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/1356271/pexels-photo-1356271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Cotton t-shirt',
     price: 15,
@@ -319,7 +323,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 101,
     prod_id: 1004,
-    prod_image: 'https://images.pexels.com/photos/2769297/pexels-photo-2769297.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/2769297/pexels-photo-2769297.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Cotton t-shirt',
     price: 17,
@@ -338,7 +343,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 101,
     prod_id: 1005,
-    prod_image: 'https://images.pexels.com/photos/1656684/pexels-photo-1656684.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/1656684/pexels-photo-1656684.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Cotton t-shirt',
     price: 23,
@@ -357,7 +363,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 103,
     prod_id: 1006,
-    prod_image: 'https://images.pexels.com/photos/1232459/pexels-photo-1232459.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/1232459/pexels-photo-1232459.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Polo shirt',
     price: 20,
@@ -376,7 +383,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 103,
     prod_id: 1007,
-    prod_image: 'https://images.pexels.com/photos/3777556/pexels-photo-3777556.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/3777556/pexels-photo-3777556.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Polo shirt',
     price: 25,
@@ -395,7 +403,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 103,
     prod_id: 1008,
-    prod_image: 'https://images.pexels.com/photos/20798143/pexels-photo-20798143/free-photo-of-man-in-sunglasses.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/20798143/pexels-photo-20798143/free-photo-of-man-in-sunglasses.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Polo shirt',
     price: 21,
@@ -414,7 +423,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 104,
     prod_id: 1008,
-    prod_image: 'https://images.pexels.com/photos/13155760/pexels-photo-13155760.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/13155760/pexels-photo-13155760.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Traditional Sherwani',
     price: 40,
@@ -433,7 +443,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 104,
     prod_id: 1009,
-    prod_image: 'https://images.pexels.com/photos/16968335/pexels-photo-16968335/free-photo-of-pre-wedding-shoot.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/16968335/pexels-photo-16968335/free-photo-of-pre-wedding-shoot.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Traditional Panjabi',
     price: 30,
@@ -452,7 +463,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 104,
     prod_id: 1010,
-    prod_image: 'https://images.pexels.com/photos/8217705/pexels-photo-8217705.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/8217705/pexels-photo-8217705.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Cotton Panjabi',
     price: 32,
@@ -471,7 +483,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 105,
     prod_id: 1011,
-    prod_image: 'https://images.pexels.com/photos/3209639/pexels-photo-3209639.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/3209639/pexels-photo-3209639.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Blazer',
     price: 45,
@@ -490,7 +503,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 105,
     prod_id: 1012,
-    prod_image: 'https://images.pexels.com/photos/29945903/pexels-photo-29945903/free-photo-of-confident-young-man-in-stylish-red-blazer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/29945903/pexels-photo-29945903/free-photo-of-confident-young-man-in-stylish-red-blazer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Blazer',
     price: 48,
@@ -509,7 +523,8 @@ const products = [
     sub_cat_id: 10,
     sub_sub_cat_id: 105,
     prod_id: 1013,
-    prod_image: 'https://images.pexels.com/photos/2955376/pexels-photo-2955376.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/2955376/pexels-photo-2955376.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Blazer',
     price: 50,
@@ -528,7 +543,8 @@ const products = [
     sub_cat_id: 11,
     sub_sub_cat_id: 106,
     prod_id: 1014,
-    prod_image: 'https://images.pexels.com/photos/730055/pexels-photo-730055.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/730055/pexels-photo-730055.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Saree',
     price: 29,
@@ -547,7 +563,8 @@ const products = [
     sub_cat_id: 11,
     sub_sub_cat_id: 106,
     prod_id: 1015,
-    prod_image: 'https://images.pexels.com/photos/1999895/pexels-photo-1999895.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/1999895/pexels-photo-1999895.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Saree',
     price: 40,
@@ -566,7 +583,8 @@ const products = [
     sub_cat_id: 11,
     sub_sub_cat_id: 106,
     prod_id: 1016,
-    prod_image: 'https://images.pexels.com/photos/1999895/pexels-photo-1999895.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/1999895/pexels-photo-1999895.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Saree',
     price: 40,
@@ -585,7 +603,8 @@ const products = [
     sub_cat_id: 11,
     sub_sub_cat_id: 106,
     prod_id: 1017,
-    prod_image: 'https://images.pexels.com/photos/1446161/pexels-photo-1446161.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/1446161/pexels-photo-1446161.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Saree',
     price: 36,
@@ -604,7 +623,8 @@ const products = [
     sub_cat_id: 11,
     sub_sub_cat_id: 107,
     prod_id: 1018,
-    prod_image: 'https://images.pexels.com/photos/904117/pexels-photo-904117.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/904117/pexels-photo-904117.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Salwar',
     price: 27,
@@ -623,7 +643,8 @@ const products = [
     sub_cat_id: 11,
     sub_sub_cat_id: 107,
     prod_id: 1019,
-    prod_image: 'https://images.pexels.com/photos/20777203/pexels-photo-20777203/free-photo-of-model-in-blue-embroidered-shalwar-kameez-dress-with-scarf.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/20777203/pexels-photo-20777203/free-photo-of-model-in-blue-embroidered-shalwar-kameez-dress-with-scarf.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Salwar',
     price: 30,
@@ -642,7 +663,8 @@ const products = [
     sub_cat_id: 11,
     sub_sub_cat_id: 107,
     prod_id: 1020,
-    prod_image: 'https://images.pexels.com/photos/19281544/pexels-photo-19281544/free-photo-of-western-dress-2024-shoot-by-dhanno.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/19281544/pexels-photo-19281544/free-photo-of-western-dress-2024-shoot-by-dhanno.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Salwar',
     price: 33,
@@ -661,7 +683,8 @@ const products = [
     sub_cat_id: 11,
     sub_sub_cat_id: 108,
     prod_id: 1021,
-    prod_image: 'https://images.pexels.com/photos/2072583/pexels-photo-2072583.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/2072583/pexels-photo-2072583.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Western',
     price: 28,
@@ -680,7 +703,8 @@ const products = [
     sub_cat_id: 11,
     sub_sub_cat_id: 108,
     prod_id: 1022,
-    prod_image: 'https://images.pexels.com/photos/1386897/pexels-photo-1386897.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/1386897/pexels-photo-1386897.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Western',
     price: 28,
@@ -699,7 +723,8 @@ const products = [
     sub_cat_id: 11,
     sub_sub_cat_id: 109,
     prod_id: 1023,
-    prod_image: 'https://images.pexels.com/photos/1488507/pexels-photo-1488507.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/1488507/pexels-photo-1488507.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Skirt',
     price: 22,
@@ -718,7 +743,8 @@ const products = [
     sub_cat_id: 11,
     sub_sub_cat_id: 109,
     prod_id: 1024,
-    prod_image: 'https://images.pexels.com/photos/1007018/pexels-photo-1007018.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/1007018/pexels-photo-1007018.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Skirt',
     price: 23,
@@ -737,7 +763,8 @@ const products = [
     sub_cat_id: 11,
     sub_sub_cat_id: 109,
     prod_id: 1025,
-    prod_image: 'https://images.pexels.com/photos/1007019/pexels-photo-1007019.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/1007019/pexels-photo-1007019.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Skirt',
     price: 20,
@@ -756,7 +783,8 @@ const products = [
     sub_cat_id: 12,
     sub_sub_cat_id: 1010,
     prod_id: 1026,
-    prod_image: 'https://images.pexels.com/photos/15493878/pexels-photo-15493878/free-photo-of-hands-on-samsung-galaxy-s23-ultra-5g-green-color-mention-zana_qaradaghy-on-instagram-while-use-this-photo-follow-on-instagram-zana_qaradaghy.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/15493878/pexels-photo-15493878/free-photo-of-hands-on-samsung-galaxy-s23-ultra-5g-green-color-mention-zana_qaradaghy-on-instagram-while-use-this-photo-follow-on-instagram-zana_qaradaghy.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Samsung S24 Ultra',
     price: 990,
@@ -775,7 +803,8 @@ const products = [
     sub_cat_id: 12,
     sub_sub_cat_id: 1010,
     prod_id: 1027,
-    prod_image: 'https://images.pexels.com/photos/16149966/pexels-photo-16149966/free-photo-of-get-ready-for-the-future-with-samsung-galaxy-s23.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/16149966/pexels-photo-16149966/free-photo-of-get-ready-for-the-future-with-samsung-galaxy-s23.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Samsung S23 Ultra',
     price: 910,
@@ -794,7 +823,8 @@ const products = [
     sub_cat_id: 12,
     sub_sub_cat_id: 1010,
     prod_id: 1028,
-    prod_image: 'https://images.pexels.com/photos/16812192/pexels-photo-16812192/free-photo-of-samsung-smart-phone-in-hand.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/16812192/pexels-photo-16812192/free-photo-of-samsung-smart-phone-in-hand.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Samsung A55',
     price: 710,
@@ -813,7 +843,8 @@ const products = [
     sub_cat_id: 12,
     sub_sub_cat_id: 1011,
     prod_id: 1029,
-    prod_image: 'https://images.pexels.com/photos/18525574/pexels-photo-18525574/free-photo-of-unboxing-iphone-15-pro-max-box-in-natural-titanium-color-mention-zana_qaradaghy-on-instagram-while-use-this-photo-follow-on-instagram-zana_qaradaghy.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/18525574/pexels-photo-18525574/free-photo-of-unboxing-iphone-15-pro-max-box-in-natural-titanium-color-mention-zana_qaradaghy-on-instagram-while-use-this-photo-follow-on-instagram-zana_qaradaghy.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Iphone 16 pro',
     price: 999,
@@ -832,7 +863,8 @@ const products = [
     sub_cat_id: 12,
     sub_sub_cat_id: 1011,
     prod_id: 1030,
-    prod_image: 'https://images.pexels.com/photos/29020349/pexels-photo-29020349/free-photo-of-modern-smartphone-on-wooden-surface.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/29020349/pexels-photo-29020349/free-photo-of-modern-smartphone-on-wooden-surface.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Iphone 15 pro',
     price: 999,
@@ -851,7 +883,8 @@ const products = [
     sub_cat_id: 12,
     sub_sub_cat_id: 1011,
     prod_id: 1031,
-    prod_image: 'https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Iphone XS',
     price: 400,
@@ -870,7 +903,8 @@ const products = [
     sub_cat_id: 12,
     sub_sub_cat_id: 1012,
     prod_id: 1032,
-    prod_image: 'https://images.pexels.com/photos/27359750/pexels-photo-27359750/free-photo-of-redme-smartphone-on-boxes.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/27359750/pexels-photo-27359750/free-photo-of-redme-smartphone-on-boxes.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Realme C65',
     price: 430,
@@ -889,7 +923,8 @@ const products = [
     sub_cat_id: 12,
     sub_sub_cat_id: 1012,
     prod_id: 1033,
-    prod_image: 'https://images.pexels.com/photos/18016326/pexels-photo-18016326/free-photo-of-hand-holding-smartphone.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/18016326/pexels-photo-18016326/free-photo-of-hand-holding-smartphone.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Realme 10 pro',
     price: 399,
@@ -908,7 +943,8 @@ const products = [
     sub_cat_id: 13,
     sub_sub_cat_id: 1013,
     prod_id: 1034,
-    prod_image: 'https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Mac Book Pro',
     price: 1299,
@@ -927,7 +963,8 @@ const products = [
     sub_cat_id: 13,
     sub_sub_cat_id: 1013,
     prod_id: 1035,
-    prod_image: 'https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Mac Book Air',
     price: 999,
@@ -946,7 +983,8 @@ const products = [
     sub_cat_id: 13,
     sub_sub_cat_id: 1013,
     prod_id: 1036,
-    prod_image: 'https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Mac Book Air',
     price: 999,
@@ -965,7 +1003,8 @@ const products = [
     sub_cat_id: 13,
     sub_sub_cat_id: 1013,
     prod_id: 1037,
-    prod_image: 'https://images.pexels.com/photos/38568/apple-imac-ipad-workplace-38568.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/38568/apple-imac-ipad-workplace-38568.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'i Mac ',
     price: 939,
@@ -984,7 +1023,8 @@ const products = [
     sub_cat_id: 13,
     sub_sub_cat_id: 1014,
     prod_id: 1038,
-    prod_image: 'https://images.pexels.com/photos/691810/pexels-photo-691810.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/691810/pexels-photo-691810.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Asus Tuf Gaming ',
     price: 999,
@@ -1003,7 +1043,8 @@ const products = [
     sub_cat_id: 13,
     sub_sub_cat_id: 1014,
     prod_id: 1039,
-    prod_image: 'https://images.pexels.com/photos/19793730/pexels-photo-19793730/free-photo-of-a-laptop-lying-on-a-bed.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/19793730/pexels-photo-19793730/free-photo-of-a-laptop-lying-on-a-bed.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Asus Vivobook 14',
     price: 814,
@@ -1022,7 +1063,8 @@ const products = [
     sub_cat_id: 13,
     sub_sub_cat_id: 1014,
     prod_id: 1040,
-    prod_image: 'https://images.pexels.com/photos/14328581/pexels-photo-14328581.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/14328581/pexels-photo-14328581.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Asus Vivobook 15',
     price: 880,
@@ -1041,7 +1083,8 @@ const products = [
     sub_cat_id: 13,
     sub_sub_cat_id: 1014,
     prod_id: 1041,
-    prod_image: 'https://images.pexels.com/photos/19376850/pexels-photo-19376850/free-photo-of-young-man-sitting-at-the-desk-and-reading-a-book.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/19376850/pexels-photo-19376850/free-photo-of-young-man-sitting-at-the-desk-and-reading-a-book.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'HP 250 G13',
     price: 880,
@@ -1060,7 +1103,8 @@ const products = [
     sub_cat_id: 13,
     sub_sub_cat_id: 1014,
     prod_id: 1042,
-    prod_image: 'https://images.pexels.com/photos/9845869/pexels-photo-9845869.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/9845869/pexels-photo-9845869.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'HP 250 G12',
     price: 720,
@@ -1079,7 +1123,8 @@ const products = [
     sub_cat_id: 14,
     sub_sub_cat_id: 1015,
     prod_id: 1043,
-    prod_image: 'https://images.pexels.com/photos/400678/pexels-photo-400678.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/400678/pexels-photo-400678.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'HP 23.5 Monitor',
     price: 112,
@@ -1098,7 +1143,8 @@ const products = [
     sub_cat_id: 15,
     sub_sub_cat_id: 1016,
     prod_id: 1044,
-    prod_image: 'https://images.pexels.com/photos/28606674/pexels-photo-28606674/free-photo-of-stylish-green-sneakers-on-patterned-carpet-indoors.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/28606674/pexels-photo-28606674/free-photo-of-stylish-green-sneakers-on-patterned-carpet-indoors.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Nike Air Jordan 2024',
     price: 152,
@@ -1117,7 +1163,8 @@ const products = [
     sub_cat_id: 15,
     sub_sub_cat_id: 1016,
     prod_id: 1045,
-    prod_image: 'https://images.pexels.com/photos/13449652/pexels-photo-13449652.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/13449652/pexels-photo-13449652.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Nike Air Jordan 2024 Pro',
     price: 140,
@@ -1136,7 +1183,8 @@ const products = [
     sub_cat_id: 15,
     sub_sub_cat_id: 1016,
     prod_id: 1046,
-    prod_image: 'https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Nike Air Jordan 2023',
     price: 130,
@@ -1153,9 +1201,10 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 15,
-    sub_sub_cat_id: 1017,
+    sub_sub_cat_id: 1016,
     prod_id: 1044,
-    prod_image: 'https://images.pexels.com/photos/28606674/pexels-photo-28606674/free-photo-of-stylish-green-sneakers-on-patterned-carpet-indoors.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/28606674/pexels-photo-28606674/free-photo-of-stylish-green-sneakers-on-patterned-carpet-indoors.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Adidas A12',
     price: 152,
@@ -1172,9 +1221,10 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 15,
-    sub_sub_cat_id: 1017,
+    sub_sub_cat_id: 1016,
     prod_id: 1045,
-    prod_image: 'https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Adidas A13',
     price: 130,
@@ -1191,9 +1241,10 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 15,
-    sub_sub_cat_id: 1017,
+    sub_sub_cat_id: 1016,
     prod_id: 1046,
-    prod_image: 'https://images.pexels.com/photos/13449652/pexels-photo-13449652.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/13449652/pexels-photo-13449652.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Adidas A12',
     price: 140,
@@ -1210,9 +1261,10 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 15,
-    sub_sub_cat_id: 1017,
+    sub_sub_cat_id: 1016,
     prod_id: 1047,
-    prod_image: 'https://images.pexels.com/photos/10419944/pexels-photo-10419944.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/10419944/pexels-photo-10419944.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Hill Tracking Shoe',
     price: 160,
@@ -1231,7 +1283,8 @@ const products = [
     sub_cat_id: 16,
     sub_sub_cat_id: 1017,
     prod_id: 1048,
-    prod_image: 'https://images.pexels.com/photos/3480353/pexels-photo-3480353.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/3480353/pexels-photo-3480353.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Adidas A12',
     price: 200,
@@ -1250,7 +1303,8 @@ const products = [
     sub_cat_id: 16,
     sub_sub_cat_id: 1017,
     prod_id: 1049,
-    prod_image: 'https://images.pexels.com/photos/9810903/pexels-photo-9810903.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/9810903/pexels-photo-9810903.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Prada Hills',
     price: 200,
@@ -1269,7 +1323,8 @@ const products = [
     sub_cat_id: 16,
     sub_sub_cat_id: 1017,
     prod_id: 1050,
-    prod_image: 'https://images.pexels.com/photos/6669419/pexels-photo-6669419.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/6669419/pexels-photo-6669419.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'Prada Hills',
     price: 190,
@@ -1288,7 +1343,8 @@ const products = [
     sub_cat_id: 16,
     sub_sub_cat_id: 1017,
     prod_id: 1051,
-    prod_image: 'https://images.pexels.com/photos/9178975/pexels-photo-9178975.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    prod_image:
+      'https://images.pexels.com/photos/9178975/pexels-photo-9178975.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
     prod_name: 'North Star',
     price: 100,
@@ -1301,8 +1357,7 @@ const products = [
     currency_id: 302,
     currency_name: 'USD',
     status: 1,
-  }
-
+  },
 ]
 
 console.log(products)
