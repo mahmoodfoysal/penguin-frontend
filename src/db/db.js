@@ -1300,7 +1300,7 @@ const products = [
   },
   {
     parent_cat_id: 3,
-    sub_cat_id: 16,
+    sub_cat_id: 15,
     sub_sub_cat_id: 1017,
     prod_id: 1048,
     prod_image:
@@ -1321,12 +1321,12 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 16,
-    sub_sub_cat_id: 1017,
+    sub_sub_cat_id: 1018,
     prod_id: 1049,
     prod_image:
       'https://images.pexels.com/photos/9810903/pexels-photo-9810903.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
-    prod_name: 'Prada Hills',
+    prod_name: 'Prada Heels',
     price: 200,
     prod_type: 'R',
     prod_type_name: 'Regular',
@@ -1341,12 +1341,12 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 16,
-    sub_sub_cat_id: 1017,
+    sub_sub_cat_id: 1018,
     prod_id: 1050,
     prod_image:
       'https://images.pexels.com/photos/6669419/pexels-photo-6669419.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     prod_more_image: {},
-    prod_name: 'Prada Hills',
+    prod_name: 'Prada Heels',
     price: 190,
     prod_type: 'R',
     prod_type_name: 'Regular',
@@ -1361,7 +1361,7 @@ const products = [
   {
     parent_cat_id: 3,
     sub_cat_id: 16,
-    sub_sub_cat_id: 1017,
+    sub_sub_cat_id: 1019,
     prod_id: 1051,
     prod_image:
       'https://images.pexels.com/photos/9178975/pexels-photo-9178975.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',

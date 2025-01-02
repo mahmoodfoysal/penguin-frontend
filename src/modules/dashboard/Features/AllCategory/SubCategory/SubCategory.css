@@ -115,12 +115,37 @@ p {
 .table-style {
   width: 100%;
   border: 1px solid #e2edfa;
-  margin-top: 10px;
 }
 
 .table-style td,
 .table-style th {
   padding: 5px 15px;
+}
+
+.table-wrapper {
+  margin-top: 10px;
+  height: calc(100vh - 175px); /* Adjust height as needed */
+  overflow-y: auto; /* Enables vertical scrolling */
+}
+
+.table-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background-color: #cccccc;
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
+
+.table-style thead th {
+  position: sticky; /* Keeps the header fixed */
+  top: 0; /* Sticks to the top */
+  background-color: #f9f9f9; /* Optional: Header background color */
+  z-index: 1; /* Ensures the header stays above the table rows */
 }
 
 .table-style thead {
