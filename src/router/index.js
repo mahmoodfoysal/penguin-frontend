@@ -31,7 +31,7 @@ const routes = [
     name: 'DashboardHome',
     component: () => import('@/modules/dashboard/DashboardIndex.vue'),
     redirect: '/dashboard/features/home',
-    meta: { requiresAuth: true, requiresAdminCheck: true,  hideFooter: true },
+    meta: { requiresAuth: true, requiresAdminCheck: true, hideFooter: true },
     children: [
       {
         path: 'home',
@@ -54,22 +54,31 @@ const routes = [
       {
         path: 'parent-category',
         name: 'ParentCat',
-        component: () => import('@/modules/dashboard/Features/AllCategory/PrentCategory/ParentCategory.vue'),
+        component: () =>
+          import('@/modules/dashboard/Features/AllCategory/PrentCategory/ParentCategory.vue'),
         meta: { hideFooter: true },
       },
       {
         path: 'sub-category',
         name: 'SubCat',
-        component: () => import('@/modules/dashboard/Features/AllCategory/SubCategory/SubCategory.vue'),
+        component: () =>
+          import('@/modules/dashboard/Features/AllCategory/SubCategory/SubCategory.vue'),
         meta: { hideFooter: true },
       },
       {
         path: 'sub-sub-category',
         name: 'SubSubCat',
-        component: () => import('@/modules/dashboard/Features/AllCategory/SubSubCategory/SubSubCategory.vue'),
+        component: () =>
+          import('@/modules/dashboard/Features/AllCategory/SubSubCategory/SubSubCategory.vue'),
         meta: { hideFooter: true },
-      }
-    ]
+      },
+      {
+        path: 'products',
+        name: 'Products',
+        component: () => import('@/modules/dashboard/Features/Products/PenguinPrducts.vue'),
+        meta: { hideFooter: true },
+      },
+    ],
   },
 ]
 
