@@ -34,8 +34,11 @@ const handleGetProducts = async () => {
       <thead>
         <tr>
           <th>SL</th>
-          <th>Category Name</th>
-          <th>Category ID</th>
+          <th>Product Name</th>
+          <th>Prod ID</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Type</th>
           <th>Status</th>
           <th>Actions</th>
         </tr>
@@ -43,8 +46,12 @@ const handleGetProducts = async () => {
       <tbody>
         <tr v-for="(item, index) in productList" :key="index">
           <td>{{ index + 1 }}</td>
-          <td>{{ item?.par_cat_name }}</td>
-          <td>{{ item?.par_cat_id }}</td>
+          <td>{{ item?.prod_name }}</td>
+          <td>{{ item?.prod_id }}</td>
+          <td>{{ item?.price }} {{ item?.currency_name }}</td>
+          <td>{{ item?.stock }} PC</td>
+          <td>{{ item?.prod_type_name }}</td>
+
           <td>
             <div class="form-check form-switch">
               <input v-model="item.status" :value="item" :true-value="1" :false-value="0" class="form-check-input"
@@ -53,12 +60,18 @@ const handleGetProducts = async () => {
             </div>
           </td>
           <td>
-            <span @click="handleEdit(item)" class="material-icons ms-2 cursor me-2 edit-icon">
+
+            <span class="material-icons cursor info-icon">
+              info
+            </span>
+            <span @click="handleEdit(item)" class="material-icons ms-2 cursor edit-icon">
               edit
             </span>
             <span class="material-icons ms-2 cursor delete-icon">
               delete
             </span>
+
+
           </td>
         </tr>
       </tbody>
