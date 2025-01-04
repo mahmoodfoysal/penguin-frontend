@@ -4,11 +4,14 @@ import { getProducts } from '../../api/products.js';
 import { getParentCategory, getSubCategory, getSubSubCategory } from '../../api/categories.js';
 
 const isDetailsModal = ref(false);
+const isCreateModal = ref(false);
 const productList = ref([]);
 const productDetails = ref({});
 const parentCategoryList = ref([]);
 const subCategoryList = ref([]);
 const subSubCategoryList = ref([]);
+const inputData = ref({});
+const isValidation = ref(false);
 
 onMounted(() => {
   handleGetProducts();
@@ -16,6 +19,14 @@ onMounted(() => {
   handleGetSubCategory();
   handleGetSubSubCategory();
 });
+
+const handleCreate = () => {
+  isCreateModal.value = true;
+};
+
+const handleCancel = () => {
+  isCreateModal.value = false;
+};
 
 const handleGetProducts = async () => {
   try {
@@ -70,6 +81,9 @@ const handleProductDetails = (item) => {
   isDetailsModal.value = true
 };
 
+const handleSubmit = () => {
+
+}
 
 </script>
 
@@ -77,7 +91,9 @@ const handleProductDetails = (item) => {
   <div class="filter-bar-style d-flex flex-wrap align-items-center justify-content-between">
     <span>Products</span>
     <div class="d-flex align-items-center">
-      <button class="d-flex align-items-center">
+      <button
+      @click="handleCreate"
+      class="d-flex align-items-center">
         Create New <span class="material-icons">add</span>
       </button>
     </div>
@@ -182,6 +198,62 @@ const handleProductDetails = (item) => {
         <div class="modal-footer d-flex justify-content-center mb-4 pt-4 modal-footer-style">
           <button @click="isDetailsModal = false" type="submit" class="submit-btn">
             Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- add product modal  -->
+  <nav class="navbar bg-light fixed-top">
+    <div class="container-fluid">
+      <div class="offcanvas offcanvas-end create-modal" tabindex="-1" id="offcanvasNavbar"
+        aria-labelledby="offcanvasNavbarLabel" :class="{ 'show': isCreateModal }"
+        :style="{ visibility: isCreateModal ? 'visible' : 'hidden' }">
+        <div class="offcanvas-header modal-header-style">
+          <div class="d-flex align-items-center gap-3">
+            <button type="button" class="btn-close" @click="handleCancel" aria-label="Close"></button>
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
+              Create Product
+            </h5>
+          </div>
+        </div>
+        <div class="offcanvas-body">
+          <!-- code write here  -->
+          <div class="row">
+
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Parent Category *</label>
+                <select
+                  :class="{ 'is-invalid': isValidation && !inputData.parent_cat_info }"
+                  class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
+                  <option v-for="(item, index) in parentCategoryList" :key="index" :value="item">{{ item?.par_cat_id }}
+                    - {{
+                      item?.par_cat_name }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Category Name *</label>
+                <input v-model="inputData.sub_sub_cat_name"
+                  :class="{ 'is-invalid': isValidation && !inputData.sub_sub_cat_name }" type="text"
+                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
+                  aria-describedby="emailHelp" placeholder="Write sub sub category name">
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center mb-4 pt-4 modal-footer-style">
+          <button @click="handleSubmit" type="submit" class="submit-btn">
+            Submit
+          </button>
+
+          <button @click="handleCancel" type="cencel" class="cancel-btn ms-2">
+            Cancel
           </button>
         </div>
       </div>
