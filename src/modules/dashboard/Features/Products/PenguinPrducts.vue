@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { getProducts } from '../../api/products.js';
 import { getParentCategory, getSubCategory, getSubSubCategory } from '../../api/categories.js';
 
@@ -84,6 +84,10 @@ const handleProductDetails = (item) => {
 const handleSubmit = () => {
 
 }
+
+const filterSubCategory = computed(() => subCategoryList.value?.filter((item) => item.par_cat_id === inputData.value?.parent_cat_info?.par_cat_id));
+
+const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((item) => item.sub_cat_id === inputData.value?.sub_cat_info?.sub_cat_id));
 
 </script>
 
@@ -226,11 +230,40 @@ const handleSubmit = () => {
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Parent Category *</label>
                 <select
+                  v-model="inputData.parent_cat_info"
                   :class="{ 'is-invalid': isValidation && !inputData.parent_cat_info }"
                   class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
                   <option v-for="(item, index) in parentCategoryList" :key="index" :value="item">{{ item?.par_cat_id }}
                     - {{
                       item?.par_cat_name }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Sub Category *</label>
+                <select
+                  v-model="inputData.sub_cat_info"
+                  :class="{ 'is-invalid': isValidation && !inputData.sub_cat_info }"
+                  class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
+                  <option v-for="(item, index) in filterSubCategory" :key="index" :value="item">{{ item?.sub_cat_id }}
+                    - {{
+                      item?.sub_cat_name }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Sub Category *</label>
+                <select
+                  v-model="inputData.sub_sub_cat_info"
+                  :class="{ 'is-invalid': isValidation && !inputData.sub_sub_cat_info }"
+                  class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
+                  <option v-for="(item, index) in filterSubSubCategory" :key="index" :value="item">{{ item?.sub_sub_cat_id }}
+                    - {{
+                      item?.sub_sub_cat_name }}</option>
                 </select>
               </div>
             </div>
