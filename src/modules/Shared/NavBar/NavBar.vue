@@ -82,7 +82,7 @@ watch(
                 </RouterLink>
               </li>
               <li class="nav-item ">
-                <RouterLink :to="{ name: 'Products' }" class="link-decor-style">
+                <RouterLink :to="{ name: 'ClientProducts' }" class="link-decor-style">
                   <a class="nav-link" href="">Products</a>
                 </RouterLink>
               </li>

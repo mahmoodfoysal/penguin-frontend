@@ -214,3 +214,9 @@ p {
   box-shadow: none;
   cursor: pointer;
 }
+
+.product-details-card img {
+  width: 100% !important;
+  height: calc(100vh - 400px);
+  object-fit: contain;
+}
