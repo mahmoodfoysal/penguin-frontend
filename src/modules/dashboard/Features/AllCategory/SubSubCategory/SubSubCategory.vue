@@ -9,6 +9,7 @@ const subCatList = ref([])
 const inputData = ref({});
 const isValidation = ref(false);
 const isCreateModal = ref(false);
+const isEdit = ref(false);
 const store = useStore();
 
 const statusList = ref([
@@ -24,11 +25,13 @@ const statusList = ref([
 
 
 onMounted(() => {
-  handleGetSubSubCategory()
+  handleGetSubSubCategory();
   handleGetParentCategory();
+  handleGetSubCategory();
 });
 
 const handleCreate = () => {
+  isEdit.value = false;
   isCreateModal.value = true;
   isValidation.value = false;
   inputData.value = {
@@ -49,7 +52,7 @@ const handleGetSubSubCategory = async () => {
 const handleGetSubCategory = async () => {
   try {
     const result = await getSubCategory();
-    subCatList.value = result.data?.list_data.filter((item) => item.par_cat_id === inputData.value?.parent_cat_info?.par_cat_id);
+      subCatList.value = result.data?.list_data;
   }
   catch (error) {
     console.log(error);
@@ -141,10 +144,12 @@ const handleCancel = () => {
 };
 
 const handleEdit = (item) => {
+  isEdit.value = true;
   inputData.value = {
     id: item?._id,
     parent_cat_info: parentCategoryList.value.find((parCatItem) => parCatItem.par_cat_id === item.par_cat_id),
-    sub_cat_info: subCatList.value.find((subItem) => subItem.sub_cat_id === item.sub_cat_id),
+    sub_cat_info: subCatList.value
+    .find((subItem) => subItem.sub_cat_id === item.sub_cat_id),
     sub_sub_cat_id: item?.sub_sub_cat_id,
     sub_sub_cat_name: item?.sub_sub_cat_name,
     status: item?.status
@@ -153,6 +158,11 @@ const handleEdit = (item) => {
 };
 
 const user_email = computed(() => store.userInfo?.email);
+
+const  filterSubCategory = computed(() =>
+  subCatList.value?.filter((item) => item.par_cat_id === inputData.value?.parent_cat_info?.par_cat_id)
+);
+
 </script>
 
 <template>
@@ -245,7 +255,7 @@ const user_email = computed(() => store.userInfo?.email);
                 <select v-model="inputData.sub_cat_info"
                   :class="{ 'is-invalid': isValidation && !inputData.sub_cat_info }"
                   class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
-                  <option v-for="(item, index) in subCatList" :key="index" :value="item">{{ item?.sub_cat_id }}
+                  <option v-for="(item, index) in filterSubCategory" :key="index" :value="item">{{ item?.sub_cat_id }}
                     - {{
                       item?.sub_cat_name }}</option>
                 </select>
