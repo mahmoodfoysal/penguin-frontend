@@ -67,6 +67,11 @@ onMounted(() => {
 
 const handleCreate = () => {
   isCreateModal.value = true;
+  inputData.value = {
+    status: 1,
+    prod_type_info: productTypeList.value?.find((item) => item.prod_type === "R"),
+    currency_type_info: currencyTypeList.value?.find((item) => item.currency_id === 302)
+  }
 };
 
 const handleCancel = () => {
@@ -327,8 +332,7 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
                 <label for="exampleInputEmail1" class="form-label">Product ID *</label>
                 <input v-model="inputData.prod_id"
                   :class="{ 'is-invalid': isValidation && !inputData.prod_id }" type="number"
-                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
-                  aria-describedby="emailHelp" placeholder="Write product ID">
+                  class="form-control form-control-sm input-field-style" placeholder="Write product ID">
               </div>
             </div>
 
@@ -336,9 +340,8 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Price *</label>
                 <input v-model="inputData.price"
-                  :class="{ 'is-invalid': isValidation && !inputData.price }" type="text"
-                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
-                  aria-describedby="emailHelp" placeholder="Write product price">
+                  :class="{ 'is-invalid': isValidation && !inputData.price }" type="number"
+                  class="form-control form-control-sm input-field-style" placeholder="Write product price">
               </div>
             </div>
 
@@ -347,8 +350,7 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
                 <label for="exampleInputEmail1" class="form-label">Stock *</label>
                 <input v-model="inputData.stock"
                   :class="{ 'is-invalid': isValidation && !inputData.stock }" type="number"
-                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
-                  aria-describedby="emailHelp" placeholder="Write product stock">
+                  class="form-control form-control-sm input-field-style" placeholder="Write product stock">
               </div>
             </div>
 
@@ -397,8 +399,8 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
                 <label for="exampleInputEmail1" class="form-label">Image *</label>
                 <input v-model="inputData.prod_image"
                   :class="{ 'is-invalid': isValidation && !inputData.prod_image }" type="url"
-                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
-                  aria-describedby="emailHelp" placeholder="Enter photo URL">
+                  class="form-control form-control-sm input-field-style" id="exampleInputText"
+                  aria-describedby="textHelp" placeholder="Enter photo URL">
               </div>
             </div>
             <div class="col-md-6">
