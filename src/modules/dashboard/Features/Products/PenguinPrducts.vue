@@ -13,6 +13,51 @@ const subSubCategoryList = ref([]);
 const inputData = ref({});
 const isValidation = ref(false);
 
+const productTypeList = ref([
+  {
+    prod_type_name: 'Regular',
+    prod_type: 'R'
+  },
+  {
+    prod_type_name: 'Discount',
+    prod_type: 'D'
+  },
+  {
+    prod_type_name: 'Offer',
+    prod_type: 'O'
+  },
+  {
+    prod_type_name: 'Upcomming',
+    prod_type: 'U'
+  },
+]);
+
+const currencyTypeList = ref([
+  {
+    currency_id: 301,
+    currency_name: "Taka"
+  },
+  {
+    currency_id: 302,
+    currency_name: "USD"
+  },
+  {
+    currency_id: 303,
+    currency_name: "EURO"
+  },
+]);
+
+const statusList = ref([
+  {
+    status: 1,
+    status_name: "Active"
+  },
+  {
+    status: 0,
+    status_name: "Inactive"
+  }
+])
+
 onMounted(() => {
   handleGetProducts();
   handleGetParentCategory();
@@ -155,7 +200,7 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
   <!-- details modal  -->
   <nav class="navbar bg-light fixed-top">
     <div class="container-fluid">
-      <div class="offcanvas offcanvas-end create-modal" tabindex="-1" id="offcanvasNavbar"
+      <div class="offcanvas offcanvas-end details-modal" tabindex="-1" id="offcanvasNavbar"
         aria-labelledby="offcanvasNavbarLabel" :class="{ 'show': isDetailsModal }"
         :style="{ visibility: isDetailsModal ? 'visible' : 'hidden' }">
         <div class="offcanvas-header modal-header-style">
@@ -227,7 +272,7 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
           <div class="row">
 
             <div class="col-md-6">
-              <div class="mb-3">
+              <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Parent Category *</label>
                 <select
                   v-model="inputData.parent_cat_info"
@@ -241,7 +286,7 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
             </div>
 
             <div class="col-md-6">
-              <div class="mb-3">
+              <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Sub Category *</label>
                 <select
                   v-model="inputData.sub_cat_info"
@@ -255,8 +300,8 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
             </div>
 
             <div class="col-md-6">
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Sub Category *</label>
+              <div class="mb-2">
+                <label for="exampleInputEmail1" class="form-label">Sub Sub Category *</label>
                 <select
                   v-model="inputData.sub_sub_cat_info"
                   :class="{ 'is-invalid': isValidation && !inputData.sub_sub_cat_info }"
@@ -269,12 +314,110 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
             </div>
 
             <div class="col-md-6">
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Category Name *</label>
-                <input v-model="inputData.sub_sub_cat_name"
-                  :class="{ 'is-invalid': isValidation && !inputData.sub_sub_cat_name }" type="text"
+              <div class="mb-2">
+                <label for="exampleInputEmail1" class="form-label">Product Name *</label>
+                <input v-model="inputData.prod_name"
+                  :class="{ 'is-invalid': isValidation && !inputData.prod_name }" type="text"
                   class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
-                  aria-describedby="emailHelp" placeholder="Write sub sub category name">
+                  aria-describedby="emailHelp" placeholder="Write product name">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-2">
+                <label for="exampleInputEmail1" class="form-label">Product ID *</label>
+                <input v-model="inputData.prod_id"
+                  :class="{ 'is-invalid': isValidation && !inputData.prod_id }" type="number"
+                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
+                  aria-describedby="emailHelp" placeholder="Write product ID">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-2">
+                <label for="exampleInputEmail1" class="form-label">Price *</label>
+                <input v-model="inputData.price"
+                  :class="{ 'is-invalid': isValidation && !inputData.price }" type="text"
+                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
+                  aria-describedby="emailHelp" placeholder="Write product price">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-2">
+                <label for="exampleInputEmail1" class="form-label">Stock *</label>
+                <input v-model="inputData.stock"
+                  :class="{ 'is-invalid': isValidation && !inputData.stock }" type="number"
+                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
+                  aria-describedby="emailHelp" placeholder="Write product stock">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-2">
+                <label for="exampleInputEmail1" class="form-label">Product Type *</label>
+                <select
+                  v-model="inputData.prod_type_info"
+                  :class="{ 'is-invalid': isValidation && !inputData.prod_type_info }"
+                  class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
+                  <option v-for="(item, index) in productTypeList" :key="index" :value="item">({{ item?.prod_type }})
+                    - {{
+                      item?.prod_type_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-2">
+                <label for="exampleInputEmail1" class="form-label">Currency Type *</label>
+                <select
+                  v-model="inputData.currency_type_info"
+                  :class="{ 'is-invalid': isValidation && !inputData.currency_type_info }"
+                  class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
+                  <option v-for="(item, index) in currencyTypeList" :key="index" :value="item">({{ item?.currency_id }})
+                    - {{
+                      item?.currency_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-2">
+                <label for="exampleInputEmail1" class="form-label">Status *</label>
+                <select
+                  v-model="inputData.status"
+                  :class="{ 'is-invalid': isValidation && !inputData.currency_type_info }"
+                  class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
+                  <option v-for="(item, index) in statusList" :key="index" :value="item.status">({{ item?.status }})
+                    - {{
+                      item?.status_name }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="mb-2">
+                <label for="exampleInputEmail1" class="form-label">Image *</label>
+                <input v-model="inputData.prod_image"
+                  :class="{ 'is-invalid': isValidation && !inputData.prod_image }" type="url"
+                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
+                  aria-describedby="emailHelp" placeholder="Enter photo URL">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-2">
+                <label for="exampleInputEmail1" class="form-label">Brand *</label>
+                <input v-model="inputData.prod_brand"
+                  :class="{ 'is-invalid': isValidation && !inputData.prod_brand }" type="text"
+                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
+                  aria-describedby="emailHelp" placeholder="Enter brand name">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="mb-2">
+                <label for="exampleInputEmail1" class="form-label">Description *</label>
+                <textarea v-model="inputData.description"
+                  rows="4"
+                  :class="{ 'is-invalid': isValidation && !inputData.description }" type="text"
+                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
+                  aria-describedby="emailHelp" placeholder="Enter description"></textarea>
               </div>
             </div>
 
