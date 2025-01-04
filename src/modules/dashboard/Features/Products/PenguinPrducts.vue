@@ -1,13 +1,20 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { getProducts } from '../../api/products.js';
+import { getParentCategory, getSubCategory, getSubSubCategory } from '../../api/categories.js';
 
 const isDetailsModal = ref(false);
 const productList = ref([]);
 const productDetails = ref({});
+const parentCategoryList = ref([]);
+const subCategoryList = ref([]);
+const subSubCategoryList = ref([]);
 
 onMounted(() => {
-  handleGetProducts()
+  handleGetProducts();
+  handleGetParentCategory();
+  handleGetSubCategory();
+  handleGetSubSubCategory();
 });
 
 const handleGetProducts = async () => {
@@ -20,10 +27,50 @@ const handleGetProducts = async () => {
   }
 };
 
+const handleGetParentCategory = async () => {
+  try {
+    const result = await getParentCategory();
+    parentCategoryList.value = result.data?.list_data;
+  }
+  catch(error) {
+    console.log(error);
+  }
+};
+
+const handleGetSubCategory = async () => {
+  try {
+    const result = await getSubCategory();
+    subCategoryList.value = result.data?.list_data;
+  }
+  catch(error) {
+    console.log(error);
+  }
+};
+
+const handleGetSubSubCategory = async () => {
+  try {
+    const result = await getSubSubCategory();
+    subSubCategoryList.value = result.data?.list_data;
+  }
+  catch(error) {
+    console.log(error);
+  }
+};
+
 const handleProductDetails = (item) => {
-  productDetails.value = item;
+  const parentCategory = parentCategoryList.value?.find((parItem) => parItem.parent_cat_id == item.parent_cat_id);
+  const subCategory = subCategoryList.value?.find((subItem) => subItem.sub_cat_id == item.sub_cat_id);
+  const subSubCategory = subSubCategoryList.value?.find((subSubItem) => subSubItem.sub_sub_cat_id == item.sub_sub_cat_id);
+  productDetails.value = {
+    ...item,
+    par_cat_name: parentCategory?.par_cat_name,
+    sub_cat_name: subCategory?.sub_cat_name,
+    sub_sub_cat_name: subSubCategory?.sub_sub_cat_name,
+  };
   isDetailsModal.value = true
 };
+
+
 </script>
 
 <template>
@@ -106,10 +153,27 @@ const handleProductDetails = (item) => {
               <div class="card product-details-card mb-3">
                 <img :src="productDetails.prod_image" class="card-img-top" alt="...">
                 <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                    additional content. This content is a little bit longer.</p>
-                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                  <h5 class="card-title">{{ productDetails?.prod_name }} - {{ productDetails?.prod_id }}</h5>
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <p>Price : <span>{{ productDetails?.price }} {{ productDetails?.currency_name }}</span></p>
+                    <p>Stock : <span>{{ productDetails?.stock }} PC</span></p>
+                    <p>Product Type : <span>{{ productDetails?.prod_type_name }}</span></p>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <p>Parent Category : <span>({{ productDetails?.par_cat_id }}) - {{ productDetails?.par_cat_name }}</span></p>
+                    <p>Sub Category : <span>({{ productDetails?.sub_cat_id }}) - {{ productDetails?.sub_cat_name }}</span></p>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <p>Sub Sub Category : <span>({{ productDetails?.sub_sub_cat_id }}) - {{ productDetails?.sub_sub_cat_name }}</span></p>
+                    <p>Brand Name : <span>{{ productDetails?.prod_brand }}</span></p>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <p>Currency : <span>{{ productDetails?.currency_id }} - {{ productDetails?.currency_name }}</span></p>
+                    <p>Status : <span>{{ productDetails?.status == 1 ? 'Active' : 'Inactive' }}</span></p>
+                    <p>Rating : <span>{{ productDetails?.rating }}</span></p>
+                  </div>
+
+                  <p class="card-text"><small class="text-muted">Description : <span>{{ productDetails?.description }}</span></small></p>
                 </div>
               </div>
             </div>

@@ -239,7 +239,7 @@ console.log(dashboardMenu)
 
 const products = [
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 100,
     prod_id: 1000,
@@ -259,7 +259,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 100,
     prod_id: 1001,
@@ -279,7 +279,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 100,
     prod_id: 1002,
@@ -299,7 +299,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 101,
     prod_id: 1003,
@@ -319,7 +319,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 101,
     prod_id: 1004,
@@ -339,7 +339,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 101,
     prod_id: 1005,
@@ -359,7 +359,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 102,
     prod_id: 1006,
@@ -379,7 +379,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 102,
     prod_id: 1007,
@@ -399,7 +399,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 102,
     prod_id: 1008,
@@ -419,7 +419,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 103,
     prod_id: 1008,
@@ -439,7 +439,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 103,
     prod_id: 1009,
@@ -459,7 +459,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 103,
     prod_id: 1010,
@@ -479,7 +479,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 104,
     prod_id: 1011,
@@ -499,7 +499,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 104,
     prod_id: 1012,
@@ -519,7 +519,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 10,
     sub_sub_cat_id: 104,
     prod_id: 1013,
@@ -539,7 +539,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 11,
     sub_sub_cat_id: 105,
     prod_id: 1014,
@@ -559,7 +559,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 11,
     sub_sub_cat_id: 105,
     prod_id: 1015,
@@ -579,7 +579,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 11,
     sub_sub_cat_id: 105,
     prod_id: 1016,
@@ -599,7 +599,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 11,
     sub_sub_cat_id: 105,
     prod_id: 1017,
@@ -619,7 +619,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 11,
     sub_sub_cat_id: 106,
     prod_id: 1018,
@@ -639,7 +639,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 11,
     sub_sub_cat_id: 106,
     prod_id: 1019,
@@ -659,7 +659,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 11,
     sub_sub_cat_id: 106,
     prod_id: 1020,
@@ -679,7 +679,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 11,
     sub_sub_cat_id: 107,
     prod_id: 1021,
@@ -699,7 +699,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 11,
     sub_sub_cat_id: 107,
     prod_id: 1022,
@@ -719,7 +719,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 11,
     sub_sub_cat_id: 108,
     prod_id: 1023,
@@ -739,7 +739,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 11,
     sub_sub_cat_id: 108,
     prod_id: 1024,
@@ -759,7 +759,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 11,
     sub_sub_cat_id: 108,
     prod_id: 1025,
@@ -779,7 +779,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 1,
+    par_cat_id: 1,
     sub_cat_id: 11,
     sub_sub_cat_id: 109,
     prod_id: 1078455,
@@ -799,7 +799,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 12,
     sub_sub_cat_id: 1010,
     prod_id: 1026,
@@ -819,7 +819,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 12,
     sub_sub_cat_id: 1010,
     prod_id: 1027,
@@ -839,7 +839,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 12,
     sub_sub_cat_id: 1010,
     prod_id: 1028,
@@ -859,7 +859,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 12,
     sub_sub_cat_id: 1011,
     prod_id: 1029,
@@ -879,7 +879,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 12,
     sub_sub_cat_id: 1011,
     prod_id: 1030,
@@ -899,7 +899,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 12,
     sub_sub_cat_id: 1011,
     prod_id: 1031,
@@ -919,7 +919,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 12,
     sub_sub_cat_id: 1012,
     prod_id: 1032,
@@ -939,7 +939,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 12,
     sub_sub_cat_id: 1012,
     prod_id: 1033,
@@ -959,7 +959,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 13,
     sub_sub_cat_id: 1013,
     prod_id: 1034,
@@ -979,7 +979,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 13,
     sub_sub_cat_id: 1013,
     prod_id: 1035,
@@ -999,7 +999,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 13,
     sub_sub_cat_id: 1013,
     prod_id: 1036,
@@ -1019,7 +1019,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 13,
     sub_sub_cat_id: 1013,
     prod_id: 1037,
@@ -1039,7 +1039,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 13,
     sub_sub_cat_id: 1014,
     prod_id: 1038,
@@ -1059,7 +1059,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 13,
     sub_sub_cat_id: 1014,
     prod_id: 1039,
@@ -1079,7 +1079,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 13,
     sub_sub_cat_id: 1014,
     prod_id: 1040,
@@ -1099,7 +1099,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 13,
     sub_sub_cat_id: 1015,
     prod_id: 1041,
@@ -1119,7 +1119,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 13,
     sub_sub_cat_id: 1015,
     prod_id: 1042,
@@ -1139,7 +1139,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 2,
+    par_cat_id: 2,
     sub_cat_id: 14,
     sub_sub_cat_id: 1016,
     prod_id: 1043,
@@ -1159,7 +1159,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 3,
+    par_cat_id: 3,
     sub_cat_id: 15,
     sub_sub_cat_id: 1017,
     prod_id: 1044,
@@ -1179,7 +1179,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 3,
+    par_cat_id: 3,
     sub_cat_id: 15,
     sub_sub_cat_id: 1017,
     prod_id: 1045,
@@ -1199,7 +1199,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 3,
+    par_cat_id: 3,
     sub_cat_id: 15,
     sub_sub_cat_id: 1017,
     prod_id: 1046,
@@ -1219,7 +1219,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 3,
+    par_cat_id: 3,
     sub_cat_id: 15,
     sub_sub_cat_id: 1017,
     prod_id: 1044,
@@ -1239,7 +1239,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 3,
+    par_cat_id: 3,
     sub_cat_id: 15,
     sub_sub_cat_id: 1017,
     prod_id: 1045,
@@ -1259,7 +1259,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 3,
+    par_cat_id: 3,
     sub_cat_id: 15,
     sub_sub_cat_id: 1017,
     prod_id: 1046,
@@ -1279,7 +1279,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 3,
+    par_cat_id: 3,
     sub_cat_id: 15,
     sub_sub_cat_id: 1017,
     prod_id: 1047,
@@ -1299,7 +1299,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 3,
+    par_cat_id: 3,
     sub_cat_id: 15,
     sub_sub_cat_id: 1017,
     prod_id: 1048,
@@ -1319,7 +1319,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 3,
+    par_cat_id: 3,
     sub_cat_id: 16,
     sub_sub_cat_id: 1018,
     prod_id: 1049,
@@ -1339,7 +1339,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 3,
+    par_cat_id: 3,
     sub_cat_id: 16,
     sub_sub_cat_id: 1018,
     prod_id: 1050,
@@ -1359,7 +1359,7 @@ const products = [
     status: 1,
   },
   {
-    parent_cat_id: 3,
+    par_cat_id: 3,
     sub_cat_id: 16,
     sub_sub_cat_id: 1019,
     prod_id: 1051,
