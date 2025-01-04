@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import { getProducts } from '../../api/products.js';
+import { getProducts, postProduct } from '../../api/products.js';
 import { getParentCategory, getSubCategory, getSubSubCategory } from '../../api/categories.js';
 
 const isDetailsModal = ref(false);
@@ -131,13 +131,40 @@ const handleProductDetails = (item) => {
   isDetailsModal.value = true
 };
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
+  const data = {
+    _id: inputData.value.id || null,
+    par_cat_id: Number(inputData.value?.par_cat_id),
+    sub_cat_id: Number(inputData.value?.sub_cat_id),
+    sub_sub_cat_id: Number(inputData.value?.sub_sub_cat_id),
+    prod_id: Number(inputData.value?.prod_id),
+    prod_image: inputData.value?.prod_image,
+    prod_name: inputData.value?.prod_name,
+    price: Number(inputData.value?.price),
+    prod_type: inputData.value?.prod_type_info?.prod_type,
+    prod_type_name: inputData.value?.prod_type_info?.prod_type_name,
+    stock: Number(inputData.value?.stock),
+    prod_brand: inputData.value?.prod_brand,
+    currency_id: Number(inputData.value?.currency_type_info?.currency_id),
+    currency_name: inputData.value?.currency_type_info?.currency_name,
+    rating: null,
+    status: Number(inputData.value?.status),
+    description: inputData.value?.description
+  };
 
-}
+  const text = "Are you want to sure?";
+  if(confirm(text) === true) {
+    const result = await postProduct(data);
+    if(result.data?.id) {
+      alert(result.data?.message);
+    };
+  }
+  console.log("data", data);
+};
 
-const filterSubCategory = computed(() => subCategoryList.value?.filter((item) => item.par_cat_id === inputData.value?.parent_cat_info?.par_cat_id));
+const filterSubCategory = computed(() => subCategoryList.value?.filter((item) => item.par_cat_id === inputData.value?.par_cat_id));
 
-const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((item) => item.sub_cat_id === inputData.value?.sub_cat_info?.sub_cat_id));
+const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((item) => item.sub_cat_id === inputData.value?.sub_cat_id));
 
 </script>
 
@@ -280,10 +307,10 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Parent Category *</label>
                 <select
-                  v-model="inputData.parent_cat_info"
-                  :class="{ 'is-invalid': isValidation && !inputData.parent_cat_info }"
+                  v-model="inputData.par_cat_id"
+                  :class="{ 'is-invalid': isValidation && !inputData.par_cat_id }"
                   class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
-                  <option v-for="(item, index) in parentCategoryList" :key="index" :value="item">{{ item?.par_cat_id }}
+                  <option v-for="(item, index) in parentCategoryList" :key="index" :value="item.par_cat_id">{{ item?.par_cat_id }}
                     - {{
                       item?.par_cat_name }}</option>
                 </select>
@@ -294,10 +321,10 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Sub Category *</label>
                 <select
-                  v-model="inputData.sub_cat_info"
-                  :class="{ 'is-invalid': isValidation && !inputData.sub_cat_info }"
+                  v-model="inputData.sub_cat_id"
+                  :class="{ 'is-invalid': isValidation && !inputData.sub_cat_id }"
                   class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
-                  <option v-for="(item, index) in filterSubCategory" :key="index" :value="item">{{ item?.sub_cat_id }}
+                  <option v-for="(item, index) in filterSubCategory" :key="index" :value="item.sub_cat_id">{{ item?.sub_cat_id }}
                     - {{
                       item?.sub_cat_name }}</option>
                 </select>
@@ -306,12 +333,12 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
 
             <div class="col-md-6">
               <div class="mb-2">
-                <label for="exampleInputEmail1" class="form-label">Sub Sub Category *</label>
+                <label for="exampleInputEmail1" class="form-label">Sub Sub Category</label>
                 <select
-                  v-model="inputData.sub_sub_cat_info"
-                  :class="{ 'is-invalid': isValidation && !inputData.sub_sub_cat_info }"
+                  v-model="inputData.sub_sub_cat_id"
+                  :class="{ 'is-invalid': isValidation && !inputData.sub_sub_cat_id }"
                   class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
-                  <option v-for="(item, index) in filterSubSubCategory" :key="index" :value="item">{{ item?.sub_sub_cat_id }}
+                  <option v-for="(item, index) in filterSubSubCategory" :key="index" :value="item.sub_sub_cat_id">{{ item?.sub_sub_cat_id }}
                     - {{
                       item?.sub_sub_cat_name }}</option>
                 </select>
@@ -405,7 +432,7 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
             </div>
             <div class="col-md-6">
               <div class="mb-2">
-                <label for="exampleInputEmail1" class="form-label">Brand *</label>
+                <label for="exampleInputEmail1" class="form-label">Brand</label>
                 <input v-model="inputData.prod_brand"
                   :class="{ 'is-invalid': isValidation && !inputData.prod_brand }" type="text"
                   class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
