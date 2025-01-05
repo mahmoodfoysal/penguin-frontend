@@ -8,6 +8,6 @@ export const getProducts = async () => {
 
 // post or update api
 export const postProduct = async (data) => {
-  const url = 'http://localhost:5000/api/admin/insert-update/product-list'
+  const url = 'http://localhost:5000/api/admin/insert-update-product-list'
   return await axios.post(url, data);
 };
