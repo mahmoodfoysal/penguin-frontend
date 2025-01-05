@@ -8,6 +8,8 @@ const parentCategoryList = ref([])
 const inputData = ref({});
 const isValidation = ref(false);
 const isCreateModal = ref(false);
+const searchKey = ref('');
+const is_searchable = ref(false);
 const store = useStore();
 
 const statusList = ref([
@@ -134,6 +136,24 @@ const handleEdit = (item) => {
   isCreateModal.value = true;
 };
 
+const search_func = (val) => {
+  is_searchable.value = val;
+};
+
+const filterSubCategories = computed(() => {
+        return categoryList.value?.filter((item) =>
+            Object.entries(item)
+                .reduce(
+                    (result, [, value]) =>
+                        !(value instanceof Object) ? (result += ` ${value}`) : result,
+                    ''
+                )
+                .toString()
+                .toLowerCase()
+                .includes(searchKey.value.toString().toLowerCase())
+        );
+    });
+
 const user_email = computed(() => store.userInfo?.email);
 </script>
 
@@ -152,7 +172,16 @@ const user_email = computed(() => store.userInfo?.email);
       <tr>
         <th>SL</th>
         <th>Parent ID</th>
-        <th>Parent Name</th>
+        <th>Parent Name
+          <div class="magic-search" :class="{ active: is_searchable }" @click="search_func(true)">
+                <div id="search-icon" class="search-icon">
+                  <span class="material-icons">search</span>
+                </div>
+
+                <input id="search-input" v-model="searchKey" type="text" class="search-input" placeholder="Search..."
+                  @blur="search_func(false)" />
+              </div>
+        </th>
         <th>Sub ID</th>
         <th>Sub Name</th>
         <th>Status</th>
@@ -160,7 +189,7 @@ const user_email = computed(() => store.userInfo?.email);
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, index) in categoryList" :key="index">
+      <tr v-for="(item, index) in filterSubCategories" :key="index">
         <td>{{ index + 1 }}</td>
         <td>{{ item?.par_cat_id }}</td>
         <td>{{ item?.par_cat_name }}</td>
