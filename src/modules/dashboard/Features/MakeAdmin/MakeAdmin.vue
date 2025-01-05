@@ -1,4 +1,5 @@
 <script setup>
+import { useStore } from '@/store/index';
 import { computed, onMounted, ref } from 'vue';
 import { getAdmin, postAdmin } from '../../api/make-admin.js';
 
@@ -8,6 +9,7 @@ const isValidation = ref(false);
 const isCreateModal = ref(false);
 const searchKey = ref('');
 const is_searchable = ref(false);
+const store = useStore();
 
 const admin_role = ref([
   {
@@ -42,7 +44,8 @@ const handleGetAdmin = async () => {
 const handleSubmit = async () => {
   isValidation.value = false;
   if (!inputData.value?.email ||
-    !inputData.value?.role_info
+    !inputData.value?.role_info ||
+    !user_email.value
   ) {
     isValidation.value = true;
     return;
@@ -51,7 +54,8 @@ const handleSubmit = async () => {
     _id: inputData.value.id || null,
     email: inputData.value?.email,
     role: inputData.value?.role_info?.role_name,
-    role_id: inputData.value?.role_info?.id
+    role_id: inputData.value?.role_info?.id,
+    user_info: user_email.value
   }
   try {
     const text = "Are you want to sure?"
@@ -103,6 +107,8 @@ const handleEdit = (roleInfo) => {
 const search_func = (val) => {
   is_searchable.value = val;
 };
+
+const user_email = computed(() => store.userInfo?.email);
 
 const filterAdminList = computed(() => {
   return adminList.value?.filter((item) =>

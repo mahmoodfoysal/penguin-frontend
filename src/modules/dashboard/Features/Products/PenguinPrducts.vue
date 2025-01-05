@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { getProducts, postProduct, deleteProduct, updateProductStatus } from '../../api/products.js';
 import { getParentCategory, getSubCategory, getSubSubCategory } from '../../api/categories.js';
+import { useStore } from '@/store/index';
 
 const isDetailsModal = ref(false);
 const isCreateModal = ref(false);
@@ -14,6 +15,7 @@ const inputData = ref({});
 const isValidation = ref(false);
 const searchKey = ref('');
 const is_searchable = ref(false);
+const store = useStore();
 
 const productTypeList = ref([
   {
@@ -168,7 +170,8 @@ const handleSubmit = async () => {
     currency_name: inputData.value?.currency_type_info?.currency_name,
     rating: null,
     status: Number(inputData.value?.status),
-    description: inputData.value?.description
+    description: inputData.value?.description,
+    user_info: user_email.value
   };
 
   const text = "Are you want to sure?";
@@ -250,6 +253,8 @@ const handleUpdateStatus = async (item) => {
 const search_func = (val) => {
   is_searchable.value = val;
 };
+
+const user_email = computed(() => store.userInfo?.email);
 
 
 const filterSubCategory = computed(() => subCategoryList.value?.filter((item) => item.par_cat_id === inputData.value?.par_cat_id));
