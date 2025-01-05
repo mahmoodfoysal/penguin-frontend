@@ -256,6 +256,20 @@ const filterSubCategory = computed(() => subCategoryList.value?.filter((item) =>
 
 const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((item) => item.sub_cat_id === inputData.value?.sub_cat_id));
 
+const filterProducts = computed(() => {
+        return productList.value?.filter((item) =>
+            Object.entries(item)
+                .reduce(
+                    (result, [, value]) =>
+                        !(value instanceof Object) ? (result += ` ${value}`) : result,
+                    ''
+                )
+                .toString()
+                .toLowerCase()
+                .includes(searchKey.value.toString().toLowerCase())
+        );
+    });
+
 </script>
 
 <template>
@@ -293,7 +307,7 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in productList" :key="index">
+        <tr v-for="(item, index) in filterProducts" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ item?.prod_name }}</td>
           <td>{{ item?.prod_id }}</td>
