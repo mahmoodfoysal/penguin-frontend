@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue';
-import { getParentCategory, getSubCategory, postSubCategory, updateSubCategoryStatus } from '@/modules/dashboard/api/categories.js';
+import { getParentCategory, getSubCategory, postSubCategory, updateSubCategoryStatus, deleteSubCategory } from '@/modules/dashboard/api/categories.js';
 import { useStore } from '@/store/index';
 
 const categoryList = ref([]);
@@ -136,6 +136,26 @@ const handleEdit = (item) => {
   isCreateModal.value = true;
 };
 
+const handleDeleteCategory = async (id) => {
+  try {
+    const text = "Are you want to sure?";
+    if(confirm(text) === true) {
+      const result = await deleteSubCategory(id);
+      if(result.data?.deletedCount == 1) {
+        alert(result.data?.message);
+        const index = categoryList.value?.findIndex((item) => item._id === id)
+          if(index !== 1) {
+            categoryList.value.splice(index, 1)
+          }
+
+      }
+    }
+  }
+  catch(error) {
+    console.log(error);
+  }
+};
+
 const search_func = (val) => {
   is_searchable.value = val;
 };
@@ -206,7 +226,9 @@ const user_email = computed(() => store.userInfo?.email);
           <span @click="handleEdit(item)" class="material-icons ms-2 cursor me-2 edit-icon">
             edit
           </span>
-          <span class="material-icons ms-2 cursor delete-icon">
+          <span
+          @click="handleDeleteCategory(item._id)"
+          class="material-icons ms-2 cursor delete-icon">
             delete
           </span>
         </td>
