@@ -103,10 +103,25 @@ p {
   opacity: 0.8;
 }
 
+/* table style for all table start  */
 .table-style {
   width: 100%;
   border: 1px solid #e2edfa;
-  margin-top: 10px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.table-style thead {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  z-index: 1;
+}
+
+.table-style tbody {
+  display: block;
+  height: calc(100vh - 200px);
+  overflow-y: auto;
 }
 
 .table-style td,
@@ -114,12 +129,32 @@ p {
   padding: 5px 15px;
 }
 
-.table-style thead {
-  border-bottom: 1px solid #e2edfa;
+.table-style thead,
+.table-style tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
+
+.table-style tbody::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-style tbody::-webkit-scrollbar-thumb {
+  background-color: #cccccc;
+  border-radius: 4px;
+}
+
+.table-style tbody::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
+
 .table-style tbody tr {
   border-bottom: 1px solid #e2edfa;
 }
+
+/* table style for all table  end */
+
 
 .table-style thead tr th {
   color: #026cd1;
@@ -151,4 +186,79 @@ p {
 .table-style tbody td:nth-child(5) {
   width: 20%;
   text-align: end;
+}
+
+/* magic search  */
+
+.magic-search {
+  position: absolute;
+  left: 352px;
+  top: 5px;
+  width: 24px;
+  height: 24px;
+  line-height: 35px;
+  background-color: #e2edfa;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: width 0.4s ease,
+    border-radius 0.4s ease,
+    background-color 0.4s ease,
+    box-shadow 0.4s ease;
+  overflow: hidden;
+  border: 1px solid #026cd1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.magic-search.active {
+  width: 200px;
+  border-radius: 30px;
+  background-color: #e2edfa;
+  position: absolute;
+  left: 352px;
+  top: 5px;
+  z-index: 999;
+}
+
+.magic-search .search-icon {
+  color: #026cd1;
+  cursor: pointer;
+  transition: transform 0.4s ease,
+    color 0.4s ease;
+  position: absolute;
+  left: 2px;
+  top: -3px;
+}
+.magic-search .search-icon .material-icons {
+  font-size: 18px;
+}
+
+.magic-search.active .search-icon {
+  transform: rotate(0deg);
+  color: #808080;
+}
+
+.magic-search .search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #000;
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  padding-left: 25px;
+  line-height: 24px;
+}
+
+.magic-search.active .search-input {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.magic-search .search-input::placeholder {
+  color: #808080;
+  font-size: 12px;
 }
