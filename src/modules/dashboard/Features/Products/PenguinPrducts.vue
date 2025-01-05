@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import { getProducts, postProduct } from '../../api/products.js';
+import { getProducts, postProduct, deleteProduct, updateProductStatus } from '../../api/products.js';
 import { getParentCategory, getSubCategory, getSubSubCategory } from '../../api/categories.js';
 
 const isDetailsModal = ref(false);
@@ -205,8 +205,45 @@ const handleSubmit = async () => {
     };
 
   }
-
 };
+
+// edit product
+const handleEdit = (item) => {
+  inputData.value = {
+    id: item._id,
+    ...item,
+    currency_type_info: currencyTypeList.value?.find((item) => item.currency_id === item.currency_id),
+    prod_type_info: productTypeList.value?.find((item) => item.prod_type === item.prod_type)
+  };
+  isCreateModal.value = true;
+};
+
+// delete product
+const handleDeleteProduct = async (id) => {
+  const text = "Are youu want to sure?";
+  if (confirm(text) === true) {
+    const result = await deleteProduct(id);
+    if (result.data?.deletedCount == 1) {
+      alert(result.data?.message);
+      const index = productList.value?.findIndex((item) => item._id === id);
+      if(index !== -1) {
+        productList.value?.splice(index, 1);
+      };
+    };
+  };
+};
+
+// update status
+const handleUpdateStatus = async (item) => {
+  try {
+    const data = {status: Number(item.status)}
+    const result = await updateProductStatus(item._id, data);
+    alert(result.data?.message);
+  }
+  catch(error) {
+    console.log(error);
+  }
+}
 
 const filterSubCategory = computed(() => subCategoryList.value?.filter((item) => item.par_cat_id === inputData.value?.par_cat_id));
 
@@ -249,9 +286,16 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
 
           <td>
             <div class="form-check form-switch">
-              <input v-model="item.status" :value="item" :true-value="1" :false-value="0" class="form-check-input"
-                type="checkbox" role="switch" id="flexSwitchCheckDisabled"
-                @change="handleUpdateParentCategoryStatus(item)" />
+              <input
+                v-model="item.status"
+                :value="item"
+                :true-value="1"
+                :false-value="0"
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="flexSwitchCheckDisabled"
+                @change="handleUpdateStatus(item)" />
             </div>
           </td>
           <td>
@@ -262,7 +306,7 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
             <span @click="handleEdit(item)" class="material-icons ms-2 cursor edit-icon">
               edit
             </span>
-            <span class="material-icons ms-2 cursor delete-icon">
+            <span @click="handleDeleteProduct(item._id)" class="material-icons ms-2 cursor delete-icon">
               delete
             </span>
 
