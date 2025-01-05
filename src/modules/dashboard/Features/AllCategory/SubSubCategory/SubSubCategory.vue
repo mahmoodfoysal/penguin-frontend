@@ -10,6 +10,8 @@ const inputData = ref({});
 const isValidation = ref(false);
 const isCreateModal = ref(false);
 const isEdit = ref(false);
+const searchKey = ref('');
+const is_searchable = ref(false);
 const store = useStore();
 
 const statusList = ref([
@@ -52,7 +54,7 @@ const handleGetSubSubCategory = async () => {
 const handleGetSubCategory = async () => {
   try {
     const result = await getSubCategory();
-      subCatList.value = result.data?.list_data;
+    subCatList.value = result.data?.list_data;
   }
   catch (error) {
     console.log(error);
@@ -149,7 +151,7 @@ const handleEdit = (item) => {
     id: item?._id,
     parent_cat_info: parentCategoryList.value.find((parCatItem) => parCatItem.par_cat_id === item.par_cat_id),
     sub_cat_info: subCatList.value
-    .find((subItem) => subItem.sub_cat_id === item.sub_cat_id),
+      .find((subItem) => subItem.sub_cat_id === item.sub_cat_id),
     sub_sub_cat_id: item?.sub_sub_cat_id,
     sub_sub_cat_name: item?.sub_sub_cat_name,
     status: item?.status
@@ -157,11 +159,29 @@ const handleEdit = (item) => {
   isCreateModal.value = true;
 };
 
+const search_func = (val) => {
+  is_searchable.value = val;
+};
+
 const user_email = computed(() => store.userInfo?.email);
 
-const  filterSubCategory = computed(() =>
+const filterSubCategory = computed(() =>
   subCatList.value?.filter((item) => item.par_cat_id === inputData.value?.parent_cat_info?.par_cat_id)
 );
+
+const filterSubSubCategories = computed(() => {
+  return categoryList.value?.filter((item) =>
+    Object.entries(item)
+      .reduce(
+        (result, [, value]) =>
+          !(value instanceof Object) ? (result += ` ${value}`) : result,
+        ''
+      )
+      .toString()
+      .toLowerCase()
+      .includes(searchKey.value.toString().toLowerCase())
+  );
+});
 
 </script>
 
@@ -180,7 +200,16 @@ const  filterSubCategory = computed(() =>
         <tr>
           <th>SL</th>
           <th>Parent ID</th>
-          <th>Parent Name</th>
+          <th>Parent Name
+            <div class="magic-search" :class="{ active: is_searchable }" @click="search_func(true)">
+              <div id="search-icon" class="search-icon">
+                <span class="material-icons">search</span>
+              </div>
+
+              <input id="search-input" v-model="searchKey" type="text" class="search-input" placeholder="Search..."
+                @blur="search_func(false)" />
+            </div>
+          </th>
           <th>Sub ID</th>
           <th>Sub Name</th>
           <th>SubSub ID</th>
@@ -190,7 +219,7 @@ const  filterSubCategory = computed(() =>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in categoryList" :key="index">
+        <tr v-for="(item, index) in filterSubSubCategories" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ item?.par_cat_id }}</td>
           <td>{{ item?.par_cat_name }}</td>
