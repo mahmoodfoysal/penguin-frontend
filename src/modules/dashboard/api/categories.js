@@ -58,3 +58,10 @@ export const updateSubSubCategoryStatus = async (id, data) => {
   const url = `http://localhost:5000/api/admin/update-sub-sub-category-status/${id}`;
   return await axios.patch(url, data);
 };
+
+
+// all delete api
+export const deleteSubSubCategory = async(id) => {
+  const url = `http://localhost:5000/api/admin/delete-sub-sub-category/${id}`;
+  return await axios.delete(url);
+};
