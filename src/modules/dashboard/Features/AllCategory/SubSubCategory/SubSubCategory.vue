@@ -183,7 +183,7 @@ const  filterSubCategory = computed(() =>
           <th>Parent Name</th>
           <th>Sub ID</th>
           <th>Sub Name</th>
-          <th>Sub Sub ID</th>
+          <th>SubSub ID</th>
           <th>Sub Sub Name</th>
           <th>Status</th>
           <th>Actions</th>
