@@ -102,7 +102,7 @@ const handleSubmit = async () => {
     sub_cat_name: inputData.value?.sub_cat_info?.sub_cat_name,
     sub_sub_cat_name: inputData.value?.sub_sub_cat_name,
     par_cat_name: inputData.value?.parent_cat_info?.par_cat_name,
-    userInfo: user_email.value,
+    user_info: user_email.value,
     status: inputData.value?.status
   }
   try {

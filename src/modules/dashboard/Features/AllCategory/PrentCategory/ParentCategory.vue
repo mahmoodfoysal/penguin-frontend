@@ -71,7 +71,7 @@ const handleSubmit = async () => {
     par_cat_id: Number(inputData.value?.par_cat_id),
     par_cat_name: inputData.value?.par_cat_name,
     status: inputData.value?.status,
-    userInfo: user_email.value,
+    user_info: user_email.value,
   }
   try {
     const text = "Are you want to sure?";

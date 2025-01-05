@@ -147,7 +147,8 @@ const handleSubmit = async () => {
     !inputData.value?.prod_type_info ||
     !inputData.value?.currency_type_info ||
     !inputData.value?.status ||
-    !inputData.value?.prod_image
+    !inputData.value?.prod_image ||
+    !user_email.value
   ) {
     isValidation.value = true;
     alert("Please fill all the required field");
@@ -255,7 +256,6 @@ const search_func = (val) => {
 };
 
 const user_email = computed(() => store.userInfo?.email);
-
 
 const filterSubCategory = computed(() => subCategoryList.value?.filter((item) => item.par_cat_id === inputData.value?.par_cat_id));
 
