@@ -12,6 +12,8 @@ const subCategoryList = ref([]);
 const subSubCategoryList = ref([]);
 const inputData = ref({});
 const isValidation = ref(false);
+const searchKey = ref('');
+const is_searchable = ref(false);
 
 const productTypeList = ref([
   {
@@ -226,7 +228,7 @@ const handleDeleteProduct = async (id) => {
     if (result.data?.deletedCount == 1) {
       alert(result.data?.message);
       const index = productList.value?.findIndex((item) => item._id === id);
-      if(index !== -1) {
+      if (index !== -1) {
         productList.value?.splice(index, 1);
       };
     };
@@ -236,14 +238,19 @@ const handleDeleteProduct = async (id) => {
 // update status
 const handleUpdateStatus = async (item) => {
   try {
-    const data = {status: Number(item.status)}
+    const data = { status: Number(item.status) }
     const result = await updateProductStatus(item._id, data);
     alert(result.data?.message);
   }
-  catch(error) {
+  catch (error) {
     console.log(error);
   }
-}
+};
+
+const search_func = (val) => {
+  is_searchable.value = val;
+};
+
 
 const filterSubCategory = computed(() => subCategoryList.value?.filter((item) => item.par_cat_id === inputData.value?.par_cat_id));
 
@@ -261,12 +268,22 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
     </div>
   </div>
 
-  <div class="table-wrapper">
+
     <table class="table table-style">
       <thead>
         <tr>
           <th>SL</th>
-          <th>Product Name</th>
+          <th>Product Name <div class="position-relative ms-2">
+              <div class="magic-search" :class="{ active: is_searchable }" @click="search_func(true)">
+                <div id="search-icon" class="search-icon">
+                  <span class="material-icons">search</span>
+                </div>
+
+                <input id="search-input" v-model="searchKey" type="text" class="search-input" placeholder="Search..."
+                  @blur="search_func(false)" />
+              </div>
+            </div>
+          </th>
           <th>Prod ID</th>
           <th>Price</th>
           <th>Stock</th>
@@ -286,16 +303,8 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
 
           <td>
             <div class="form-check form-switch">
-              <input
-                v-model="item.status"
-                :value="item"
-                :true-value="1"
-                :false-value="0"
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-                id="flexSwitchCheckDisabled"
-                @change="handleUpdateStatus(item)" />
+              <input v-model="item.status" :value="item" :true-value="1" :false-value="0" class="form-check-input"
+                type="checkbox" role="switch" id="flexSwitchCheckDisabled" @change="handleUpdateStatus(item)" />
             </div>
           </td>
           <td>
@@ -315,7 +324,6 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
         </tr>
       </tbody>
     </table>
-  </div>
 
   <!-- details modal  -->
   <nav class="navbar bg-light fixed-top">

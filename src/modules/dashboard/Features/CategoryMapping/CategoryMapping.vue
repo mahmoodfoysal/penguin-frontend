@@ -27,17 +27,17 @@ const handleGetCategories = async () => {
     </div>
   </div>
 
-  <div class="table-wrapper">
+
     <table class="table table-style">
       <thead>
         <tr>
           <th>Sl</th>
-          <th class="text-center">Parent ID</th>
-          <th>Parent Name</th>
-          <th>Subcat ID</th>
-          <th>Subcat Name</th>
-          <th class="text-center">SubSubcat ID</th>
-          <th class="text-start">SubSubcat Name</th>
+          <th class="text-center">P.ID</th>
+          <th>P.Name</th>
+          <th>S.ID</th>
+          <th>S.Name</th>
+          <th class="text-center">S.ID</th>
+          <th class="text-start">S.Name</th>
         </tr>
       </thead>
       <tbody>
@@ -82,8 +82,6 @@ const handleGetCategories = async () => {
         </template>
       </tbody>
     </table>
-  </div>
-
 
 </template>
 
