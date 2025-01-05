@@ -1,7 +1,7 @@
 <script setup>
 import { useStore } from '@/store/index';
 import { computed, onMounted, ref } from 'vue';
-import { getAdmin, postAdmin } from '../../api/make-admin.js';
+import { getAdmin, postAdmin, deleteAdmin } from '../../api/make-admin.js';
 
 const adminList = ref([]);
 const inputData = ref({});
@@ -104,6 +104,25 @@ const handleEdit = (roleInfo) => {
   isCreateModal.value = true;
 };
 
+const handleDeleteAdmin = async (id) => {
+  try {
+    const text = 'Are you want to sure?';
+    if(confirm(text) === true) {
+      const result = await deleteAdmin(id)
+    if(result.data?.deletedCount == 1) {
+      alert(result.data?.message);
+      const index = adminList.value.findIndex((item) => item._id == id);
+      if(index !== -1) {
+        adminList.value?.splice(index, 1);
+      }
+    }
+    }
+  }
+  catch(error) {
+    console.log(error);
+  }
+};
+
 const search_func = (val) => {
   is_searchable.value = val;
 };
@@ -162,7 +181,9 @@ const filterAdminList = computed(() => {
           <span @click="handleEdit(item)" class="material-icons ms-2 cursor me-2 edit-icon">
             edit
           </span>
-          <span class="material-icons ms-2 cursor delete-icon">
+          <span
+          @click="handleDeleteAdmin(item?._id)"
+          class="material-icons ms-2 cursor delete-icon">
             delete
           </span>
         </td>
