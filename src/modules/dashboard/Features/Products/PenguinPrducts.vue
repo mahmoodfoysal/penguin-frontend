@@ -93,7 +93,7 @@ const handleGetParentCategory = async () => {
     const result = await getParentCategory();
     parentCategoryList.value = result.data?.list_data;
   }
-  catch(error) {
+  catch (error) {
     console.log(error);
   }
 };
@@ -103,7 +103,7 @@ const handleGetSubCategory = async () => {
     const result = await getSubCategory();
     subCategoryList.value = result.data?.list_data;
   }
-  catch(error) {
+  catch (error) {
     console.log(error);
   }
 };
@@ -113,7 +113,7 @@ const handleGetSubSubCategory = async () => {
     const result = await getSubSubCategory();
     subSubCategoryList.value = result.data?.list_data;
   }
-  catch(error) {
+  catch (error) {
     console.log(error);
   }
 };
@@ -132,6 +132,23 @@ const handleProductDetails = (item) => {
 };
 
 const handleSubmit = async () => {
+  isValidation.value = false;
+  if (
+    !inputData.value?.par_cat_id ||
+    !inputData.value?.sub_cat_id ||
+    !inputData.value?.prod_name ||
+    !inputData.value?.prod_id ||
+    !inputData.value?.price ||
+    !inputData.value?.stock ||
+    !inputData.value?.prod_type_info ||
+    !inputData.value?.currency_type_info ||
+    !inputData.value?.status ||
+    !inputData.value?.prod_image
+  ) {
+    isValidation.value = true;
+    alert("Please fill all the required field");
+    return;
+  }
   const data = {
     _id: inputData.value.id || null,
     par_cat_id: Number(inputData.value?.par_cat_id),
@@ -153,13 +170,42 @@ const handleSubmit = async () => {
   };
 
   const text = "Are you want to sure?";
-  if(confirm(text) === true) {
+  if (confirm(text) === true) {
     const result = await postProduct(data);
-    if(result.data?.id) {
+    if (result.data?.id) {
       alert(result.data?.message);
+      isValidation.value = false;
+      isCreateModal.value = false;
+      const obj = {
+        _id: inputData.value.id || null,
+        par_cat_id: Number(inputData.value?.par_cat_id),
+        sub_cat_id: Number(inputData.value?.sub_cat_id),
+        sub_sub_cat_id: Number(inputData.value?.sub_sub_cat_id),
+        prod_id: Number(inputData.value?.prod_id),
+        prod_image: inputData.value?.prod_image,
+        prod_name: inputData.value?.prod_name,
+        price: Number(inputData.value?.price),
+        prod_type: inputData.value?.prod_type_info?.prod_type,
+        prod_type_name: inputData.value?.prod_type_info?.prod_type_name,
+        stock: Number(inputData.value?.stock),
+        prod_brand: inputData.value?.prod_brand,
+        currency_id: Number(inputData.value?.currency_type_info?.currency_id),
+        currency_name: inputData.value?.currency_type_info?.currency_name,
+        rating: null,
+        status: Number(inputData.value?.status),
+        description: inputData.value?.description
+      };
+      const index = productList.value?.findIndex((item) => item._id == result.data?.id);
+      if (index > - 1) {
+        productList.value[index] = obj;
+      }
+      else {
+        productList.value.unshift(obj)
+      }
     };
+
   }
-  console.log("data", data);
+
 };
 
 const filterSubCategory = computed(() => subCategoryList.value?.filter((item) => item.par_cat_id === inputData.value?.par_cat_id));
@@ -172,9 +218,7 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
   <div class="filter-bar-style d-flex flex-wrap align-items-center justify-content-between">
     <span>Products</span>
     <div class="d-flex align-items-center">
-      <button
-      @click="handleCreate"
-      class="d-flex align-items-center">
+      <button @click="handleCreate" class="d-flex align-items-center">
         Create New <span class="material-icons">add</span>
       </button>
     </div>
@@ -257,20 +301,25 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
                     <p>Product Type : <span>{{ productDetails?.prod_type_name }}</span></p>
                   </div>
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <p>Parent Category : <span>({{ productDetails?.par_cat_id }}) - {{ productDetails?.par_cat_name }}</span></p>
-                    <p>Sub Category : <span>({{ productDetails?.sub_cat_id }}) - {{ productDetails?.sub_cat_name }}</span></p>
+                    <p>Parent Category : <span>({{ productDetails?.par_cat_id }}) - {{ productDetails?.par_cat_name
+                        }}</span></p>
+                    <p>Sub Category : <span>({{ productDetails?.sub_cat_id }}) - {{ productDetails?.sub_cat_name
+                        }}</span></p>
                   </div>
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <p>Sub Sub Category : <span>({{ productDetails?.sub_sub_cat_id }}) - {{ productDetails?.sub_sub_cat_name }}</span></p>
+                    <p>Sub Sub Category : <span>({{ productDetails?.sub_sub_cat_id }}) - {{
+                      productDetails?.sub_sub_cat_name }}</span></p>
                     <p>Brand Name : <span>{{ productDetails?.prod_brand }}</span></p>
                   </div>
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <p>Currency : <span>{{ productDetails?.currency_id }} - {{ productDetails?.currency_name }}</span></p>
+                    <p>Currency : <span>{{ productDetails?.currency_id }} - {{ productDetails?.currency_name }}</span>
+                    </p>
                     <p>Status : <span>{{ productDetails?.status == 1 ? 'Active' : 'Inactive' }}</span></p>
                     <p>Rating : <span>{{ productDetails?.rating }}</span></p>
                   </div>
 
-                  <p class="card-text"><small class="text-muted">Description : <span>{{ productDetails?.description }}</span></small></p>
+                  <p class="card-text"><small class="text-muted">Description : <span>{{ productDetails?.description
+                        }}</span></small></p>
                 </div>
               </div>
             </div>
@@ -306,11 +355,10 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
             <div class="col-md-6">
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Parent Category *</label>
-                <select
-                  v-model="inputData.par_cat_id"
-                  :class="{ 'is-invalid': isValidation && !inputData.par_cat_id }"
+                <select v-model="inputData.par_cat_id" :class="{ 'is-invalid': isValidation && !inputData.par_cat_id }"
                   class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
-                  <option v-for="(item, index) in parentCategoryList" :key="index" :value="item.par_cat_id">{{ item?.par_cat_id }}
+                  <option v-for="(item, index) in parentCategoryList" :key="index" :value="item.par_cat_id">{{
+                    item?.par_cat_id }}
                     - {{
                       item?.par_cat_name }}</option>
                 </select>
@@ -320,11 +368,10 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
             <div class="col-md-6">
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Sub Category *</label>
-                <select
-                  v-model="inputData.sub_cat_id"
-                  :class="{ 'is-invalid': isValidation && !inputData.sub_cat_id }"
+                <select v-model="inputData.sub_cat_id" :class="{ 'is-invalid': isValidation && !inputData.sub_cat_id }"
                   class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
-                  <option v-for="(item, index) in filterSubCategory" :key="index" :value="item.sub_cat_id">{{ item?.sub_cat_id }}
+                  <option v-for="(item, index) in filterSubCategory" :key="index" :value="item.sub_cat_id">{{
+                    item?.sub_cat_id }}
                     - {{
                       item?.sub_cat_name }}</option>
                 </select>
@@ -334,11 +381,11 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
             <div class="col-md-6">
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Sub Sub Category</label>
-                <select
-                  v-model="inputData.sub_sub_cat_id"
+                <select v-model="inputData.sub_sub_cat_id"
                   :class="{ 'is-invalid': isValidation && !inputData.sub_sub_cat_id }"
                   class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
-                  <option v-for="(item, index) in filterSubSubCategory" :key="index" :value="item.sub_sub_cat_id">{{ item?.sub_sub_cat_id }}
+                  <option v-for="(item, index) in filterSubSubCategory" :key="index" :value="item.sub_sub_cat_id">{{
+                    item?.sub_sub_cat_id }}
                     - {{
                       item?.sub_sub_cat_name }}</option>
                 </select>
@@ -348,44 +395,41 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
             <div class="col-md-6">
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Product Name *</label>
-                <input v-model="inputData.prod_name"
-                  :class="{ 'is-invalid': isValidation && !inputData.prod_name }" type="text"
-                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
+                <input v-model="inputData.prod_name" :class="{ 'is-invalid': isValidation && !inputData.prod_name }"
+                  type="text" class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
                   aria-describedby="emailHelp" placeholder="Write product name">
               </div>
             </div>
             <div class="col-md-4">
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Product ID *</label>
-                <input v-model="inputData.prod_id"
-                  :class="{ 'is-invalid': isValidation && !inputData.prod_id }" type="number"
-                  class="form-control form-control-sm input-field-style" placeholder="Write product ID">
+                <input v-model="inputData.prod_id" :class="{ 'is-invalid': isValidation && !inputData.prod_id }"
+                  type="number" class="form-control form-control-sm input-field-style" placeholder="Write product ID">
               </div>
             </div>
 
             <div class="col-md-4">
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Price *</label>
-                <input v-model="inputData.price"
-                  :class="{ 'is-invalid': isValidation && !inputData.price }" type="number"
-                  class="form-control form-control-sm input-field-style" placeholder="Write product price">
+                <input v-model="inputData.price" :class="{ 'is-invalid': isValidation && !inputData.price }"
+                  type="number" class="form-control form-control-sm input-field-style"
+                  placeholder="Write product price">
               </div>
             </div>
 
             <div class="col-md-4">
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Stock *</label>
-                <input v-model="inputData.stock"
-                  :class="{ 'is-invalid': isValidation && !inputData.stock }" type="number"
-                  class="form-control form-control-sm input-field-style" placeholder="Write product stock">
+                <input v-model="inputData.stock" :class="{ 'is-invalid': isValidation && !inputData.stock }"
+                  type="number" class="form-control form-control-sm input-field-style"
+                  placeholder="Write product stock">
               </div>
             </div>
 
             <div class="col-md-4">
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Product Type *</label>
-                <select
-                  v-model="inputData.prod_type_info"
+                <select v-model="inputData.prod_type_info"
                   :class="{ 'is-invalid': isValidation && !inputData.prod_type_info }"
                   class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
                   <option v-for="(item, index) in productTypeList" :key="index" :value="item">({{ item?.prod_type }})
@@ -397,8 +441,7 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
             <div class="col-md-4">
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Currency Type *</label>
-                <select
-                  v-model="inputData.currency_type_info"
+                <select v-model="inputData.currency_type_info"
                   :class="{ 'is-invalid': isValidation && !inputData.currency_type_info }"
                   class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
                   <option v-for="(item, index) in currencyTypeList" :key="index" :value="item">({{ item?.currency_id }})
@@ -410,8 +453,7 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
             <div class="col-md-4">
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Status *</label>
-                <select
-                  v-model="inputData.status"
+                <select v-model="inputData.status"
                   :class="{ 'is-invalid': isValidation && !inputData.currency_type_info }"
                   class="form-select form-select-sm input-field-style" aria-label=".form-select-sm example">
                   <option v-for="(item, index) in statusList" :key="index" :value="item.status">({{ item?.status }})
@@ -424,26 +466,23 @@ const filterSubSubCategory = computed(() => subSubCategoryList.value?.filter((it
             <div class="col-md-6">
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Image *</label>
-                <input v-model="inputData.prod_image"
-                  :class="{ 'is-invalid': isValidation && !inputData.prod_image }" type="url"
-                  class="form-control form-control-sm input-field-style" id="exampleInputText"
+                <input v-model="inputData.prod_image" :class="{ 'is-invalid': isValidation && !inputData.prod_image }"
+                  type="url" class="form-control form-control-sm input-field-style" id="exampleInputText"
                   aria-describedby="textHelp" placeholder="Enter photo URL">
               </div>
             </div>
             <div class="col-md-6">
               <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Brand</label>
-                <input v-model="inputData.prod_brand"
-                  :class="{ 'is-invalid': isValidation && !inputData.prod_brand }" type="text"
-                  class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
+                <input v-model="inputData.prod_brand" :class="{ 'is-invalid': isValidation && !inputData.prod_brand }"
+                  type="text" class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
                   aria-describedby="emailHelp" placeholder="Enter brand name">
               </div>
             </div>
             <div class="col-md-12">
               <div class="mb-2">
-                <label for="exampleInputEmail1" class="form-label">Description *</label>
-                <textarea v-model="inputData.description"
-                  rows="4"
+                <label for="exampleInputEmail1" class="form-label">Description</label>
+                <textarea v-model="inputData.description" rows="4"
                   :class="{ 'is-invalid': isValidation && !inputData.description }" type="text"
                   class="form-control form-control-sm input-field-style" id="exampleInputEmail1"
                   aria-describedby="emailHelp" placeholder="Enter description"></textarea>
