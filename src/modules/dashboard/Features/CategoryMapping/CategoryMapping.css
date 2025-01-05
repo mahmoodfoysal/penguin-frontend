@@ -128,9 +128,6 @@ p {
 
 /* table style for all table  end */
 
-.table-style tbody tr {
-  border-bottom: 1px solid #e2edfa;
-}
 
 .table-style thead tr th {
   color: #026cd1;

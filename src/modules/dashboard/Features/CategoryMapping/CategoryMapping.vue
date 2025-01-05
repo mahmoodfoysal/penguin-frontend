@@ -36,8 +36,8 @@ const handleGetCategories = async () => {
           <th>P.Name</th>
           <th>S.ID</th>
           <th>S.Name</th>
-          <th class="text-center">S.ID</th>
-          <th class="text-start">S.Name</th>
+          <th class="text-center">S.S.ID</th>
+          <th class="text-start">S.S.Name</th>
         </tr>
       </thead>
       <tbody>
