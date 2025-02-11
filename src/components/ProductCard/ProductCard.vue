@@ -1,16 +1,24 @@
 <script setup>
+import { toRefs } from 'vue';
+const props = defineProps({
+  productInfo: {
+    type: Array,
+    default: () => []
+  }
+});
+
+const {productInfo} = toRefs(props);
 
 </script>
 
 <template>
   <div class="single-product">
-    <img class="img-fluid" src="../../assets/img/product/p1.jpg" alt="">
+    <img class="img-fluid" :src="productInfo?.prod_image" alt="product-image">
     <div class="product-details">
-      <h6>addidas New Hammer sole
-        for Sports person</h6>
+      <h6>{{ productInfo?.prod_name }}</h6>
       <div class="price">
-        <h6>$150.00</h6>
-        <h6 class="l-through">$210.00</h6>
+        <h6>{{ productInfo.price?.toFixed(2) }} {{ productInfo.currency_name }}</h6>
+        <!-- <h6 class="l-through">210.00</h6> -->
       </div>
       <div class="prd-bottom">
 

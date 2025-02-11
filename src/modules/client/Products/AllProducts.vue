@@ -1,9 +1,25 @@
 <script setup>
+import { getProducts } from '../api/product.js';
 import ProductCard from '@/components/ProductCard/ProductCard.vue';
 import ProductCategory from '@/components/ProductCategory/ProductCategory.vue';
 import ProductFilters from '@/components/ProductFilters/ProductFilters.vue';
+import { onMounted, ref } from 'vue';
 
+const productList = ref([]);
 
+onMounted(() => {
+  handleGetProducts()
+})
+
+const handleGetProducts = async () => {
+  try {
+    const result= await getProducts();
+    productList.value = result.data?.list_data.filter(item => item.status === 1);
+  }
+  catch(error) {
+    console.log(error)
+  }
+};
 
 </script>
 
@@ -17,17 +33,17 @@ import ProductFilters from '@/components/ProductFilters/ProductFilters.vue';
       </div>
       <div class="col-xl-9 col-lg-8 col-md-7">
         <div class="filter-bar d-flex flex-wrap align-items-center justify-content-between mb-2">
-          <span>Parent Category</span>
+          <span>Products</span>
           <div class="d-flex align-items-center">
-            <button @click="handleCreate" class="d-flex align-items-center">
-              Create New <span class="material-icons">add</span>
-            </button>
+
           </div>
         </div>
         <!-- product card  -->
         <div class="row">
-          <div v-for="n in 10" :key="n" class="col-lg-3 col-md-6">
-            <ProductCard></ProductCard>
+          <div v-for="(item, index) in productList" :key="index" class="col-lg-3 col-md-6">
+            <ProductCard
+            :productInfo="item"
+            ></ProductCard>
           </div>
         </div>
       </div>
