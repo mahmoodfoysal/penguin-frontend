@@ -1,4 +1,5 @@
 <script setup>
+import router from '@/router';
 import { toRefs } from 'vue';
 const props = defineProps({
   productInfo: {
@@ -9,11 +10,15 @@ const props = defineProps({
 
 const {productInfo} = toRefs(props);
 
+const handleProductDetails = () => {
+  router.push('/features/products/1')
+}
+
 </script>
 
 <template>
   <div class="single-product">
-    <img class="img-fluid" :src="productInfo?.prod_image" alt="product-image">
+    <img @click="handleProductDetails" class="img-fluid" :src="productInfo?.prod_image" alt="product-image" title="See product details">
     <div class="product-details">
       <h6>{{ productInfo?.prod_name }}</h6>
       <div class="price">

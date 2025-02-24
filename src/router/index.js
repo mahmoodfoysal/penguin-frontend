@@ -27,6 +27,11 @@ const routes = [
     component: () => import('@/modules/client/Products/AllProducts.vue'),
   },
   {
+    path: '/features/products/:id',
+    name: 'ProductDetails',
+    component: () => import('@/components/SingleProduct/SingleProduct.vue'),
+  },
+  {
     path: '/dashboard/features',
     name: 'DashboardHome',
     component: () => import('@/modules/dashboard/DashboardIndex.vue'),

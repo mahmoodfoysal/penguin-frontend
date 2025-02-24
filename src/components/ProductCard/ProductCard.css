@@ -92,3 +92,11 @@
     visibility: visible;
     left: 40px;
   }
+
+  .single-product img {
+    height: 280px;
+    object-fit: cover;
+  }
+  .single-product img:hover {
+    cursor: pointer;
+  }
