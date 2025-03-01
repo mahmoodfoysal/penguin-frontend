@@ -370,6 +370,16 @@
     color: #000;
     border-radius: 0;
   }
+
+  .quantity-style span:nth-child(1) {
+    cursor: pointer;
+  }
+  .quantity-style span:nth-child(2) {
+    font-size: 20px;
+  }
+  .quantity-style span:nth-child(3) {
+    cursor: pointer;
+  }
   
   /* End Single Product Area css
   ============================================================================================ */

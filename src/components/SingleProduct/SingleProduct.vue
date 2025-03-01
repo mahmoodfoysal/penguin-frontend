@@ -1,13 +1,35 @@
 <script setup>
-import { ref } from 'vue';
+import { getProductDetails } from '@/modules/client/api/product.js';
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
 
 const selectedTab = ref('description');
+const productDetails = ref({});
+const routeParamsId = ref(route.params.id);
+
+
+
+onMounted(() => {
+  handleProductDetails()
+})
 
 const handleSelectedTab = (tab) => {
   selectedTab.value = null;
   selectedTab.value = tab;
-  console.log('Selected Tab:', selectedTab.value);
 }
+
+const handleProductDetails = async () => {
+  try {
+    const result = await getProductDetails(routeParamsId.value);
+    productDetails.value = result.data?.details_data
+  }
+  catch (error) {
+    console.log(error);
+  }
+};
+
 </script>
 
 <template>
@@ -18,32 +40,31 @@ const handleSelectedTab = (tab) => {
         <div class="col-lg-6">
           <div class="s_Product_carousel">
             <div class="single-prd-item">
-              <img class="img-fluid" src="/src/assets/img/category/s-p1.jpg" alt="">
+              <img class="img-fluid" :src="productDetails?.prod_image" alt="">
             </div>
 
           </div>
         </div>
         <div class="col-lg-5 offset-lg-1">
           <div class="s_product_text">
-            <h3>Faded SkyBlu Denim Jeans</h3>
-            <h2>$149.99</h2>
+            <h3>{{ productDetails?.prod_name }}</h3>
+            <h2>{{ productDetails?.price }} {{ productDetails?.currency_name }}</h2>
             <ul class="list">
-              <li><a class="active" href="#"><span>Category</span> : Household</a></li>
-              <li><a href="#"><span>Availibility</span> : In Stock</a></li>
+              <li>Brand: <span>{{ productDetails?.prod_brand }}</span></li>
+              <li>Stock: <span>{{ productDetails?.stock }}</span></li>
             </ul>
-            <p>Mill Oil is an innovative oil filled radiator with the most modern technology. If you are looking for
-              something that can make your interior look awesome, and at the same time give you the pleasant warm
-              feeling
-              during the winter.</p>
+            <p>{{ productDetails?.description }}</p>
             <div class="product_count">
               <label for="qty">Quantity:</label>
-              <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
-              <button
-                onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-              <button
-                onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+              <div class="d-flex justify-content-center align-items-center gap-2 quantity-style">
+                <span class="material-icons">
+                  remove
+                </span>
+                <span>1</span>
+                <span class="material-icons">
+                  add
+                </span>
+              </div>
             </div>
             <div class="card_area d-flex align-items-center">
               <a class="primary-btn" href="#">Add to Cart</a>
@@ -63,7 +84,7 @@ const handleSelectedTab = (tab) => {
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
           <button @click="handleSelectedTab('description')" :class="{ 'activeTab': selectedTab === 'description' }"
-            class="nav-link nav-btn"  role="tab">Description</button>
+            class="nav-link nav-btn" role="tab">Description</button>
         </li>
         <li class="nav-item">
           <button @click="handleSelectedTab('specification')" :class="{ 'activeTab': selectedTab === 'specification' }"
@@ -74,37 +95,14 @@ const handleSelectedTab = (tab) => {
             class="nav-link nav-btn">Comments</button>
         </li>
         <li class="nav-item">
-          <button @click="handleSelectedTab('reviews')" :class="{ 'activeTab': selectedTab === 'reviews' }" class="nav-link nav-btn"
-          >Reviews</button>
+          <button @click="handleSelectedTab('reviews')" :class="{ 'activeTab': selectedTab === 'reviews' }"
+            class="nav-link nav-btn">Reviews</button>
         </li>
       </ul>
       <div class="tab-content">
 
         <div v-if="selectedTab == 'description'">
-          <p>Beryl Cook is one of Britain’s most talented and amusing artists .Beryl’s pictures feature women of all
-            shapes
-            and sizes enjoying themselves .Born between the two world wars, Beryl Cook eventually left Kendrick School
-            in
-            Reading at the age of 15, where she went to secretarial school and then into an insurance office. After
-            moving to
-            London and then Hampton, she eventually married her next door neighbour from Reading, John Cook. He was an
-            officer in the Merchant Navy and after he left the sea in 1956, they bought a pub for a year before John
-            took a
-            job in Southern Rhodesia with a motor company. Beryl bought their young son a box of watercolours, and when
-            showing him how to use it, she decided that she herself quite enjoyed painting. John subsequently bought her
-            a
-            child’s painting set for her birthday and it was with this that she produced her first significant work, a
-            half-length portrait of a dark-skinned lady with a vacant expression and large drooping breasts. It was
-            aptly
-            named ‘Hangover’ by Beryl’s husband and</p>
-          <p>It is often frustrating to attempt to plan meals that are designed for one. Despite this fact, we are
-            seeing
-            more and more recipe books and Internet websites that are dedicated to the act of cooking for one. Divorce
-            and
-            the death of spouses or grown children leaving for college are all reasons that someone accustomed to
-            cooking for
-            more than one would suddenly need to learn how to adjust all the cooking practices utilized before into a
-            streamlined plan of cooking that is more efficient for one person creating less</p>
+          <p>{{ productDetails?.description }}</p>
         </div>
 
         <div v-if="selectedTab == 'specification'">
