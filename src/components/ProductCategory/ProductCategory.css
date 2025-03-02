@@ -71,3 +71,12 @@
   .sidebar-style::-webkit-scrollbar-track {
     background-color: #f5f5f5;
   }
+
+  .reset-style {
+    cursor: pointer;
+    font-size: 14px;
+    display: block;
+    line-height: 50px;
+    padding-left: 2px;
+    border-bottom: 1px solid #eee;
+  }
