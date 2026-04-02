@@ -1,6 +1,4 @@
 import React from "react";
-import { Rating } from "@smastrom/react-rating";
-import "@smastrom/react-rating/style.css";
 import { useNavigate } from "react-router";
 
 const ProductCard = ({ product }) => {
@@ -63,9 +61,7 @@ const ProductCard = ({ product }) => {
             <span className="text-base-content/60 text-sm font-medium tracking-wide italic">
               Stock {product.stock}
             </span>
-            <span className="font-extrabold text-xl text-primary">
-              <Rating style={{ maxWidth: 100 }} value={2.5} readOnly />
-            </span>
+            <span className="font-extrabold text-xl text-primary"></span>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../../../../components/ProductCard";
-import { useLoaderData } from "react-router";
+import { Link, useLoaderData } from "react-router";
 
 const NewArriveProducts = () => {
   const products = useLoaderData();
@@ -40,15 +40,15 @@ const NewArriveProducts = () => {
               The latest foundational pieces added to our collection.
             </p>
           </div>
-          <a
-            href="#"
+          <Link
+            to="/products"
             className="link link-hover font-bold text-primary uppercase text-sm tracking-widest flex items-center gap-2 group"
           >
-            View All{" "}
+            View All
             <span className="group-hover:translate-x-1 transition-transform">
               →
             </span>
-          </a>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
