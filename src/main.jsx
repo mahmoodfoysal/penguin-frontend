@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import { ClickToComponent } from "click-to-react-component";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import Home from "./modules/client/Home/Home/Home";
+import Products from "./modules/client/Products/Products.jsx";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,12 @@ const router = createBrowserRouter([
     children: [
       { index: true, Component: Home },
       { path: "home", Component: Home },
+      {
+        path: "products",
+        Component: Products,
+        loader: async () =>
+          await fetch("http://localhost:5000/api/penguin/get-product-list"),
+      },
     ],
   },
 ]);

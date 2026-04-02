@@ -1,4 +1,5 @@
 import React from "react";
+import ProductCard from "../../../../components/ProductCard";
 
 const NewArriveProducts = () => {
   return (
@@ -54,46 +55,8 @@ const NewArriveProducts = () => {
               type: "Apparel",
               price: "$55.00",
             },
-          ].map((product) => (
-            <div key={product.id} className="group cursor-pointer">
-              <div className="relative overflow-hidden rounded-3xl bg-base-200 aspect-[3/4]">
-                <img
-                  src={product.img}
-                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-in-out"
-                  alt={product.name}
-                />
-                {/* Quick-add overlay */}
-                <button className="btn btn-circle btn-primary absolute bottom-5 right-5 translate-y-20 group-hover:translate-y-0 transition-transform duration-300 shadow-xl z-20">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <div className="mt-5 px-1">
-                <h3 className="font-bold text-xl tracking-tight text-base-content group-hover:text-primary transition-colors">
-                  {product.name}
-                </h3>
-                <div className="flex justify-between items-center mt-2">
-                  <span className="text-base-content/60 text-sm font-medium tracking-wide italic">
-                    {product.type}
-                  </span>
-                  <span className="font-extrabold text-xl text-primary">
-                    {product.price}
-                  </span>
-                </div>
-              </div>
-            </div>
+          ].map((product, index) => (
+            <ProductCard product={product} key={index}></ProductCard>
           ))}
         </div>
       </section>

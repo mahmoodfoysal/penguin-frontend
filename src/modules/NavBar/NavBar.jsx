@@ -1,4 +1,6 @@
 import React from "react";
+import { NavLink } from "react-router";
+import "./NavBar.css";
 
 const NavBar = () => {
   return (
@@ -10,25 +12,20 @@ const NavBar = () => {
               href="#"
               className="btn btn-ghost text-xl font-black tracking-tighter uppercase"
             >
-              Vortex.
+              Penguin
             </a>
           </div>
-          <div className="navbar-center hidden lg:flex">
+          <div className="navbar-center hidden lg:flex nav-link-style">
             <ul className="menu menu-horizontal px-1 gap-1 font-medium text-sm">
               <li>
-                <a href="#collections" className="hover:text-primary">
-                  Collections
-                </a>
+                <NavLink to="/home" className="hover:text-primary">
+                  Home
+                </NavLink>
               </li>
               <li>
-                <a href="#arrivals" className="hover:text-primary">
-                  New Arrivals
-                </a>
-              </li>
-              <li>
-                <a href="#limited" className="hover:text-primary">
-                  Limited Drop
-                </a>
+                <NavLink to="/products" className="hover:text-primary">
+                  Products
+                </NavLink>
               </li>
             </ul>
           </div>
