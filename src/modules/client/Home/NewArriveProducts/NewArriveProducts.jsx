@@ -1,7 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "../../../../components/ProductCard";
+import { useLoaderData } from "react-router";
 
 const NewArriveProducts = () => {
+  const products = useLoaderData();
+
+  const [randomProducts, setRandomProducts] = useState([]);
+
+  useEffect(() => {
+    const getRandomItems = (arr, count) => {
+      const result = [];
+      const usedIndices = new Set();
+
+      while (result.length < count && usedIndices.size < arr.length) {
+        const index = Math.floor(Math.random() * arr.length);
+        if (!usedIndices.has(index)) {
+          usedIndices.add(index);
+          result.push(arr[index]);
+        }
+      }
+
+      return result;
+    };
+
+    setTimeout(() => {
+      setRandomProducts(getRandomItems(products.list_data, 4));
+    }, 0);
+  }, [products]);
+
   return (
     <>
       <section className="py-24 px-6 max-w-7xl mx-auto" id="arrivals">
@@ -26,36 +52,7 @@ const NewArriveProducts = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
-          {[
-            {
-              id: 1,
-              img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=600",
-              name: "S1 Studio Headphones",
-              type: "Hardware",
-              price: "$240.00",
-            },
-            {
-              id: 2,
-              img: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?q=80&w=600",
-              name: "Classic Matte Kettle",
-              type: "Home Goods",
-              price: "$95.00",
-            },
-            {
-              id: 3,
-              img: "https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=600",
-              name: "Wired Sound Pods",
-              type: "Accessories",
-              price: "$160.00",
-            },
-            {
-              id: 4,
-              img: "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=600",
-              name: "Void-Black Tee",
-              type: "Apparel",
-              price: "$55.00",
-            },
-          ].map((product, index) => (
+          {randomProducts.map((product, index) => (
             <ProductCard product={product} key={index}></ProductCard>
           ))}
         </div>
