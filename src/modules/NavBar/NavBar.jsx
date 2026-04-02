@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import "./NavBar.css";
 
 const NavBar = () => {
@@ -8,12 +8,12 @@ const NavBar = () => {
       <div className="sticky top-0 z-50 px-4 py-2">
         <div className="navbar bg-base-100/70 backdrop-blur-md rounded-2xl border border-base-200 shadow-sm">
           <div className="navbar-start">
-            <a
-              href="#"
+            <Link
+              to="/home"
               className="btn btn-ghost text-xl font-black tracking-tighter uppercase"
             >
               Penguin
-            </a>
+            </Link>
           </div>
           <div className="navbar-center hidden lg:flex nav-link-style">
             <ul className="menu menu-horizontal px-1 gap-1 font-medium text-sm">
@@ -25,6 +25,21 @@ const NavBar = () => {
               <li>
                 <NavLink to="/products" className="hover:text-primary">
                   Products
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/cart" className="hover:text-primary">
+                  Cart
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/checkout" className="hover:text-primary">
+                  Checkout
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/login" className="hover:text-primary">
+                  Login
                 </NavLink>
               </li>
             </ul>

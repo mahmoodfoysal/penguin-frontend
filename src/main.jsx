@@ -7,6 +7,9 @@ import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 import Home from "./modules/client/Home/Home/Home";
 import Products from "./modules/client/Products/Products.jsx";
 import ProductDetails from "./modules/client/ProductDetrails/ProductDetails.jsx";
+import Cart from "./modules/client/Cart/Cart.jsx";
+import Checkout from "./modules/client/Checkout/Checkout.jsx";
+import Login from "./modules/Authentication/Login/Login.jsx";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +38,18 @@ const router = createBrowserRouter([
           await fetch(
             `http://localhost:5000/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
           ),
+      },
+      {
+        path: "cart",
+        Component: Cart,
+      },
+      {
+        path: "checkout",
+        Component: Checkout,
+      },
+      {
+        path: "login",
+        Component: Login,
       },
     ],
   },

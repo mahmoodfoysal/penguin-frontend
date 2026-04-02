@@ -6,12 +6,12 @@ const Footer = () => {
       <footer className="footer footer-center p-10 bg-base-200 text-base-content rounded-t-3xl mt-20">
         <aside>
           <p className="font-black text-3xl uppercase tracking-tighter mb-2">
-            Vortex.
+            Penguin.
           </p>
           <p className="font-medium text-base-content/60">
             Crafted Essentials Ltd. Providing reliable design since 2023
           </p>
-          <p className="text-sm">Copyright © 2024 - All right reserved</p>
+          <p className="text-sm">Copyright © 2026 - All right reserved</p>
         </aside>
         <nav>
           <div className="grid grid-flow-col gap-4">
