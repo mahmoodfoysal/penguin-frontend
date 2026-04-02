@@ -1,10 +1,21 @@
 import React from "react";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
+import { useNavigate } from "react-router";
 
 const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
+
+  const handleProductDetails = (item) => {
+    navigate(`/product/${item._id}/${item.prod_id}`);
+    console.log(item);
+  };
+
+  const handleAddToCart = () => {
+    console.log("k");
+  };
   return (
-    <div>
+    <div onClick={() => handleProductDetails(product)}>
       <div className="group cursor-pointer">
         <div className="relative overflow-hidden rounded-3xl bg-base-200 aspect-[3/4]">
           <img
@@ -13,7 +24,13 @@ const ProductCard = ({ product }) => {
             alt="prod image"
           />
           {/* Quick-add overlay */}
-          <button className="btn btn-circle btn-primary absolute bottom-5 right-5 translate-y-20 group-hover:translate-y-0 transition-transform duration-300 shadow-xl z-20">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAddToCart(product);
+            }}
+            className="btn btn-circle btn-primary absolute bottom-5 right-5 translate-y-20 group-hover:translate-y-0 transition-transform duration-300 shadow-xl z-20"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
