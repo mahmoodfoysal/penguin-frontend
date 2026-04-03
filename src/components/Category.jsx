@@ -1,39 +1,38 @@
 import React, { useState } from "react";
 
-const Category = () => {
+const Category = ({ categoryList, handleFilterProducts }) => {
   const [openCategory, setOpenCategory] = useState(null);
 
   const toggleCategory = (categoryName) => {
-    setOpenCategory(openCategory === categoryName ? null : categoryName);
+    setOpenCategory(
+      openCategory === categoryName.par_cat_name
+        ? null
+        : categoryName.par_cat_name,
+    );
+    handleFilterProducts(categoryName);
   };
+
   return (
     <div>
       {/* 1. CATEGORIES WITH SUB-CATEGORIES (NEW) */}
       <h3 className="font-heading font-black uppercase tracking-widest text-xs mb-6">
         Categories
       </h3>
+      <h4
+        onClick={() => handleFilterProducts(null)}
+        className="font-heading font-black uppercase tracking-widest text-[13px] mb-6 cursor-pointer"
+      >
+        All Category
+      </h4>
       <div className="space-y-4">
-        {[
-          {
-            name: "Footwear",
-            subs: ["Runners", "Basketball", "Lifestyle", "Slides"],
-          },
-          {
-            name: "Apparel",
-            subs: ["Hoodies", "T-Shirts", "Trackpants", "Jackets"],
-          },
-          {
-            name: "Accessories",
-            subs: ["Bags", "Socks", "Hats", "Equipment"],
-          },
-        ].map((category) => {
-          const isOpen = openCategory === category.name;
+        {categoryList.map((category, index) => {
+          const isOpen = openCategory === category.par_cat_name;
 
           return (
-            <div key={category.name} className="group">
+            <div key={index} className="group">
               {/* Parent Name (The Toggle) */}
               <div
-                onClick={() => toggleCategory(category.name)}
+                onClick={() => toggleCategory(category)}
                 className={`flex items-center justify-between cursor-pointer border-b pb-2 transition-colors ${
                   isOpen
                     ? "border-accent text-accent"
@@ -41,7 +40,7 @@ const Category = () => {
                 }`}
               >
                 <span className="font-heading font-bold text-sm uppercase tracking-wider">
-                  {category.name}
+                  {category.par_cat_name}
                 </span>
                 <span
                   className={`text-[10px] transition-transform duration-300 ${isOpen ? "rotate-180 opacity-100" : "rotate-0 opacity-30"}`}
@@ -59,13 +58,13 @@ const Category = () => {
                 }`}
               >
                 <ul className="overflow-hidden ml-4 space-y-2 border-l-2 border-accent/20 pl-4">
-                  {category.subs.map((sub) => (
-                    <li key={sub}>
+                  {category.sub_categories?.map((subItem, subIndex) => (
+                    <li key={subIndex}>
                       <a
-                        href={`#${sub}`}
+                        href={`#${subIndex}`}
                         className="font-body text-xs uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all block py-1"
                       >
-                        {sub}
+                        {subItem.sub_cat_name}
                       </a>
                     </li>
                   ))}

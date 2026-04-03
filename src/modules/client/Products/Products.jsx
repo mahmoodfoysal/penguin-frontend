@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLoaderData } from "react-router";
 import ProductCard from "./../../../components/ProductCard";
 import Category from "../../../components/Category";
@@ -8,9 +8,54 @@ import Pagination from "../../../components/Pagination";
 import FeatureProducts from "../../../components/FeatureProducts";
 
 const Products = () => {
-  const products = useLoaderData();
+  const data = useLoaderData();
 
-  console.log(products.list_data);
+  const productsList = data.products?.list_data;
+
+  const categoryList = data.categories?.list_data;
+
+  const [filterProduct, setFilterProduct] = useState(productsList || []);
+
+  const [priceValue, setPriceValue] = useState(productsList || []);
+
+  const maxPrice = Math.max(...priceValue.map((item) => item.price));
+
+  const [price, setPrice] = useState(0);
+
+  const handleFilterProducts = (catItem) => {
+    setPrice(0);
+    if (catItem == null) {
+      setFilterProduct(productsList);
+      setPriceValue(productsList);
+    } else if (catItem) {
+      const filterProd = productsList.filter(
+        (item) => item.par_cat_id === catItem.par_cat_id,
+      );
+      setFilterProduct(filterProd);
+      setPriceValue(filterProd);
+    }
+  };
+
+  // useEffect(() => {
+  //   if (price === 0) {
+  //     setFilterProduct(productsList); // reset
+  //     return;
+  //   }
+  //   const updated = productsList.filter(item => item.price <= price);
+  //   setFilterProduct(updated);
+  // }, [price, productsList]);
+
+  useEffect(() => {
+    if (price === 0) return;
+
+    const timer = setTimeout(() => {
+      setFilterProduct((prev) => prev.filter((item) => item.price <= price));
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [price]);
+
+  console.log("filterProduct", filterProduct);
 
   return (
     <div>
@@ -34,10 +79,17 @@ const Products = () => {
           <aside className="w-full lg:w-64 flex-shrink-0">
             <div className="sticky top-28 space-y-10">
               {/* 1. CATEGORIES WITH SUB-CATEGORIES (NEW) */}
-              <Category></Category>
+              <Category
+                categoryList={categoryList}
+                handleFilterProducts={handleFilterProducts}
+              ></Category>
 
               {/* Price Range Filter */}
-              <PriceRange></PriceRange>
+              <PriceRange
+                setPrice={setPrice}
+                price={price}
+                maxPrice={maxPrice}
+              ></PriceRange>
 
               {/* Brand Filter */}
               <Brand></Brand>
@@ -48,7 +100,10 @@ const Products = () => {
           <main className="flex-grow">
             {/* Top Bar (Sort) */}
             <div className="flex justify-between items-center mb-8 pb-4 border-b border-black/5 font-heading text-[10px] font-bold uppercase tracking-[0.2em]">
-              <span>Showing 1-12 of 84 Items</span>
+              <span>
+                Showing 1-{filterProduct?.length || 0} of{" "}
+                {productsList?.length || 0} Items
+              </span>
               <select className="select select-ghost select-xs focus:bg-transparent font-bold">
                 <option>Sort: Newest</option>
                 <option>Price: Low to High</option>
@@ -58,7 +113,7 @@ const Products = () => {
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-12">
-              {products.list_data.map((item, index) => (
+              {productsList.map((item, index) => (
                 <ProductCard product={item} key={index}></ProductCard>
               ))}
             </div>

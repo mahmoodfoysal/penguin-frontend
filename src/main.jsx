@@ -14,7 +14,6 @@ import Login from "./modules/Authentication/Login/Login.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
-
     element: <Navigate to="/home" replace />,
     Component: App,
     children: [
@@ -28,8 +27,18 @@ const router = createBrowserRouter([
       {
         path: "products",
         Component: Products,
-        loader: async () =>
-          await fetch("http://localhost:5000/api/penguin/get-product-list"),
+        loader: async () => {
+          const products = await fetch(
+            "http://localhost:5000/api/penguin/get-product-list",
+          );
+          const categories = await fetch(
+            "http://localhost:5000/api/client/get-all-categories",
+          );
+          return {
+            products: await products.json(),
+            categories: await categories.json(),
+          };
+        },
       },
       {
         path: "product/:id/:prod_id",

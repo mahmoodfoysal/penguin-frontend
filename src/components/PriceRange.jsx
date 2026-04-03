@@ -1,6 +1,6 @@
 import React from "react";
 
-const PriceRange = () => {
+const PriceRange = ({ maxPrice, setPrice, price }) => {
   return (
     <div>
       {/* Price Range Filter */}
@@ -9,13 +9,15 @@ const PriceRange = () => {
       </h3>
       <input
         type="range"
-        min="0"
-        max="1000"
+        min={0}
+        value={price}
+        max={maxPrice}
+        onChange={(e) => setPrice(e.target.value)}
         className="range range-accent range-xs"
       />
       <div className="flex justify-between mt-4 font-heading font-bold text-sm">
         <span>$0</span>
-        <span>$1000</span>
+        <span>${maxPrice}</span>
       </div>
     </div>
   );

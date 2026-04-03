@@ -24,7 +24,7 @@ const NewArriveProducts = () => {
     };
 
     setTimeout(() => {
-      setRandomProducts(getRandomItems(products.list_data, 4));
+      setRandomProducts(getRandomItems(products?.list_data, 4));
     }, 0);
   }, [products]);
 
