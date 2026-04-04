@@ -61,12 +61,22 @@ const NavBar = () => {
                 </NavLink>
               </li>
               <li>
+                <NavLink to="/about" className="hover:text-primary">
+                  About Us
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/contact" className="hover:text-primary">
+                  Contact
+                </NavLink>
+              </li>
+              <li>
                 <NavLink to="/checkout" className="hover:text-primary">
                   Checkout
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard/home" className="hover:text-primary">
+                <NavLink to="/dashboard" className="hover:text-primary">
                   Dashboard
                 </NavLink>
               </li>

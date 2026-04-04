@@ -1,0 +1,10 @@
+.nav-link-style-admin a.active {
+  color: oklch(77% 0.152 181.912) !important;
+}
+.nav-link-style-admin a.active:hover {
+  color: #ffffff !important;
+}
+
+.nav-link-style-admin button {
+  cursor: pointer;
+}

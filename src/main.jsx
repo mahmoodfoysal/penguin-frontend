@@ -14,6 +14,13 @@ import Cart from "./modules/client/Cart/Cart.jsx";
 import Checkout from "./modules/client/Checkout/Checkout.jsx";
 import Login from "./modules/Authentication/Login/Login.jsx";
 import MakeAdmin from "./modules/dashboard/MakeAdmin/MakeAdmin.jsx";
+import ParentCategory from "./modules/dashboard/ParentCategory/ParentCategory.jsx";
+import SubCategory from "./modules/dashboard/SubCategory/SubCategory.jsx";
+import AddProduct from "./modules/dashboard/AddProduct/AddProduct.jsx";
+import PendingOrder from "./modules/dashboard/PendingOrder/PendingOrder.jsx";
+import Contact from "./modules/shared/Contact/Contact.jsx";
+import AboutUs from "./modules/shared/AboutUs/AboutUs.jsx";
+import DashboardHome from "./modules/dashboard/Home/DashboardHome.jsx";
 
 const router = createBrowserRouter([
   {
@@ -65,12 +72,39 @@ const router = createBrowserRouter([
         Component: Login,
       },
       {
-        path: "/dashboard/home",
-        Component: AdminHome,
+        path: "contact",
+        Component: Contact,
       },
       {
-        path: "/dashboard/make-admin",
-        Component: MakeAdmin,
+        path: "about",
+        Component: AboutUs,
+      },
+      {
+        path: "/dashboard",
+        element: <AdminHome></AdminHome>,
+        children: [
+          { index: true, element: <DashboardHome></DashboardHome> },
+          {
+            path: "/dashboard/make-admin",
+            Component: MakeAdmin,
+          },
+          {
+            path: "/dashboard/parent-category",
+            Component: ParentCategory,
+          },
+          {
+            path: "/dashboard/sub-category",
+            Component: SubCategory,
+          },
+          {
+            path: "/dashboard/add-product",
+            Component: AddProduct,
+          },
+          {
+            path: "/dashboard/pending-order",
+            Component: PendingOrder,
+          },
+        ],
       },
     ],
   },
