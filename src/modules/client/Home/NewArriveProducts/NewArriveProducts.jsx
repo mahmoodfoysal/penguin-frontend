@@ -12,8 +12,8 @@ const NewArriveProducts = () => {
       const result = [];
       const usedIndices = new Set();
 
-      while (result.length < count && usedIndices.size < arr.length) {
-        const index = Math.floor(Math.random() * arr.length);
+      while (result.length < count && usedIndices.size < arr?.length) {
+        const index = Math.floor(Math.random() * arr?.length);
         if (!usedIndices.has(index)) {
           usedIndices.add(index);
           result.push(arr[index]);

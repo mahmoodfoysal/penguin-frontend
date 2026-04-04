@@ -1,15 +1,19 @@
 import { StrictMode } from "react";
+import { Provider } from "react-redux";
+import { store } from "./store/store.js";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { ClickToComponent } from "click-to-react-component";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 import Home from "./modules/client/Home/Home/Home";
+import AdminHome from "./modules/dashboard/Home/AdminHome.jsx";
 import Products from "./modules/client/Products/Products.jsx";
 import ProductDetails from "./modules/client/ProductDetrails/ProductDetails.jsx";
 import Cart from "./modules/client/Cart/Cart.jsx";
 import Checkout from "./modules/client/Checkout/Checkout.jsx";
 import Login from "./modules/Authentication/Login/Login.jsx";
+import MakeAdmin from "./modules/dashboard/MakeAdmin/MakeAdmin.jsx";
 
 const router = createBrowserRouter([
   {
@@ -60,13 +64,23 @@ const router = createBrowserRouter([
         path: "login",
         Component: Login,
       },
+      {
+        path: "/dashboard/home",
+        Component: AdminHome,
+      },
+      {
+        path: "/dashboard/make-admin",
+        Component: MakeAdmin,
+      },
     ],
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <>
-    <ClickToComponent />
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <ClickToComponent />
+      <RouterProvider router={router} />
+    </Provider>
   </>,
 );

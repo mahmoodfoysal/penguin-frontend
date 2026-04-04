@@ -9,6 +9,9 @@ import {
 } from "firebase/auth";
 import initilizationAuthentication from "../../../firebase/firebase.init";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../../store/slice/user";
+
 initilizationAuthentication();
 
 const provider = new GoogleAuthProvider();
@@ -16,12 +19,13 @@ const provider = new GoogleAuthProvider();
 const auth = getAuth();
 
 const Login = () => {
+  const dispatch = useDispatch();
   const email = useRef();
   const password = useRef();
   const fullName = useRef();
   const photoUrl = useRef();
 
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 
   const [isLogin, setIsLogin] = useState(true);
 
@@ -41,7 +45,7 @@ const Login = () => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
 
         const token = credential.accessToken;
-        console.log("token", token);
+        sessionStorage.setItem("penguin-shopping", JSON.stringify(token));
         // The signed-in user info.
         const user = result.user;
         console.log("user", user);
@@ -80,7 +84,7 @@ const Login = () => {
         fullName.current.value = null;
 
         console.log(user.accessToken);
-        navigation("/home");
+        navigate("/home");
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -104,6 +108,10 @@ const Login = () => {
 
         email.current.value = null;
         password.current.value = null;
+
+        // 🔥 Save in Redux + sessionStorage
+        dispatch(setUser(user.accessToken));
+        navigate("/home");
       })
 
       .catch((error) => {
