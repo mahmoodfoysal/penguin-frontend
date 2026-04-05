@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { getAuth, signOut } from "firebase/auth";
 import "./NavBar.css";
-import initilizationAuthentication from "../../firebase/firebase.init";
+
 import { useSelector, useDispatch } from "react-redux";
 
-import { logout, setUserInfo } from "../../store/slice/user";
+import { logout, setUserInfo } from "../../../store/slice/user";
+import initilizationAuthentication from "../../../firebase/firebase.init";
 
 initilizationAuthentication();
 
@@ -78,14 +79,6 @@ const NavBar = () => {
               <li>
                 <NavLink to="/dashboard" className="hover:text-primary">
                   Dashboard
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/dashboard/make-admin"
-                  className="hover:text-primary"
-                >
-                  Design
                 </NavLink>
               </li>
             </ul>

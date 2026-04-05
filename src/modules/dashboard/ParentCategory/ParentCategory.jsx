@@ -102,22 +102,22 @@ const ParentCategory = () => {
             <div className="flex-grow space-y-10">
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
-                  Category Display Name
+                  Category Name <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Footwear"
+                  placeholder="Cloths"
                   className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
                 />
               </div>
 
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
-                  URL Slug (Auto-generated)
+                  Category ID <span className="text-red-600">*</span>
                 </label>
                 <input
-                  type="text"
-                  placeholder="e.g. footwear"
+                  type="number"
+                  placeholder="123"
                   className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
                 />
               </div>

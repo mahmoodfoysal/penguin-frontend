@@ -175,6 +175,29 @@ const ProductDetails = () => {
                   Write a <span className="text-accent">Review</span>
                 </h2>
                 <div className="space-y-4">
+                  <div className="flex-grow space-y-2">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                        Full Name<span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Mike"
+                        className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                        Email <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        placeholder="mike@user.com"
+                        className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
+                      />
+                    </div>
+                  </div>
                   <Rating
                     style={{ maxWidth: 90 }}
                     value={clientRating}
