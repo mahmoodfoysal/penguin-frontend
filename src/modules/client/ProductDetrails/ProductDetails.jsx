@@ -2,14 +2,29 @@ import React from "react";
 import { useLoaderData } from "react-router";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
+import PageHeader from "../../../components/PageHeader";
 
 const ProductDetails = () => {
   const loadDetailsData = useLoaderData();
 
   const { prod_image, stock, rating, prod_name, price, description } =
     loadDetailsData.details_data;
+  const pageInfo = [
+    {
+      parent_route_name: "Products",
+      path: "/products",
+    },
+    {
+      curren_route: "Product Details",
+    },
+    {
+      first_name: "Product",
+      last_name: "Details",
+    },
+  ];
   return (
-    <div>
+    <>
+      <PageHeader pageInfo={pageInfo}></PageHeader>
       <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white">
         {/* 1. MAIN PRODUCT SECTION */}
         <div className="container mx-auto px-6 py-12">
@@ -80,10 +95,10 @@ const ProductDetails = () => {
 
               {/* ACTION BUTTONS */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button className="bg-black text-white py-5 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-accent transition-colors">
+                <button className="bg-black text-white py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-accent transition-colors rounded-md cursor-pointer">
                   Add to Cart
                 </button>
-                <button className="bg-accent text-white py-5 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-black transition-colors">
+                <button className="bg-accent text-white py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-black transition-colors rounded-md cursor-pointer">
                   Buy It Now
                 </button>
               </div>
@@ -162,10 +177,11 @@ const ProductDetails = () => {
         <div className="py-20">
           <div className="container mx-auto px-6">
             <div className="flex items-end justify-between mb-12">
-              <h2 className="font-heading text-4xl font-black uppercase italic tracking-tighter">
-                Related <span className="text-accent text-outline">Gear</span>
+              <h2 className="font-heading text-4xl font-black uppercase  tracking-tighter">
+                Related{" "}
+                <span className="text-accent text-outline">Products</span>
               </h2>
-              <button className="text-[10px] font-black uppercase tracking-[0.2em] border-b-2 border-accent pb-1">
+              <button className="text-[10px] font-black uppercase tracking-[0.2em] border-b-2 border-accent pb-1 cursor-pointer">
                 View Collection
               </button>
             </div>
@@ -192,7 +208,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

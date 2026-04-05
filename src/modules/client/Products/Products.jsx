@@ -209,6 +209,10 @@ const Products = () => {
     {
       curren_route: "Products",
     },
+    {
+      first_name: "All",
+      last_name: "Products",
+    },
   ];
 
   return (

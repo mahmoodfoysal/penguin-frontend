@@ -7,7 +7,10 @@ const PageHeader = ({ pageInfo }) => {
       {/* 1. PAGE HEADER */}
       <div className="container mx-auto px-4 py-4">
         <h1 className="font-heading text-5xl font-black uppercase tracking-tighter">
-          All <span className="text-accent text-outline">Products</span>
+          {pageInfo[2]?.first_name || ""}{" "}
+          <span className="text-accent text-outline">
+            {pageInfo[2]?.last_name || ""}
+          </span>
         </h1>
         <div className="flex gap-2 text-[10px] uppercase tracking-[0.2em] font-bold opacity-50 mt-4">
           <Link to={pageInfo[0]?.path}>{pageInfo[0]?.parent_route_name}</Link>
