@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLoaderData } from "react-router";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import PageHeader from "../../../components/PageHeader";
+import ProductCard from "../../../components/ProductCard";
 
 const ProductDetails = () => {
-  const loadDetailsData = useLoaderData();
+  const data = useLoaderData();
 
-  const { prod_image, stock, rating, prod_name, price, description } =
-    loadDetailsData.details_data;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [clientRating, setClientRating] = useState(0);
+
+  const productList = data.products.list_data;
+  console.log(productList);
+
+  const {
+    prod_image,
+    stock,
+    rating,
+    prod_name,
+    price,
+    description,
+    par_cat_id,
+  } = data.product_details.details_data;
   const pageInfo = [
     {
       parent_route_name: "Products",
@@ -22,6 +37,50 @@ const ProductDetails = () => {
       last_name: "Details",
     },
   ];
+
+  const filterRelatedProduct = productList.filter(
+    (item) => item.par_cat_id == par_cat_id,
+  );
+  console.log("filterRelatedProduct", filterRelatedProduct);
+
+  // ================= PAGINATION =================
+  const itemsPerPage = 8;
+
+  const totalPages = Math.ceil(filterRelatedProduct.length / itemsPerPage);
+
+  const paginatedProducts = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filterRelatedProduct.slice(start, start + itemsPerPage);
+  }, [filterRelatedProduct, currentPage]);
+
+  // reset page on filter change
+  useEffect(() => {
+    // Schedule the state update after the current render
+    const timeout = setTimeout(() => {
+      setCurrentPage(1);
+    }, 0);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  const getPagination = () => {
+    const pages = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - 1 && i <= currentPage + 1)
+      ) {
+        pages.push(i);
+      } else if (pages[pages.length - 1] !== "...") {
+        pages.push("...");
+      }
+    }
+
+    return pages;
+  };
+
   return (
     <>
       <PageHeader pageInfo={pageInfo}></PageHeader>
@@ -44,7 +103,7 @@ const ProductDetails = () => {
               </div>
 
               {/* Thumbnails (Multiple Image Selection) */}
-              <div className="grid grid-cols-4 gap-4">
+              {/* <div className="grid grid-cols-4 gap-4">
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
@@ -57,7 +116,7 @@ const ProductDetails = () => {
                     />
                   </div>
                 ))}
-              </div>
+              </div> */}
             </div>
 
             {/* RIGHT: PRODUCT INFO */}
@@ -107,7 +166,7 @@ const ProductDetails = () => {
         </div>
 
         {/* 2. RATINGS & REVIEWS SECTION */}
-        <div className="bg-base-200/30 border-y border-black/5 py-20">
+        <div className="bg-base-200/30 border-y border-black/5 py-10">
           <div className="container mx-auto px-6">
             <div className="flex flex-col lg:flex-row gap-16">
               {/* Review Form */}
@@ -116,25 +175,19 @@ const ProductDetails = () => {
                   Write a <span className="text-accent">Review</span>
                 </h2>
                 <div className="space-y-4">
-                  <div>
-                    <label className="block text-[10px] font-black uppercase tracking-widest mb-2">
-                      Rating
-                    </label>
-                    <select className="select select-bordered w-full rounded-none border-black/10 focus:outline-accent">
-                      <option>5 Stars - Excellent</option>
-                      <option>4 Stars - Very Good</option>
-                      <option>3 Stars - Average</option>
-                      <option>2 Stars - Poor</option>
-                      <option>1 Star - Terrible</option>
-                    </select>
-                  </div>
+                  <Rating
+                    style={{ maxWidth: 90 }}
+                    value={clientRating}
+                    onChange={(value) => setClientRating(value)}
+                  />
+                  {clientRating}
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-widest mb-2">
                       Your Message
                     </label>
                     <textarea
                       className="textarea textarea-bordered w-full h-32 rounded-none border-black/10 focus:outline-accent"
-                      placeholder="Tell us about the fit and feel..."
+                      placeholder="Comment"
                     ></textarea>
                   </div>
                   <button className="btn btn-block bg-black text-white rounded-none border-none hover:bg-accent font-heading font-black uppercase tracking-widest">
@@ -174,36 +227,61 @@ const ProductDetails = () => {
         </div>
 
         {/* 3. RELATED PRODUCTS */}
-        <div className="py-20">
+        <div className="py-10">
           <div className="container mx-auto px-6">
             <div className="flex items-end justify-between mb-12">
               <h2 className="font-heading text-4xl font-black uppercase  tracking-tighter">
                 Related{" "}
                 <span className="text-accent text-outline">Products</span>
               </h2>
-              <button className="text-[10px] font-black uppercase tracking-[0.2em] border-b-2 border-accent pb-1 cursor-pointer">
+              {/* <button className="text-[10px] font-black uppercase tracking-[0.2em] border-b-2 border-accent pb-1 cursor-pointer">
                 View Collection
-              </button>
+              </button> */}
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[1, 2, 3, 4].map((id) => (
-                <div key={id} className="group cursor-pointer">
-                  <div className="aspect-[4/5] bg-base-200 mb-4 overflow-hidden rounded-sm relative">
-                    <img
-                      src={`https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=400&v=${id}`}
-                      className="w-full h-full object-cover mix-blend-multiply group-hover:scale-110 transition-transform duration-500"
-                      alt="Related"
-                    />
-                  </div>
-                  <h4 className="font-heading font-black text-sm uppercase leading-none mb-1">
-                    Stealth Runner v.{id}
-                  </h4>
-                  <p className="font-heading font-bold text-accent text-lg">
-                    $190.00
-                  </p>
-                </div>
+              {paginatedProducts.map((product, index) => (
+                <ProductCard product={product} key={index}></ProductCard>
               ))}
+            </div>
+
+            {/* PAGINATION */}
+            <div className="mt-8 flex justify-center">
+              <div className="join gap-2">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  className="join-item btn btn-outline btn-square rounded-none border-black/10"
+                >
+                  «
+                </button>
+
+                {getPagination().map((page, index) => (
+                  <button
+                    key={index}
+                    onClick={() => page !== "..." && setCurrentPage(page)}
+                    className={`join-item btn btn-square rounded-none ${
+                      currentPage === page
+                        ? "bg-black text-white border-black"
+                        : "btn-outline"
+                    } ${page === "..." ? "btn-disabled" : ""}`}
+                  >
+                    {page}
+                  </button>
+                ))}
+
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  className="join-item btn btn-outline btn-square rounded-none border-black/10"
+                >
+                  »
+                </button>
+              </div>
             </div>
           </div>
         </div>

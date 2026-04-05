@@ -52,12 +52,20 @@ const router = createBrowserRouter([
         },
       },
       {
-        path: "product/:id/:prod_id",
+        path: "product-details/:id/:prod_id",
         Component: ProductDetails,
-        loader: async ({ params }) =>
-          await fetch(
+        loader: async ({ params }) => {
+          const products = await fetch(
+            "http://localhost:5000/api/penguin/get-product-list",
+          );
+          const details = await fetch(
             `http://localhost:5000/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
-          ),
+          );
+          return {
+            products: await products.json(),
+            product_details: await details.json(),
+          };
+        },
       },
       {
         path: "cart",

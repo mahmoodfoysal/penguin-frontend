@@ -2,8 +2,8 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div>
-      <footer className="footer footer-center p-10 bg-base-200 text-base-content rounded-t-3xl mt-20">
+    <>
+      <footer className="footer footer-center p-10 bg-base-200 text-base-content rounded-t-3xl mt-2">
         <aside>
           <p className="font-black text-3xl uppercase tracking-tighter mb-2">
             Penguin.
@@ -51,7 +51,7 @@ const Footer = () => {
           </div>
         </nav>
       </footer>
-    </div>
+    </>
   );
 };
 
