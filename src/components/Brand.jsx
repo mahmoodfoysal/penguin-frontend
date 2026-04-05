@@ -1,25 +1,24 @@
 import React from "react";
 
-const Brand = () => {
+const Brand = ({ handleBrandChange, getBrandList, selectedBrands }) => {
   return (
     <div>
       {/* Brand Filter */}
-      <h3 className="font-heading font-black uppercase tracking-widest text-xs mb-6">
+      <h3 className="font-heading font-black uppercase tracking-widest text-sm mb-4">
         Brands
       </h3>
-      <div className="space-y-3">
-        {["Nike", "Adidas", "Vortex Lab", "Puma"].map((brand) => (
-          <label
-            key={brand}
-            className="flex items-center gap-3 cursor-pointer group"
-          >
+      <div className="space-y-2">
+        {getBrandList.map((brand, index) => (
+          <label key={index} className="flex items-center gap-3 cursor-pointer">
             <input
               type="checkbox"
-              className="checkbox checkbox-sm rounded-none border-black/20 checked:border-accent [--chkbg:theme(colors.accent)] [--chkfg:white]"
+              checked={selectedBrands.some(
+                (b) => b.trim().toLowerCase() === brand.trim().toLowerCase(),
+              )}
+              onChange={() => handleBrandChange(brand)}
+              className="checkbox checkbox-xs"
             />
-            <span className="font-body text-sm uppercase tracking-wider group-hover:text-accent transition-colors">
-              {brand}
-            </span>
+            <span>{brand}</span>
           </label>
         ))}
       </div>

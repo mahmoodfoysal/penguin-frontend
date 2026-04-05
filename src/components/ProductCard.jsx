@@ -54,12 +54,12 @@ const ProductCard = ({ product }) => {
               {product.prod_brand}
             </span>
             <span className="font-extrabold text-xl text-primary">
-              $ {product.price}
+              ${product.price}
             </span>
           </div>
           <div className="flex justify-between items-center mt-2">
             <span className="text-base-content/60 text-sm font-medium tracking-wide italic">
-              Stock {product.stock}
+              Stock: {product.stock}
             </span>
             <span className="font-extrabold text-xl text-primary"></span>
           </div>
