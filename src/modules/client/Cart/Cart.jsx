@@ -1,23 +1,81 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  incrementQty,
+  decrementQty,
+  removeFromCart,
+  clearCart,
+} from "../../../store/slice/cartSlice.js";
+import PageHeader from "../../../components/PageHeader";
+import { Link, useNavigate } from "react-router";
 
 const Cart = () => {
+  const pageInfo = [
+    {
+      parent_route_name: "",
+      path: "",
+    },
+    {
+      curren_route: "Manage your cart",
+    },
+    {
+      first_name: "Your",
+      last_name: "Cart",
+    },
+  ];
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const cartList = useSelector((state) => state.cart.cart);
+
+  // const totalPrice = cartList.reduce(
+  //   (acc, item) => acc + item.price * item.quantity,
+  //   0,
+  // );
+
+  const handleItemIncrement = (product) => {
+    dispatch(incrementQty(product._id));
+  };
+
+  const handleItemdecrement = (product) => {
+    dispatch(decrementQty(product._id));
+  };
+
+  const handleRemoveItem = (product) => {
+    dispatch(removeFromCart(product._id));
+  };
+
+  const handleClearCart = () => {
+    dispatch(clearCart());
+  };
+
+  const subTotal = useMemo(() => {
+    return cartList.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  }, [cartList]);
+
+  const shippingCost = useMemo(() => {
+    let cost = 0;
+
+    if (cartList.length > 5) {
+      cost = 0;
+    } else {
+      cost = 2 * cartList?.length;
+    }
+    return cost;
+  }, [cartList]);
+
+  const totalTax = useMemo(() => {
+    return subTotal * 0.06;
+  }, [subTotal]);
   return (
     <div>
+      {cartList.length}
       <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white">
-        {/* 1. HEADER */}
-        <div className="border-b border-black/5 bg-base-200/30">
-          <div className="container mx-auto px-6 py-12">
-            <h1 className="font-heading text-5xl md:text-7xl font-black uppercase tracking-tighter italic">
-              Your <span className="text-accent text-outline">Bag</span>
-            </h1>
-            <p className="font-heading font-bold text-[10px] uppercase tracking-[0.3em] opacity-40 mt-2">
-              Items are reserved for 30 minutes
-            </p>
-          </div>
-        </div>
+        <PageHeader pageInfo={pageInfo}></PageHeader>
 
         {/* 2. MAIN CONTENT */}
-        <div className="container mx-auto px-6 py-16">
+        <div className="container mx-auto px-6 py-10">
           <div className="flex flex-col lg:flex-row gap-16">
             {/* LEFT: PRODUCT TABLE */}
             <div className="flex-grow">
@@ -33,24 +91,24 @@ const Cart = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-black/5">
-                    {[1, 2].map((item) => (
-                      <tr key={item} className="group">
+                    {cartList.map((item, index) => (
+                      <tr key={index} className="group">
                         {/* Product Name & Image */}
                         <td className="py-8">
                           <div className="flex items-center gap-6">
                             <div className="w-20 h-24 bg-base-200 flex-shrink-0 rounded-sm overflow-hidden border border-black/5">
                               <img
-                                src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=200"
+                                src={item.prod_image}
                                 className="w-full h-full object-cover mix-blend-multiply"
                                 alt="product"
                               />
                             </div>
                             <div>
                               <h4 className="font-heading font-black uppercase text-sm leading-tight">
-                                Apex Phantom v.0{item}
+                                {item.prod_name}
                               </h4>
                               <p className="text-[10px] uppercase font-bold opacity-40 mt-1 tracking-widest">
-                                Size: US 10
+                                Size: Standard
                               </p>
                             </div>
                           </div>
@@ -58,19 +116,25 @@ const Cart = () => {
 
                         {/* Price */}
                         <td className="py-8 text-center font-heading font-bold text-sm">
-                          $240.00
+                          ${item.price}
                         </td>
 
                         {/* Quantity Selector */}
                         <td className="py-8 text-center">
                           <div className="inline-flex items-center border border-black/10 px-2 py-1 gap-4">
-                            <button className="hover:text-accent font-black">
+                            <button
+                              onClick={() => handleItemdecrement(item)}
+                              className="hover:text-accent font-black text-xl cursor-pointer"
+                            >
                               -
                             </button>
-                            <span className="font-heading font-bold text-xs">
-                              1
+                            <span className="font-heading font-bold text-md ">
+                              {item.quantity}
                             </span>
-                            <button className="hover:text-accent font-black">
+                            <button
+                              onClick={() => handleItemIncrement(item)}
+                              className="hover:text-accent font-black text-xl cursor-pointer"
+                            >
                               +
                             </button>
                           </div>
@@ -78,12 +142,15 @@ const Cart = () => {
 
                         {/* Total */}
                         <td className="py-8 text-center font-heading font-black text-accent text-sm">
-                          $240.00
+                          ${item.price * item.quantity}
                         </td>
 
                         {/* Action */}
                         <td className="py-8 text-right">
-                          <button className="text-[10px] font-black uppercase tracking-tighter hover:text-red-500 transition-colors underline decoration-2 underline-offset-4">
+                          <button
+                            onClick={() => handleRemoveItem(item)}
+                            className="text-[10px] font-black uppercase tracking-tighter hover:text-red-500 transition-colors underline decoration-2 underline-offset-4"
+                          >
                             Remove
                           </button>
                         </td>
@@ -95,13 +162,16 @@ const Cart = () => {
 
               {/* Bottom Actions */}
               <div className="mt-8 flex justify-between items-center">
-                <a
-                  href="/shop"
+                <Link
+                  onClick={() => navigate(-1)}
                   className="text-xs font-heading font-black uppercase tracking-widest border-b-2 border-black pb-1 hover:border-accent hover:text-accent transition-all"
                 >
                   ← Continue Shopping
-                </a>
-                <button className="text-xs font-heading font-black uppercase tracking-widest opacity-40 hover:opacity-100">
+                </Link>
+                <button
+                  onClick={() => handleClearCart()}
+                  className="text-xs font-heading font-black uppercase tracking-widest opacity-40 hover:opacity-100 cursor-pointer"
+                >
                   Clear Cart
                 </button>
               </div>
@@ -117,15 +187,19 @@ const Cart = () => {
                 <div className="space-y-4">
                   <div className="flex justify-between font-heading font-bold text-xs uppercase tracking-widest">
                     <span className="opacity-50">Sub Total</span>
-                    <span>$480.00</span>
+                    <span>${Number(subTotal).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between font-heading font-bold text-xs uppercase tracking-widest">
                     <span className="opacity-50">Shipping</span>
-                    <span className="text-green-600">FREE</span>
+                    {cartList?.length > 5 ? (
+                      <span className="text-green-600">FREE</span>
+                    ) : (
+                      <span>${Number(shippingCost).toFixed(2)}</span>
+                    )}
                   </div>
                   <div className="flex justify-between font-heading font-bold text-xs uppercase tracking-widest">
                     <span className="opacity-50">Estimated Tax</span>
-                    <span>$12.50</span>
+                    <span>${Number(totalTax).toFixed(2)}</span>
                   </div>
 
                   <div className="border-t-2 border-black pt-6 mt-6 flex justify-between items-end">
@@ -138,7 +212,7 @@ const Cart = () => {
                       </h3>
                     </div>
                     <span className="font-heading font-black text-3xl text-accent">
-                      $492.50
+                      ${Number(subTotal + shippingCost + totalTax)?.toFixed(2)}
                     </span>
                   </div>
                 </div>

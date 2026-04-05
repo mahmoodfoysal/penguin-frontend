@@ -12,11 +12,17 @@ const PageHeader = ({ pageInfo }) => {
             {pageInfo[2]?.last_name || ""}
           </span>
         </h1>
-        <div className="flex gap-2 text-[10px] uppercase tracking-[0.2em] font-bold opacity-50 mt-4">
-          <Link to={pageInfo[0]?.path}>{pageInfo[0]?.parent_route_name}</Link>
-          <span>/</span>
-          <span className="text-black">{pageInfo[1]?.curren_route}</span>
-        </div>
+        {pageInfo[0]?.path ? (
+          <div className="flex gap-2 text-[10px] uppercase tracking-[0.2em] font-bold opacity-50 mt-4">
+            <Link to={pageInfo[0]?.path}>{pageInfo[0]?.parent_route_name}</Link>
+            <span>/</span>
+            <span className="text-black">{pageInfo[1]?.curren_route}</span>
+          </div>
+        ) : (
+          <div className="font-heading font-bold text-[10px] uppercase tracking-[0.3em] opacity-40 mt-2">
+            {pageInfo[1]?.curren_route}
+          </div>
+        )}
       </div>
     </div>
   );

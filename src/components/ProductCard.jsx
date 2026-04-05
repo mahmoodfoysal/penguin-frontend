@@ -1,16 +1,18 @@
 import React from "react";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/slice/cartSlice";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleProductDetails = (item) => {
     navigate(`/product-details/${item._id}/${item.prod_id}`);
-    console.log(item);
   };
 
-  const handleAddToCart = () => {
-    console.log("k");
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
   };
 
   return (

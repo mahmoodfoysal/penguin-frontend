@@ -17,7 +17,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
   const userInfo = useSelector((state) => state.auth.userInfo);
-  console.log(userInfo);
+  const cartList = useSelector((state) => state.cart.cart);
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -107,7 +107,7 @@ const NavBar = () => {
             <Link to="/cart">
               <div className="indicator">
                 <span className="indicator-item badge bg-accent text-white border-none font-black text-[8px] h-4 min-h-0 px-1">
-                  3
+                  {cartList?.length}
                 </span>
                 <button className="btn btn-ghost btn-circle hover:text-accent transition-colors">
                   <svg
