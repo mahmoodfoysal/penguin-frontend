@@ -6,14 +6,22 @@ import Forbidden from "../pages/Forbidden";
 const AdminRoute = ({ children }) => {
   const user = useSelector((state) => state.auth.user);
   const role = useSelector((state) => state.auth.role);
+  const userInfo = useSelector((state) => state.auth.userInfo);
+
+  console.log(role);
 
   const location = useLocation();
   console.log(location);
 
-  const hasUser = user && Object.keys(user).length > 0;
-  const isAdmin = role && Object.keys(role).length > 0;
+  //   if (isLoading) {
+  //     return <span className="loading loading-bars loading-xl text-center"></span>;
+  //   }
 
-  if (hasUser && isAdmin) {
+  if (
+    user?.length &&
+    role?.data?.admin &&
+    userInfo.email === role?.data?.email
+  ) {
     return children;
   } else return <Forbidden></Forbidden>;
 };
