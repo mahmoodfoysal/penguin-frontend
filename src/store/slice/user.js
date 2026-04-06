@@ -9,6 +9,7 @@ const getUserFromSession = () => {
 const initialState = {
   user: getUserFromSession(),
   userInfo: {},
+  role: {},
   isLoggedIn: !!getUserFromSession(),
 };
 
@@ -31,15 +32,20 @@ const authSlice = createSlice({
       state.userInfo = action.payload;
       //   state.isLoggedIn = true;
     },
+    setRole: (state, action) => {
+      state.role = action.payload;
+      //   state.isLoggedIn = true;
+    },
 
     logout: (state) => {
       state.user = null;
       state.isLoggedIn = false;
 
       sessionStorage.removeItem("penguin-shopping");
+      setRole({});
     },
   },
 });
 
-export const { setUser, logout, setUserInfo } = authSlice.actions;
+export const { setUser, logout, setUserInfo, setRole } = authSlice.actions;
 export default authSlice.reducer;

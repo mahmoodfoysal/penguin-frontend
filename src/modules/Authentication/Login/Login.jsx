@@ -8,9 +8,10 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import initilizationAuthentication from "../../../firebase/firebase.init";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../../store/slice/user";
+import { setUser, setRole } from "../../../store/slice/user";
+import axios from "axios";
 
 initilizationAuthentication();
 
@@ -26,6 +27,7 @@ const Login = () => {
   const photoUrl = useRef();
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [isLogin, setIsLogin] = useState(true);
 
@@ -41,20 +43,21 @@ const Login = () => {
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-
-        const token = credential.accessToken;
-        sessionStorage.setItem("penguin-shopping", JSON.stringify(token));
-        // The signed-in user info.
         const user = result.user;
-        console.log("user", user);
-        // IdP data available using getAdditionalUserInfo(result)
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        console.log(token);
+        dispatch(setUser(user.accessToken));
+        if (token) {
+          const url = `http://localhost:5000/admin/get-admin-list/${user.email}`;
+          const adminCheck = axios.get(url);
+          dispatch(setRole(adminCheck));
+        }
+        navigate(location?.state || "/home");
       })
       .catch((error) => {
         const errorMessage = error.message;
         console.log(errorMessage);
-        // The email of the user's account used.
       });
   };
 
@@ -74,17 +77,14 @@ const Login = () => {
           phoneNumber: 90000,
         });
         console.log(user);
-        sessionStorage.setItem(
-          "penguin-shopping",
-          JSON.stringify(user.accessToken),
-        );
+        dispatch(setUser(user.accessToken));
         email.current.value = null;
         password.current.value = null;
         photoUrl.current.value = null;
         fullName.current.value = null;
 
         console.log(user.accessToken);
-        navigate("/home");
+        navigate(location?.state || "/home");
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -105,13 +105,17 @@ const Login = () => {
           "penguin-shopping",
           JSON.stringify(user.accessToken),
         );
+        dispatch(setUser(user.accessToken));
+        if (user) {
+          const url = `http://localhost:5000/admin/get-admin-list/${email.current.value}`;
+          const adminCheck = axios.get(url);
+          dispatch(setRole(adminCheck));
+        }
 
         email.current.value = null;
         password.current.value = null;
 
-        // 🔥 Save in Redux + sessionStorage
-        dispatch(setUser(user.accessToken));
-        navigate("/home");
+        navigate(location?.state || "/home");
       })
 
       .catch((error) => {

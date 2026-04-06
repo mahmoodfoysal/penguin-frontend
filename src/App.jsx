@@ -5,10 +5,11 @@ import { useEffect } from "react";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
 import initilizationAuthentication from "./firebase/firebase.init";
 import { useDispatch } from "react-redux";
-import { setUser, logout, setUserInfo } from "./store/slice/user";
+import { setUser, logout, setUserInfo, setRole } from "./store/slice/user";
 import NavBar from "./modules/shared/NavBar/NavBar";
 
 import Footer from "./modules/Shared/Footer/Footer";
+import axios from "axios";
 initilizationAuthentication();
 
 const auth = getAuth();
@@ -16,9 +17,48 @@ const auth = getAuth();
 function App() {
   const dispatch = useDispatch();
   // get currently signin user
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+  //     const sessionUser = sessionStorage.getItem("penguin-shopping");
+
+  //     const userData = {
+  //       name: firebaseUser.displayName,
+  //       email: firebaseUser.email,
+  //       photo: firebaseUser.photoURL,
+  //       token: firebaseUser.accessToken,
+  //     };
+
+  //     dispatch(setUserInfo(userData));
+
+  //     // ✅ 1. If session exists → use it
+  //     if (sessionUser) {
+  //       dispatch(setUser(JSON.parse(sessionUser)));
+  //       return;
+  //     }
+
+  //     // ✅ 2. Otherwise use Firebase user
+  //     if (firebaseUser) {
+  //       const token = {
+  //         token: firebaseUser.accessToken,
+  //       };
+  //       dispatch(setUser(token));
+  //     } else {
+  //       dispatch(logout());
+  //     }
+
+  //   });
+
+  //   return () => unsubscribe();
+  // }, [dispatch]);
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       const sessionUser = sessionStorage.getItem("penguin-shopping");
+
+      if (!firebaseUser) {
+        dispatch(logout());
+        return;
+      }
 
       const userData = {
         name: firebaseUser.displayName,
@@ -29,20 +69,19 @@ function App() {
 
       dispatch(setUserInfo(userData));
 
-      // ✅ 1. If session exists → use it
       if (sessionUser) {
         dispatch(setUser(JSON.parse(sessionUser)));
-        return;
+      } else {
+        dispatch(setUser({ token: firebaseUser.accessToken }));
       }
 
-      // ✅ 2. Otherwise use Firebase user
-      if (firebaseUser) {
-        const token = {
-          token: firebaseUser.accessToken,
-        };
-        dispatch(setUser(token));
-      } else {
-        dispatch(logout());
+      try {
+        const url = `http://localhost:5000/admin/get-admin-list/${userData.email}`;
+        const response = await axios.get(url);
+
+        dispatch(setRole(response));
+      } catch (error) {
+        console.log("Admin API error:", error);
       }
     });
 

@@ -21,6 +21,8 @@ import PendingOrder from "./modules/dashboard/PendingOrder/PendingOrder.jsx";
 import Contact from "./modules/shared/Contact/Contact.jsx";
 import AboutUs from "./modules/shared/AboutUs/AboutUs.jsx";
 import DashboardHome from "./modules/dashboard/Home/DashboardHome.jsx";
+import PrivateRoute from "./Routes/PrivateRoute.jsx";
+import AdminRoute from "./Routes/AdminRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -73,7 +75,11 @@ const router = createBrowserRouter([
       },
       {
         path: "checkout",
-        Component: Checkout,
+        element: (
+          <PrivateRoute>
+            <Checkout></Checkout>
+          </PrivateRoute>
+        ),
       },
       {
         path: "login",
@@ -89,7 +95,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <AdminHome></AdminHome>,
+        element: (
+          <AdminRoute>
+            <AdminHome></AdminHome>
+          </AdminRoute>
+        ),
         children: [
           { index: true, element: <DashboardHome></DashboardHome> },
           {
