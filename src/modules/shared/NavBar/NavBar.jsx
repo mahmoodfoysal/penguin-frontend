@@ -72,11 +72,6 @@ const NavBar = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/checkout" className="hover:text-primary">
-                  Checkout
-                </NavLink>
-              </li>
-              <li>
                 <NavLink to="/dashboard" className="hover:text-primary">
                   Dashboard
                 </NavLink>

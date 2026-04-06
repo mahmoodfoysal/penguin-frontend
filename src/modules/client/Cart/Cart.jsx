@@ -50,6 +50,10 @@ const Cart = () => {
     dispatch(clearCart());
   };
 
+  const handleCheckOut = () => {
+    navigate("/checkout");
+  };
+
   const subTotal = useMemo(() => {
     return cartList.reduce((acc, item) => acc + item.price * item.quantity, 0);
   }, [cartList]);
@@ -65,7 +69,7 @@ const Cart = () => {
     return cost;
   }, [cartList]);
 
-  const totalTax = useMemo(() => {
+  const totalVat = useMemo(() => {
     return subTotal * 0.06;
   }, [subTotal]);
   return (
@@ -200,27 +204,22 @@ const Cart = () => {
                     </div>
                     <div className="flex justify-between font-heading font-bold text-xs uppercase tracking-widest">
                       <span className="opacity-50">Estimated Tax</span>
-                      <span>${Number(totalTax).toFixed(2)}</span>
+                      <span>${Number(totalVat).toFixed(2)}</span>
                     </div>
 
-                    <div className="border-t-2 border-black pt-6 mt-6 flex justify-between items-end">
-                      <div>
-                        <span className="font-heading font-black uppercase text-[10px] tracking-widest opacity-40">
-                          Total Amount
-                        </span>
-                        <h3 className="font-heading font-black text-3xl leading-none text-black mt-1">
-                          Grand Total
-                        </h3>
-                      </div>
-                      <span className="font-heading font-black text-3xl text-accent">
-                        $
-                        {Number(subTotal + shippingCost + totalTax)?.toFixed(2)}
+                    <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-black/5 mt-4">
+                      <span>Total Amount</span>
+                      <span className="text-accent text-2xl">
+                        ${Number(subTotal + shippingCost + totalVat).toFixed(2)}
                       </span>
                     </div>
                   </div>
 
                   <div className="mt-10 space-y-3">
-                    <button className="w-full bg-black text-white py-6 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-colors shadow-xl shadow-black/10">
+                    <button
+                      onClick={handleCheckOut}
+                      className="w-full bg-black text-white py-4 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-colors shadow-xl shadow-black/10 rounded-md cursor-pointer"
+                    >
                       Proceed To Checkout
                     </button>
                     <div className="flex justify-center gap-4 py-4 opacity-30 grayscale">

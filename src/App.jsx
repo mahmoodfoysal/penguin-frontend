@@ -6,7 +6,8 @@ import { onAuthStateChanged, getAuth } from "firebase/auth";
 import initilizationAuthentication from "./firebase/firebase.init";
 import { useDispatch } from "react-redux";
 import { setUser, logout, setUserInfo } from "./store/slice/user";
-import NavBar from "./modules/Shared/NavBar/NavBar";
+import NavBar from "./modules/shared/NavBar/NavBar";
+
 import Footer from "./modules/Shared/Footer/Footer";
 initilizationAuthentication();
 
