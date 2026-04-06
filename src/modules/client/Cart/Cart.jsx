@@ -87,7 +87,7 @@ const Cart = () => {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b-2 border-black font-heading text-[10px] uppercase tracking-[0.2em] font-black">
+                      <tr className="border-b-2 border-black font-heading text-xs uppercase tracking-[0.2em] font-black">
                         <th className="pb-4">Product</th>
                         <th className="pb-4 text-center">Price</th>
                         <th className="pb-4 text-center">Quantity</th>
@@ -154,7 +154,7 @@ const Cart = () => {
                           <td className="py-8 text-right">
                             <span
                               onClick={() => handleRemoveItem(item)}
-                              class="material-icons cursor-pointer hover:text-red-600"
+                              className="material-icons cursor-pointer hover:text-red-600"
                             >
                               delete_outline
                             </span>

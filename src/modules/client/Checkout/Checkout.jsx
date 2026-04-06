@@ -1,25 +1,33 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import PageHeader from "../../../components/PageHeader";
 import { Link, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
+import { clearCart } from "../../../store/slice/cartSlice";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const Checkout = () => {
-  const cartList = useSelector((state) => state.cart.cart);
-  const fullName = useRef(null);
-  const email = useRef(null);
-  const phoneNo = useRef(null);
-  const country = useRef(null);
-  const city = useRef(null);
-  const zipCode = useRef(null);
-  const address = useRef(null);
-  const bkashNo = useRef(null);
-  const transectionNo = useRef(null);
-  const cardNumber = useRef(null);
-  const expDate = useRef(null);
-  const cvcNo = useRef(null);
-  const [paymentMethod, setPaymentMethod] = useState(1);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const cartList = useSelector((state) => state.cart.cart);
+
+  const [formData, setFormData] = useState({
+    fullName: null,
+    email: null,
+    phoneNo: null,
+    city: null,
+    countryInfo: { id: 1, country_name: "Bangladesh" },
+    zipCode: null,
+    address: null,
+    bkashNo: null,
+    transectionNo: null,
+    cardNumber: null,
+    cardExpDate: null,
+    cvcNo: null,
+  });
+  const [paymentMethod, setPaymentMethod] = useState(1);
+  const [isInvalid, setIsInvalid] = useState(false);
 
   // const pageInfo = [
   //   {
@@ -60,28 +68,152 @@ const Checkout = () => {
     },
   ];
 
-  const handleOrderSubmit = () => {
-    console.log(fullName.current.value, paymentMethod.current);
+  const handleOrderSubmit = async () => {
+    try {
+      setIsInvalid(false);
+      const confirmation = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to submit this order?",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        confirmButtonText: "Ok",
+      });
+
+      if (
+        !formData.fullName ||
+        !formData.email ||
+        !formData.phoneNo ||
+        !formData.countryInfo ||
+        !formData.countryInfo.id ||
+        !formData.countryInfo.country_name ||
+        !formData.city ||
+        !formData.zipCode ||
+        !formData.address ||
+        !cartList.length
+      ) {
+        setIsInvalid(true);
+        Swal.fire({
+          icon: "error",
+          title: "Invalid or missing required fields",
+          text: "Check input field",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
+
+      if (paymentMethod === 2) {
+        // Bkash payment validation
+        if (!formData.bkashNo || !formData.transectionNo) {
+          setIsInvalid(true);
+          Swal.fire({
+            icon: "error",
+            title: "Invalid or missing required fields",
+            text: "Check input field",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+      } else if (paymentMethod === 3) {
+        // Card payment validation
+        if (!formData.cardNumber || !formData.cardExpDate || !formData.cvcNo) {
+          setIsInvalid(true);
+          Swal.fire({
+            icon: "error",
+            title: "Invalid or missing required fields",
+            text: "Check input field",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+      }
+
+      const orderList = cartList.map((item) => {
+        return {
+          _id: item._id,
+          prod_name: item.prod_name,
+          price: item.price,
+          prod_image: item.prod_image,
+          prod_id: item.prod_id,
+          stock: item.stock,
+          currency_name: item.currency_name,
+          currency_id: item.currency_id,
+          discount_price: item.discount_price,
+          quantity: item.quantity,
+        };
+      });
+
+      const data = {
+        _id: null,
+        full_name: formData.fullName,
+        email: formData.email,
+        phone_no: Number(formData.phoneNo),
+        city: formData.city,
+        country_name: formData.countryInfo?.country_name,
+        country_id: formData.countryInfo?.id,
+
+        zip: Number(formData.zipCode),
+        address: formData.address,
+        card_no: paymentMethod === 3 ? Number(formData.cardNumber) : null,
+        card_exp_date: paymentMethod === 3 ? formData.card_exp_date : null,
+        card_cvc: paymentMethod === 3 ? Number(formData.cvcNo) : null,
+        sub_total: subTotal,
+        vat_total: totalVat,
+        shipping: shippingCost,
+        total_amount: subTotal + totalVat + shippingCost,
+        order_status: "P",
+        order_date: formData.cardExpDate,
+        payment_method: paymentMethod,
+        bkash_no: paymentMethod === 2 ? formData.bkashNo : null,
+        bkash_trns_no: paymentMethod === 2 ? formData.transectionNo : null,
+        cash_on_delivery: paymentMethod === 1 ? "Cash on delivery" : null,
+        order_list: orderList,
+      };
+      if (confirmation.isConfirmed) {
+        const url = `http://localhost:5000/api/admin/insert-update-order-list`;
+        const result = await axios.post(url, data);
+
+        if (result.status) {
+          Swal.fire({
+            icon: "success",
+            title: "Order Placed!",
+            text: "Your order has been submitted successfully.",
+            confirmButtonText: "OK",
+          });
+          dispatch(clearCart());
+          setIsInvalid(false);
+          navigate("/home");
+          setFormData({
+            fullName: null,
+            email: null,
+            phoneNo: null,
+            city: null,
+            countryInfo: { id: 1, country_name: "Bangladesh" },
+            zipCode: null,
+            address: null,
+            bkashNo: null,
+            transectionNo: null,
+            cardNumber: null,
+            cardExpDate: null,
+            cvcNo: null,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const subTotal = useMemo(() => {
-    return cartList.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const { subTotal, totalVat } = useMemo(() => {
+    const subTotal = cartList.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0,
+    );
+    const totalVat = subTotal * 0.06;
+    return { subTotal, totalVat };
   }, [cartList]);
 
-  const shippingCost = useMemo(() => {
-    let cost = 0;
-
-    if (cartList.length > 5) {
-      cost = 0;
-    } else {
-      cost = 2 * cartList?.length;
-    }
-    return cost;
-  }, [cartList]);
-
-  const totalVat = useMemo(() => {
-    return subTotal * 0.06;
-  }, [subTotal]);
+  const shippingCost = cartList.length > 5 ? 0 : 2 * cartList.length;
 
   return (
     <div>
@@ -126,8 +258,15 @@ const Checkout = () => {
                     </label>
                     <input
                       type="text"
-                      ref={fullName}
-                      className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent"
+                      value={formData.fullName}
+                      onChange={(e) =>
+                        setFormData({ ...formData, fullName: e.target.value })
+                      }
+                      className={`w-full border-b-2 ${
+                        isInvalid && !formData.fullName
+                          ? "border-red-600"
+                          : "border-black/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                       placeholder="John Doe"
                     />
                   </div>
@@ -136,9 +275,16 @@ const Checkout = () => {
                       Email <span className="text-red-600">*</span>
                     </label>
                     <input
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
                       type="email"
-                      ref={email}
-                      className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent"
+                      className={`w-full border-b-2 ${
+                        isInvalid && !formData.email
+                          ? "border-red-600"
+                          : "border-black/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                       placeholder="user@user.com"
                     />
                   </div>
@@ -147,9 +293,16 @@ const Checkout = () => {
                       Phone No <span className="text-red-600">*</span>
                     </label>
                     <input
-                      ref={phoneNo}
+                      value={formData.phoneNo}
+                      onChange={(e) =>
+                        setFormData({ ...formData, phoneNo: e.target.value })
+                      }
                       type="number"
-                      className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent"
+                      className={`w-full border-b-2 ${
+                        isInvalid && !formData.phoneNo
+                          ? "border-red-600"
+                          : "border-black/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                       placeholder="019xxxxxx"
                     />
                   </div>
@@ -158,14 +311,22 @@ const Checkout = () => {
                       Country <span className="text-red-600">*</span>
                     </label>
                     <select
-                      ref={country}
-                      className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold bg-transparent uppercase tracking-wider cursor-pointer"
+                      value={JSON.stringify(formData.countryInfo) || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          countryInfo: JSON.parse(e.target.value),
+                        })
+                      }
+                      className={`w-full border-b-2 ${
+                        isInvalid &&
+                        (!formData.countryInfo || !formData.countryInfo.id)
+                          ? "border-red-600"
+                          : "border-black/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent uppercase tracking-wider cursor-pointer`}
                     >
                       {countryList.map((item) => (
-                        <option
-                          key={item.country_name}
-                          value={item.country_name}
-                        >
+                        <option key={item.id} value={JSON.stringify(item)}>
                           {item.country_name}
                         </option>
                       ))}
@@ -177,9 +338,16 @@ const Checkout = () => {
                       City
                     </label>
                     <input
-                      ref={city}
+                      value={formData.city}
+                      onChange={(e) =>
+                        setFormData({ ...formData, city: e.target.value })
+                      }
                       type="text"
-                      className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent"
+                      className={`w-full border-b-2 ${
+                        isInvalid && !formData.city
+                          ? "border-red-600"
+                          : "border-black/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                       placeholder="New York"
                     />
                   </div>
@@ -188,9 +356,16 @@ const Checkout = () => {
                       Zip Code
                     </label>
                     <input
-                      ref={zipCode}
-                      type="text"
-                      className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent"
+                      value={formData.zipCode}
+                      onChange={(e) =>
+                        setFormData({ ...formData, zipCode: e.target.value })
+                      }
+                      type="number"
+                      className={`w-full border-b-2 ${
+                        isInvalid && !formData.zipCode
+                          ? "border-red-600"
+                          : "border-black/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                       placeholder="10001"
                     />
                   </div>
@@ -200,9 +375,16 @@ const Checkout = () => {
                       Street Address
                     </label>
                     <input
-                      ref={address}
+                      value={formData.address}
+                      onChange={(e) =>
+                        setFormData({ ...formData, address: e.target.value })
+                      }
                       type="text"
-                      className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent"
+                      className={`w-full border-b-2 ${
+                        isInvalid && !formData.address
+                          ? "border-red-600"
+                          : "border-black/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                       placeholder="123 Vortex Street"
                     />
                   </div>
@@ -285,8 +467,18 @@ const Checkout = () => {
                             </label>
                             <input
                               type="number"
-                              ref={bkashNo}
-                              className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent"
+                              value={formData.bkashNo}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  bkashNo: e.target.value,
+                                })
+                              }
+                              className={`w-full border-b-2 ${
+                                isInvalid && !formData.bkashNo
+                                  ? "border-red-600"
+                                  : "border-black/10"
+                              } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                               placeholder="019xxxxxx"
                             />
                           </div>
@@ -297,8 +489,18 @@ const Checkout = () => {
                             </label>
                             <input
                               type="text"
-                              ref={transectionNo}
-                              className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent"
+                              value={formData.transectionNo}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  transectionNo: e.target.value,
+                                })
+                              }
+                              className={`w-full border-b-2 ${
+                                isInvalid && !formData.transectionNo
+                                  ? "border-red-600"
+                                  : "border-black/10"
+                              } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                               placeholder="jdjdjd77djess99#"
                             />
                           </div>
@@ -321,22 +523,52 @@ const Checkout = () => {
                         </div>
                         <div className="space-y-6">
                           <input
-                            ref={cardNumber}
-                            type="text"
-                            className="w-full border-b border-black/10 focus:border-accent outline-none py-2 text-sm font-mono bg-transparent"
-                            placeholder="CARD NUMBER"
+                            value={formData.cardNumber}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                cardNumber: e.target.value,
+                              })
+                            }
+                            type="number"
+                            className={`w-full border-b-2 ${
+                              isInvalid && !formData.cardNumber
+                                ? "border-red-600"
+                                : "border-black/10"
+                            } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
+                            placeholder="1222 2222 2222 2222"
                           />
                           <div className="grid grid-cols-2 gap-6">
                             <input
-                              ref={expDate}
-                              type="text"
-                              className="w-full border-b border-black/10 focus:border-accent outline-none py-2 text-sm font-mono bg-transparent"
+                              value={formData.cardExpDate}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  cardExpDate: e.target.value,
+                                })
+                              }
+                              type="date"
+                              className={`w-full border-b-2 ${
+                                isInvalid && !formData.cardExpDate
+                                  ? "border-red-600"
+                                  : "border-black/10"
+                              } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                               placeholder="MM / YY"
                             />
                             <input
-                              ref={cvcNo}
-                              type="text"
-                              className="w-full border-b border-black/10 focus:border-accent outline-none py-2 text-sm font-mono bg-transparent"
+                              value={formData.cvcNo}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  cvcNo: e.target.value,
+                                })
+                              }
+                              type="number"
+                              className={`w-full border-b-2 ${
+                                isInvalid && !formData.cvcNo
+                                  ? "border-red-600"
+                                  : "border-black/10"
+                              } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                               placeholder="CVC"
                             />
                           </div>
@@ -351,7 +583,7 @@ const Checkout = () => {
             {/* RIGHT COLUMN: ORDER SUMMARY */}
             <div className="w-full lg:w-[400px]">
               <div className="sticky top-28 bg-base-200/50 p-8 border border-black/5 rounded-sm">
-                <h3 className="font-heading text-xl font-black uppercase italic mb-8">
+                <h3 className="font-heading text-2xl font-black uppercase italic mb-8">
                   Order <span className="text-accent">Summary</span>
                 </h3>
 
@@ -367,10 +599,10 @@ const Checkout = () => {
                         />
                       </div>
                       <div className="flex-grow">
-                        <h4 className="font-heading font-bold text-[10px] uppercase leading-tight">
+                        <h4 className="font-heading font-bold text-xs uppercase leading-tight">
                           {item.prod_name}
                         </h4>
-                        <p className="text-[9px] uppercase opacity-50 font-bold mt-1">
+                        <p className="text-[10px] uppercase opacity-50 font-bold mt-1">
                           Size: std / Qty: {item.quantity}
                         </p>
                         <p className="font-heading font-black text-xs mt-2">
@@ -383,11 +615,11 @@ const Checkout = () => {
 
                 {/* Totals */}
                 <div className="border-t border-black/10 pt-6 space-y-3">
-                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest opacity-60">
+                  <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
                     <span>Subtotal</span>
                     <span>${Number(subTotal).toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest opacity-60">
+                  <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
                     <span>Shipping</span>
                     {cartList?.length > 5 ? (
                       <span className="text-green-600">FREE</span>
@@ -395,7 +627,7 @@ const Checkout = () => {
                       <span>${Number(shippingCost).toFixed(2)}</span>
                     )}
                   </div>
-                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest opacity-60">
+                  <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
                     <span>VAT</span>
                     <span>${Number(totalVat).toFixed(2)}</span>
                   </div>
@@ -410,7 +642,7 @@ const Checkout = () => {
                 {/* Place Order Button */}
                 <button
                   onClick={handleOrderSubmit}
-                  className="w-full bg-black text-white py-4 mt-10 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-3 rounded-md"
+                  className="w-full bg-black text-white py-4 mt-10 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-3 rounded-md cursor-pointer"
                 >
                   Place Order
                   <span className="group-hover:translate-x-2 transition-transform">
