@@ -30,19 +30,18 @@ import PublicRoutes from "./Routes/PublicRoutes.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/home" replace />,
-    Component: App,
+    element: <App></App>,
     children: [
       { index: true, Component: Home },
       {
         path: "home",
-        Component: Home,
+        element: <Home></Home>,
         loader: async () =>
           await fetch("http://localhost:5000/api/penguin/get-product-list"),
       },
       {
         path: "products",
-        Component: Products,
+        element: <Products></Products>,
         loader: async () => {
           const products = await fetch(
             "http://localhost:5000/api/penguin/get-product-list",
@@ -58,7 +57,7 @@ const router = createBrowserRouter([
       },
       {
         path: "product-details/:id/:prod_id",
-        Component: ProductDetails,
+        element: <ProductDetails></ProductDetails>,
         loader: async ({ params }) => {
           const products = await fetch(
             "http://localhost:5000/api/penguin/get-product-list",
@@ -74,7 +73,7 @@ const router = createBrowserRouter([
       },
       {
         path: "cart",
-        Component: Cart,
+        element: <Cart></Cart>,
       },
       {
         path: "checkout",
@@ -102,11 +101,11 @@ const router = createBrowserRouter([
       },
       {
         path: "contact",
-        Component: Contact,
+        element: <Contact></Contact>,
       },
       {
         path: "about",
-        Component: AboutUs,
+        element: <AboutUs></AboutUs>,
       },
       {
         path: "/dashboard",
