@@ -8,8 +8,6 @@ const AdminRoute = ({ children }) => {
   const role = useSelector((state) => state.auth.role);
   const userInfo = useSelector((state) => state.auth.userInfo);
 
-  console.log(role);
-
   const location = useLocation();
   console.log(location);
 
