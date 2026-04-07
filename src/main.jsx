@@ -176,10 +176,10 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <>
+  <StrictMode>
     <Provider store={store}>
       <ClickToComponent />
       <RouterProvider router={router} />
     </Provider>
-  </>,
+  </StrictMode>,
 );
