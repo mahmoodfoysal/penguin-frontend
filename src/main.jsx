@@ -25,6 +25,7 @@ import PrivateRoute from "./Routes/PrivateRoute.jsx";
 import AdminRoute from "./Routes/AdminRoute.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import DirectCheckOut from "./modules/client/Checkout/DirectCheckOut.jsx";
+import PublicRoutes from "./Routes/PublicRoutes.jsx";
 
 const router = createBrowserRouter([
   {
@@ -93,7 +94,11 @@ const router = createBrowserRouter([
       },
       {
         path: "login",
-        Component: Login,
+        element: (
+          <PublicRoutes>
+            <Login></Login>
+          </PublicRoutes>
+        ),
       },
       {
         path: "contact",
@@ -111,26 +116,53 @@ const router = createBrowserRouter([
           </AdminRoute>
         ),
         children: [
-          { index: true, element: <DashboardHome></DashboardHome> },
+          {
+            index: true,
+            element: (
+              <AdminRoute>
+                <DashboardHome></DashboardHome>
+              </AdminRoute>
+            ),
+          },
           {
             path: "/dashboard/make-admin",
-            Component: MakeAdmin,
+            element: (
+              <AdminRoute>
+                <MakeAdmin></MakeAdmin>
+              </AdminRoute>
+            ),
           },
           {
             path: "/dashboard/parent-category",
-            Component: ParentCategory,
+            element: (
+              <AdminRoute>
+                <ParentCategory></ParentCategory>
+              </AdminRoute>
+            ),
           },
           {
             path: "/dashboard/sub-category",
-            Component: SubCategory,
+            element: (
+              <AdminRoute>
+                <SubCategory></SubCategory>
+              </AdminRoute>
+            ),
           },
           {
             path: "/dashboard/add-product",
-            Component: AddProduct,
+            element: (
+              <AdminRoute>
+                <AddProduct></AddProduct>
+              </AdminRoute>
+            ),
           },
           {
             path: "/dashboard/pending-order",
-            Component: PendingOrder,
+            element: (
+              <AdminRoute>
+                <PendingOrder></PendingOrder>
+              </AdminRoute>
+            ),
           },
         ],
       },

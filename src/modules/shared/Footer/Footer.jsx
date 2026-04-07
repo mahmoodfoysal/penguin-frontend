@@ -8,9 +8,9 @@ const Footer = () => {
           <p className="font-black text-3xl uppercase tracking-tighter mb-2">
             Penguin.
           </p>
-          <p className="font-medium text-base-content/60">
+          {/* <p className="font-medium text-base-content/60">
             Crafted Essentials Ltd. Providing reliable design since 2023
-          </p>
+          </p> */}
           <p className="text-sm">Copyright © 2026 - All right reserved</p>
         </aside>
         <nav>
