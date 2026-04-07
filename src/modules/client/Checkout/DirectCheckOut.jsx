@@ -6,8 +6,7 @@ import { clearCart } from "../../../store/slice/cartSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import Swal from "sweetalert2";
-
-const Checkout = () => {
+const DirectCheckOut = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartList = useSelector((state) => state.cart.cart);
@@ -214,7 +213,6 @@ const Checkout = () => {
   }, [cartList]);
 
   const shippingCost = cartList.length > 5 ? 0 : 2 * cartList.length;
-
   return (
     <>
       <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white">
@@ -669,4 +667,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default DirectCheckOut;

@@ -11,15 +11,7 @@ const AdminRoute = ({ children }) => {
   const location = useLocation();
   console.log(location);
 
-  //   if (isLoading) {
-  //     return <span className="loading loading-bars loading-xl text-center"></span>;
-  //   }
-
-  if (
-    user?.length &&
-    role?.data?.admin &&
-    userInfo.email === role?.data?.email
-  ) {
+  if (user?.length && role?.admin && userInfo.email === role?.email) {
     return children;
   } else return <Forbidden></Forbidden>;
 };

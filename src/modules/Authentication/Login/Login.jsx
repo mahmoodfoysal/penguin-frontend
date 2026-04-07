@@ -51,9 +51,9 @@ const Login = () => {
         if (token) {
           const url = `http://localhost:5000/admin/get-admin-list/${user.email}`;
           const adminCheck = axios.get(url);
-          dispatch(setRole(adminCheck));
+          dispatch(setRole(adminCheck?.data));
         }
-        navigate(location?.state || "/home");
+        navigate(location.state?.from?.pathname || "/home");
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -84,7 +84,7 @@ const Login = () => {
         fullName.current.value = null;
 
         console.log(user.accessToken);
-        navigate(location?.state || "/home");
+        navigate(location.state?.from?.pathname || "/home");
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -109,13 +109,13 @@ const Login = () => {
         if (user) {
           const url = `http://localhost:5000/admin/get-admin-list/${email.current.value}`;
           const adminCheck = axios.get(url);
-          dispatch(setRole(adminCheck));
+          dispatch(setRole(adminCheck?.data));
         }
 
         email.current.value = null;
         password.current.value = null;
 
-        navigate(location?.state || "/home");
+        navigate(location.state?.from?.pathname || "/home");
       })
 
       .catch((error) => {

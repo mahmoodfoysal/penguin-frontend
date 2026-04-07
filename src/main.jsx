@@ -24,6 +24,7 @@ import DashboardHome from "./modules/dashboard/Home/DashboardHome.jsx";
 import PrivateRoute from "./Routes/PrivateRoute.jsx";
 import AdminRoute from "./Routes/AdminRoute.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
+import DirectCheckOut from "./modules/client/Checkout/DirectCheckOut.jsx";
 
 const router = createBrowserRouter([
   {
@@ -79,6 +80,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <Checkout></Checkout>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "buy-product",
+        element: (
+          <PrivateRoute>
+            <DirectCheckOut></DirectCheckOut>
           </PrivateRoute>
         ),
       },

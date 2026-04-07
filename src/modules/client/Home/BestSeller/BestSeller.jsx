@@ -3,7 +3,7 @@ import React from "react";
 const BestSeller = () => {
   return (
     <div>
-      <section className="py-24 px-6 max-w-7xl mx-auto" id="arrivals">
+      <section className="py-10 px-6 max-w-7xl mx-auto" id="arrivals">
         <div className="flex justify-between items-end mb-16">
           <div className="flex flex-col gap-2">
             <h2 className="text-5xl font-extrabold tracking-tighter">

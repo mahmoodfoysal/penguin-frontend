@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import PageHeader from "../../../components/PageHeader";
@@ -14,6 +14,7 @@ import {
 const ProductDetails = () => {
   const data = useLoaderData();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -99,11 +100,19 @@ const ProductDetails = () => {
   };
 
   const handleItemIncrement = (product) => {
-    dispatch(incrementQty(product._id));
+    if (cartQuantity == 0) {
+      handleAddToCart(product);
+    } else {
+      dispatch(incrementQty(product._id));
+    }
   };
 
   const handleItemdecrement = (product) => {
     dispatch(decrementQty(product._id));
+  };
+
+  const handleBuyNow = () => {
+    navigate("/buy-product");
   };
 
   return (
@@ -248,8 +257,13 @@ const ProductDetails = () => {
                 >
                   Add to Cart
                 </button>
-                <button className="bg-accent text-white py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-black transition-colors rounded-md cursor-pointer">
-                  Buy It Now
+                <button
+                  onClick={() =>
+                    handleBuyNow(data.product_details.details_data)
+                  }
+                  className="bg-accent text-white py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-black transition-colors rounded-md cursor-pointer"
+                >
+                  Buy Now
                 </button>
               </div>
             </div>

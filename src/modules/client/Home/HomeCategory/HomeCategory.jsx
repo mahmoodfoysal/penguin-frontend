@@ -1,7 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 const HomeCategory = () => {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -18,49 +20,20 @@ const HomeCategory = () => {
     handleImageCategory();
   }, []);
 
-  // const categories = [
-  //   {
-  //     title: "Men's",
-  //     subtitle: "COLLECTION",
-  //     img: "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?q=80&w=600", // Loafers/Formal
-  //     bgColor: "bg-[#A9D1F7]", // Soft Blue
-  //     textColor: "text-[#1e293b]",
-  //   },
-  //   {
-  //     title: "Women's",
-  //     subtitle: "COLLECTION",
-  //     img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=600", // Heels/Fashion
-  //     bgColor: "bg-[#F7C6D9]", // Soft Pink
-  //     textColor: "text-[#4a1d33]",
-  //   },
-  //   {
-  //     title: "Kids'",
-  //     subtitle: "COLLECTION",
-  //     img: "https://images.unsplash.com/photo-1514989125330-eb32184fec5f?q=80&w=600", // Sneakers
-  //     bgColor: "bg-[#FDF2B3]", // Soft Yellow
-  //     textColor: "text-[#424212]",
-  //   },
-  //   {
-  //     title: "Accessories'",
-  //     subtitle: "COLLECTION",
-  //     img: "https://images.unsplash.com/photo-1548036654-3d604bab5ce8?q=80&w=600", // Bags/Gear
-  //     bgColor: "bg-[#B2F5D1]", // Soft Mint
-  //     textColor: "text-[#064e3b]",
-  //   },
-  // ];
-
-  const handleProductDetails = () => {
-    console.log("Click");
+  const handleRelatedProducts = (item) => {
+    navigate("/products", {
+      state: { categoryId: item.cat_id },
+    });
   };
   return (
-    <div>
+    <>
       <section className="px-6 py-12 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {categories.map((item, index) => (
             <div
               key={index}
               className={`relative group h-64 overflow-hidden rounded-sm cursor-pointer transition-all duration-300 ${item.bgColor}`}
-              onClick={handleProductDetails}
+              onClick={() => handleRelatedProducts(item)}
             >
               {/* Text Overlay */}
               <div className={`absolute top-6 left-6 z-10 text-black`}>
@@ -84,7 +57,7 @@ const HomeCategory = () => {
           ))}
         </div>
       </section>
-    </div>
+    </>
   );
 };
 
