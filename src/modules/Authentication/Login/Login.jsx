@@ -49,7 +49,7 @@ const Login = () => {
         console.log(token);
         dispatch(setUser(user.accessToken));
         if (token) {
-          const url = `http://localhost:5000/admin/get-admin-list/${user.email}`;
+          const url = `https://api-penguin.onrender.com/admin/get-admin-list/${user.email}`;
           const adminCheck = axios.get(url);
           dispatch(setRole(adminCheck?.data));
         }
@@ -107,7 +107,7 @@ const Login = () => {
         );
         dispatch(setUser(user.accessToken));
         if (user) {
-          const url = `http://localhost:5000/admin/get-admin-list/${email.current.value}`;
+          const url = `https://api-penguin.onrender.com/admin/get-admin-list/${email.current.value}`;
           const adminCheck = axios.get(url);
           dispatch(setRole(adminCheck?.data));
         }

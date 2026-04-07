@@ -10,7 +10,7 @@ const HomeCategory = () => {
     const handleImageCategory = async () => {
       try {
         const result = await axios.get(
-          "http://localhost:5000/api/admin/get-image-category",
+          "https://api-penguin.onrender.com/api/admin/get-image-category",
         );
         setCategories(result.data?.list_data);
       } catch (error) {

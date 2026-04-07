@@ -37,17 +37,19 @@ const router = createBrowserRouter([
         path: "home",
         element: <Home></Home>,
         loader: async () =>
-          await fetch("http://localhost:5000/api/penguin/get-product-list"),
+          await fetch(
+            "https://api-penguin.onrender.com/api/penguin/get-product-list",
+          ),
       },
       {
         path: "products",
         element: <Products></Products>,
         loader: async () => {
           const products = await fetch(
-            "http://localhost:5000/api/penguin/get-product-list",
+            "https://api-penguin.onrender.com/api/penguin/get-product-list",
           );
           const categories = await fetch(
-            "http://localhost:5000/api/client/get-all-categories",
+            "https://api-penguin.onrender.com/api/client/get-all-categories",
           );
           return {
             products: await products.json(),
@@ -60,10 +62,10 @@ const router = createBrowserRouter([
         element: <ProductDetails></ProductDetails>,
         loader: async ({ params }) => {
           const products = await fetch(
-            "http://localhost:5000/api/penguin/get-product-list",
+            "https://api-penguin.onrender.com/api/penguin/get-product-list",
           );
           const details = await fetch(
-            `http://localhost:5000/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
+            `https://api-penguin.onrender.com/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
           );
           return {
             products: await products.json(),

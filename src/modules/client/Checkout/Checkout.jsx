@@ -171,7 +171,7 @@ const Checkout = () => {
         order_list: orderList,
       };
       if (confirmation.isConfirmed) {
-        const url = `http://localhost:5000/api/admin/insert-update-order-list`;
+        const url = `https://api-penguin.onrender.com/api/admin/insert-update-order-list`;
         const result = await axios.post(url, data);
 
         if (result.status) {

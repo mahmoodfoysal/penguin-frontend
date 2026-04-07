@@ -84,7 +84,7 @@ function App() {
       }
 
       try {
-        const url = `http://localhost:5000/admin/get-admin-list/${userData.email}`;
+        const url = `https://api-penguin.onrender.com/admin/get-admin-list/${userData.email}`;
         const response = await axios.get(url);
 
         dispatch(setRole(response.data));
