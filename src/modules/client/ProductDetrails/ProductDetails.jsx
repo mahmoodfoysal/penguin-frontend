@@ -11,6 +11,7 @@ import {
   decrementQty,
 } from "../../../store/slice/cartSlice";
 import { setOrderProduct } from "../../../store/slice/buyProduct";
+import ComponentLoader from "../../../pages/ComponentLoader";
 
 const ProductDetails = () => {
   const data = useLoaderData();
@@ -117,27 +118,31 @@ const ProductDetails = () => {
 
   return (
     <>
-      <PageHeader pageInfo={pageInfo}></PageHeader>
-      <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white">
-        {/* 1. MAIN PRODUCT SECTION */}
-        <div className="container mx-auto px-6 py-12">
-          <div className="flex flex-col lg:flex-row gap-16">
-            {/* LEFT: IMAGE GALLERY */}
-            <div className="w-full lg:w-1/2 space-y-4">
-              {/* Main Image */}
-              <div className="aspect-square bg-base-200 overflow-hidden border border-black/5 rounded-sm relative group">
-                <img
-                  src={prod_image}
-                  className="w-full h-full object-cover mix-blend-multiply group-hover:scale-110 transition-transform duration-700"
-                  alt="Main Product"
-                />
-                <div className="absolute top-4 left-4 bg-black text-white text-[10px] font-black uppercase px-3 py-1 tracking-widest">
-                  In Stock:{stock} Left
-                </div>
-              </div>
+      {!data ? (
+        <ComponentLoader></ComponentLoader>
+      ) : (
+        <>
+          <PageHeader pageInfo={pageInfo}></PageHeader>
+          <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white">
+            {/* 1. MAIN PRODUCT SECTION */}
+            <div className="container mx-auto px-6 py-12">
+              <div className="flex flex-col lg:flex-row gap-16">
+                {/* LEFT: IMAGE GALLERY */}
+                <div className="w-full lg:w-1/2 space-y-4">
+                  {/* Main Image */}
+                  <div className="aspect-square bg-base-200 overflow-hidden border border-black/5 rounded-sm relative group">
+                    <img
+                      src={prod_image}
+                      className="w-full h-full object-cover mix-blend-multiply group-hover:scale-110 transition-transform duration-700"
+                      alt="Main Product"
+                    />
+                    <div className="absolute top-4 left-4 bg-black text-white text-[10px] font-black uppercase px-3 py-1 tracking-widest">
+                      In Stock:{stock} Left
+                    </div>
+                  </div>
 
-              {/* Thumbnails (Multiple Image Selection) */}
-              {/* <div className="grid grid-cols-4 gap-4">
+                  {/* Thumbnails (Multiple Image Selection) */}
+                  {/* <div className="grid grid-cols-4 gap-4">
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
@@ -151,269 +156,274 @@ const ProductDetails = () => {
                   </div>
                 ))}
               </div> */}
-            </div>
+                </div>
 
-            {/* RIGHT: PRODUCT INFO */}
-            <div className="w-full lg:w-1/2">
-              <div className="flex items-center gap-2 mb-4">
-                {/* Rating Display */}
+                {/* RIGHT: PRODUCT INFO */}
+                <div className="w-full lg:w-1/2">
+                  <div className="flex items-center gap-2 mb-4">
+                    {/* Rating Display */}
 
-                <Rating style={{ maxWidth: 80 }} value={rating} readOnly />
-                <span className="text-[10px] font-bold opacity-50 uppercase tracking-widest">
-                  (128 Reviews***)
-                </span>
-              </div>
-
-              <h1 className="font-heading text-5xl md:text-7xl font-black uppercase tracking-tighter italic leading-none mb-4">
-                {prod_name}
-              </h1>
-
-              <div className="flex items-baseline gap-4 mb-8">
-                <span className="font-heading font-bold text-4xl text-black">
-                  ${price}
-                </span>
-                <span className="font-heading font-bold text-xl line-through opacity-30">
-                  $310.00**
-                </span>
-              </div>
-
-              <div className="mb-8 border-l-4 border-accent pl-6">
-                <h3 className="font-heading font-black uppercase tracking-widest text-xs mb-2">
-                  Description
-                </h3>
-                <p className="text-sm leading-relaxed opacity-70">
-                  {description}
-                </p>
-              </div>
-
-              {/* QUANTITY SELECTOR (NEW) */}
-              <div className="mb-6 space-y-3 flex flex-col items-center ">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
-                  Select Quantity
-                </label>
-                <div className="flex items-center border-2 border-black w-full md:w-48 h-12 overflow-hidden group">
-                  {/* Decrement */}
-                  <button
-                    onClick={() =>
-                      handleItemdecrement(data.product_details.details_data)
-                    }
-                    className="flex-1 h-full flex items-center justify-center hover:bg-black hover:text-white transition-colors border-r-2 border-black cursor-pointer"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={4}
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5 12h14"
-                      />
-                    </svg>
-                  </button>
-
-                  {/* Number Display */}
-                  <div className="flex-1 h-full flex items-center justify-center bg-base-100">
-                    <span className="font-heading font-black text-lg italic tracking-tighter">
-                      {cartQuantity}
+                    <Rating style={{ maxWidth: 80 }} value={rating} readOnly />
+                    <span className="text-[10px] font-bold opacity-50 uppercase tracking-widest">
+                      (128 Reviews***)
                     </span>
                   </div>
 
-                  {/* Increment */}
-                  <button
-                    onClick={() =>
-                      handleItemIncrement(data.product_details.details_data)
-                    }
-                    className="flex-1 h-full flex items-center justify-center hover:bg-black hover:text-white transition-colors border-l-2 border-black cursor-pointer"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={4}
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 4.5v15m7.5-7.5h-15"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
+                  <h1 className="font-heading text-5xl md:text-7xl font-black uppercase tracking-tighter italic leading-none mb-4">
+                    {prod_name}
+                  </h1>
 
-              {/* ACTION BUTTONS */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button
-                  onClick={() =>
-                    handleAddToCart(data.product_details.details_data)
-                  }
-                  className="bg-black text-white py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-accent transition-colors rounded-md cursor-pointer"
-                >
-                  Add to Cart
-                </button>
-                <button
-                  onClick={() =>
-                    handleBuyNow(data.product_details.details_data)
-                  }
-                  className="bg-accent text-white py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-black transition-colors rounded-md cursor-pointer"
-                >
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 2. RATINGS & REVIEWS SECTION */}
-        <div className="bg-base-200/30 border-y border-black/5 py-10">
-          <div className="container mx-auto px-6">
-            <div className="flex flex-col lg:flex-row gap-16">
-              {/* Review Form */}
-              <div className="w-full lg:w-1/3">
-                <h2 className="font-heading text-3xl font-black uppercase italic mb-6">
-                  Write a <span className="text-accent">Review</span>
-                </h2>
-                <div className="space-y-4">
-                  <div className="flex-grow space-y-2">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
-                        Full Name<span className="text-red-600">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Mike"
-                        className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
-                        Email <span className="text-red-600">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        placeholder="mike@user.com"
-                        className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
-                      />
-                    </div>
+                  <div className="flex items-baseline gap-4 mb-8">
+                    <span className="font-heading font-bold text-4xl text-black">
+                      ${price}
+                    </span>
+                    <span className="font-heading font-bold text-xl line-through opacity-30">
+                      $310.00**
+                    </span>
                   </div>
-                  <Rating
-                    style={{ maxWidth: 90 }}
-                    value={clientRating}
-                    onChange={(value) => setClientRating(value)}
-                  />
 
-                  <div>
-                    <label className="block text-[10px] font-black uppercase tracking-widest mb-2">
-                      Your Message
+                  <div className="mb-8 border-l-4 border-accent pl-6">
+                    <h3 className="font-heading font-black uppercase tracking-widest text-xs mb-2">
+                      Description
+                    </h3>
+                    <p className="text-sm leading-relaxed opacity-70">
+                      {description}
+                    </p>
+                  </div>
+
+                  {/* QUANTITY SELECTOR (NEW) */}
+                  <div className="mb-6 space-y-3 flex flex-col items-center ">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
+                      Select Quantity
                     </label>
-                    <textarea
-                      className="textarea textarea-bordered w-full h-32 rounded-none border-black/10 focus:outline-accent"
-                      placeholder="Comment"
-                    ></textarea>
-                  </div>
-                  <button className="btn btn-block bg-black text-white rounded-none border-none hover:bg-accent font-heading font-black uppercase tracking-widest">
-                    Submit Review
-                  </button>
-                </div>
-              </div>
+                    <div className="flex items-center border-2 border-black w-full md:w-48 h-12 overflow-hidden group">
+                      {/* Decrement */}
+                      <button
+                        onClick={() =>
+                          handleItemdecrement(data.product_details.details_data)
+                        }
+                        className="flex-1 h-full flex items-center justify-center hover:bg-black hover:text-white transition-colors border-r-2 border-black cursor-pointer"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={4}
+                          stroke="currentColor"
+                          className="w-4 h-4"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 12h14"
+                          />
+                        </svg>
+                      </button>
 
-              {/* Customer Feedback List */}
-              <div className="w-full lg:w-2/3">
-                <h2 className="font-heading text-3xl font-black uppercase italic mb-6">
-                  Customer <span className="text-accent">Comments</span>
-                </h2>
-                <div className="space-y-8">
-                  {[1, 2].map((review) => (
-                    <div key={review} className="border-b border-black/5 pb-8">
-                      <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-heading font-black uppercase text-sm">
-                          Marcus K.
-                        </h4>
-                        <span className="text-accent text-xs">★★★★★</span>
+                      {/* Number Display */}
+                      <div className="flex-1 h-full flex items-center justify-center bg-base-100">
+                        <span className="font-heading font-black text-lg italic tracking-tighter">
+                          {cartQuantity}
+                        </span>
                       </div>
-                      <p className="text-sm opacity-70 leading-relaxed italic">
-                        "Absolutely incredible quality. The cushioning feels
-                        like walking on clouds, but with the support needed for
-                        long-distance runs. Best purchase this year."
-                      </p>
-                      <div className="mt-4 text-[10px] font-bold opacity-30 uppercase tracking-widest">
-                        Verified Buyer — 2 Days Ago
-                      </div>
+
+                      {/* Increment */}
+                      <button
+                        onClick={() =>
+                          handleItemIncrement(data.product_details.details_data)
+                        }
+                        className="flex-1 h-full flex items-center justify-center hover:bg-black hover:text-white transition-colors border-l-2 border-black cursor-pointer"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={4}
+                          stroke="currentColor"
+                          className="w-4 h-4"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 4.5v15m7.5-7.5h-15"
+                          />
+                        </svg>
+                      </button>
                     </div>
-                  ))}
+                  </div>
+
+                  {/* ACTION BUTTONS */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button
+                      onClick={() =>
+                        handleAddToCart(data.product_details.details_data)
+                      }
+                      className="bg-black text-white py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-accent transition-colors rounded-md cursor-pointer"
+                    >
+                      Add to Cart
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleBuyNow(data.product_details.details_data)
+                      }
+                      className="bg-accent text-white py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-black transition-colors rounded-md cursor-pointer"
+                    >
+                      Buy Now
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* 3. RELATED PRODUCTS */}
-        <div className="py-10">
-          <div className="container mx-auto px-6">
-            <div className="flex items-end justify-between mb-12">
-              <h2 className="font-heading text-4xl font-black uppercase  tracking-tighter">
-                Related{" "}
-                <span className="text-accent text-outline">Products</span>
-              </h2>
-              {/* <button className="text-[10px] font-black uppercase tracking-[0.2em] border-b-2 border-accent pb-1 cursor-pointer">
+            {/* 2. RATINGS & REVIEWS SECTION */}
+            <div className="bg-base-200/30 border-y border-black/5 py-10">
+              <div className="container mx-auto px-6">
+                <div className="flex flex-col lg:flex-row gap-16">
+                  {/* Review Form */}
+                  <div className="w-full lg:w-1/3">
+                    <h2 className="font-heading text-3xl font-black uppercase italic mb-6">
+                      Write a <span className="text-accent">Review</span>
+                    </h2>
+                    <div className="space-y-4">
+                      <div className="flex-grow space-y-2">
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                            Full Name<span className="text-red-600">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Mike"
+                            className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                            Email <span className="text-red-600">*</span>
+                          </label>
+                          <input
+                            type="email"
+                            placeholder="mike@user.com"
+                            className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
+                          />
+                        </div>
+                      </div>
+                      <Rating
+                        style={{ maxWidth: 90 }}
+                        value={clientRating}
+                        onChange={(value) => setClientRating(value)}
+                      />
+
+                      <div>
+                        <label className="block text-[10px] font-black uppercase tracking-widest mb-2">
+                          Your Message
+                        </label>
+                        <textarea
+                          className="textarea textarea-bordered w-full h-32 rounded-none border-black/10 focus:outline-accent"
+                          placeholder="Comment"
+                        ></textarea>
+                      </div>
+                      <button className="btn btn-block bg-black text-white rounded-none border-none hover:bg-accent font-heading font-black uppercase tracking-widest">
+                        Submit Review
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Customer Feedback List */}
+                  <div className="w-full lg:w-2/3">
+                    <h2 className="font-heading text-3xl font-black uppercase italic mb-6">
+                      Customer <span className="text-accent">Comments</span>
+                    </h2>
+                    <div className="space-y-8">
+                      {[1, 2].map((review) => (
+                        <div
+                          key={review}
+                          className="border-b border-black/5 pb-8"
+                        >
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-heading font-black uppercase text-sm">
+                              Marcus K.
+                            </h4>
+                            <span className="text-accent text-xs">★★★★★</span>
+                          </div>
+                          <p className="text-sm opacity-70 leading-relaxed italic">
+                            "Absolutely incredible quality. The cushioning feels
+                            like walking on clouds, but with the support needed
+                            for long-distance runs. Best purchase this year."
+                          </p>
+                          <div className="mt-4 text-[10px] font-bold opacity-30 uppercase tracking-widest">
+                            Verified Buyer — 2 Days Ago
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 3. RELATED PRODUCTS */}
+            <div className="py-10">
+              <div className="container mx-auto px-6">
+                <div className="flex items-end justify-between mb-12">
+                  <h2 className="font-heading text-4xl font-black uppercase  tracking-tighter">
+                    Related{" "}
+                    <span className="text-accent text-outline">Products</span>
+                  </h2>
+                  {/* <button className="text-[10px] font-black uppercase tracking-[0.2em] border-b-2 border-accent pb-1 cursor-pointer">
                 View Collection
               </button> */}
-            </div>
+                </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {paginatedProducts.map((product, index) => (
-                <ProductCard product={product} key={index}></ProductCard>
-              ))}
-            </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                  {paginatedProducts.map((product, index) => (
+                    <ProductCard product={product} key={index}></ProductCard>
+                  ))}
+                </div>
 
-            {/* PAGINATION */}
-            <div className="mt-8 flex justify-center">
-              <div className="join gap-2">
-                <button
-                  disabled={currentPage === 1}
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  className="join-item btn btn-outline btn-square rounded-none border-black/10"
-                >
-                  «
-                </button>
+                {/* PAGINATION */}
+                <div className="mt-8 flex justify-center">
+                  <div className="join gap-2">
+                    <button
+                      disabled={currentPage === 1}
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      }
+                      className="join-item btn btn-outline btn-square rounded-none border-black/10"
+                    >
+                      «
+                    </button>
 
-                {getPagination().map((page, index) => (
-                  <button
-                    key={index}
-                    onClick={() => page !== "..." && setCurrentPage(page)}
-                    className={`join-item btn btn-square rounded-none ${
-                      currentPage === page
-                        ? "bg-black text-white border-black"
-                        : "btn-outline"
-                    } ${page === "..." ? "btn-disabled" : ""}`}
-                  >
-                    {page}
-                  </button>
-                ))}
+                    {getPagination().map((page, index) => (
+                      <button
+                        key={index}
+                        onClick={() => page !== "..." && setCurrentPage(page)}
+                        className={`join-item btn btn-square rounded-none ${
+                          currentPage === page
+                            ? "bg-black text-white border-black"
+                            : "btn-outline"
+                        } ${page === "..." ? "btn-disabled" : ""}`}
+                      >
+                        {page}
+                      </button>
+                    ))}
 
-                <button
-                  disabled={currentPage === totalPages}
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  className="join-item btn btn-outline btn-square rounded-none border-black/10"
-                >
-                  »
-                </button>
+                    <button
+                      disabled={currentPage === totalPages}
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      }
+                      className="join-item btn btn-outline btn-square rounded-none border-black/10"
+                    >
+                      »
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 };

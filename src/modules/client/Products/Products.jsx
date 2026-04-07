@@ -7,6 +7,7 @@ import Category from "../../../components/Category";
 import PriceRange from "../../../components/PriceRange";
 import Brand from "../../../components/Brand";
 import PageHeader from "../../../components/PageHeader";
+import ComponentLoader from "../../../pages/ComponentLoader";
 
 const Products = () => {
   const pageInfo = [
@@ -225,137 +226,148 @@ const Products = () => {
   }, [location.state]);
 
   return (
-    <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white">
-      <PageHeader pageInfo={pageInfo}></PageHeader>
+    <>
+      {!productsList.length ? (
+        <ComponentLoader></ComponentLoader>
+      ) : (
+        <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white">
+          <PageHeader pageInfo={pageInfo}></PageHeader>
 
-      {/* 2. MAIN CONTENT AREA */}
-      <div className="container mx-auto px-6 py-8 flex flex-col lg:flex-row gap-12">
-        {/* LEFT SIDEBAR FILTERS */}
-        <aside className="w-full lg:w-64 flex-shrink-0">
-          <div className="sticky top-28 space-y-10">
-            {/* SEARCH */}
-            <SearchBar
-              searchProductList={searchProductList}
-              setSearchProductList={setSearchProductList}
-            ></SearchBar>
+          {/* 2. MAIN CONTENT AREA */}
+          <div className="container mx-auto px-6 py-8 flex flex-col lg:flex-row gap-12">
+            {/* LEFT SIDEBAR FILTERS */}
+            <aside className="w-full lg:w-64 flex-shrink-0">
+              <div className="sticky top-28 space-y-10">
+                {/* SEARCH */}
+                <SearchBar
+                  searchProductList={searchProductList}
+                  setSearchProductList={setSearchProductList}
+                ></SearchBar>
 
-            {/* CATEGORY */}
-            <Category
-              categoryList={categoryList}
-              openCategory={openCategory}
-              toggleCategory={toggleCategory}
-              handleSubCategory={handleSubCategory}
-            ></Category>
+                {/* CATEGORY */}
+                <Category
+                  categoryList={categoryList}
+                  openCategory={openCategory}
+                  toggleCategory={toggleCategory}
+                  handleSubCategory={handleSubCategory}
+                ></Category>
 
-            {/* PRICE RANGE */}
-            <PriceRange
-              price={price}
-              maxPrice={maxPrice}
-              setPrice={setPrice}
-            ></PriceRange>
+                {/* PRICE RANGE */}
+                <PriceRange
+                  price={price}
+                  maxPrice={maxPrice}
+                  setPrice={setPrice}
+                ></PriceRange>
 
-            {/* BRAND */}
-            <Brand
-              handleBrandChange={handleBrandChange}
-              getBrandList={getBrandList}
-              selectedBrands={selectedBrands}
-            ></Brand>
-          </div>
-        </aside>
+                {/* BRAND */}
+                <Brand
+                  handleBrandChange={handleBrandChange}
+                  getBrandList={getBrandList}
+                  selectedBrands={selectedBrands}
+                ></Brand>
+              </div>
+            </aside>
 
-        {/* PRODUCT GRID & PAGINATION */}
-        <main className="flex-grow">
-          {(searchProductList ||
-            selectedCategory ||
-            selectedSubCategory ||
-            selectedBrands?.length > 0 ||
-            price > 0) && (
-            <h4
-              onClick={handleClearFilter}
-              className="text-sm cursor-pointer hover:text-accent flex items-center gap-2"
-            >
-              Clear All Filter
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={3}
-                stroke="currentColor"
-                className="w-3.5 h-3.5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </h4>
-          )}
-
-          <div className="flex justify-between items-center mb-8 pb-4 border-b border-black/5 font-heading text-[10px] font-bold uppercase tracking-[0.2em]">
-            <span>
-              Showing {(currentPage - 1) * itemsPerPage + 1}-
-              {Math.min(currentPage * itemsPerPage, filteredProducts.length)} of{" "}
-              {filteredProducts.length} Items
-            </span>
-            <select
-              className="select select-ghost select-xs focus:bg-transparent font-bold cursor-pointer"
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-            >
-              <option value="newest">Sort: Newest</option>
-              <option value="lowToHigh">Price: Low to High</option>
-              <option value="highToLow">Price: High to Low</option>
-            </select>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-12">
-            {paginatedProducts.map((item, index) => (
-              <ProductCard product={item} key={index}></ProductCard>
-            ))}
-          </div>
-
-          {/* PAGINATION */}
-          <div className="mt-20 flex justify-center">
-            <div className="join gap-2">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                className="join-item btn btn-outline btn-square rounded-none border-black/10"
-              >
-                «
-              </button>
-
-              {getPagination().map((page, index) => (
-                <button
-                  key={index}
-                  onClick={() => page !== "..." && setCurrentPage(page)}
-                  className={`join-item btn btn-square rounded-none ${
-                    currentPage === page
-                      ? "bg-black text-white border-black"
-                      : "btn-outline"
-                  } ${page === "..." ? "btn-disabled" : ""}`}
+            {/* PRODUCT GRID & PAGINATION */}
+            <main className="flex-grow">
+              {(searchProductList ||
+                selectedCategory ||
+                selectedSubCategory ||
+                selectedBrands?.length > 0 ||
+                price > 0) && (
+                <h4
+                  onClick={handleClearFilter}
+                  className="text-sm cursor-pointer hover:text-accent flex items-center gap-2"
                 >
-                  {page}
-                </button>
-              ))}
+                  Clear All Filter
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={3}
+                    stroke="currentColor"
+                    className="w-3.5 h-3.5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </h4>
+              )}
 
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                className="join-item btn btn-outline btn-square rounded-none border-black/10"
-              >
-                »
-              </button>
-            </div>
+              <div className="flex justify-between items-center mb-8 pb-4 border-b border-black/5 font-heading text-[10px] font-bold uppercase tracking-[0.2em]">
+                <span>
+                  Showing {(currentPage - 1) * itemsPerPage + 1}-
+                  {Math.min(
+                    currentPage * itemsPerPage,
+                    filteredProducts.length,
+                  )}{" "}
+                  of {filteredProducts.length} Items
+                </span>
+                <select
+                  className="select select-ghost select-xs focus:bg-transparent font-bold cursor-pointer"
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                >
+                  <option value="newest">Sort: Newest</option>
+                  <option value="lowToHigh">Price: Low to High</option>
+                  <option value="highToLow">Price: High to Low</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-12">
+                {paginatedProducts.map((item, index) => (
+                  <ProductCard product={item} key={index}></ProductCard>
+                ))}
+              </div>
+
+              {/* PAGINATION */}
+              <div className="mt-20 flex justify-center">
+                <div className="join gap-2">
+                  <button
+                    disabled={currentPage === 1}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    className="join-item btn btn-outline btn-square rounded-none border-black/10"
+                  >
+                    «
+                  </button>
+
+                  {getPagination().map((page, index) => (
+                    <button
+                      key={index}
+                      onClick={() => page !== "..." && setCurrentPage(page)}
+                      className={`join-item btn btn-square rounded-none ${
+                        currentPage === page
+                          ? "bg-black text-white border-black"
+                          : "btn-outline"
+                      } ${page === "..." ? "btn-disabled" : ""}`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  <button
+                    disabled={currentPage === totalPages}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    className="join-item btn btn-outline btn-square rounded-none border-black/10"
+                  >
+                    »
+                  </button>
+                </div>
+              </div>
+            </main>
           </div>
-        </main>
-      </div>
 
-      <FeatureProducts></FeatureProducts>
-    </div>
+          <FeatureProducts></FeatureProducts>
+        </div>
+      )}
+    </>
   );
 };
 
