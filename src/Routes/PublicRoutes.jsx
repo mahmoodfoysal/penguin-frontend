@@ -11,7 +11,7 @@ const PublicRoutes = ({ children }) => {
     (user && Object.keys(user).length > 0) ||
     (userInfo && Object.keys(userInfo).length > 0);
 
-  // ✅ If logged in → stay on current page or redirect to previous page
+  // If logged in → stay on current page or redirect to previous page
   if (isAuthenticated) {
     // Stay on the same page if they are already on it
     const from = location.state?.from?.pathname || location.pathname;

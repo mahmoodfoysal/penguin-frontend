@@ -1,15 +1,15 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import PageHeader from "../../../components/PageHeader";
 import { Link, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
-import { clearCart } from "../../../store/slice/cartSlice";
 import { useDispatch } from "react-redux";
+import { setOrderProduct } from "../../../store/slice/buyProduct";
 import axios from "axios";
 import Swal from "sweetalert2";
 const DirectCheckOut = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const cartList = useSelector((state) => state.cart.cart);
+  const orderProduct = useSelector((state) => state.buy.orderProduct);
 
   const [formData, setFormData] = useState({
     fullName: null,
@@ -27,20 +27,6 @@ const DirectCheckOut = () => {
   });
   const [paymentMethod, setPaymentMethod] = useState(1);
   const [isInvalid, setIsInvalid] = useState(false);
-
-  // const pageInfo = [
-  //   {
-  //     parent_route_name: "",
-  //     path: "",
-  //   },
-  //   {
-  //     curren_route: "Complete Your Order",
-  //   },
-  //   {
-  //     first_name: "Check",
-  //     last_name: "out",
-  //   },
-  // ];
 
   const paymentModeList = [
     { id: 1, label: "Cash on Delivery" },
@@ -89,7 +75,7 @@ const DirectCheckOut = () => {
         !formData.city ||
         !formData.zipCode ||
         !formData.address ||
-        !cartList.length
+        !orderProduct
       ) {
         setIsInvalid(true);
         Swal.fire({
@@ -127,21 +113,6 @@ const DirectCheckOut = () => {
         }
       }
 
-      const orderList = cartList.map((item) => {
-        return {
-          _id: item._id,
-          prod_name: item.prod_name,
-          price: item.price,
-          prod_image: item.prod_image,
-          prod_id: item.prod_id,
-          stock: item.stock,
-          currency_name: item.currency_name,
-          currency_id: item.currency_id,
-          discount_price: item.discount_price,
-          quantity: item.quantity,
-        };
-      });
-
       const data = {
         _id: null,
         full_name: formData.fullName,
@@ -166,7 +137,20 @@ const DirectCheckOut = () => {
         bkash_no: paymentMethod === 2 ? formData.bkashNo : null,
         bkash_trns_no: paymentMethod === 2 ? formData.transectionNo : null,
         cash_on_delivery: paymentMethod === 1 ? "Cash on delivery" : null,
-        order_list: orderList,
+        order_list: [
+          {
+            _id: orderProduct._id,
+            prod_name: orderProduct.prod_name,
+            price: orderProduct.price,
+            prod_image: orderProduct.prod_image,
+            prod_id: orderProduct.prod_id,
+            stock: orderProduct.stock,
+            currency_name: orderProduct.currency_name,
+            currency_id: orderProduct.currency_id,
+            discount_price: orderProduct.discount_price,
+            quantity: orderProduct.quantity,
+          },
+        ],
       };
       if (confirmation.isConfirmed) {
         const url = `http://localhost:5000/api/admin/insert-update-order-list`;
@@ -179,7 +163,7 @@ const DirectCheckOut = () => {
             text: "Your order has been submitted successfully.",
             confirmButtonText: "OK",
           });
-          dispatch(clearCart());
+          dispatch(setOrderProduct({}));
           setIsInvalid(false);
           navigate("/home");
           setFormData({
@@ -203,16 +187,36 @@ const DirectCheckOut = () => {
     }
   };
 
-  const { subTotal, totalVat } = useMemo(() => {
-    const subTotal = cartList.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0,
+  const handleItemIncrement = () => {
+    dispatch(
+      setOrderProduct({
+        ...orderProduct,
+        quantity: (orderProduct.quantity || 1) + 1,
+      }),
     );
-    const totalVat = subTotal * 0.06;
-    return { subTotal, totalVat };
-  }, [cartList]);
+  };
 
-  const shippingCost = cartList.length > 5 ? 0 : 2 * cartList.length;
+  const handleItemDecrement = () => {
+    if (orderProduct.quantity > 1) {
+      dispatch(
+        setOrderProduct({
+          ...orderProduct,
+          quantity: orderProduct.quantity - 1,
+        }),
+      );
+    }
+  };
+
+  const handleRemoveItem = () => {
+    dispatch(setOrderProduct({}));
+    navigate(-1);
+  };
+
+  const subTotal = orderProduct.price * orderProduct.quantity;
+
+  const totalVat = 0.6;
+
+  const shippingCost = 2;
   return (
     <>
       <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white">
@@ -587,43 +591,116 @@ const DirectCheckOut = () => {
 
                 {/* Mini Product List */}
                 <div className="space-y-6 mb-8 max-h-[300px] overflow-y-auto pr-2 no-scrollbar">
-                  {cartList.map((item, index) => (
-                    <div key={index} className="flex gap-4">
-                      <div className="w-16 h-20 bg-white border border-black/5 flex-shrink-0">
-                        <img
-                          src={item.prod_image}
-                          className="w-full h-full object-cover mix-blend-multiply"
-                          alt="thumb"
-                        />
-                      </div>
-                      <div className="flex-grow">
-                        <h4 className="font-heading font-bold text-xs uppercase leading-tight">
-                          {item.prod_name}
+                  <div className="flex gap-4 items-start border-b border-black/5 pb-4 last:border-0">
+                    {/* 1. PRODUCT THUMBNAIL */}
+                    <div className="w-16 h-20 bg-white border border-black/10 flex-shrink-0 relative group">
+                      <img
+                        src={orderProduct.prod_image}
+                        className="w-full h-full object-cover mix-blend-multiply"
+                        alt="thumb"
+                      />
+                      {/* Subtle accent corner */}
+                      <div className="absolute top-0 left-0 w-1 h-1 bg-accent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+
+                    {/* 2. PRODUCT DETAILS */}
+                    <div className="flex-grow">
+                      <div className="flex justify-between items-start">
+                        <h4 className="font-heading font-black text-[10px] md:text-xs uppercase leading-tight tracking-tight max-w-[120px]">
+                          {orderProduct.prod_name}
                         </h4>
-                        <p className="text-[10px] uppercase opacity-50 font-bold mt-1">
-                          Size: std / Qty: {item.quantity}
+                        {/* Price - Bold/Italic to stand out */}
+                        <p className="font-heading font-black text-xs italic text-accent">
+                          $
+                          {(orderProduct.price * orderProduct.quantity).toFixed(
+                            2,
+                          )}
                         </p>
-                        <p className="font-heading font-black text-xs mt-2">
-                          ${item.price}
-                        </p>
+                      </div>
+
+                      <p className="text-[9px] uppercase opacity-40 font-bold mt-1 tracking-widest">
+                        Size: std
+                      </p>
+
+                      {/* 3. QUANTITY CONTROLLER (INTEGRATED) */}
+                      <div className="flex items-center mt-3">
+                        <div className="flex items-center border border-black h-7">
+                          {/* Decrement Button */}
+                          <button
+                            onClick={handleItemDecrement}
+                            className="w-7 h-full flex items-center justify-center hover:bg-black hover:text-white transition-colors border-r border-black cursor-pointer"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={4}
+                              stroke="currentColor"
+                              className="w-2.5 h-2.5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M5 12h14"
+                              />
+                            </svg>
+                          </button>
+
+                          {/* Value Display */}
+                          <div className="px-3 h-full flex items-center justify-center min-w-[30px]">
+                            <span className="font-heading font-black text-[10px] italic">
+                              {orderProduct.quantity}
+                            </span>
+                          </div>
+
+                          {/* Increment Button */}
+                          <button
+                            onClick={handleItemIncrement}
+                            className="cursor-pointer w-7 h-full flex items-center justify-center hover:bg-black hover:text-white transition-colors border-l border-black"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={4}
+                              stroke="currentColor"
+                              className="w-2.5 h-2.5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 4.5v15m7.5-7.5h-15"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+
+                        {/* Remove/Delete Icon (As requested previously) */}
+                        <button
+                          onClick={handleRemoveItem}
+                          className="ml-auto text-black/20 hover:text-red-500 transition-colors"
+                        >
+                          <span className="material-icons cursor-pointer hover:text-red-600">
+                            delete_outline
+                          </span>
+                        </button>
                       </div>
                     </div>
-                  ))}
+                  </div>
                 </div>
 
                 {/* Totals */}
                 <div className="border-t border-black/10 pt-6 space-y-3">
                   <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
                     <span>Subtotal</span>
-                    <span>${Number(subTotal).toFixed(2)}</span>
+                    <span>
+                      ${" "}
+                      {(orderProduct.price * orderProduct.quantity).toFixed(2)}
+                    </span>
                   </div>
                   <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
                     <span>Shipping</span>
-                    {cartList?.length > 5 ? (
-                      <span className="text-green-600">FREE</span>
-                    ) : (
-                      <span>${Number(shippingCost).toFixed(2)}</span>
-                    )}
+                    <span>${Number(shippingCost).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
                     <span>VAT</span>

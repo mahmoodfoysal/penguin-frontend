@@ -10,6 +10,7 @@ import {
   incrementQty,
   decrementQty,
 } from "../../../store/slice/cartSlice";
+import { setOrderProduct } from "../../../store/slice/buyProduct";
 
 const ProductDetails = () => {
   const data = useLoaderData();
@@ -21,7 +22,6 @@ const ProductDetails = () => {
   const [clientRating, setClientRating] = useState(0);
 
   const productList = data.products.list_data;
-  console.log(productList);
 
   const {
     _id,
@@ -55,7 +55,6 @@ const ProductDetails = () => {
   const filterRelatedProduct = productList.filter(
     (item) => item.par_cat_id == par_cat_id,
   );
-  console.log("filterRelatedProduct", filterRelatedProduct);
 
   // ================= PAGINATION =================
   const itemsPerPage = 8;
@@ -69,7 +68,6 @@ const ProductDetails = () => {
 
   // reset page on filter change
   useEffect(() => {
-    // Schedule the state update after the current render
     const timeout = setTimeout(() => {
       setCurrentPage(1);
     }, 0);
@@ -111,7 +109,9 @@ const ProductDetails = () => {
     dispatch(decrementQty(product._id));
   };
 
-  const handleBuyNow = () => {
+  const handleBuyNow = (product) => {
+    console.log(product);
+    dispatch(setOrderProduct({ ...product, quantity: 1 }));
     navigate("/buy-product");
   };
 

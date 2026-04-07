@@ -9,6 +9,7 @@ import {
 import PageHeader from "../../../components/PageHeader";
 import { Link, useNavigate } from "react-router";
 import EmptyScreen from "../../../pages/EmptyScreen.jsx";
+import Swal from "sweetalert2";
 
 const Cart = () => {
   const emptyInfo = {
@@ -42,8 +43,24 @@ const Cart = () => {
     dispatch(decrementQty(product._id));
   };
 
-  const handleRemoveItem = (product) => {
-    dispatch(removeFromCart(product._id));
+  const handleRemoveItem = async (product) => {
+    const confirmation = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to remove from cart",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      confirmButtonText: "Ok",
+    });
+    if (confirmation.isConfirmed) {
+      dispatch(removeFromCart(product._id));
+      Swal.fire({
+        icon: "success",
+        title: "Item remove from cart",
+        text: "Success",
+        confirmButtonText: "OK",
+      });
+    }
   };
 
   const handleClearCart = () => {

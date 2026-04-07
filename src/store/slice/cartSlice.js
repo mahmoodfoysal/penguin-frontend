@@ -31,7 +31,7 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    // ✅ ADD TO CART
+    // ADD TO CART
     addToCart: (state, action) => {
       const item = action.payload;
 
@@ -49,7 +49,7 @@ const cartSlice = createSlice({
       saveCart(state.cart);
     },
 
-    // ✅ INCREMENT
+    // INCREMENT
     incrementQty: (state, action) => {
       const item = state.cart.find((p) => p._id === action.payload);
       if (item) {
@@ -58,7 +58,7 @@ const cartSlice = createSlice({
       }
     },
 
-    // ✅ DECREMENT
+    // DECREMENT
     decrementQty: (state, action) => {
       const item = state.cart.find((p) => p._id === action.payload);
 
@@ -72,13 +72,13 @@ const cartSlice = createSlice({
       saveCart(state.cart);
     },
 
-    // ✅ REMOVE ITEM
+    // REMOVE ITEM
     removeFromCart: (state, action) => {
       state.cart = state.cart.filter((item) => item._id !== action.payload);
       saveCart(state.cart);
     },
 
-    // ✅ CLEAR CART
+    // CLEAR CART
     clearCart: (state) => {
       state.cart = [];
       localStorage.removeItem(STORAGE_KEY);

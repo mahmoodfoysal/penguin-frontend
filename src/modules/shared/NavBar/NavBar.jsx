@@ -18,6 +18,7 @@ const NavBar = () => {
   const user = useSelector((state) => state.auth.user);
   const userInfo = useSelector((state) => state.auth.userInfo);
   const cartList = useSelector((state) => state.cart.cart);
+  const role = useSelector((state) => state.auth.role);
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -71,11 +72,13 @@ const NavBar = () => {
                   Contact
                 </NavLink>
               </li>
-              <li>
-                <NavLink to="/dashboard" className="hover:text-primary">
-                  Dashboard
-                </NavLink>
-              </li>
+              {role?.email && (
+                <li>
+                  <NavLink to="/dashboard" className="hover:text-primary">
+                    Dashboard
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </div>
           <div className="navbar-end gap-3 flex items-center relative">
