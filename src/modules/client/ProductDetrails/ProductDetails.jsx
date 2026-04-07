@@ -4,9 +4,16 @@ import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import PageHeader from "../../../components/PageHeader";
 import ProductCard from "../../../components/ProductCard";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addToCart,
+  incrementQty,
+  decrementQty,
+} from "../../../store/slice/cartSlice";
 
 const ProductDetails = () => {
   const data = useLoaderData();
+  const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -16,6 +23,7 @@ const ProductDetails = () => {
   console.log(productList);
 
   const {
+    _id,
     prod_image,
     stock,
     rating,
@@ -24,6 +32,11 @@ const ProductDetails = () => {
     description,
     par_cat_id,
   } = data.product_details.details_data;
+
+  const cartList = useSelector((state) => state.cart.cart);
+
+  const cartQuantity = cartList.find((item) => item._id == _id)?.quantity || 0;
+
   const pageInfo = [
     {
       parent_route_name: "Products",
@@ -79,6 +92,18 @@ const ProductDetails = () => {
     }
 
     return pages;
+  };
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+  };
+
+  const handleItemIncrement = (product) => {
+    dispatch(incrementQty(product._id));
+  };
+
+  const handleItemdecrement = (product) => {
+    dispatch(decrementQty(product._id));
   };
 
   return (
@@ -152,9 +177,75 @@ const ProductDetails = () => {
                 </p>
               </div>
 
+              {/* QUANTITY SELECTOR (NEW) */}
+              <div className="mb-6 space-y-3 flex flex-col items-center ">
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
+                  Select Quantity
+                </label>
+                <div className="flex items-center border-2 border-black w-full md:w-48 h-12 overflow-hidden group">
+                  {/* Decrement */}
+                  <button
+                    onClick={() =>
+                      handleItemdecrement(data.product_details.details_data)
+                    }
+                    className="flex-1 h-full flex items-center justify-center hover:bg-black hover:text-white transition-colors border-r-2 border-black cursor-pointer"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={4}
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 12h14"
+                      />
+                    </svg>
+                  </button>
+
+                  {/* Number Display */}
+                  <div className="flex-1 h-full flex items-center justify-center bg-base-100">
+                    <span className="font-heading font-black text-lg italic tracking-tighter">
+                      {cartQuantity}
+                    </span>
+                  </div>
+
+                  {/* Increment */}
+                  <button
+                    onClick={() =>
+                      handleItemIncrement(data.product_details.details_data)
+                    }
+                    className="flex-1 h-full flex items-center justify-center hover:bg-black hover:text-white transition-colors border-l-2 border-black cursor-pointer"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={4}
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
               {/* ACTION BUTTONS */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button className="bg-black text-white py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-accent transition-colors rounded-md cursor-pointer">
+                <button
+                  onClick={() =>
+                    handleAddToCart(data.product_details.details_data)
+                  }
+                  className="bg-black text-white py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-accent transition-colors rounded-md cursor-pointer"
+                >
                   Add to Cart
                 </button>
                 <button className="bg-accent text-white py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-black transition-colors rounded-md cursor-pointer">
@@ -203,7 +294,7 @@ const ProductDetails = () => {
                     value={clientRating}
                     onChange={(value) => setClientRating(value)}
                   />
-                  {clientRating}
+
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-widest mb-2">
                       Your Message
@@ -222,7 +313,7 @@ const ProductDetails = () => {
               {/* Customer Feedback List */}
               <div className="w-full lg:w-2/3">
                 <h2 className="font-heading text-3xl font-black uppercase italic mb-6">
-                  Customer <span className="text-accent">Voices</span>
+                  Customer <span className="text-accent">Comments</span>
                 </h2>
                 <div className="space-y-8">
                   {[1, 2].map((review) => (

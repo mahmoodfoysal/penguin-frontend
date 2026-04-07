@@ -23,6 +23,7 @@ import AboutUs from "./modules/shared/AboutUs/AboutUs.jsx";
 import DashboardHome from "./modules/dashboard/Home/DashboardHome.jsx";
 import PrivateRoute from "./Routes/PrivateRoute.jsx";
 import AdminRoute from "./Routes/AdminRoute.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -125,6 +126,10 @@ const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "*",
+    element: <ErrorPage></ErrorPage>,
   },
 ]);
 
