@@ -64,7 +64,7 @@ const NavBar = () => {
               </li>
               <li>
                 <NavLink to="/about" className="hover:text-primary">
-                  About Us
+                  About
                 </NavLink>
               </li>
               <li>

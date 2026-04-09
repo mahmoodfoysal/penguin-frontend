@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import ProductCard from "../../../../components/ProductCard";
+import ComponentLoader from "../../../../pages/ComponentLoader";
 
 const BestSeller = () => {
-  const products = useLoaderData();
+  const { products } = useLoaderData();
 
   const [bestSellerProd, setBestSellerProd] = useState([]);
 
@@ -49,11 +50,15 @@ const BestSeller = () => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
-        {bestSellerProd.map((product, index) => (
-          <ProductCard product={product} key={index}></ProductCard>
-        ))}
-      </div>
+      {!products?.list_data ? (
+        <ComponentLoader></ComponentLoader>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+          {bestSellerProd.map((product, index) => (
+            <ProductCard product={product} key={index}></ProductCard>
+          ))}
+        </div>
+      )}
     </section>
   );
 };

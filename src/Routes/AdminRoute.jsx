@@ -11,7 +11,7 @@ const AdminRoute = ({ children }) => {
   const location = useLocation();
   console.log(location);
 
-  if (user?.length && role?.admin && userInfo.email === role?.email) {
+  if (user?.token && role?.admin && userInfo.email === role?.email) {
     return children;
   } else return <Forbidden></Forbidden>;
 };

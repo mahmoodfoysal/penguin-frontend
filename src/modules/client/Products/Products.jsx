@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Link, useLoaderData, useLocation } from "react-router";
 import ProductCard from "./../../../components/ProductCard";
-import FeatureProducts from "../../../components/FeatureProducts";
+// import FeatureProducts from "../../../components/FeatureProducts";
 import SearchBar from "../../../components/SearchBar";
 import Category from "../../../components/Category";
 import PriceRange from "../../../components/PriceRange";
 import Brand from "../../../components/Brand";
 import PageHeader from "../../../components/PageHeader";
 import ComponentLoader from "../../../pages/ComponentLoader";
+import DataNotFound from "../../../pages/DataNotFound";
 
 const Products = () => {
   const pageInfo = [
@@ -27,7 +28,7 @@ const Products = () => {
 
   const location = useLocation();
 
-  // ✅ Safe fallback for API data
+  // Safe fallback for API data
   const productsList = data.products?.list_data || [];
 
   const categoryList = data.categories?.list_data || [];
@@ -227,12 +228,11 @@ const Products = () => {
 
   return (
     <>
+      <PageHeader pageInfo={pageInfo}></PageHeader>
       {!productsList.length ? (
         <ComponentLoader></ComponentLoader>
       ) : (
         <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white">
-          <PageHeader pageInfo={pageInfo}></PageHeader>
-
           {/* 2. MAIN CONTENT AREA */}
           <div className="container mx-auto px-6 py-8 flex flex-col lg:flex-row gap-12">
             {/* LEFT SIDEBAR FILTERS */}
@@ -317,11 +317,15 @@ const Products = () => {
                 </select>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-12">
-                {paginatedProducts.map((item, index) => (
-                  <ProductCard product={item} key={index}></ProductCard>
-                ))}
-              </div>
+              {!paginatedProducts?.length ? (
+                <DataNotFound></DataNotFound>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-12">
+                  {paginatedProducts.map((item, index) => (
+                    <ProductCard product={item} key={index}></ProductCard>
+                  ))}
+                </div>
+              )}
 
               {/* PAGINATION */}
               <div className="mt-20 flex justify-center">
@@ -364,9 +368,10 @@ const Products = () => {
             </main>
           </div>
 
-          <FeatureProducts></FeatureProducts>
+          {/* <FeatureProducts></FeatureProducts> */}
         </div>
       )}
+      ]
     </>
   );
 };

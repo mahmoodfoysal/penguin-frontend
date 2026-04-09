@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../../../../components/ProductCard";
 import { Link, useLoaderData } from "react-router";
+import ComponentLoader from "../../../../pages/ComponentLoader";
 
 const NewArriveProducts = () => {
-  const products = useLoaderData();
+  const { products } = useLoaderData();
 
   const [randomProducts, setRandomProducts] = useState([]);
 
@@ -22,6 +23,7 @@ const NewArriveProducts = () => {
 
       return result;
     };
+    console.log(products);
 
     setTimeout(() => {
       setRandomProducts(getRandomItems(products?.list_data, 4));
@@ -51,11 +53,15 @@ const NewArriveProducts = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
-          {randomProducts.map((product, index) => (
-            <ProductCard product={product} key={index}></ProductCard>
-          ))}
-        </div>
+        {!products?.list_data?.length ? (
+          <ComponentLoader></ComponentLoader>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+            {randomProducts.map((product, index) => (
+              <ProductCard product={product} key={index}></ProductCard>
+            ))}
+          </div>
+        )}
       </section>
     </>
   );

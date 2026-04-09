@@ -17,9 +17,8 @@ const Contact = () => {
   ];
   return (
     <>
+      <PageHeader pageInfo={pageInfo}></PageHeader>
       <div className="min-h-screen bg-white text-black font-body p-8 md:p-12 overflow-x-hidden">
-        <PageHeader pageInfo={pageInfo}></PageHeader>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mt-5">
           {/* 2. LEFT COLUMN: INFO & MAP */}
           <div className="space-y-16">

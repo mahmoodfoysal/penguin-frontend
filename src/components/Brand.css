@@ -1,0 +1,4 @@
+.brand-scroll {
+  height: calc(100vh - 540px);
+  overflow: auto;
+}

@@ -1,8 +1,24 @@
 import React from "react";
+import PageHeader from "../../../components/PageHeader";
+
+const pageInfo = [
+  {
+    parent_route_name: "Home",
+    path: "/home",
+  },
+  {
+    curren_route: "About",
+  },
+  {
+    first_name: "About",
+    last_name: "Penguin",
+  },
+];
 
 const AboutUs = () => {
   return (
-    <div>
+    <>
+      <PageHeader pageInfo={pageInfo}></PageHeader>
       <div className="min-h-screen bg-white text-black font-body p-8 md:p-12 overflow-x-hidden">
         {/* 4. BEHIND THE SCENES */}
         <section className="mb-32">
@@ -60,7 +76,7 @@ const AboutUs = () => {
           </span>
         </footer>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   GoogleAuthProvider,
   getAuth,
@@ -11,7 +11,9 @@ import initilizationAuthentication from "../../../firebase/firebase.init";
 import { useLocation, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setUser, setRole } from "../../../store/slice/user";
+
 import axios from "axios";
+import Swal from "sweetalert2";
 
 initilizationAuthentication();
 
@@ -21,22 +23,28 @@ const auth = getAuth();
 
 const Login = () => {
   const dispatch = useDispatch();
-  const email = useRef();
-  const password = useRef();
-  const fullName = useRef();
-  const photoUrl = useRef();
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const [isLogin, setIsLogin] = useState(true);
+  const [isInvalid, setIsInvalid] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: null,
+    password: null,
+    photoUrl: null,
+    email: null,
+  });
+  const [passVisible, setPassVisible] = useState(false);
 
   const handleChangeLoginRegister = () => {
     setIsLogin(!isLogin);
-    email.current.value = null;
-    password.current.value = null;
-    photoUrl.current.value = null;
-    fullName.current.value = null;
+
+    setFormData({});
+  };
+
+  const handlePasswordVisible = () => {
+    setPassVisible(!passVisible);
   };
 
   // google singin
@@ -47,7 +55,7 @@ const Login = () => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         console.log(token);
-        dispatch(setUser(user.accessToken));
+        dispatch(setUser({ token: user.accessToken }));
         if (token) {
           const url = `https://api-penguin.onrender.com/admin/get-admin-list/${user.email}`;
           const adminCheck = axios.get(url);
@@ -63,10 +71,22 @@ const Login = () => {
 
   // create account
   const handleRegistration = () => {
-    const userEmail = email.current.value;
-    const userPassword = password.current.value;
-    const name = fullName.current.value;
-    const photo = photoUrl.current.value;
+    setIsInvalid(false);
+    if (!formData.fullName || !formData.email || !formData.password) {
+      setIsInvalid(true);
+      Swal.fire({
+        icon: "error",
+        title: "Invalid!",
+        text: "Please fill all the required field.",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+    const userEmail = formData.email;
+    const userPassword = formData.password;
+    const name = formData.fullName;
+    const photo = formData.photoUrl;
+
     createUserWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -74,17 +94,21 @@ const Login = () => {
         updateProfile(user, {
           displayName: name,
           photoURL: photo,
-          phoneNumber: 90000,
+          phoneNumber: null,
         });
         console.log(user);
-        dispatch(setUser(user.accessToken));
-        email.current.value = null;
-        password.current.value = null;
-        photoUrl.current.value = null;
-        fullName.current.value = null;
+        dispatch(setUser({ token: user.accessToken }));
+        setFormData({});
 
         console.log(user.accessToken);
         navigate(location.state?.from?.pathname || "/home");
+        setIsInvalid(false);
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Success.",
+          confirmButtonText: "OK",
+        });
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -95,27 +119,39 @@ const Login = () => {
 
   // login
   const handleLogin = () => {
-    const userEmail = email.current.value;
-    const userPassword = password.current.value;
+    setIsInvalid(false);
+    if (!formData.email || !formData.password) {
+      setIsInvalid(true);
+      Swal.fire({
+        icon: "error",
+        title: "Invalid!",
+        text: "Please fill all the required field.",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+    const userEmail = formData.email;
+    const userPassword = formData.password;
     signInWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(user);
-        sessionStorage.setItem(
-          "penguin-shopping",
-          JSON.stringify(user.accessToken),
-        );
-        dispatch(setUser(user.accessToken));
+        dispatch(setUser({ token: user.accessToken }));
+
         if (user) {
-          const url = `https://api-penguin.onrender.com/admin/get-admin-list/${email.current.value}`;
+          const url = `https://api-penguin.onrender.com/admin/get-admin-list/${userEmail}`;
           const adminCheck = axios.get(url);
           dispatch(setRole(adminCheck?.data));
         }
 
-        email.current.value = null;
-        password.current.value = null;
-
+        setFormData({});
+        setIsInvalid(false);
         navigate(location.state?.from?.pathname || "/home");
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Success.",
+          confirmButtonText: "OK",
+        });
       })
 
       .catch((error) => {
@@ -125,7 +161,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <>
       <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white flex flex-col lg:flex-row">
         {/* LEFT SIDE: BRAND IMPACT (Hidden on Mobile) */}
         <div className="hidden lg:flex lg:w-1/2 bg-black relative overflow-hidden items-center justify-center p-20">
@@ -135,7 +171,7 @@ const Login = () => {
               Penguin
             </span>
             <span className="font-heading font-black text-[20vw] leading-none uppercase italic text-accent">
-              LABS
+              Gear
             </span>
           </div>
 
@@ -174,12 +210,19 @@ const Login = () => {
               {!isLogin && (
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
-                    Full Name
+                    Full Name <span className="text-red-600">*</span>
                   </label>
                   <input
-                    ref={fullName}
+                    value={formData.fullName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, fullName: e.target.value })
+                    }
                     type="text"
-                    className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/20"
+                    className={`w-full border-b-2 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/20 ${
+                      isInvalid && !formData.fullName
+                        ? "border-red-600"
+                        : "border-black/20"
+                    }`}
                     placeholder="Enter your name"
                   />
                 </div>
@@ -191,7 +234,10 @@ const Login = () => {
                     PhotoURL
                   </label>
                   <input
-                    ref={photoUrl}
+                    value={formData.photoUrl}
+                    onChange={(e) =>
+                      setFormData({ ...formData, photoUrl: e.target.value })
+                    }
                     type="url"
                     className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/20"
                     placeholder="photo url"
@@ -201,12 +247,19 @@ const Login = () => {
 
               <div className="space-y-1">
                 <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
-                  Email Address
+                  Email Address <span className="text-red-600">*</span>
                 </label>
                 <input
-                  ref={email}
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   type="email"
-                  className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/20"
+                  className={`w-full border-b-2 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/20 ${
+                    isInvalid && !formData.email
+                      ? "border-red-600"
+                      : "border-black/20"
+                  }`}
                   placeholder="name@email.com"
                 />
               </div>
@@ -214,19 +267,32 @@ const Login = () => {
               <div className="space-y-1">
                 <div className="flex justify-between items-center">
                   <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
-                    Password
+                    Password <span className="text-red-600">*</span>
                   </label>
                   {/* {isLogin && (
                     <button className="text-[9px] font-black uppercase tracking-tighter hover:text-accent transition-colors">
                       Forgot?
                     </button>
                   )} */}
+                  <span
+                    onClick={handlePasswordVisible}
+                    className="material-icons text-[9px] cursor-pointer hover:text-accent transition-colors"
+                  >
+                    {!passVisible ? "visibility" : "visibility_off"}
+                  </span>
                 </div>
                 <input
-                  ref={password}
-                  type="password"
-                  className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/20"
-                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  type={`${!passVisible ? "password" : "text"}`}
+                  className={`w-full border-b-2 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/20 ${
+                    isInvalid && !formData.password
+                      ? "border-red-600"
+                      : "border-black/20"
+                  }`}
+                  placeholder={`${!passVisible ? "*********" : "12333333333"}`}
                 />
               </div>
 
@@ -305,7 +371,7 @@ const Login = () => {
               </p>
               <button
                 onClick={() => handleChangeLoginRegister()}
-                className="mt-2 font-heading font-black text-sm uppercase tracking-widest text-accent border-b-2 border-accent pb-1 hover:text-black hover:border-black transition-all"
+                className="mt-2 font-heading font-black text-sm uppercase tracking-widest text-accent border-b-2 border-accent pb-1 hover:text-black hover:border-black transition-all cursor-pointer"
               >
                 {isLogin ? "Create One Now" : "Login to Account"}
               </button>
@@ -313,7 +379,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
