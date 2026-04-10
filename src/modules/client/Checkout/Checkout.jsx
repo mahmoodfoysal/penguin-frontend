@@ -77,9 +77,9 @@ const Checkout = () => {
       const result = await axios.get(
         `http://localhost:5000/api/penguin/get-match-coupon-list/${userInfo?.email}/${couponCode}`,
       );
-      setCouponInfo(result.data);
 
       if (result.data?.is_valid === true && !result.data?.appliedAt) {
+        setCouponInfo(result.data);
         if (result?.data?.operator === "*") {
           subTotal * 5;
         } else if (result?.data?.operator === "-") {
@@ -95,6 +95,7 @@ const Checkout = () => {
           confirmButtonText: "OK",
         });
       } else if (result.data?.is_valid === true && result.data?.appliedAt) {
+        setCouponCode(null);
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -102,6 +103,7 @@ const Checkout = () => {
           confirmButtonText: "OK",
         });
       } else {
+        setCouponCode(null);
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -128,8 +130,8 @@ const Checkout = () => {
       });
 
       if (
-        !formData.fullName ||
-        !formData.email ||
+        !userInfo?.name ||
+        !userInfo.email ||
         !formData.phoneNo ||
         !formData.countryInfo ||
         !formData.countryInfo.id ||
@@ -192,8 +194,8 @@ const Checkout = () => {
 
       const data = {
         _id: null,
-        full_name: formData.fullName,
-        email: formData.email,
+        full_name: userInfo?.name,
+        email: userInfo?.email,
         phone_no: Number(formData.phoneNo),
         city: formData.city,
         country_name: formData.countryInfo?.country_name,
@@ -222,10 +224,13 @@ const Checkout = () => {
         const result = await axios.post(url, data);
 
         if (result.status) {
-          const url = await axios.patch(
-            `http://localhost:5000/api/penguin/update-coupon-list/${couponInfo?._id}/${couponInfo?.email}`,
-          );
-          console.log(url);
+          if (couponInfo) {
+            const url = await axios.patch(
+              `http://localhost:5000/api/penguin/update-coupon-list/${couponInfo?._id}/${couponInfo?.email}`,
+            );
+            console.log(url);
+          }
+
           Swal.fire({
             icon: "success",
             title: "Order Placed!",
@@ -326,16 +331,14 @@ const Checkout = () => {
                       </label>
                       <input
                         type="text"
-                        value={formData.fullName}
-                        onChange={(e) =>
-                          setFormData({ ...formData, fullName: e.target.value })
-                        }
+                        value={userInfo?.name}
                         className={`w-full border-b-2 ${
-                          isInvalid && !formData.fullName
+                          isInvalid && !userInfo.name
                             ? "border-red-600"
                             : "border-black/10"
                         } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                         placeholder="John Doe"
+                        disabled={userInfo?.name}
                       />
                     </div>
                     <div className="space-y-2">
@@ -343,17 +346,15 @@ const Checkout = () => {
                         Email <span className="text-red-600">*</span>
                       </label>
                       <input
-                        value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
-                        }
+                        value={userInfo?.email}
                         type="email"
                         className={`w-full border-b-2 ${
-                          isInvalid && !formData.email
+                          isInvalid && !userInfo.email
                             ? "border-red-600"
                             : "border-black/10"
                         } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                         placeholder="user@user.com"
+                        disabled={userInfo?.email}
                       />
                     </div>
                     <div className="space-y-2">
