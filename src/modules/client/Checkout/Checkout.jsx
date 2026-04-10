@@ -12,6 +12,7 @@ const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartList = useSelector((state) => state.cart.cart);
+  const userInfo = useSelector((state) => state.auth.userInfo);
 
   const [formData, setFormData] = useState({
     fullName: null,
@@ -29,6 +30,8 @@ const Checkout = () => {
   });
   const [paymentMethod, setPaymentMethod] = useState(1);
   const [isInvalid, setIsInvalid] = useState(false);
+  const [couponCode, setCouponCode] = useState(null);
+  const [couponInfo, setCouponInfo] = useState(null);
 
   // const pageInfo = [
   //   {
@@ -68,6 +71,49 @@ const Checkout = () => {
       country_name: "China",
     },
   ];
+
+  const handleCouponCode = async () => {
+    try {
+      const result = await axios.get(
+        `http://localhost:5000/api/penguin/get-match-coupon-list/${userInfo?.email}/${couponCode}`,
+      );
+      setCouponInfo(result.data);
+
+      if (result.data?.is_valid === true && !result.data?.appliedAt) {
+        if (result?.data?.operator === "*") {
+          subTotal * 5;
+        } else if (result?.data?.operator === "-") {
+          subTotal - result?.data?.per_dis_amt;
+        } else if (result?.data?.operator === "/") {
+          subTotal / result?.data?.per_dis_amt;
+        }
+
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Coupon Applied Successfully",
+          confirmButtonText: "OK",
+        });
+      } else if (result.data?.is_valid === true && result.data?.appliedAt) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Coupon Already Used",
+          confirmButtonText: "OK",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Coupon not valid",
+          confirmButtonText: "OK",
+        });
+      }
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleOrderSubmit = async () => {
     try {
@@ -161,7 +207,8 @@ const Checkout = () => {
         sub_total: subTotal,
         vat_total: totalVat,
         shipping: shippingCost,
-        total_amount: subTotal + totalVat + shippingCost,
+        total_amount: totalAmount,
+        discount: discount || 0,
         order_status: "P",
         order_date: formData.cardExpDate,
         payment_method: paymentMethod,
@@ -175,6 +222,10 @@ const Checkout = () => {
         const result = await axios.post(url, data);
 
         if (result.status) {
+          const url = await axios.patch(
+            `http://localhost:5000/api/penguin/update-coupon-list/${couponInfo?._id}/${couponInfo?.email}`,
+          );
+          console.log(url);
           Swal.fire({
             icon: "success",
             title: "Order Placed!",
@@ -205,16 +256,29 @@ const Checkout = () => {
     }
   };
 
-  const { subTotal, totalVat } = useMemo(() => {
-    const subTotal = cartList.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0,
-    );
-    const totalVat = subTotal * 0.06;
-    return { subTotal, totalVat };
-  }, [cartList]);
+  const { subTotal, totalVat, totalAmount, shippingCost, discount } =
+    useMemo(() => {
+      const subTotal = cartList.reduce(
+        (acc, item) => acc + (item.price || 0) * (item.quantity || 0),
+        0,
+      );
 
-  const shippingCost = cartList.length > 5 ? 0 : 2 * cartList.length;
+      const shippingCost = cartList.length > 5 ? 0 : 2 * cartList.length;
+      const totalVat = subTotal * 0.06;
+
+      let discount = 0;
+
+      if (couponInfo?.operator === "*" && !couponInfo?.appliedAt) {
+        discount = subTotal * (Number(couponInfo?.per_dis_amt) / 10);
+      } else if (couponInfo?.operator === "-" && !couponInfo?.appliedAt) {
+        discount = Number(couponInfo?.per_dis_amt) || 0;
+      } else if (couponInfo?.operator === "/" && !couponInfo?.appliedAt) {
+        discount = subTotal - subTotal / (Number(couponInfo?.per_dis_amt) || 1);
+      }
+      const totalAmount = subTotal + totalVat + shippingCost - discount;
+
+      return { subTotal, totalVat, totalAmount, shippingCost, discount };
+    }, [cartList, couponInfo]);
 
   return (
     <>
@@ -636,10 +700,47 @@ const Checkout = () => {
                       <span>VAT</span>
                       <span>${Number(totalVat).toFixed(2)}</span>
                     </div>
+                    {discount > 0 && (
+                      <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
+                        <span>Discount</span>
+                        <span>${Number(discount).toFixed(2)}</span>
+                      </div>
+                    )}
+
+                    <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-black/5 gap-4">
+                      <input
+                        value={couponCode}
+                        disabled={
+                          couponInfo?.email &&
+                          couponInfo?.is_valid == true &&
+                          !couponInfo?.appliedAt
+                        }
+                        onChange={(e) => setCouponCode(e.target.value)}
+                        type="text"
+                        placeholder="Enter coupon code"
+                        className="w-full border-b-2 border-black/10 focus:border-accent outline-none  text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
+                      />
+
+                      <button
+                        onClick={handleCouponCode}
+                        disabled={
+                          couponInfo?.email &&
+                          couponInfo?.is_valid == true &&
+                          !couponInfo?.appliedAt
+                        }
+                        className="w-full bg-black text-white py-2 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-1 rounded-md cursor-pointer"
+                      >
+                        Apply
+                        <span className="group-hover:translate-x-2 transition-transform">
+                          →
+                        </span>
+                      </button>
+                    </div>
+
                     <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-black/5 mt-4">
                       <span>Total Amount</span>
                       <span className="text-accent text-2xl">
-                        ${Number(subTotal + shippingCost + totalVat).toFixed(2)}
+                        ${Number(totalAmount).toFixed(2)}
                       </span>
                     </div>
                   </div>
