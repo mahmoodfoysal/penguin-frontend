@@ -318,7 +318,11 @@ const Products = () => {
               </div>
 
               {!paginatedProducts?.length ? (
-                <DataNotFound></DataNotFound>
+                <DataNotFound
+                  backMsg="Lost"
+                  mainMsg1="Data"
+                  mainMsg2="Void"
+                ></DataNotFound>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-12">
                   {paginatedProducts.map((item, index) => (

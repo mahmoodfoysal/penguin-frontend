@@ -75,7 +75,7 @@ const Checkout = () => {
   const handleCouponCode = async () => {
     try {
       const result = await axios.get(
-        `http://localhost:5000/api/penguin/get-match-coupon-list/${userInfo?.email}/${couponCode}`,
+        `https://api-penguin.onrender.com/api/penguin/get-match-coupon-list/${userInfo?.email}/${couponCode}`,
       );
 
       if (result.data?.is_valid === true && !result.data?.appliedAt) {
@@ -226,10 +226,19 @@ const Checkout = () => {
         if (result.status) {
           if (couponInfo) {
             const url = await axios.patch(
-              `http://localhost:5000/api/penguin/update-coupon-list/${couponInfo?._id}/${couponInfo?.email}`,
+              `https://api-penguin.onrender.com/api/penguin/update-coupon-list/${couponInfo?._id}/${couponInfo?.email}`,
             );
             console.log(url);
           }
+
+          const updateStockPromises = cartList?.map(async (item) => {
+            const newStock = item.stock - item.quantity;
+            const url = `https://api-penguin.onrender.com/api/penguin/get-product-list/stock/${item?._id}`;
+
+            return await axios.patch(url, { stock: newStock });
+          });
+
+          await Promise.all(updateStockPromises);
 
           Swal.fire({
             icon: "success",

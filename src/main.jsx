@@ -256,15 +256,18 @@ const productsLoader = async () => {
 };
 
 const productDetailsLoader = async ({ params }) => {
-  const [products, product_details] = await Promise.all([
+  const [products, product_details, comments] = await Promise.all([
     fetchWithTimeout(
       "https://api-penguin.onrender.com/api/penguin/get-product-list",
     ),
     fetchWithTimeout(
       `https://api-penguin.onrender.com/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
     ),
+    fetchWithTimeout(
+      `https://api-penguin.onrender.com/api/penguin/get-review-list/${params.prod_id}`,
+    ),
   ]);
-  return { products, product_details };
+  return { products, product_details, comments };
 };
 
 // ------------------

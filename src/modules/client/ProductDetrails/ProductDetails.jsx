@@ -12,6 +12,10 @@ import {
 } from "../../../store/slice/cartSlice";
 import { setOrderProduct } from "../../../store/slice/buyProduct";
 import ComponentLoader from "../../../pages/ComponentLoader";
+import Swal from "sweetalert2";
+import axios from "axios";
+import { timeCount } from "../../../utils/timeCount";
+import DataNotFound from "../../../pages/DataNotFound";
 
 const ProductDetails = () => {
   const data = useLoaderData();
@@ -22,20 +26,29 @@ const ProductDetails = () => {
 
   const [clientRating, setClientRating] = useState(0);
 
-  const productList = data.products.list_data;
+  const [clientComment, setClientComment] = useState(null);
+
+  const [isInvalid, setIsInvalid] = useState(false);
+
+  const productList = data.products?.list_data;
+
+  const commentList = data.comments?.list_data;
 
   const {
     _id,
     prod_image,
     stock,
-    rating,
+
     prod_name,
     price,
     description,
     par_cat_id,
+    sub_cat_id,
+    prod_id,
   } = data.product_details.details_data;
 
   const cartList = useSelector((state) => state.cart.cart);
+  const userInfo = useSelector((state) => state.auth.userInfo);
 
   const cartQuantity = cartList.find((item) => item._id == _id)?.quantity || 0;
 
@@ -116,6 +129,77 @@ const ProductDetails = () => {
     navigate("/buy-product");
   };
 
+  const handleReviewSubmit = async () => {
+    setIsInvalid(false);
+    if (!userInfo?.name || !userInfo?.email) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please Login First",
+        confirmButtonText: "OK",
+      });
+      setIsInvalid(true);
+      return;
+    }
+    if (!clientRating || !clientComment) {
+      Swal.fire({
+        icon: "warning",
+        title: "warning",
+        text: "Fill all the required field",
+        confirmButtonText: "OK",
+      });
+      setIsInvalid(true);
+      return;
+    }
+
+    const data = {
+      full_name: userInfo?.name,
+      email: userInfo?.email,
+      comment: clientComment,
+      image_url: userInfo?.photo,
+      rating: clientRating,
+      prod_id: prod_id,
+      par_cat_id: par_cat_id,
+      sub_cat_id: sub_cat_id,
+    };
+
+    console.log(data);
+
+    const confirmation = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to submit this order?",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      confirmButtonText: "Ok",
+    });
+
+    if (confirmation.isConfirmed) {
+      const result = await axios.post(
+        `https://api-penguin.onrender.com/api/penguin/insert-update-review-list`,
+        data,
+      );
+      if (result.status) {
+        Swal.fire({
+          icon: "success",
+          title: "Successful",
+          text: "Successful",
+          confirmButtonText: "OK",
+        });
+        setIsInvalid(false);
+      }
+    }
+
+    console.log(clientComment, clientRating);
+  };
+
+  const totalRating = commentList.reduce(
+    (sum, item) => sum + (item.rating || 0),
+    0,
+  );
+
+  const averageRating = totalRating / commentList.length || 0;
+
   return (
     <>
       {!data ? (
@@ -163,9 +247,13 @@ const ProductDetails = () => {
                   <div className="flex items-center gap-2 mb-4">
                     {/* Rating Display */}
 
-                    <Rating style={{ maxWidth: 80 }} value={rating} readOnly />
+                    <Rating
+                      style={{ maxWidth: 80 }}
+                      value={averageRating}
+                      readOnly
+                    />
                     <span className="text-[10px] font-bold opacity-50 uppercase tracking-widest">
-                      (128 Reviews***)
+                      ({commentList?.length || 0} Reviews)
                     </span>
                   </div>
 
@@ -291,8 +379,10 @@ const ProductDetails = () => {
                             Full Name<span className="text-red-600">*</span>
                           </label>
                           <input
+                            value={userInfo?.name}
                             type="text"
-                            placeholder="Mike"
+                            placeholder="Name comes from login user"
+                            disabled
                             className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
                           />
                         </div>
@@ -302,12 +392,23 @@ const ProductDetails = () => {
                             Email <span className="text-red-600">*</span>
                           </label>
                           <input
+                            value={userInfo?.email}
                             type="email"
-                            placeholder="mike@user.com"
+                            placeholder="Email comes from login user"
+                            disabled
                             className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
                           />
                         </div>
                       </div>
+                      <label
+                        className={`${
+                          isInvalid && !clientRating
+                            ? "text-red-600"
+                            : "text-black-600"
+                        }`}
+                      >
+                        Rating *
+                      </label>
                       <Rating
                         style={{ maxWidth: 90 }}
                         value={clientRating}
@@ -319,44 +420,83 @@ const ProductDetails = () => {
                           Your Message
                         </label>
                         <textarea
-                          className="textarea textarea-bordered w-full h-32 rounded-none border-black/10 focus:outline-accent"
+                          value={clientComment}
+                          onChange={(e) => setClientComment(e.target.value)}
+                          className={`textarea textarea-bordered w-full h-32 rounded-none border-black/10 focus:outline-accent ${
+                            isInvalid && !clientComment
+                              ? "border-red-600"
+                              : "border-black/10"
+                          }`}
                           placeholder="Comment"
                         ></textarea>
                       </div>
-                      <button className="btn btn-block bg-black text-white rounded-none border-none hover:bg-accent font-heading font-black uppercase tracking-widest">
+                      <button
+                        onClick={handleReviewSubmit}
+                        className="btn btn-block bg-black text-white rounded-none border-none hover:bg-accent font-heading font-black uppercase tracking-widest"
+                      >
                         Submit Review
                       </button>
                     </div>
                   </div>
 
                   {/* Customer Feedback List */}
+
                   <div className="w-full lg:w-2/3">
                     <h2 className="font-heading text-3xl font-black uppercase italic mb-6">
                       Customer <span className="text-accent">Comments</span>
                     </h2>
-                    <div className="space-y-8">
-                      {[1, 2].map((review) => (
-                        <div
-                          key={review}
-                          className="border-b border-black/5 pb-8"
-                        >
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-heading font-black uppercase text-sm">
-                              Marcus K.
-                            </h4>
-                            <span className="text-accent text-xs">★★★★★</span>
+                    {!commentList?.length ? (
+                      <DataNotFound
+                        backMsg="No Comment"
+                        mainMsg1="No"
+                        mainMsg2="Comment"
+                      ></DataNotFound>
+                    ) : (
+                      <div className="space-y-8">
+                        {commentList.map((item, index) => (
+                          <div
+                            key={index}
+                            className="border-b border-black/5 pb-8 flex gap-4"
+                          >
+                            {/* 1. PICTURE */}
+                            <div className="flex-shrink-0">
+                              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-black">
+                                <img
+                                  src={item?.image_url}
+                                  className="w-full h-full object-cover"
+                                  alt="user"
+                                />
+                              </div>
+                            </div>
+
+                            {/* 2. CONTENT AREA */}
+                            <div className="flex-grow min-w-0">
+                              {" "}
+                              {/* min-w-0 is key for text wrapping in flexbox */}
+                              <div className="flex justify-between items-center mb-1 gap-2">
+                                <h4 className="font-heading font-black uppercase text-sm truncate">
+                                  {item?.full_name}
+                                </h4>
+
+                                <Rating
+                                  style={{ maxWidth: 80 }}
+                                  value={item.rating}
+                                  readOnly
+                                />
+                              </div>
+                              {/* COMMENT (Added wrap logic) */}
+                              <p className="text-sm opacity-70 leading-relaxed italic break-words whitespace-pre-wrap">
+                                {item.comment}
+                              </p>
+                              {/* TIME */}
+                              <div className="mt-4 text-[10px] font-bold opacity-30 uppercase tracking-widest">
+                                {timeCount(item.createdAt)}
+                              </div>
+                            </div>
                           </div>
-                          <p className="text-sm opacity-70 leading-relaxed italic">
-                            "Absolutely incredible quality. The cushioning feels
-                            like walking on clouds, but with the support needed
-                            for long-distance runs. Best purchase this year."
-                          </p>
-                          <div className="mt-4 text-[10px] font-bold opacity-30 uppercase tracking-widest">
-                            Verified Buyer — 2 Days Ago
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
