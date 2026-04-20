@@ -154,7 +154,7 @@ const MakeAdmin = () => {
   return (
     <div className="p-4">
       {/* 1. HEADER */}
-      <header className="mb-12">
+      <header className="mb-8">
         <h1 className="font-heading text-5xl font-black uppercase tracking-tighter">
           Admin <span className="text-accent text-outline">Control</span>
         </h1>
@@ -164,8 +164,8 @@ const MakeAdmin = () => {
       </header>
 
       {/* 2. INPUT FORM SECTION */}
-      <div className="bg-white border border-black/5 p-10 mb-16 shadow-sm">
-        <h3 className="font-heading font-black uppercase tracking-widest text-xs mb-8 border-b border-black/5 pb-4">
+      <div className="bg-white border border-black/5 p-10 mb-6 shadow-sm">
+        <h3 className="font-heading font-black uppercase tracking-widest text-xl mb-8 border-b border-black/5 pb-4">
           Add New Admin
         </h3>
 
@@ -205,7 +205,7 @@ const MakeAdmin = () => {
               className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-xs font-bold bg-transparent uppercase tracking-wider cursor-pointer"
             >
               <option>Select Role</option>
-              {accessList.map((item, index) => (
+              {accessList?.map((item, index) => (
                 <option value={JSON.stringify(item)} key={index}>
                   {item?.role}
                 </option>
@@ -233,11 +233,11 @@ const MakeAdmin = () => {
       {/* 3. ADMIN LIST VIEW */}
       <div className="bg-white border border-black/5 overflow-hidden">
         <div className="p-8 border-b border-black/5 flex justify-between items-center">
-          <h2 className="font-heading text-xl font-black uppercase italic">
+          <h2 className="font-heading text-xl font-black uppercase">
             Administrators <span className="text-accent">List</span>
           </h2>
           <span className="text-[10px] font-black opacity-30 uppercase tracking-widest">
-            Total: 04 Members
+            Total: {adminList?.length}
           </span>
         </div>
 
