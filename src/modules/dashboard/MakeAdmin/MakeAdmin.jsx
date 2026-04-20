@@ -245,12 +245,12 @@ const MakeAdmin = () => {
           <table className="w-full text-left">
             <thead>
               <tr className="bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black text-black/40">
-                <th className="px-8 py-5">Super Admin</th>
-                <th className="px-8 py-5">Email</th>
-                <th className="px-8 py-5">Role</th>
-                <th className="px-8 py-5">Created Date</th>
-                <th className="px-8 py-5">Modified Date</th>
-                <th className="px-8 py-5 text-right">Actions</th>
+                <th className="px-3 py-3">Super Admin</th>
+                <th className="px-3 py-3">Email</th>
+                <th className="px-3 py-3">Role</th>
+                <th className="px-3 py-3">Created Date</th>
+                <th className="px-3 py-3">Modified Date</th>
+                <th className="px-3 py-5 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
@@ -261,7 +261,7 @@ const MakeAdmin = () => {
                 >
                   <td className="px-3 py-3">{item.user_info}</td>
                   <td className="px-3 py-3">{item.email}</td>
-                  <td className="px-8 py-3">
+                  <td className="px-3 py-3">
                     <span className="inline-block border border-black/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full group-hover:border-accent group-hover:text-accent transition-colors">
                       {item.role}
                     </span>
