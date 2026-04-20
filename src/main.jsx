@@ -243,6 +243,13 @@ const homeLoader = async () => {
   return { products };
 };
 
+const adminLoader = async () => {
+  const adminData = await fetchWithTimeout(
+    "https://api-penguin.onrender.com/api/admin/get-admin-list",
+  );
+  return { adminData };
+};
+
 const productsLoader = async () => {
   const [products, categories] = await Promise.all([
     fetchWithTimeout(
@@ -322,7 +329,11 @@ const router = createBrowserRouter([
         ),
         children: [
           { index: true, element: <DashboardHome /> },
-          { path: "/dashboard/make-admin", element: <MakeAdmin /> },
+          {
+            path: "/dashboard/make-admin",
+            element: <MakeAdmin />,
+            loader: adminLoader,
+          },
           { path: "/dashboard/parent-category", element: <ParentCategory /> },
           { path: "/dashboard/sub-category", element: <SubCategory /> },
           { path: "/dashboard/add-product", element: <AddProduct /> },
