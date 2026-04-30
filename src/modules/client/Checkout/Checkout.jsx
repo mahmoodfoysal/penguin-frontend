@@ -414,7 +414,11 @@ const Checkout = () => {
                         } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent uppercase tracking-wider cursor-pointer`}
                       >
                         {countryList.map((item) => (
-                          <option key={item.id} value={JSON.stringify(item)}>
+                          <option
+                            key={item.id}
+                            value={JSON.stringify(item)}
+                            className="bg-base-100 text-base-content"
+                          >
                             {item.country_name}
                           </option>
                         ))}
@@ -738,7 +742,7 @@ const Checkout = () => {
                         onChange={(e) => setCouponCode(e.target.value)}
                         type="text"
                         placeholder="Enter coupon code"
-                        className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none  text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
+                        className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none  text-sm font-bold transition-colors bg-transparent placeholder:bg-base-100 text-base-content"
                       />
 
                       <button

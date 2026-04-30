@@ -49,10 +49,10 @@ const BlogPreview = () => {
       <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
         <div className="flex flex-col gap-2 max-w-2xl">
           <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-base-content">
-            Design Inspiration
+            Blogs
           </h2>
           <p className="text-lg text-base-content/60 font-light">
-            Tips, trends, and inspiration from our interior design experts.
+            Read all the latest blogs and articles from penguin
           </p>
         </div>
         <Link
