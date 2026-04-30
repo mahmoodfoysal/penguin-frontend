@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 const Forbidden = () => {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen bg-white text-black font-body flex flex-col items-center justify-center p-8 overflow-hidden relative selection:bg-accent selection:text-white">
+    <div className="min-h-screen bg-base-100 text-base-content font-body flex flex-col items-center justify-center p-8 overflow-hidden relative selection:bg-accent selection:text-white">
       {/* 1. ANIMATED GRID BACKGROUND (Subtle) */}
       <div
         className="absolute inset-0 opacity-[0.03] pointer-events-none select-none"
@@ -19,14 +19,14 @@ const Forbidden = () => {
       <div className="relative z-10 text-center max-w-2xl flex flex-col items-center">
         {/* SHIELD ICON WITH ACCENT SHADOW */}
         <div className="mb-10 relative">
-          <div className="w-24 h-24 border-4 border-black flex items-center justify-center bg-white relative z-10 group">
+          <div className="w-24 h-24 border-4 border-base-content flex items-center justify-center bg-base-100 relative z-10 group">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={2.5}
               stroke="currentColor"
-              className="w-10 h-10 text-black group-hover:text-accent transition-colors duration-300"
+              className="w-10 h-10 text-base-content group-hover:text-accent transition-colors duration-300"
             >
               <path
                 strokeLinecap="round"
@@ -50,7 +50,7 @@ const Forbidden = () => {
           <span className="text-accent text-outline">Denied</span>
         </h1>
 
-        <div className="h-1 w-20 bg-black mb-8"></div>
+        <div className="h-1 w-20 bg-base-content mb-8"></div>
 
         {/* DESCRIPTION */}
         <p className="text-xs md:text-sm font-bold uppercase tracking-widest opacity-40 leading-relaxed mb-12 max-w-md mx-auto">
@@ -62,7 +62,7 @@ const Forbidden = () => {
         <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
           <button
             onClick={() => navigate(-1)}
-            className="bg-black text-white px-12 py-4 font-heading font-black uppercase tracking-[0.3em] text-[11px] hover:bg-accent transition-all group relative overflow-hidden rounded-md"
+            className="bg-base-content text-base-100 px-12 py-4 font-heading font-black uppercase tracking-[0.3em] text-[11px] hover:bg-accent transition-all group relative overflow-hidden rounded-md"
           >
             <span className="relative z-10">Go Back</span>
             <div className="absolute inset-0 bg-accent translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>

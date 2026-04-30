@@ -48,18 +48,18 @@ const Login = () => {
   };
 
   // google singin
-  const handleGoogleSignIn = () => {
+  const handleGoogleSignIn = async () => {
     signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         console.log(token);
         dispatch(setUser({ token: user.accessToken }));
         if (token) {
-          const url = `https://api-penguin.onrender.com/admin/get-admin-list/${user.email}`;
-          const adminCheck = axios.get(url);
-          dispatch(setRole(adminCheck?.data));
+          const url = `http://localhost:5000/admin/get-admin-list/${user.email}`;
+          const response = await axios.get(url);
+          dispatch(setRole(response.data));
         }
         navigate(location.state?.from?.pathname || "/home");
       })
@@ -118,7 +118,7 @@ const Login = () => {
   };
 
   // login
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setIsInvalid(false);
     if (!formData.email || !formData.password) {
       setIsInvalid(true);
@@ -133,14 +133,14 @@ const Login = () => {
     const userEmail = formData.email;
     const userPassword = formData.password;
     signInWithEmailAndPassword(auth, userEmail, userPassword)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
         dispatch(setUser({ token: user.accessToken }));
 
         if (user) {
-          const url = `https://api-penguin.onrender.com/admin/get-admin-list/${userEmail}`;
-          const adminCheck = axios.get(url);
-          dispatch(setRole(adminCheck?.data));
+          const url = `http://localhost:5000/admin/get-admin-list/${userEmail}`;
+          const response = await axios.get(url);
+          dispatch(setRole(response.data));
         }
 
         setFormData({});
@@ -162,12 +162,12 @@ const Login = () => {
 
   return (
     <>
-      <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white flex flex-col lg:flex-row">
+      <div className="bg-base-100 min-h-screen font-body selection:bg-accent selection:text-white flex flex-col lg:flex-row">
         {/* LEFT SIDE: BRAND IMPACT (Hidden on Mobile) */}
-        <div className="hidden lg:flex lg:w-1/2 bg-black relative overflow-hidden items-center justify-center p-20">
+        <div className="hidden lg:flex lg:w-1/2 bg-base-content relative overflow-hidden items-center justify-center p-20">
           {/* Background Decorative Text */}
           <div className="absolute inset-0 opacity-10 flex flex-col justify-center items-center select-none pointer-events-none">
-            <span className="font-heading font-black text-[20vw] leading-none uppercase italic text-white text-outline">
+            <span className="font-heading font-black text-[20vw] leading-none uppercase italic text-base-100 text-outline">
               Penguin
             </span>
             <span className="font-heading font-black text-[20vw] leading-none uppercase italic text-accent">
@@ -176,7 +176,7 @@ const Login = () => {
           </div>
 
           {/* Featured Image / Message */}
-          <div className="relative z-10 text-white">
+          <div className="relative z-10 text-base-100">
             <h2 className="font-heading text-7xl font-black uppercase italic tracking-tighter leading-none mb-6">
               Join with <br />{" "}
               <span className="text-accent text-outline">Penguin</span>
@@ -188,7 +188,7 @@ const Login = () => {
         </div>
 
         {/* RIGHT SIDE: AUTH FORM */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-16 lg:p-24 bg-white">
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-16 lg:p-24 bg-base-100">
           <div className="w-full max-w-md">
             {/* Header */}
             <div className="mb-12">
@@ -218,10 +218,10 @@ const Login = () => {
                       setFormData({ ...formData, fullName: e.target.value })
                     }
                     type="text"
-                    className={`w-full border-b-2 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/20 ${
+                    className={`w-full border-b-2 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-base-content/40 ${
                       isInvalid && !formData.fullName
                         ? "border-red-600"
-                        : "border-black/20"
+                        : "border-base-content/20"
                     }`}
                     placeholder="Enter your name"
                   />
@@ -239,7 +239,7 @@ const Login = () => {
                       setFormData({ ...formData, photoUrl: e.target.value })
                     }
                     type="url"
-                    className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/20"
+                    className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-base-content/40"
                     placeholder="photo url"
                   />
                 </div>
@@ -255,10 +255,10 @@ const Login = () => {
                     setFormData({ ...formData, email: e.target.value })
                   }
                   type="email"
-                  className={`w-full border-b-2 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/20 ${
+                  className={`w-full border-b-2 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-base-content/40 ${
                     isInvalid && !formData.email
                       ? "border-red-600"
-                      : "border-black/20"
+                      : "border-base-content/20"
                   }`}
                   placeholder="name@email.com"
                 />
@@ -287,10 +287,10 @@ const Login = () => {
                     setFormData({ ...formData, password: e.target.value })
                   }
                   type={`${!passVisible ? "password" : "text"}`}
-                  className={`w-full border-b-2 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/20 ${
+                  className={`w-full border-b-2 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-base-content/40 ${
                     isInvalid && !formData.password
                       ? "border-red-600"
-                      : "border-black/20"
+                      : "border-base-content/20"
                   }`}
                   placeholder={`${!passVisible ? "*********" : "12333333333"}`}
                 />
@@ -301,14 +301,14 @@ const Login = () => {
                 {isLogin ? (
                   <button
                     onClick={handleLogin}
-                    className="w-full bg-black text-white py-4 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all shadow-xl shadow-black/10 cursor-pointer"
+                    className="w-full bg-base-content text-base-100 py-4 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all shadow-xl shadow-black/10 cursor-pointer"
                   >
                     Login Now
                   </button>
                 ) : (
                   <button
                     onClick={handleRegistration}
-                    className="w-full bg-black text-white py-4 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all shadow-xl shadow-black/10 cursor-pointer"
+                    className="w-full bg-base-content text-base-100 py-4 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all shadow-xl shadow-black/10 cursor-pointer"
                   >
                     Register Account
                   </button>
@@ -318,17 +318,17 @@ const Login = () => {
                   <div className="w-full space-y-2 ">
                     {/* The "OR" Divider */}
                     <div className="flex items-center gap-4 my-3">
-                      <div className="h-[1px] bg-black/10 flex-grow"></div>
+                      <div className="h-[1px] bg-base-content/10 flex-grow"></div>
                       <span className="font-heading font-black text-[10px] uppercase tracking-widest opacity-40">
                         Or
                       </span>
-                      <div className="h-[1px] bg-black/10 flex-grow"></div>
+                      <div className="h-[1px] bg-base-content/10 flex-grow"></div>
                     </div>
 
                     {/* The Google Button */}
                     <button
                       onClick={handleGoogleSignIn}
-                      className="w-full flex items-center justify-center gap-3 bg-white border border-[#dadce0] py-3 px-4 rounded-sm hover:bg-[#f8f9fa] hover:shadow-md transition-all cursor-pointer"
+                      className="w-full flex items-center justify-center gap-3 bg-base-100 border border-[#dadce0] py-3 px-4 rounded-sm hover:bg-[#f8f9fa] hover:shadow-md transition-all cursor-pointer"
                     >
                       {/* Official Google G Logo SVG */}
                       <svg

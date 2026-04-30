@@ -18,13 +18,13 @@ const Contact = () => {
   return (
     <>
       <PageHeader pageInfo={pageInfo}></PageHeader>
-      <div className="min-h-screen bg-white text-black font-body p-8 md:p-12 overflow-x-hidden">
+      <div className="min-h-screen bg-base-100 text-base-content font-body p-8 md:p-12 overflow-x-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mt-5">
           {/* 2. LEFT COLUMN: INFO & MAP */}
           <div className="space-y-16">
             {/* MAP IFRAME */}
 
-            <div className="relative group border-2 border-black p-1 shadow-[10px_10px_0px_rgba(0,0,0,1)] hover:shadow-[gray] transition-all">
+            <div className="relative group border-2 border-base-content p-1 shadow-[10px_10px_0px_rgba(0,0,0,1)] hover:shadow-[gray] transition-all">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6111.360186199436!2d88.59752070307306!3d24.38699025681104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39fbee50b5340bdf%3A0x8318fe0ba1480160!2sCantonment%20Rd%2C%20Rajshahi!5e0!3m2!1sen!2sbd!4v1775564540664!5m2!1sen!2sbd"
                 className="w-full h-[350px]" // REMOVED: grayscale contrast-125 invert
@@ -36,7 +36,7 @@ const Contact = () => {
             </div>
 
             {/* CONTACT INFO GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-t-2 border-black pt-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-t-2 border-base-content pt-12">
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-accent">
                   Headquarters
@@ -63,7 +63,7 @@ const Contact = () => {
           </div>
 
           {/* 3. RIGHT COLUMN: CONTACT FORM */}
-          <div className="bg-white">
+          <div className="bg-base-100">
             <form className="space-y-10" onSubmit={(e) => e.preventDefault()}>
               {/* Input Grid (4 Inputs) */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -74,7 +74,7 @@ const Contact = () => {
                   <input
                     type="text"
                     placeholder="NAME / SURNAME"
-                    className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-2 text-xs font-bold transition-colors bg-transparent uppercase tracking-tight"
+                    className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-2 text-xs font-bold transition-colors bg-transparent uppercase tracking-tight"
                   />
                 </div>
                 <div className="space-y-3">
@@ -84,7 +84,7 @@ const Contact = () => {
                   <input
                     type="email"
                     placeholder="USER@DOMAIN.COM"
-                    className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-2 text-xs font-bold transition-colors bg-transparent uppercase tracking-tight"
+                    className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-2 text-xs font-bold transition-colors bg-transparent uppercase tracking-tight"
                   />
                 </div>
                 <div className="space-y-3">
@@ -94,7 +94,7 @@ const Contact = () => {
                   <input
                     type="text"
                     placeholder="INQUIRY TYPE"
-                    className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-2 text-xs font-bold transition-colors bg-transparent uppercase tracking-tight"
+                    className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-2 text-xs font-bold transition-colors bg-transparent uppercase tracking-tight"
                   />
                 </div>
                 <div className="space-y-2">
@@ -104,7 +104,7 @@ const Contact = () => {
                   <input
                     type="text"
                     placeholder="019XXXXXX"
-                    className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-2 text-xs font-bold transition-colors bg-transparent uppercase tracking-tight font-mono"
+                    className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-2 text-xs font-bold transition-colors bg-transparent uppercase tracking-tight font-mono"
                   />
                 </div>
               </div>
@@ -117,14 +117,14 @@ const Contact = () => {
                 <textarea
                   rows="5"
                   placeholder="PLEASE DETAIL YOUR REQUEST..."
-                  className="w-full border-2 border-black/5 p-6 focus:border-accent outline-none text-xs font-medium transition-colors bg-base-200/30 rounded-sm uppercase tracking-tight leading-relaxed"
+                  className="w-full border-2 border-base-content/5 p-6 focus:border-accent outline-none text-xs font-medium transition-colors bg-base-200/30 rounded-sm uppercase tracking-tight leading-relaxed"
                 ></textarea>
               </div>
 
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-black text-white py-4 font-heading font-black uppercase tracking-[0.4em] text-[12px] hover:bg-accent transition-all group relative overflow-hidden rounded-md cursor-pointer"
+                className="w-full bg-base-content text-base-100 py-4 font-heading font-black uppercase tracking-[0.4em] text-[12px] hover:bg-accent transition-all group relative overflow-hidden rounded-md cursor-pointer"
               >
                 <span className="relative z-10">Send Message</span>
                 {/* Subtle hover effect */}

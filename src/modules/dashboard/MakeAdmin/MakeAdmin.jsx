@@ -60,7 +60,7 @@ const MakeAdmin = () => {
     try {
       if (confirmation.isConfirmed) {
         const result = await axios.post(
-          `https://api-penguin.onrender.com/api/admin/insert-update-admin`,
+          `http://localhost:5000/api/admin/insert-update-admin`,
           data,
         );
         if (result.data.status) {
@@ -127,7 +127,7 @@ const MakeAdmin = () => {
     try {
       if (confirmation.isConfirmed) {
         const result = await axios.delete(
-          `https://api-penguin.onrender.com/api/admin/delete-admin-list/${item._id}`,
+          `http://localhost:5000/api/admin/delete-admin-list/${item._id}`,
         );
         if (result.data?.status) {
           const index = adminList.findIndex((list) => list._id === item._id);
@@ -164,8 +164,8 @@ const MakeAdmin = () => {
       </header>
 
       {/* 2. INPUT FORM SECTION */}
-      <div className="bg-white border border-black/5 p-10 mb-6 shadow-sm">
-        <h3 className="font-heading font-black uppercase tracking-widest text-xl mb-8 border-b border-black/5 pb-4">
+      <div className="bg-base-100 border border-base-content/5 p-10 mb-6 shadow-sm">
+        <h3 className="font-heading font-black uppercase tracking-widest text-xl mb-8 border-b border-base-content/5 pb-4">
           Add New Admin
         </h3>
 
@@ -185,7 +185,7 @@ const MakeAdmin = () => {
               }
               type="email"
               placeholder="user@vortexlabs.com"
-              className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-xs font-bold transition-colors bg-transparent"
+              className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-xs font-bold transition-colors bg-transparent"
             />
           </div>
 
@@ -202,7 +202,7 @@ const MakeAdmin = () => {
                   roleInfo: JSON.parse(e.target.value),
                 })
               }
-              className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-xs font-bold bg-transparent uppercase tracking-wider cursor-pointer"
+              className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-xs font-bold bg-transparent uppercase tracking-wider cursor-pointer"
             >
               <option>Select Role</option>
               {accessList?.map((item, index) => (
@@ -216,14 +216,14 @@ const MakeAdmin = () => {
           {/* Submit Button */}
           <button
             onClick={handleSubmitAdmin}
-            className="w-full bg-black text-white px-6 py-3 font-heading font-black uppercase tracking-[0.2em] text-xs hover:bg-accent transition-all shadow-lg shadow-black/5 cursor-pointer"
+            className="w-full bg-base-content text-base-100 px-6 py-3 font-heading font-black uppercase tracking-[0.2em] text-xs hover:bg-accent transition-all shadow-lg shadow-black/5 cursor-pointer"
           >
             {isEdit ? "Update" : "Submit"}
           </button>
 
           <button
             onClick={handleCancel}
-            className="w-full bg-black text-white px-6 py-3 font-heading font-black uppercase tracking-[0.2em] text-xs hover:bg-accent transition-all shadow-lg shadow-black/5 cursor-pointer"
+            className="w-full bg-base-content text-base-100 px-6 py-3 font-heading font-black uppercase tracking-[0.2em] text-xs hover:bg-accent transition-all shadow-lg shadow-black/5 cursor-pointer"
           >
             {isEdit ? "Cancel" : "Clear"}
           </button>
@@ -231,8 +231,8 @@ const MakeAdmin = () => {
       </div>
 
       {/* 3. ADMIN LIST VIEW */}
-      <div className="bg-white border border-black/5 overflow-hidden">
-        <div className="p-8 border-b border-black/5 flex justify-between items-center">
+      <div className="bg-base-100 border border-base-content/5 overflow-hidden">
+        <div className="p-8 border-b border-base-content/5 flex justify-between items-center">
           <h2 className="font-heading text-xl font-black uppercase">
             Administrators <span className="text-accent">List</span>
           </h2>
@@ -244,7 +244,7 @@ const MakeAdmin = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black text-black/40">
+              <tr className="bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black text-base-content/40">
                 <th className="px-3 py-3">Super Admin</th>
                 <th className="px-3 py-3">Email</th>
                 <th className="px-3 py-3">Role</th>
@@ -262,7 +262,7 @@ const MakeAdmin = () => {
                   <td className="px-3 py-3">{item.user_info}</td>
                   <td className="px-3 py-3">{item.email}</td>
                   <td className="px-3 py-3">
-                    <span className="inline-block border border-black/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full group-hover:border-accent group-hover:text-accent transition-colors">
+                    <span className="inline-block border border-base-content/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full group-hover:border-accent group-hover:text-accent transition-colors">
                       {item.role}
                     </span>
                   </td>

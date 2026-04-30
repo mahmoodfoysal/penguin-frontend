@@ -20,11 +20,11 @@ const AddProduct = () => {
   };
   return (
     <div>
-      <div className="p-4  min-h-screen bg-white font-body relative overflow-hidden">
+      <div className="p-4  min-h-screen bg-base-100 font-body relative overflow-hidden">
         {/* 1. GLOBAL HEADER AREA */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <div>
-            <h1 className="font-heading text-5xl font-black uppercase tracking-tighter text-black">
+            <h1 className="font-heading text-5xl font-black uppercase tracking-tighter text-base-content">
               Product <span className="text-accent text-outline">Vault</span>
             </h1>
             <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mt-2">
@@ -34,7 +34,7 @@ const AddProduct = () => {
 
           <button
             onClick={() => setIsDrawerOpen(true)}
-            className="bg-black text-white px-12 py-5 font-heading font-black uppercase tracking-[0.2em] text-[10px] hover:bg-accent transition-all flex items-center gap-4 group shadow-2xl shadow-black/10"
+            className="bg-base-content text-base-100 px-12 py-5 font-heading font-black uppercase tracking-[0.2em] text-[10px] hover:bg-accent transition-all flex items-center gap-4 group shadow-2xl shadow-black/10"
           >
             Add New Product
             <span className="text-xl group-hover:scale-125 transition-transform">
@@ -44,10 +44,10 @@ const AddProduct = () => {
         </div>
 
         {/* 2. DATA LIST VIEW (MAIN PAGE) */}
-        <div className="bg-white border border-black/5 rounded-sm overflow-hidden shadow-sm">
+        <div className="bg-base-100 border border-base-content/5 rounded-sm overflow-hidden shadow-sm">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-black text-white font-heading text-[9px] uppercase tracking-[0.3em] font-black">
+              <tr className="bg-base-content text-base-100 font-heading text-[9px] uppercase tracking-[0.3em] font-black">
                 <th className="px-8 py-5">Product Info</th>
                 <th className="px-8 py-5">Category</th>
                 <th className="px-8 py-5">Price</th>
@@ -65,7 +65,7 @@ const AddProduct = () => {
                 >
                   <td className="px-8 py-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-base-200 border border-black/5 p-1 group-hover:border-accent transition-colors">
+                      <div className="w-12 h-12 bg-base-200 border border-base-content/5 p-1 group-hover:border-accent transition-colors">
                         <img
                           src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=100"
                           className="w-full h-full object-contain grayscale group-hover:grayscale-0"
@@ -97,7 +97,7 @@ const AddProduct = () => {
                   <td className="px-8 py-6 text-center">
                     <button
                       onClick={() => handleOpenDetails(id)}
-                      className="text-[9px] font-black uppercase tracking-widest bg-black text-white px-4 py-2 hover:bg-accent transition-all"
+                      className="text-[9px] font-black uppercase tracking-widest bg-base-content text-base-100 px-4 py-2 hover:bg-accent transition-all"
                     >
                       Details
                     </button>
@@ -116,7 +116,7 @@ const AddProduct = () => {
         {/* 3. SHARED BACKDROP */}
         {(isDrawerOpen || isDetailsOpen) && (
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] transition-opacity duration-300"
+            className="fixed inset-0 bg-base-content/60 backdrop-blur-md z-[100] transition-opacity duration-300"
             onClick={() => {
               setIsDrawerOpen(false);
               setIsDetailsOpen(false);
@@ -126,12 +126,12 @@ const AddProduct = () => {
 
         {/* 4. "ADD NEW" DRAWER (Unchanged) */}
         <aside
-          className={`fixed top-0 right-0 h-full w-full max-w-lg bg-white z-[101] shadow-[-30px_0px_60px_rgba(0,0,0,0.2)] transition-transform duration-500 ease-in-out transform ${
+          className={`fixed top-0 right-0 h-full w-full max-w-lg bg-base-100 z-[101] shadow-[-30px_0px_60px_rgba(0,0,0,0.2)] transition-transform duration-500 ease-in-out transform ${
             isDrawerOpen ? "translate-x-0" : "translate-x-full"
-          } border-l-4 border-black`}
+          } border-l-4 border-base-content`}
         >
           <div className="h-full flex flex-col p-12 overflow-y-auto no-scrollbar">
-            <div className="mb-16 border-b border-black/5 pb-8">
+            <div className="mb-16 border-b border-base-content/5 pb-8">
               <h2 className="font-heading text-4xl font-black uppercase italic tracking-tighter">
                 New <span className="text-accent text-outline">Product</span>
               </h2>
@@ -149,14 +149,14 @@ const AddProduct = () => {
                   <input
                     type="text"
                     placeholder="e.g. Apex Runner 2026"
-                    className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent uppercase tracking-tight"
+                    className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent uppercase tracking-tight"
                   />
                 </div>
                 <div className="space-y-3">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
                     Primary Category
                   </label>
-                  <select className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold bg-transparent uppercase tracking-wider cursor-pointer appearance-none">
+                  <select className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold bg-transparent uppercase tracking-wider cursor-pointer appearance-none">
                     <option>Footwear</option>
                     <option>Apparel</option>
                     <option>Accessories</option>
@@ -170,7 +170,7 @@ const AddProduct = () => {
                   </label>
                   <input
                     type="number"
-                    className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold bg-transparent"
+                    className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold bg-transparent"
                     placeholder="0.00"
                   />
                 </div>
@@ -180,7 +180,7 @@ const AddProduct = () => {
                   </label>
                   <input
                     type="number"
-                    className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold bg-transparent"
+                    className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold bg-transparent"
                     placeholder="100"
                   />
                 </div>
@@ -191,19 +191,19 @@ const AddProduct = () => {
                 </label>
                 <textarea
                   rows="3"
-                  className="w-full border-2 border-black/5 p-4 focus:border-accent outline-none text-xs font-medium transition-colors bg-base-200/30 rounded-sm"
+                  className="w-full border-2 border-base-content/5 p-4 focus:border-accent outline-none text-xs font-medium transition-colors bg-base-200/30 rounded-sm"
                   placeholder="Product specifications..."
                 ></textarea>
               </div>
             </div>
 
-            <div className="pt-12 border-t-2 border-black mt-12 flex flex-col gap-4">
-              <button className="w-full bg-black text-white py-6 font-heading font-black uppercase tracking-[0.3em] text-[11px] hover:bg-accent transition-colors">
+            <div className="pt-12 border-t-2 border-base-content mt-12 flex flex-col gap-4">
+              <button className="w-full bg-base-content text-base-100 py-6 font-heading font-black uppercase tracking-[0.3em] text-[11px] hover:bg-accent transition-colors">
                 Save Entry
               </button>
               <button
                 onClick={() => setIsDrawerOpen(false)}
-                className="w-full border border-black/10 py-5 font-heading font-black uppercase tracking-widest text-[11px] hover:bg-black hover:text-white transition-all opacity-40 hover:opacity-100"
+                className="w-full border border-base-content/10 py-5 font-heading font-black uppercase tracking-widest text-[11px] hover:bg-base-content hover:text-base-100 transition-all opacity-40 hover:opacity-100"
               >
                 Cancel Process
               </button>
@@ -213,7 +213,7 @@ const AddProduct = () => {
 
         {/* 5. "DETAILS" VIEW DRAWER */}
         <aside
-          className={`fixed top-0 right-0 h-full w-full max-w-lg bg-white z-[101] shadow-[-30px_0px_60px_rgba(0,0,0,0.2)] transition-transform duration-500 ease-in-out transform ${
+          className={`fixed top-0 right-0 h-full w-full max-w-lg bg-base-100 z-[101] shadow-[-30px_0px_60px_rgba(0,0,0,0.2)] transition-transform duration-500 ease-in-out transform ${
             isDetailsOpen ? "translate-x-0" : "translate-x-full"
           } border-l-4 border-accent`}
         >
@@ -221,7 +221,7 @@ const AddProduct = () => {
             <div className="h-full flex flex-col p-12 overflow-y-auto no-scrollbar">
               <div className="mb-12 flex justify-between items-start">
                 <div>
-                  <h2 className="font-heading text-4xl font-black uppercase italic tracking-tighter text-black">
+                  <h2 className="font-heading text-4xl font-black uppercase italic tracking-tighter text-base-content">
                     Product <span className="text-accent">Details</span>
                   </h2>
                   <p className="text-[9px] font-black uppercase tracking-[0.4em] opacity-30 mt-2">
@@ -237,15 +237,15 @@ const AddProduct = () => {
               </div>
 
               <div className="space-y-10">
-                <div className="aspect-square bg-base-200 border border-black/5 p-8">
+                <div className="aspect-square bg-base-200 border border-base-content/5 p-8">
                   <img
                     src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=400"
-                    className="w-full h-full object-contain mix-blend-multiply"
+                    className="w-full h-full object-contain "
                     alt="detail-img"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-8 border-t border-black/5 pt-8">
+                <div className="grid grid-cols-2 gap-8 border-t border-base-content/5 pt-8">
                   <div>
                     <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
                       Item Name
@@ -280,7 +280,7 @@ const AddProduct = () => {
                   </div>
                 </div>
 
-                <div className="border-t border-black/5 pt-8">
+                <div className="border-t border-base-content/5 pt-8">
                   <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
                     Description
                   </p>
@@ -292,7 +292,7 @@ const AddProduct = () => {
 
               <button
                 onClick={() => setIsDetailsOpen(false)}
-                className="mt-12 w-full bg-black text-white py-6 font-heading font-black uppercase tracking-[0.3em] text-[11px] hover:bg-accent transition-colors"
+                className="mt-12 w-full bg-base-content text-base-100 py-6 font-heading font-black uppercase tracking-[0.3em] text-[11px] hover:bg-accent transition-colors"
               >
                 Close Details
               </button>

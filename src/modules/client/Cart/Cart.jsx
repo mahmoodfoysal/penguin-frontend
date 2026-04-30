@@ -95,7 +95,7 @@ const Cart = () => {
       {!cartList.length ? (
         <EmptyScreen text={emptyInfo}></EmptyScreen>
       ) : (
-        <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white">
+        <div className="bg-base-100 min-h-screen font-body selection:bg-accent selection:text-white">
           {/* 2. MAIN CONTENT */}
           <div className="container mx-auto px-6 py-10">
             <div className="flex flex-col lg:flex-row gap-16">
@@ -104,7 +104,7 @@ const Cart = () => {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b-2 border-black font-heading text-xs uppercase tracking-[0.2em] font-black">
+                      <tr className="border-b-2 border-base-content font-heading text-xs uppercase tracking-[0.2em] font-black">
                         <th className="pb-4">Product</th>
                         <th className="pb-4 text-center">Price</th>
                         <th className="pb-4 text-center">Quantity</th>
@@ -118,10 +118,10 @@ const Cart = () => {
                           {/* Product Name & Image */}
                           <td className="py-8">
                             <div className="flex items-center gap-6">
-                              <div className="w-20 h-24 bg-base-200 flex-shrink-0 rounded-sm overflow-hidden border border-black/5">
+                              <div className="w-20 h-24 bg-base-200 flex-shrink-0 rounded-sm overflow-hidden border border-base-content/5">
                                 <img
                                   src={item.prod_image}
-                                  className="w-full h-full object-cover mix-blend-multiply"
+                                  className="w-full h-full object-cover "
                                   alt="product"
                                 />
                               </div>
@@ -143,7 +143,7 @@ const Cart = () => {
 
                           {/* Quantity Selector */}
                           <td className="py-8 text-center">
-                            <div className="inline-flex items-center border border-black/10 px-2 py-1 gap-4">
+                            <div className="inline-flex items-center border border-base-content/10 px-2 py-1 gap-4">
                               <button
                                 onClick={() => handleItemdecrement(item)}
                                 className="hover:text-accent font-black text-xl cursor-pointer"
@@ -186,7 +186,7 @@ const Cart = () => {
                 <div className="mt-8 flex justify-between items-center">
                   <Link
                     onClick={() => navigate(-1)}
-                    className="text-xs font-heading font-black uppercase tracking-widest border-b-2 border-black pb-1 hover:border-accent hover:text-accent transition-all"
+                    className="text-xs font-heading font-black uppercase tracking-widest border-b-2 border-base-content pb-1 hover:border-accent hover:text-accent transition-all"
                   >
                     ← Continue Shopping
                   </Link>
@@ -201,8 +201,8 @@ const Cart = () => {
 
               {/* RIGHT: CART TOTAL SIDEBAR */}
               <div className="w-full lg:w-96">
-                <div className="bg-base-200/50 p-8 sticky top-28 border border-black/5">
-                  <h2 className="font-heading text-2xl font-black uppercase italic mb-8 border-b border-black pb-4">
+                <div className="bg-base-200/50 p-8 sticky top-28 border border-base-content/5">
+                  <h2 className="font-heading text-2xl font-black uppercase italic mb-8 border-b border-base-content pb-4">
                     Cart <span className="text-accent">Total</span>
                   </h2>
 
@@ -224,7 +224,7 @@ const Cart = () => {
                       <span>${Number(totalVat).toFixed(2)}</span>
                     </div>
 
-                    <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-black/5 mt-4">
+                    <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-base-content/5 mt-4">
                       <span>Total Amount</span>
                       <span className="text-accent text-2xl">
                         ${Number(subTotal + shippingCost + totalVat).toFixed(2)}
@@ -235,15 +235,15 @@ const Cart = () => {
                   <div className="mt-10 space-y-3">
                     <button
                       onClick={handleCheckOut}
-                      className="w-full bg-black text-white py-4 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-colors shadow-xl shadow-black/10 rounded-md cursor-pointer"
+                      className="w-full bg-base-content text-base-100 py-4 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-colors shadow-xl shadow-black/10 rounded-md cursor-pointer"
                     >
                       Proceed To Checkout
                     </button>
                     <div className="flex justify-center gap-4 py-4 opacity-30 grayscale">
                       {/* Mock Payment Icons */}
-                      <div className="w-8 h-5 bg-black rounded-sm"></div>
-                      <div className="w-8 h-5 bg-black rounded-sm"></div>
-                      <div className="w-8 h-5 bg-black rounded-sm"></div>
+                      <div className="w-8 h-5 bg-base-content rounded-sm"></div>
+                      <div className="w-8 h-5 bg-base-content rounded-sm"></div>
+                      <div className="w-8 h-5 bg-base-content rounded-sm"></div>
                     </div>
                   </div>
                 </div>

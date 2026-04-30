@@ -176,7 +176,7 @@ const ProductDetails = () => {
 
     if (confirmation.isConfirmed) {
       const result = await axios.post(
-        `https://api-penguin.onrender.com/api/penguin/insert-update-review-list`,
+        `http://localhost:5000/api/penguin/insert-update-review-list`,
         data,
       );
       if (result.status) {
@@ -207,20 +207,20 @@ const ProductDetails = () => {
       ) : (
         <>
           <PageHeader pageInfo={pageInfo}></PageHeader>
-          <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white">
+          <div className="bg-base-100 min-h-screen font-body selection:bg-accent selection:text-white">
             {/* 1. MAIN PRODUCT SECTION */}
             <div className="container mx-auto px-6 py-12">
               <div className="flex flex-col lg:flex-row gap-16">
                 {/* LEFT: IMAGE GALLERY */}
                 <div className="w-full lg:w-1/2 space-y-4">
                   {/* Main Image */}
-                  <div className="aspect-square bg-base-200 overflow-hidden border border-black/5 rounded-sm relative group">
+                  <div className="aspect-square bg-base-200 overflow-hidden border border-base-content/5 rounded-sm relative group">
                     <img
                       src={prod_image}
-                      className="w-full h-full object-cover mix-blend-multiply group-hover:scale-110 transition-transform duration-700"
+                      className="w-full h-full object-cover  group-hover:scale-110 transition-transform duration-700"
                       alt="Main Product"
                     />
-                    <div className="absolute top-4 left-4 bg-black text-white text-[10px] font-black uppercase px-3 py-1 tracking-widest">
+                    <div className="absolute top-4 left-4 bg-base-content text-base-100 text-[10px] font-black uppercase px-3 py-1 tracking-widest">
                       In Stock:{stock} Left
                     </div>
                   </div>
@@ -230,11 +230,11 @@ const ProductDetails = () => {
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="aspect-square bg-base-100 border-2 border-black/5 hover:border-accent cursor-pointer transition-colors overflow-hidden"
+                    className="aspect-square bg-base-100 border-2 border-base-content/5 hover:border-accent cursor-pointer transition-colors overflow-hidden"
                   >
                     <img
                       src={`https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=200&v=${i}`}
-                      className="w-full h-full object-cover mix-blend-multiply"
+                      className="w-full h-full object-cover "
                       alt="thumb"
                     />
                   </div>
@@ -262,7 +262,7 @@ const ProductDetails = () => {
                   </h1>
 
                   <div className="flex items-baseline gap-4 mb-8">
-                    <span className="font-heading font-bold text-4xl text-black">
+                    <span className="font-heading font-bold text-4xl text-base-content">
                       ${price}
                     </span>
                     <span className="font-heading font-bold text-xl line-through opacity-30">
@@ -284,13 +284,13 @@ const ProductDetails = () => {
                     <label className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
                       Select Quantity
                     </label>
-                    <div className="flex items-center border-2 border-black w-full md:w-48 h-12 overflow-hidden group">
+                    <div className="flex items-center border-2 border-base-content w-full md:w-48 h-12 overflow-hidden group">
                       {/* Decrement */}
                       <button
                         onClick={() =>
                           handleItemdecrement(data.product_details.details_data)
                         }
-                        className="flex-1 h-full flex items-center justify-center hover:bg-black hover:text-white transition-colors border-r-2 border-black cursor-pointer"
+                        className="flex-1 h-full flex items-center justify-center hover:bg-base-content hover:text-base-100 transition-colors border-r-2 border-base-content cursor-pointer"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -320,7 +320,7 @@ const ProductDetails = () => {
                         onClick={() =>
                           handleItemIncrement(data.product_details.details_data)
                         }
-                        className="flex-1 h-full flex items-center justify-center hover:bg-black hover:text-white transition-colors border-l-2 border-black cursor-pointer"
+                        className="flex-1 h-full flex items-center justify-center hover:bg-base-content hover:text-base-100 transition-colors border-l-2 border-base-content cursor-pointer"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -346,7 +346,7 @@ const ProductDetails = () => {
                       onClick={() =>
                         handleAddToCart(data.product_details.details_data)
                       }
-                      className="bg-black text-white py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-accent transition-colors rounded-md cursor-pointer"
+                      className="bg-base-content text-base-100 py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-accent transition-colors rounded-md cursor-pointer"
                     >
                       Add to Cart
                     </button>
@@ -354,7 +354,7 @@ const ProductDetails = () => {
                       onClick={() =>
                         handleBuyNow(data.product_details.details_data)
                       }
-                      className="bg-accent text-white py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-black transition-colors rounded-md cursor-pointer"
+                      className="bg-accent text-base-100 py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-base-content transition-colors rounded-md cursor-pointer"
                     >
                       Buy Now
                     </button>
@@ -364,7 +364,7 @@ const ProductDetails = () => {
             </div>
 
             {/* 2. RATINGS & REVIEWS SECTION */}
-            <div className="bg-base-200/30 border-y border-black/5 py-10">
+            <div className="bg-base-200/30 border-y border-base-content/5 py-10">
               <div className="container mx-auto px-6">
                 <div className="flex flex-col lg:flex-row gap-16">
                   {/* Review Form */}
@@ -383,7 +383,7 @@ const ProductDetails = () => {
                             type="text"
                             placeholder="Name comes from login user"
                             disabled
-                            className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
+                            className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
                           />
                         </div>
 
@@ -396,7 +396,7 @@ const ProductDetails = () => {
                             type="email"
                             placeholder="Email comes from login user"
                             disabled
-                            className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
+                            className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
                           />
                         </div>
                       </div>
@@ -404,7 +404,7 @@ const ProductDetails = () => {
                         className={`${
                           isInvalid && !clientRating
                             ? "text-red-600"
-                            : "text-black-600"
+                            : "text-base-content"
                         }`}
                       >
                         Rating *
@@ -422,17 +422,17 @@ const ProductDetails = () => {
                         <textarea
                           value={clientComment}
                           onChange={(e) => setClientComment(e.target.value)}
-                          className={`textarea textarea-bordered w-full h-32 rounded-none border-black/10 focus:outline-accent ${
+                          className={`textarea textarea-bordered w-full h-32 rounded-none border-base-content/10 focus:outline-accent ${
                             isInvalid && !clientComment
                               ? "border-red-600"
-                              : "border-black/10"
+                              : "border-base-content/10"
                           }`}
                           placeholder="Comment"
                         ></textarea>
                       </div>
                       <button
                         onClick={handleReviewSubmit}
-                        className="btn btn-block bg-black text-white rounded-none border-none hover:bg-accent font-heading font-black uppercase tracking-widest"
+                        className="btn btn-block bg-base-content text-base-100 rounded-none border-none hover:bg-accent font-heading font-black uppercase tracking-widest"
                       >
                         Submit Review
                       </button>
@@ -456,11 +456,11 @@ const ProductDetails = () => {
                         {commentList.map((item, index) => (
                           <div
                             key={index}
-                            className="border-b border-black/5 pb-8 flex gap-4"
+                            className="border-b border-base-content/5 pb-8 flex gap-4"
                           >
                             {/* 1. PICTURE */}
                             <div className="flex-shrink-0">
-                              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-black">
+                              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-base-content">
                                 <img
                                   src={item?.image_url}
                                   className="w-full h-full object-cover"
@@ -529,7 +529,7 @@ const ProductDetails = () => {
                       onClick={() =>
                         setCurrentPage((prev) => Math.max(prev - 1, 1))
                       }
-                      className="join-item btn btn-outline btn-square rounded-none border-black/10"
+                      className="join-item btn btn-outline btn-square rounded-none border-base-content/10"
                     >
                       «
                     </button>
@@ -540,7 +540,7 @@ const ProductDetails = () => {
                         onClick={() => page !== "..." && setCurrentPage(page)}
                         className={`join-item btn btn-square rounded-none ${
                           currentPage === page
-                            ? "bg-black text-white border-black"
+                            ? "bg-base-content text-base-100 border-base-content"
                             : "btn-outline"
                         } ${page === "..." ? "btn-disabled" : ""}`}
                       >
@@ -553,7 +553,7 @@ const ProductDetails = () => {
                       onClick={() =>
                         setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                       }
-                      className="join-item btn btn-outline btn-square rounded-none border-black/10"
+                      className="join-item btn btn-outline btn-square rounded-none border-base-content/10"
                     >
                       »
                     </button>

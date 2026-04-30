@@ -65,7 +65,15 @@ const ProductCard = ({ product }) => {
               <span className="text-base-content/60 text-sm font-medium tracking-wide italic">
                 Stock: {product.stock}
               </span>
-              <span className="font-extrabold text-xl text-primary"></span>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleProductDetails(product);
+                }}
+                className="btn btn-ghost btn-xs font-black uppercase tracking-widest hover:text-accent p-0"
+              >
+                View Details →
+              </button>
             </div>
           </div>
         </div>

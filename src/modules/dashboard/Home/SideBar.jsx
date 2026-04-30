@@ -10,7 +10,7 @@ const SideBar = () => {
   };
   return (
     <div className="nav-link-style-admin">
-      <aside className="w-72 bg-black text-white flex flex-col sticky top-0 h-screen shrink-0">
+      <aside className="w-72 bg-base-content text-base-100 flex flex-col sticky top-0 h-screen shrink-0">
         <div className="p-8">
           <h2 className="font-heading text-2xl font-black uppercase italic tracking-tighter">
             Penguin <span className="text-accent">Admin</span>
@@ -61,7 +61,7 @@ const SideBar = () => {
             </button>
 
             {openMenus.orders && (
-              <div className="bg-white/5 ml-4 border-l border-accent/30 py-2">
+              <div className="bg-base-100/5 ml-4 border-l border-accent/30 py-2">
                 <NavLink to="pending-order">
                   <button className="w-full text-left px-6 py-2 text-[9px] uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all">
                     Pending
@@ -102,7 +102,7 @@ const SideBar = () => {
             </button>
 
             {openMenus.home && (
-              <div className="bg-white/5 ml-4 border-l border-accent/30 py-2">
+              <div className="bg-base-100/5 ml-4 border-l border-accent/30 py-2">
                 {[
                   "Slider",
                   "Discount Poster",
@@ -123,7 +123,7 @@ const SideBar = () => {
         </nav>
 
         {/* User Status at Bottom */}
-        <div className="p-6 border-t border-white/10">
+        <div className="p-6 border-t border-base-100/10">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center font-heading font-black italic">
               A

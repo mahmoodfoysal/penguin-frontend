@@ -13,7 +13,7 @@ const DashboardHome = () => {
           </p>
         </div>
         <div className="flex gap-4">
-          <button className="bg-black text-white px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-accent transition-colors">
+          <button className="bg-base-content text-base-100 px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-accent transition-colors">
             Export Report
           </button>
         </div>
@@ -29,7 +29,7 @@ const DashboardHome = () => {
         ].map((stat, i) => (
           <div
             key={i}
-            className="bg-white border border-black/5 p-8 rounded-sm"
+            className="bg-base-100 border border-base-content/5 p-8 rounded-sm"
           >
             <p className="text-[9px] font-black uppercase tracking-widest opacity-40">
               {stat.label}
@@ -41,14 +41,14 @@ const DashboardHome = () => {
               className={`text-[9px] font-bold mt-1 ${stat.trend.includes("+") ? "text-green-500" : "text-red-500"}`}
             >
               {stat.trend}{" "}
-              <span className="opacity-40 text-black ml-1">vs last month</span>
+              <span className="opacity-40 text-base-content ml-1">vs last month</span>
             </p>
           </div>
         ))}
       </div>
 
       {/* EXAMPLE CONTENT AREA: RECENT ORDERS */}
-      <div className="bg-white border border-black/5 p-8">
+      <div className="bg-base-100 border border-base-content/5 p-8">
         <h2 className="font-heading text-xl font-black uppercase  mb-8">
           Recent <span className="text-accent">Activity</span>
         </h2>
@@ -56,7 +56,7 @@ const DashboardHome = () => {
           {[1, 2, 3, 4, 5].map((row) => (
             <div
               key={row}
-              className="flex items-center justify-between py-4 border-b border-black/5 hover:bg-base-200/50 transition-colors px-4"
+              className="flex items-center justify-between py-4 border-b border-base-content/5 hover:bg-base-200/50 transition-colors px-4"
             >
               <div className="flex items-center gap-4">
                 <div className="w-2 h-2 rounded-full bg-accent"></div>

@@ -84,7 +84,7 @@ function App() {
       }
 
       try {
-        const url = `https://api-penguin.onrender.com/admin/get-admin-list/${userData.email}`;
+        const url = `http://localhost:5000/admin/get-admin-list/${userData.email}`;
         const response = await axios.get(url);
 
         dispatch(setRole(response.data));
@@ -97,7 +97,7 @@ function App() {
     return () => unsubscribe();
   }, [dispatch]);
   return (
-    <div>
+    <div className="bg-base-100 text-base-content min-h-screen font-body selection:bg-accent selection:text-white">
       <NavBar></NavBar>
       <Outlet></Outlet>
       <Footer></Footer>

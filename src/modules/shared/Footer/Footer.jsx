@@ -4,7 +4,7 @@ import { Link } from "react-router";
 const Footer = () => {
   return (
     <>
-      <footer className="bg-white border-t-4 border-black pt-16 pb-8 px-6 mt-20 relative overflow-hidden">
+      <footer className="bg-base-100 text-base-content pt-16 pb-8 px-6 mt-20 relative overflow-hidden border-t border-base-content/10">
         {/* 1. LARGE BACKGROUND WATERMARK */}
         <div className="absolute -bottom-10 -right-10 opacity-[0.03] select-none pointer-events-none">
           <h2 className="font-heading text-[20vw] font-black uppercase italic leading-none">
@@ -29,7 +29,7 @@ const Footer = () => {
                 <a
                   target="black"
                   href="https://github.com/mahmoodfoysal"
-                  className="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white transition-all active:scale-90"
+                  className="w-10 h-10 border-2 border-current flex items-center justify-center hover:opacity-70 transition-all active:scale-90"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +44,7 @@ const Footer = () => {
                 <a
                   href="https://www.linkedin.com/in/foysalmahmood/"
                   target="black"
-                  className="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white transition-all active:scale-90"
+                  className="w-10 h-10 border-2 border-current flex items-center justify-center hover:opacity-70 transition-all active:scale-90"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +59,7 @@ const Footer = () => {
                 <a
                   href="https://www.facebook.com/foysal.mahmood.1/"
                   target="blank"
-                  className="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white transition-all active:scale-90"
+                  className="w-10 h-10 border-2 border-current flex items-center justify-center hover:opacity-70 transition-all active:scale-90"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +76,7 @@ const Footer = () => {
 
             {/* QUICK LINKS */}
             <div className="md:col-span-3 space-y-4">
-              <h4 className="font-heading font-black uppercase text-sm tracking-widest border-b-2 border-black inline-block mb-2">
+              <h4 className="font-heading font-black uppercase text-sm tracking-widest border-b-2 border-base-content inline-block mb-2">
                 Navigation
               </h4>
               <ul className="space-y-2 text-[11px] font-black uppercase tracking-tighter">
@@ -118,9 +118,9 @@ const Footer = () => {
                 <input
                   type="text"
                   placeholder="EMAIL_ADDRESS"
-                  className="w-full border-2 border-black p-4 text-xs font-mono outline-none focus:border-accent transition-colors pr-12"
+                  className="w-full border-2 border-current p-4 text-xs font-mono outline-none focus:border-accent transition-colors pr-12 bg-transparent"
                 />
-                <button className="absolute right-0 top-0 h-full px-4 bg-black text-white hover:bg-accent transition-colors">
+                <button className="btn btn-primary absolute right-0 top-0 h-full rounded-none border-none">
                   →
                 </button>
               </div>
@@ -131,7 +131,7 @@ const Footer = () => {
           </div>
 
           {/* BOTTOM BAR */}
-          <div className="border-t-2 border-black/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="border-t-2 border-base-content/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex flex-col md:flex-row items-center gap-2 md:gap-8">
               <p className="text-[10px] font-black uppercase tracking-widest">
                 © 2026 Penguin Gear Ltd.

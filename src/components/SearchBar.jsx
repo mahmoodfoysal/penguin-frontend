@@ -11,7 +11,7 @@ const SearchBar = ({ searchProductList, setSearchProductList }) => {
         <input
           type="text"
           placeholder="KEYWORDS..."
-          className="w-full border-b-2 border-black/10 focus:border-accent outline-none py-3 text-xs font-bold transition-colors bg-transparent uppercase tracking-tighter pr-10"
+          className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-xs font-bold transition-colors bg-transparent uppercase tracking-tighter pr-10"
           value={searchProductList}
           onChange={(e) => setSearchProductList(e.target.value)}
         />
@@ -21,7 +21,7 @@ const SearchBar = ({ searchProductList, setSearchProductList }) => {
           {searchProductList.length > 0 && (
             <button
               onClick={() => setSearchProductList("")}
-              className="text-black/30 hover:text-accent transition-colors p-1 cursor-pointer"
+              className="text-base-content/30 hover:text-accent transition-colors p-1 cursor-pointer"
               title="Clear Search"
             >
               <svg

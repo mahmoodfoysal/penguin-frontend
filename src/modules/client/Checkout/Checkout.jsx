@@ -75,7 +75,7 @@ const Checkout = () => {
   const handleCouponCode = async () => {
     try {
       const result = await axios.get(
-        `https://api-penguin.onrender.com/api/penguin/get-match-coupon-list/${userInfo?.email}/${couponCode}`,
+        `http://localhost:5000/api/penguin/get-match-coupon-list/${userInfo?.email}/${couponCode}`,
       );
 
       if (result.data?.is_valid === true && !result.data?.appliedAt) {
@@ -220,20 +220,20 @@ const Checkout = () => {
         order_list: orderList,
       };
       if (confirmation.isConfirmed) {
-        const url = `https://api-penguin.onrender.com/api/admin/insert-update-order-list`;
+        const url = `http://localhost:5000/api/admin/insert-update-order-list`;
         const result = await axios.post(url, data);
 
         if (result.status) {
           if (couponInfo) {
             const url = await axios.patch(
-              `https://api-penguin.onrender.com/api/penguin/update-coupon-list/${couponInfo?._id}/${couponInfo?.email}`,
+              `http://localhost:5000/api/penguin/update-coupon-list/${couponInfo?._id}/${couponInfo?.email}`,
             );
             console.log(url);
           }
 
           const updateStockPromises = cartList?.map(async (item) => {
             const newStock = item.stock - item.quantity;
-            const url = `https://api-penguin.onrender.com/api/penguin/get-product-list/stock/${item?._id}`;
+            const url = `http://localhost:5000/api/penguin/get-product-list/stock/${item?._id}`;
 
             return await axios.patch(url, { stock: newStock });
           });
@@ -299,16 +299,16 @@ const Checkout = () => {
       {!cartList.length ? (
         <ComponentLoader></ComponentLoader>
       ) : (
-        <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white">
+        <div className="bg-base-100 min-h-screen font-body selection:bg-accent selection:text-white">
           {/* 1. COMPACT HEADER */}
-          <div className="border-b border-black/5 py-8">
+          <div className="border-b border-base-content/5 py-8">
             <div className="container mx-auto px-6 flex justify-between items-center">
               <h1 className="font-heading text-5xl font-black uppercase tracking-tighter italic">
                 Check<span className="text-accent text-outline">out</span>
               </h1>
               <Link
                 onClick={() => navigate(-1)}
-                className="text-[10px] font-black uppercase tracking-widest border-b border-black pb-1 hover:text-accent hover:border-accent transition-all"
+                className="text-[10px] font-black uppercase tracking-widest border-b border-base-content pb-1 hover:text-accent hover:border-accent transition-all"
               >
                 Back to Bag
               </Link>
@@ -325,7 +325,7 @@ const Checkout = () => {
                 {/* A. SHIPPING INFORMATION */}
                 <section>
                   <div className="flex items-center gap-4 mb-8">
-                    <span className="bg-black text-white w-8 h-8 flex items-center justify-center font-heading font-black text-sm">
+                    <span className="bg-base-content text-base-100 w-8 h-8 flex items-center justify-center font-heading font-black text-sm">
                       01
                     </span>
                     <h2 className="font-heading text-2xl font-black uppercase tracking-tight">
@@ -344,7 +344,7 @@ const Checkout = () => {
                         className={`w-full border-b-2 ${
                           isInvalid && !userInfo.name
                             ? "border-red-600"
-                            : "border-black/10"
+                            : "border-base-content/10"
                         } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                         placeholder="John Doe"
                         disabled={userInfo?.name}
@@ -360,7 +360,7 @@ const Checkout = () => {
                         className={`w-full border-b-2 ${
                           isInvalid && !userInfo.email
                             ? "border-red-600"
-                            : "border-black/10"
+                            : "border-base-content/10"
                         } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                         placeholder="user@user.com"
                         disabled={userInfo?.email}
@@ -379,7 +379,7 @@ const Checkout = () => {
                         className={`w-full border-b-2 ${
                           isInvalid && !formData.phoneNo
                             ? "border-red-600"
-                            : "border-black/10"
+                            : "border-base-content/10"
                         } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                         placeholder="019xxxxxx"
                       />
@@ -400,7 +400,7 @@ const Checkout = () => {
                           isInvalid &&
                           (!formData.countryInfo || !formData.countryInfo.id)
                             ? "border-red-600"
-                            : "border-black/10"
+                            : "border-base-content/10"
                         } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent uppercase tracking-wider cursor-pointer`}
                       >
                         {countryList.map((item) => (
@@ -424,7 +424,7 @@ const Checkout = () => {
                         className={`w-full border-b-2 ${
                           isInvalid && !formData.city
                             ? "border-red-600"
-                            : "border-black/10"
+                            : "border-base-content/10"
                         } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                         placeholder="New York"
                       />
@@ -442,7 +442,7 @@ const Checkout = () => {
                         className={`w-full border-b-2 ${
                           isInvalid && !formData.zipCode
                             ? "border-red-600"
-                            : "border-black/10"
+                            : "border-base-content/10"
                         } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                         placeholder="10001"
                       />
@@ -461,7 +461,7 @@ const Checkout = () => {
                         className={`w-full border-b-2 ${
                           isInvalid && !formData.address
                             ? "border-red-600"
-                            : "border-black/10"
+                            : "border-base-content/10"
                         } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                         placeholder="123 Vortex Street"
                       />
@@ -472,7 +472,7 @@ const Checkout = () => {
                 {/* B. PAYMENT METHOD */}
                 <section>
                   <div className="flex items-center gap-4 mb-8">
-                    <span className="bg-black text-white w-8 h-8 flex items-center justify-center font-heading font-black text-sm">
+                    <span className="bg-base-content text-base-100 w-8 h-8 flex items-center justify-center font-heading font-black text-sm">
                       02
                     </span>
                     <h2 className="font-heading text-2xl font-black uppercase tracking-tight">
@@ -486,7 +486,7 @@ const Checkout = () => {
                       {paymentModeList.map((item, index) => (
                         <label
                           key={index}
-                          className="relative flex items-center p-4 border-2 border-black cursor-pointer group hover:bg-black hover:text-white transition-all"
+                          className="relative flex items-center p-4 border-2 border-base-content cursor-pointer group hover:bg-base-content hover:text-base-100 transition-all"
                         >
                           <input
                             type="radio"
@@ -499,8 +499,8 @@ const Checkout = () => {
                             defaultChecked={item.id === 1}
                           />
                           {/* Custom Radio Indicator */}
-                          <div className="w-4 h-4 border-2 border-black flex-shrink-0 mr-3 flex items-center justify-center group-hover:border-white peer-checked:bg-accent peer-checked:border-accent">
-                            <div className="w-1.5 h-1.5 bg-white scale-0 peer-checked:scale-100 transition-transform"></div>
+                          <div className="w-4 h-4 border-2 border-base-content flex-shrink-0 mr-3 flex items-center justify-center group-hover:border-white peer-checked:bg-accent peer-checked:border-accent">
+                            <div className="w-1.5 h-1.5 bg-base-100 scale-0 peer-checked:scale-100 transition-transform"></div>
                           </div>
                           <span className="font-heading font-black text-[10px] uppercase tracking-widest leading-none">
                             {item.label}
@@ -512,15 +512,15 @@ const Checkout = () => {
                     {/* 2. PAYMENT DETAILS (Conditional Context) */}
                     <div className="space-y-4">
                       {paymentMethod === 1 && (
-                        <div className="border-2 border-black p-6 relative">
+                        <div className="border-2 border-base-content p-6 relative">
                           <div className="flex justify-between items-center mb-6">
                             <span className="font-heading font-black text-xs uppercase tracking-widest">
                               When product arrive you must pay first then get
                               the product
                             </span>
                             <div className="flex gap-2">
-                              <div className="w-8 h-5 bg-black/10 rounded-sm"></div>
-                              <div className="w-8 h-5 bg-black/10 rounded-sm"></div>
+                              <div className="w-8 h-5 bg-base-content/10 rounded-sm"></div>
+                              <div className="w-8 h-5 bg-base-content/10 rounded-sm"></div>
                             </div>
                           </div>
                         </div>
@@ -528,14 +528,14 @@ const Checkout = () => {
 
                       {/* Credit Card Option (Your Original Design) */}
                       {paymentMethod === 2 && (
-                        <div className="border-2 border-black p-6 relative">
+                        <div className="border-2 border-base-content p-6 relative">
                           <div className="flex justify-between items-center mb-6">
                             <span className="font-heading font-black text-xs uppercase tracking-widest">
                               Mobile Finance System
                             </span>
                             <div className="flex gap-2">
-                              <div className="w-8 h-5 bg-black/10 rounded-sm"></div>
-                              <div className="w-8 h-5 bg-black/10 rounded-sm"></div>
+                              <div className="w-8 h-5 bg-base-content/10 rounded-sm"></div>
+                              <div className="w-8 h-5 bg-base-content/10 rounded-sm"></div>
                             </div>
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -556,7 +556,7 @@ const Checkout = () => {
                                 className={`w-full border-b-2 ${
                                   isInvalid && !formData.bkashNo
                                     ? "border-red-600"
-                                    : "border-black/10"
+                                    : "border-base-content/10"
                                 } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                                 placeholder="019xxxxxx"
                               />
@@ -578,7 +578,7 @@ const Checkout = () => {
                                 className={`w-full border-b-2 ${
                                   isInvalid && !formData.transectionNo
                                     ? "border-red-600"
-                                    : "border-black/10"
+                                    : "border-base-content/10"
                                 } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                                 placeholder="jdjdjd77djess99#"
                               />
@@ -590,14 +590,14 @@ const Checkout = () => {
                       {/* Credit Card Option (Your Original Design) */}
 
                       {paymentMethod === 3 && (
-                        <div className="border-2 border-black p-6 relative">
+                        <div className="border-2 border-base-content p-6 relative">
                           <div className="flex justify-between items-center mb-6">
                             <span className="font-heading font-black text-xs uppercase tracking-widest">
                               Card Details
                             </span>
                             <div className="flex gap-2">
-                              <div className="w-8 h-5 bg-black/10 rounded-sm"></div>
-                              <div className="w-8 h-5 bg-black/10 rounded-sm"></div>
+                              <div className="w-8 h-5 bg-base-content/10 rounded-sm"></div>
+                              <div className="w-8 h-5 bg-base-content/10 rounded-sm"></div>
                             </div>
                           </div>
                           <div className="space-y-6">
@@ -613,7 +613,7 @@ const Checkout = () => {
                               className={`w-full border-b-2 ${
                                 isInvalid && !formData.cardNumber
                                   ? "border-red-600"
-                                  : "border-black/10"
+                                  : "border-base-content/10"
                               } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                               placeholder="1222 2222 2222 2222"
                             />
@@ -630,7 +630,7 @@ const Checkout = () => {
                                 className={`w-full border-b-2 ${
                                   isInvalid && !formData.cardExpDate
                                     ? "border-red-600"
-                                    : "border-black/10"
+                                    : "border-base-content/10"
                                 } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                                 placeholder="MM / YY"
                               />
@@ -646,7 +646,7 @@ const Checkout = () => {
                                 className={`w-full border-b-2 ${
                                   isInvalid && !formData.cvcNo
                                     ? "border-red-600"
-                                    : "border-black/10"
+                                    : "border-base-content/10"
                                 } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                                 placeholder="CVC"
                               />
@@ -661,7 +661,7 @@ const Checkout = () => {
 
               {/* RIGHT COLUMN: ORDER SUMMARY */}
               <div className="w-full lg:w-[400px]">
-                <div className="sticky top-28 bg-base-200/50 p-8 border border-black/5 rounded-sm">
+                <div className="sticky top-28 bg-base-200/50 p-8 border border-base-content/5 rounded-sm">
                   <h3 className="font-heading text-2xl font-black uppercase italic mb-8">
                     Order <span className="text-accent">Summary</span>
                   </h3>
@@ -670,10 +670,10 @@ const Checkout = () => {
                   <div className="space-y-6 mb-8 max-h-[300px] overflow-y-auto pr-2 no-scrollbar">
                     {cartList.map((item, index) => (
                       <div key={index} className="flex gap-4">
-                        <div className="w-16 h-20 bg-white border border-black/5 flex-shrink-0">
+                        <div className="w-16 h-20 bg-base-100 border border-base-content/5 flex-shrink-0">
                           <img
                             src={item.prod_image}
-                            className="w-full h-full object-cover mix-blend-multiply"
+                            className="w-full h-full object-cover "
                             alt="thumb"
                           />
                         </div>
@@ -693,7 +693,7 @@ const Checkout = () => {
                   </div>
 
                   {/* Totals */}
-                  <div className="border-t border-black/10 pt-6 space-y-3">
+                  <div className="border-t border-base-content/10 pt-6 space-y-3">
                     <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
                       <span>Subtotal</span>
                       <span>${Number(subTotal).toFixed(2)}</span>
@@ -717,7 +717,7 @@ const Checkout = () => {
                       </div>
                     )}
 
-                    <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-black/5 gap-4">
+                    <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-base-content/5 gap-4">
                       <input
                         value={couponCode}
                         disabled={
@@ -728,7 +728,7 @@ const Checkout = () => {
                         onChange={(e) => setCouponCode(e.target.value)}
                         type="text"
                         placeholder="Enter coupon code"
-                        className="w-full border-b-2 border-black/10 focus:border-accent outline-none  text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
+                        className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none  text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
                       />
 
                       <button
@@ -738,7 +738,7 @@ const Checkout = () => {
                           couponInfo?.is_valid == true &&
                           !couponInfo?.appliedAt
                         }
-                        className="w-full bg-black text-white py-2 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-1 rounded-md cursor-pointer"
+                        className="w-full bg-base-content text-base-100 py-2 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-1 rounded-md cursor-pointer"
                       >
                         Apply
                         <span className="group-hover:translate-x-2 transition-transform">
@@ -747,7 +747,7 @@ const Checkout = () => {
                       </button>
                     </div>
 
-                    <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-black/5 mt-4">
+                    <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-base-content/5 mt-4">
                       <span>Total Amount</span>
                       <span className="text-accent text-2xl">
                         ${Number(totalAmount).toFixed(2)}
@@ -758,7 +758,7 @@ const Checkout = () => {
                   {/* Place Order Button */}
                   <button
                     onClick={handleOrderSubmit}
-                    className="w-full bg-black text-white py-4 mt-10 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-3 rounded-md cursor-pointer"
+                    className="w-full bg-base-content text-base-100 py-4 mt-10 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-3 rounded-md cursor-pointer"
                   >
                     Place Order
                     <span className="group-hover:translate-x-2 transition-transform">

@@ -232,12 +232,25 @@ const Products = () => {
       {!productsList.length ? (
         <ComponentLoader></ComponentLoader>
       ) : (
-        <div className="bg-white min-h-screen font-body selection:bg-accent selection:text-white">
+        <div className="bg-base-100 min-h-screen font-body selection:bg-accent selection:text-white">
           {/* 2. MAIN CONTENT AREA */}
           <div className="container mx-auto px-6 py-8 flex flex-col lg:flex-row gap-12">
+            {/* MOBILE FILTER TOGGLE */}
+            <div className="lg:hidden mb-6">
+              <button 
+                onClick={() => setOpenCategory(openCategory === 'filters' ? null : 'filters')}
+                className="btn btn-outline w-full flex justify-between items-center"
+              >
+                <span>Filter & Sort</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                </svg>
+              </button>
+            </div>
+
             {/* LEFT SIDEBAR FILTERS */}
-            <aside className="w-full lg:w-64 flex-shrink-0">
-              <div className="sticky top-28 space-y-10">
+            <aside className={`w-full lg:w-64 flex-shrink-0 ${openCategory === 'filters' ? 'block' : 'hidden lg:block'}`}>
+              <div className="lg:sticky lg:top-28 space-y-10">
                 {/* SEARCH */}
                 <SearchBar
                   searchProductList={searchProductList}
@@ -297,7 +310,7 @@ const Products = () => {
                 </h4>
               )}
 
-              <div className="flex justify-between items-center mb-8 pb-4 border-b border-black/5 font-heading text-[10px] font-bold uppercase tracking-[0.2em]">
+              <div className="flex justify-between items-center mb-8 pb-4 border-b border-base-content/5 font-heading text-[10px] font-bold uppercase tracking-[0.2em]">
                 <span>
                   Showing {(currentPage - 1) * itemsPerPage + 1}-
                   {Math.min(
@@ -339,7 +352,7 @@ const Products = () => {
                     onClick={() =>
                       setCurrentPage((prev) => Math.max(prev - 1, 1))
                     }
-                    className="join-item btn btn-outline btn-square rounded-none border-black/10"
+                    className="join-item btn btn-outline btn-square rounded-none border-base-content/10"
                   >
                     «
                   </button>
@@ -350,7 +363,7 @@ const Products = () => {
                       onClick={() => page !== "..." && setCurrentPage(page)}
                       className={`join-item btn btn-square rounded-none ${
                         currentPage === page
-                          ? "bg-black text-white border-black"
+                          ? "bg-base-content text-base-100 border-base-content"
                           : "btn-outline"
                       } ${page === "..." ? "btn-disabled" : ""}`}
                     >
@@ -363,7 +376,7 @@ const Products = () => {
                     onClick={() =>
                       setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                     }
-                    className="join-item btn btn-outline btn-square rounded-none border-black/10"
+                    className="join-item btn btn-outline btn-square rounded-none border-base-content/10"
                   >
                     »
                   </button>

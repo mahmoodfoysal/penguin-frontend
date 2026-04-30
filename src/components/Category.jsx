@@ -23,7 +23,7 @@ const Category = ({
                 className={`flex items-center justify-between cursor-pointer border-b pb-2 transition-colors ${
                   isOpen
                     ? "border-accent text-accent"
-                    : "border-black/5 text-black hover:border-accent hover:text-accent"
+                    : "border-base-content/5 text-base-content hover:border-accent hover:text-accent"
                 }`}
               >
                 <span className="font-heading font-bold text-xs uppercase tracking-wider">

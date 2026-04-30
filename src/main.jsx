@@ -38,7 +38,7 @@
 //         element: <Home></Home>,
 //         loader: async () =>
 //           await fetch(
-//             "https://api-penguin.onrender.com/api/penguin/get-product-list",
+//             "http://localhost:5000/api/penguin/get-product-list",
 //           ),
 //       },
 //       {
@@ -46,10 +46,10 @@
 //         element: <Products></Products>,
 //         loader: async () => {
 //           const products = await fetch(
-//             "https://api-penguin.onrender.com/api/penguin/get-product-list",
+//             "http://localhost:5000/api/penguin/get-product-list",
 //           );
 //           const categories = await fetch(
-//             "https://api-penguin.onrender.com/api/client/get-all-categories",
+//             "http://localhost:5000/api/client/get-all-categories",
 //           );
 //           return {
 //             products: await products.json(),
@@ -62,10 +62,10 @@
 //         element: <ProductDetails></ProductDetails>,
 //         loader: async ({ params }) => {
 //           const products = await fetch(
-//             "https://api-penguin.onrender.com/api/penguin/get-product-list",
+//             "http://localhost:5000/api/penguin/get-product-list",
 //           );
 //           const details = await fetch(
-//             `https://api-penguin.onrender.com/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
+//             `http://localhost:5000/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
 //           );
 //           return {
 //             products: await products.json(),
@@ -191,7 +191,14 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { ClickToComponent } from "click-to-react-component";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
+
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+
+// Pages
 import Home from "./modules/client/Home/Home/Home";
 import AdminHome from "./modules/dashboard/Home/AdminHome.jsx";
 import Products from "./modules/client/Products/Products.jsx";
@@ -214,86 +221,86 @@ import DirectCheckOut from "./modules/client/Checkout/DirectCheckOut.jsx";
 import PublicRoutes from "./Routes/PublicRoutes.jsx";
 
 // ------------------
-// Utility: fetch with timeout & error handling
+// ✅ Utility: fetch with timeout (FIXED)
 // ------------------
 const fetchWithTimeout = async (url, options = {}, timeout = 7000) => {
-  return Promise.race([
+  const res = await Promise.race([
     fetch(url, options),
     new Promise((_, reject) =>
       setTimeout(() => reject(new Error("Request timed out")), timeout),
     ),
-  ])
-    .then((res) => {
-      if (!res.ok) throw new Error("Failed to fetch");
-      return res.json();
-    })
-    .catch((err) => {
-      console.error(err);
-      return null; // So route still renders even if API fails
-    });
+  ]);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch");
+  }
+
+  return res.json();
 };
 
 // ------------------
-// Loader Wrappers
+// ✅ Loaders
 // ------------------
 const homeLoader = async () => {
   const products = await fetchWithTimeout(
-    "https://api-penguin.onrender.com/api/penguin/get-product-list",
+    "http://localhost:5000/api/penguin/get-product-list",
   );
   return { products };
 };
 
 const adminLoader = async () => {
   const adminData = await fetchWithTimeout(
-    "https://api-penguin.onrender.com/api/admin/get-admin-list",
+    "http://localhost:5000/api/admin/get-admin-list",
   );
   return { adminData };
 };
 
 const productsLoader = async () => {
   const [products, categories] = await Promise.all([
-    fetchWithTimeout(
-      "https://api-penguin.onrender.com/api/penguin/get-product-list",
-    ),
-    fetchWithTimeout(
-      "https://api-penguin.onrender.com/api/client/get-all-categories",
-    ),
+    fetchWithTimeout("http://localhost:5000/api/penguin/get-product-list"),
+    fetchWithTimeout("http://localhost:5000/api/client/get-all-categories"),
   ]);
+
   return { products, categories };
 };
 
 const productDetailsLoader = async ({ params }) => {
   const [products, product_details, comments] = await Promise.all([
+    fetchWithTimeout("http://localhost:5000/api/penguin/get-product-list"),
     fetchWithTimeout(
-      "https://api-penguin.onrender.com/api/penguin/get-product-list",
+      `http://localhost:5000/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
     ),
     fetchWithTimeout(
-      `https://api-penguin.onrender.com/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
-    ),
-    fetchWithTimeout(
-      `https://api-penguin.onrender.com/api/penguin/get-review-list/${params.prod_id}`,
+      `http://localhost:5000/api/penguin/get-review-list/${params.prod_id}`,
     ),
   ]);
+
   return { products, product_details, comments };
 };
 
 // ------------------
-// Router Definition
+// ✅ Router
 // ------------------
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />, // global error handling
     children: [
       { index: true, element: <Navigate to="/home" /> },
+
       { path: "home", element: <Home />, loader: homeLoader },
+
       { path: "products", element: <Products />, loader: productsLoader },
+
       {
         path: "product-details/:id/:prod_id",
         element: <ProductDetails />,
         loader: productDetailsLoader,
       },
+
       { path: "cart", element: <Cart /> },
+
       {
         path: "checkout",
         element: (
@@ -302,6 +309,7 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+
       {
         path: "buy-product",
         element: (
@@ -310,6 +318,7 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+
       {
         path: "login",
         element: (
@@ -318,8 +327,10 @@ const router = createBrowserRouter([
           </PublicRoutes>
         ),
       },
+
       { path: "contact", element: <Contact /> },
       { path: "about", element: <AboutUs /> },
+
       {
         path: "/dashboard",
         element: (
@@ -329,24 +340,25 @@ const router = createBrowserRouter([
         ),
         children: [
           { index: true, element: <DashboardHome /> },
+
           {
-            path: "/dashboard/make-admin",
+            path: "make-admin",
             element: <MakeAdmin />,
             loader: adminLoader,
           },
-          { path: "/dashboard/parent-category", element: <ParentCategory /> },
-          { path: "/dashboard/sub-category", element: <SubCategory /> },
-          { path: "/dashboard/add-product", element: <AddProduct /> },
-          { path: "/dashboard/pending-order", element: <PendingOrder /> },
+
+          { path: "parent-category", element: <ParentCategory /> },
+          { path: "sub-category", element: <SubCategory /> },
+          { path: "add-product", element: <AddProduct /> },
+          { path: "pending-order", element: <PendingOrder /> },
         ],
       },
     ],
   },
-  { path: "*", element: <ErrorPage /> },
 ]);
 
 // ------------------
-// Render App
+// ✅ Render App
 // ------------------
 createRoot(document.getElementById("root")).render(
   <StrictMode>

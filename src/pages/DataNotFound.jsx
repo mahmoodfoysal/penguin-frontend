@@ -3,7 +3,7 @@ import React from "react";
 const DataNotFound = ({ backMsg, mainMsg1, mainMsg2 }) => {
   return (
     <>
-      <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-white relative overflow-hidden">
+      <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-base-100 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none pointer-events-none opacity-[0.03]">
           <h1 className="font-heading text-[30vw] font-black tracking-tighter uppercase leading-none italic">
             {backMsg}
@@ -11,14 +11,14 @@ const DataNotFound = ({ backMsg, mainMsg1, mainMsg2 }) => {
         </div>
 
         <div className="relative mb-12">
-          <div className="w-24 h-24 border-4 border-black flex items-center justify-center relative group bg-white z-10">
+          <div className="w-24 h-24 border-4 border-base-content flex items-center justify-center relative group bg-base-100 z-10">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={2.5}
               stroke="currentColor"
-              className="w-12 h-12 text-black group-hover:text-accent transition-all duration-300 group-hover:scale-110"
+              className="w-12 h-12 text-base-content group-hover:text-accent transition-all duration-300 group-hover:scale-110"
             >
               <path
                 strokeLinecap="round"
@@ -37,7 +37,7 @@ const DataNotFound = ({ backMsg, mainMsg1, mainMsg2 }) => {
             <span className="text-accent text-outline">{mainMsg2}</span>
           </h2>
 
-          <div className="h-1.5 w-24 bg-black mx-auto mt-4 mb-8"></div>
+          <div className="h-1.5 w-24 bg-base-content mx-auto mt-4 mb-8"></div>
         </div>
       </div>
     </>

@@ -9,14 +9,14 @@ const FeatureProducts = () => {
           <h2 className="font-heading text-4xl font-black uppercase italic tracking-tighter">
             Featured <span className="text-accent">Drops</span>
           </h2>
-          <button className="btn btn-link btn-xs font-heading font-bold uppercase tracking-widest text-black no-underline hover:text-accent">
+          <button className="btn btn-link btn-xs font-heading font-bold uppercase tracking-widest text-base-content no-underline hover:text-accent">
             Shop All
           </button>
         </div>
         <div className="flex overflow-x-auto gap-6 pb-8 snap-x no-scrollbar">
           {[1, 2, 3, 4, 5].map((item) => (
             <div key={item} className="min-w-[280px] snap-start group">
-              <div className="bg-white p-4 rounded-xl shadow-sm border border-black/5 hover:border-accent transition-colors">
+              <div className="bg-base-100 p-4 rounded-xl shadow-sm border border-base-content/5 hover:border-accent transition-colors">
                 <img
                   src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=400"
                   className="rounded-lg mb-4"

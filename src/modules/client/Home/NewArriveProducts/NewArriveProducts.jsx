@@ -23,7 +23,7 @@ const NewArriveProducts = () => {
 
       return result;
     };
-    console.log(products);
+
 
     setTimeout(() => {
       setRandomProducts(getRandomItems(products?.list_data, 4));

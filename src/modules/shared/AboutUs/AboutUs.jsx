@@ -19,19 +19,19 @@ const AboutUs = () => {
   return (
     <>
       <PageHeader pageInfo={pageInfo}></PageHeader>
-      <div className="min-h-screen bg-white text-black font-body p-8 md:p-12 overflow-x-hidden">
+      <div className="min-h-screen bg-base-100 text-base-content font-body p-8 md:p-12 overflow-x-hidden">
         {/* 4. BEHIND THE SCENES */}
         <section className="mb-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <div className="order-2 lg:order-1">
               <div className="grid grid-cols-2 gap-4">
-                <div className="aspect-square bg-base-100 border border-black/10 overflow-hidden">
+                <div className="aspect-square bg-base-100 border border-base-content/10 overflow-hidden">
                   <img
                     src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=400"
                     className="w-full h-full object-cover grayscale"
                   />
                 </div>
-                <div className="aspect-square bg-base-100 border border-black/10 overflow-hidden mt-12">
+                <div className="aspect-square bg-base-100 border border-base-content/10 overflow-hidden mt-12">
                   <img
                     src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=400"
                     className="w-full h-full object-cover grayscale"
@@ -48,7 +48,7 @@ const AboutUs = () => {
                 Welcome to our store. Our store is open every day from 10.00 AM
                 to 10.00 PM. You can buy, exchange and trial product here.
               </p>
-              {/* <div className="pt-6 border-t border-black/10 inline-block">
+              {/* <div className="pt-6 border-t border-base-content/10 inline-block">
                 <p className="font-heading text-xl font-bold uppercase italic tracking-tighter">
                   Verified Authentic Protocol
                 </p>
@@ -61,12 +61,12 @@ const AboutUs = () => {
         </section>
 
         {/* 5. SHOPPING CALL TO ACTION */}
-        <footer className="bg-black text-white p-20 text-center relative overflow-hidden">
+        <footer className="bg-base-content text-base-100 p-20 text-center relative overflow-hidden">
           <div className="relative z-10">
             <h2 className="font-heading text-6xl md:text-9xl font-black uppercase italic tracking-tighter mb-12 leading-none">
               Enter The <span className="text-accent text-outline">Store</span>
             </h2>
-            <button className="bg-white text-black px-16 py-4 font-heading font-black uppercase tracking-[0.3em] text-[12px] hover:bg-accent hover:text-white transition-all rounded-md cursor-pointer">
+            <button className="bg-base-100 text-base-content px-16 py-4 font-heading font-black uppercase tracking-[0.3em] text-[12px] hover:bg-accent hover:text-base-100 transition-all rounded-md cursor-pointer">
               Browse New Arrivals
             </button>
           </div>
