@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Outlet, ScrollRestoration } from "react-router-dom";
 import "./App.css";
 
 import { useEffect } from "react";
@@ -16,6 +16,8 @@ import NavBar from "./modules/shared/NavBar/NavBar";
 
 import Footer from "./modules/Shared/Footer/Footer";
 import axios from "axios";
+import ScrollToTop from "./components/ScrollToTop";
+
 initilizationAuthentication();
 
 const auth = getAuth();
@@ -97,10 +99,12 @@ function App() {
     return () => unsubscribe();
   }, [dispatch]);
   return (
-    <div className="bg-base-100 text-base-content min-h-screen font-body selection:bg-accent selection:text-white">
+    <div className="bg-base-100 text-base-content min-h-screen font-body selection:bg-accent selection:text-white relative">
+      <ScrollRestoration />
       <NavBar></NavBar>
       <Outlet></Outlet>
       <Footer></Footer>
+      <ScrollToTop></ScrollToTop>
     </div>
   );
 }
