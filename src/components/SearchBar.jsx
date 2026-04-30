@@ -5,7 +5,7 @@ const SearchBar = ({ searchProductList, setSearchProductList }) => {
     <div className="space-y-3 mb-4">
       {/* SEARCH */}
       <label className="text-sm font-black uppercase tracking-[0.2em] opacity-40">
-        Search Inventory
+        Search
       </label>
       <div className="relative group">
         <input

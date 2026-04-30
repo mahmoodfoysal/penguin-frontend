@@ -97,6 +97,11 @@ const NavBar = () => {
                 </NavLink>
               </li>
               <li>
+                <NavLink to="/blogs" className="hover:text-primary">
+                  Blogs
+                </NavLink>
+              </li>
+              <li>
                 <NavLink to="/about" className="hover:text-primary">
                   About
                 </NavLink>
@@ -277,6 +282,7 @@ const NavBar = () => {
               {[
                 { name: "Home", path: "/home" },
                 { name: "Products", path: "/products" },
+                { name: "Blogs", path: "/blogs" },
                 { name: "About", path: "/about" },
                 { name: "Contact", path: "/contact" },
                 ...(role?.email
