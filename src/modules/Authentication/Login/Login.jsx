@@ -36,10 +36,12 @@ const Login = () => {
     email: null,
   });
   const [passVisible, setPassVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [authError, setAuthError] = useState(null);
 
   const handleChangeLoginRegister = () => {
     setIsLogin(!isLogin);
-
+    setAuthError(null);
     setFormData({});
   };
 
@@ -49,6 +51,8 @@ const Login = () => {
 
   // google singin
   const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    setAuthError(null);
     signInWithPopup(auth, provider)
       .then(async (result) => {
         const user = result.user;
@@ -57,29 +61,27 @@ const Login = () => {
         console.log(token);
         dispatch(setUser({ token: user.accessToken }));
         if (token) {
-          const url = `http://localhost:5000/admin/get-admin-list/${user.email}`;
+          const url = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/admin/get-admin-list/${user.email}`;
           const response = await axios.get(url);
           dispatch(setRole(response.data));
         }
+        setIsLoading(false);
         navigate(location.state?.from?.pathname || "/home");
       })
       .catch((error) => {
-        const errorMessage = error.message;
-        console.log(errorMessage);
+        setIsLoading(false);
+        setAuthError(error.message);
+        console.log(error.message);
       });
   };
 
   // create account
   const handleRegistration = () => {
     setIsInvalid(false);
+    setAuthError(null);
     if (!formData.fullName || !formData.email || !formData.password) {
       setIsInvalid(true);
-      Swal.fire({
-        icon: "error",
-        title: "Invalid!",
-        text: "Please fill all the required field.",
-        confirmButtonText: "OK",
-      });
+      setAuthError("All fields are required.");
       return;
     }
     const userEmail = formData.email;
@@ -87,6 +89,7 @@ const Login = () => {
     const name = formData.fullName;
     const photo = formData.photoUrl;
 
+    setIsLoading(true);
     createUserWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -101,62 +104,62 @@ const Login = () => {
         setFormData({});
 
         console.log(user.accessToken);
+        setIsLoading(false);
         navigate(location.state?.from?.pathname || "/home");
         setIsInvalid(false);
         Swal.fire({
           icon: "success",
           title: "Success!",
-          text: "Success.",
+          text: "Registration successful.",
           confirmButtonText: "OK",
         });
       })
       .catch((error) => {
-        const errorMessage = error.message;
-        console.log(errorMessage);
-        // ..
+        setIsLoading(false);
+        setAuthError(error.message);
+        console.log(error.message);
       });
   };
 
   // login
   const handleLogin = async () => {
     setIsInvalid(false);
+    setAuthError(null);
     if (!formData.email || !formData.password) {
       setIsInvalid(true);
-      Swal.fire({
-        icon: "error",
-        title: "Invalid!",
-        text: "Please fill all the required field.",
-        confirmButtonText: "OK",
-      });
+      setAuthError("Email and password are required.");
       return;
     }
     const userEmail = formData.email;
     const userPassword = formData.password;
+    setIsLoading(true);
     signInWithEmailAndPassword(auth, userEmail, userPassword)
       .then(async (userCredential) => {
         const user = userCredential.user;
         dispatch(setUser({ token: user.accessToken }));
 
         if (user) {
-          const url = `http://localhost:5000/admin/get-admin-list/${userEmail}`;
+          const url = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/admin/get-admin-list/${userEmail}`;
           const response = await axios.get(url);
           dispatch(setRole(response.data));
         }
 
         setFormData({});
         setIsInvalid(false);
+        setIsLoading(false);
         navigate(location.state?.from?.pathname || "/home");
         Swal.fire({
           icon: "success",
           title: "Success!",
-          text: "Success.",
+          text: "Login successful.",
           confirmButtonText: "OK",
         });
       })
 
       .catch((error) => {
-        const errorMessage = error.message;
-        console.log(errorMessage);
+        setIsLoading(false);
+        setAuthError(error.message);
+        console.log(error.message);
       });
   };
 
@@ -294,23 +297,37 @@ const Login = () => {
                   }`}
                   placeholder={`${!passVisible ? "*********" : "12333333333"}`}
                 />
-              </div>
-
-              {/* CTA Buttons */}
+              </div>              {/* CTA Buttons */}
               <div className="pt-6 space-y-2">
+                {authError && (
+                  <div className="bg-red-50 border-l-4 border-red-600 p-4 mb-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <p className="text-xs text-red-600 font-bold uppercase tracking-widest">
+                      {authError}
+                    </p>
+                  </div>
+                )}
+
                 {isLogin ? (
                   <button
                     onClick={handleLogin}
-                    className="w-full bg-base-content text-base-100 py-4 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all shadow-xl shadow-black/10 cursor-pointer"
+                    disabled={isLoading}
+                    className="w-full bg-base-content text-base-100 py-4 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all shadow-xl shadow-black/10 cursor-pointer disabled:bg-base-content/50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    Login Now
+                    {isLoading ? (
+                      <span className="loading loading-spinner loading-sm"></span>
+                    ) : null}
+                    {isLoading ? "Processing..." : "Login Now"}
                   </button>
                 ) : (
                   <button
                     onClick={handleRegistration}
-                    className="w-full bg-base-content text-base-100 py-4 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all shadow-xl shadow-black/10 cursor-pointer"
+                    disabled={isLoading}
+                    className="w-full bg-base-content text-base-100 py-4 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all shadow-xl shadow-black/10 cursor-pointer disabled:bg-base-content/50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    Register Account
+                    {isLoading ? (
+                      <span className="loading loading-spinner loading-sm"></span>
+                    ) : null}
+                    {isLoading ? "Creating..." : "Register Account"}
                   </button>
                 )}
 
@@ -328,35 +345,40 @@ const Login = () => {
                     {/* The Google Button */}
                     <button
                       onClick={handleGoogleSignIn}
-                      className="w-full flex items-center justify-center gap-3 bg-base-100 border border-[#dadce0] py-3 px-4 rounded-sm hover:bg-[#f8f9fa] hover:shadow-md transition-all cursor-pointer"
+                      disabled={isLoading}
+                      className="w-full flex items-center justify-center gap-3 bg-base-100 border border-[#dadce0] py-3 px-4 rounded-sm hover:bg-[#f8f9fa] hover:shadow-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {/* Official Google G Logo SVG */}
-                      <svg
-                        width="18"
-                        height="18"
-                        viewBox="0 0 18 18"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"
-                          fill="#4285F4"
-                        />
-                        <path
-                          d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"
-                          fill="#34A853"
-                        />
-                        <path
-                          d="M3.964 10.706c-.18-.54-.282-1.117-.282-1.706s.102-1.166.282-1.706V4.962H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.038l3.007-2.332z"
-                          fill="#FBBC05"
-                        />
-                        <path
-                          d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.443 2.048.957 4.962L3.964 7.294c.708-2.127 2.692-3.714 5.036-3.714z"
-                          fill="#EA4335"
-                        />
-                      </svg>
+                      {isLoading ? (
+                        <span className="loading loading-spinner loading-sm text-accent"></span>
+                      ) : (
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 18 18"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"
+                            fill="#4285F4"
+                          />
+                          <path
+                            d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"
+                            fill="#34A853"
+                          />
+                          <path
+                            d="M3.964 10.706c-.18-.54-.282-1.117-.282-1.706s.102-1.166.282-1.706V4.962H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.038l3.007-2.332z"
+                            fill="#FBBC05"
+                          />
+                          <path
+                            d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.443 2.048.957 4.962L3.964 7.294c.708-2.127 2.692-3.714 5.036-3.714z"
+                            fill="#EA4335"
+                          />
+                        </svg>
+                      )}
 
                       <span className="text-[#3c4043] font-sans font-medium text-sm tracking-tight">
-                        Continue with Google
+                        {isLoading ? "Please wait..." : "Continue with Google"}
                       </span>
                     </button>
                   </div>

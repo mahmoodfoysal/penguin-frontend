@@ -38,7 +38,7 @@
 //         element: <Home></Home>,
 //         loader: async () =>
 //           await fetch(
-//             "http://localhost:5000/api/penguin/get-product-list",
+//             "${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list",
 //           ),
 //       },
 //       {
@@ -46,10 +46,10 @@
 //         element: <Products></Products>,
 //         loader: async () => {
 //           const products = await fetch(
-//             "http://localhost:5000/api/penguin/get-product-list",
+//             "${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list",
 //           );
 //           const categories = await fetch(
-//             "http://localhost:5000/api/client/get-all-categories",
+//             "${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/client/get-all-categories",
 //           );
 //           return {
 //             products: await products.json(),
@@ -62,10 +62,10 @@
 //         element: <ProductDetails></ProductDetails>,
 //         loader: async ({ params }) => {
 //           const products = await fetch(
-//             "http://localhost:5000/api/penguin/get-product-list",
+//             "${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list",
 //           );
 //           const details = await fetch(
-//             `http://localhost:5000/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
+//             `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
 //           );
 //           return {
 //             products: await products.json(),
@@ -243,22 +243,26 @@ const fetchWithTimeout = async (url, options = {}, timeout = 7000) => {
 // ------------------
 const homeLoader = async () => {
   const products = await fetchWithTimeout(
-    "http://localhost:5000/api/penguin/get-product-list",
+    `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
   );
   return { products };
 };
 
 const adminLoader = async () => {
   const adminData = await fetchWithTimeout(
-    "http://localhost:5000/api/admin/get-admin-list",
+    `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-admin-list`,
   );
   return { adminData };
 };
 
 const productsLoader = async () => {
   const [products, categories] = await Promise.all([
-    fetchWithTimeout("http://localhost:5000/api/penguin/get-product-list"),
-    fetchWithTimeout("http://localhost:5000/api/client/get-all-categories"),
+    fetchWithTimeout(
+      `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
+    ),
+    fetchWithTimeout(
+      `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/client/get-all-categories`,
+    ),
   ]);
 
   return { products, categories };
@@ -266,12 +270,14 @@ const productsLoader = async () => {
 
 const productDetailsLoader = async ({ params }) => {
   const [products, product_details, comments] = await Promise.all([
-    fetchWithTimeout("http://localhost:5000/api/penguin/get-product-list"),
     fetchWithTimeout(
-      `http://localhost:5000/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
+      `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
     ),
     fetchWithTimeout(
-      `http://localhost:5000/api/penguin/get-review-list/${params.prod_id}`,
+      `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
+    ),
+    fetchWithTimeout(
+      `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list/${params.prod_id}`,
     ),
   ]);
 

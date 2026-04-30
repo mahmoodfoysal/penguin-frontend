@@ -29,10 +29,11 @@ const ProductDetails = () => {
   const [clientComment, setClientComment] = useState(null);
 
   const [isInvalid, setIsInvalid] = useState(false);
+  const [isReviewLoading, setIsReviewLoading] = useState(false);
 
   const productList = data.products?.list_data;
 
-  const commentList = data.comments?.list_data;
+  const [commentList, setCommentList] = useState(data.comments?.list_data);
 
   const {
     _id,
@@ -175,18 +176,55 @@ const ProductDetails = () => {
     });
 
     if (confirmation.isConfirmed) {
-      const result = await axios.post(
-        `http://localhost:5000/api/penguin/insert-update-review-list`,
-        data,
-      );
-      if (result.status) {
-        Swal.fire({
-          icon: "success",
-          title: "Successful",
-          text: "Successful",
-          confirmButtonText: "OK",
-        });
-        setIsInvalid(false);
+      setIsReviewLoading(true);
+      try {
+        const result = await axios.post(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/insert-update-review-list`,
+          data,
+        );
+        if (result.status) {
+          Swal.fire({
+            icon: "success",
+            title: "Successful",
+            text: "Successful",
+            confirmButtonText: "OK",
+          });
+          setIsInvalid(false);
+
+          const obj = {
+            _id: result.data.id,
+
+            full_name: userInfo?.name,
+            image_url: userInfo?.photo,
+            createdAt: new Date().toISOString(),
+            comment: clientComment,
+            rating: clientRating,
+            sub_cat_id: sub_cat_id,
+            par_cat_id: par_cat_id,
+            prod_id: prod_id,
+          };
+
+          const index = commentList?.findIndex(
+            (item) => item.id == result.data.id,
+          );
+
+          if (index > -1) {
+            const updatedList = [...commentList];
+
+            updatedList[index] = obj;
+
+            setClientComment(updatedList);
+          } else {
+            setCommentList([obj, ...commentList]);
+          }
+
+          setClientComment("");
+          setClientRating(0);
+        }
+      } catch (error) {
+        console.error("Failed to submit review", error);
+      } finally {
+        setIsReviewLoading(false);
       }
     }
 
@@ -432,9 +470,14 @@ const ProductDetails = () => {
                       </div>
                       <button
                         onClick={handleReviewSubmit}
-                        className="btn btn-block bg-base-content text-base-100 rounded-none border-none hover:bg-accent font-heading font-black uppercase tracking-widest"
+                        disabled={isReviewLoading}
+                        className="btn btn-block bg-base-content text-base-100 rounded-none border-none hover:bg-accent font-heading font-black uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        Submit Review
+                        {isReviewLoading ? (
+                          <span className="loading loading-spinner loading-sm"></span>
+                        ) : (
+                          "Submit Review"
+                        )}
                       </button>
                     </div>
                   </div>
@@ -445,15 +488,19 @@ const ProductDetails = () => {
                     <h2 className="font-heading text-3xl font-black uppercase italic mb-6">
                       Customer <span className="text-accent">Comments</span>
                     </h2>
+
                     {!commentList?.length ? (
                       <DataNotFound
                         backMsg="No Comment"
                         mainMsg1="No"
                         mainMsg2="Comment"
-                      ></DataNotFound>
+                      />
                     ) : (
-                      <div className="space-y-8">
-                        {commentList.map((item, index) => (
+                      /* FIXED: Added max-height and overflow scroll logic here */
+                      <div
+                        className={`space-y-8 ${commentList?.length > 4 ? "max-h-[600px] overflow-y-auto pr-4 custom-scrollbar" : ""}`}
+                      >
+                        {commentList?.map((item, index) => (
                           <div
                             key={index}
                             className="border-b border-base-content/5 pb-8 flex gap-4"
@@ -471,24 +518,19 @@ const ProductDetails = () => {
 
                             {/* 2. CONTENT AREA */}
                             <div className="flex-grow min-w-0">
-                              {" "}
-                              {/* min-w-0 is key for text wrapping in flexbox */}
                               <div className="flex justify-between items-center mb-1 gap-2">
                                 <h4 className="font-heading font-black uppercase text-sm truncate">
                                   {item?.full_name}
                                 </h4>
-
                                 <Rating
                                   style={{ maxWidth: 80 }}
                                   value={item.rating}
                                   readOnly
                                 />
                               </div>
-                              {/* COMMENT (Added wrap logic) */}
                               <p className="text-sm opacity-70 leading-relaxed italic break-words whitespace-pre-wrap">
                                 {item.comment}
                               </p>
-                              {/* TIME */}
                               <div className="mt-4 text-[10px] font-bold opacity-30 uppercase tracking-widest">
                                 {timeCount(item.createdAt)}
                               </div>

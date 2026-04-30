@@ -154,7 +154,7 @@ const DirectCheckOut = () => {
         ],
       };
       if (confirmation.isConfirmed) {
-        const url = `http://localhost:5000/api/admin/insert-update-order-list`;
+        const url = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-order-list`;
         const result = await axios.post(url, data);
 
         if (result.status) {

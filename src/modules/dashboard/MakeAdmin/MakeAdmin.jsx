@@ -60,7 +60,7 @@ const MakeAdmin = () => {
     try {
       if (confirmation.isConfirmed) {
         const result = await axios.post(
-          `http://localhost:5000/api/admin/insert-update-admin`,
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-admin`,
           data,
         );
         if (result.data.status) {
@@ -82,14 +82,12 @@ const MakeAdmin = () => {
           );
 
           if (index > -1) {
-            // 1. Create a copy of the list
             const updatedList = [...adminList];
-            // 2. Update the specific item in the copy
+
             updatedList[index] = obj;
-            // 3. Set the state with the new array
+
             setAdminList(updatedList);
           } else {
-            // 1. Create a new array with the new object at the start, followed by the old items
             setAdminList([obj, ...adminList]);
           }
           handleResetForm();
@@ -127,7 +125,7 @@ const MakeAdmin = () => {
     try {
       if (confirmation.isConfirmed) {
         const result = await axios.delete(
-          `http://localhost:5000/api/admin/delete-admin-list/${item._id}`,
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/delete-admin-list/${item._id}`,
         );
         if (result.data?.status) {
           const index = adminList.findIndex((list) => list._id === item._id);

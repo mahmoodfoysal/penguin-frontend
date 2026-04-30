@@ -32,6 +32,8 @@ const Checkout = () => {
   const [isInvalid, setIsInvalid] = useState(false);
   const [couponCode, setCouponCode] = useState(null);
   const [couponInfo, setCouponInfo] = useState(null);
+  const [isCouponLoading, setIsCouponLoading] = useState(false);
+  const [isOrderLoading, setIsOrderLoading] = useState(false);
 
   // const pageInfo = [
   //   {
@@ -73,9 +75,10 @@ const Checkout = () => {
   ];
 
   const handleCouponCode = async () => {
+    setIsCouponLoading(true);
     try {
       const result = await axios.get(
-        `http://localhost:5000/api/penguin/get-match-coupon-list/${userInfo?.email}/${couponCode}`,
+        `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-match-coupon-list/${userInfo?.email}/${couponCode}`,
       );
 
       if (result.data?.is_valid === true && !result.data?.appliedAt) {
@@ -114,6 +117,8 @@ const Checkout = () => {
       console.log(result);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsCouponLoading(false);
     }
   };
 
@@ -220,49 +225,54 @@ const Checkout = () => {
         order_list: orderList,
       };
       if (confirmation.isConfirmed) {
-        const url = `http://localhost:5000/api/admin/insert-update-order-list`;
-        const result = await axios.post(url, data);
+        setIsOrderLoading(true);
+        try {
+          const url = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-order-list`;
+          const result = await axios.post(url, data);
 
-        if (result.status) {
-          if (couponInfo) {
-            const url = await axios.patch(
-              `http://localhost:5000/api/penguin/update-coupon-list/${couponInfo?._id}/${couponInfo?.email}`,
-            );
-            console.log(url);
+          if (result.status) {
+            if (couponInfo) {
+              const url = await axios.patch(
+                `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/update-coupon-list/${couponInfo?._id}/${couponInfo?.email}`,
+              );
+              console.log(url);
+            }
+
+            const updateStockPromises = cartList?.map(async (item) => {
+              const newStock = item.stock - item.quantity;
+              const url = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list/stock/${item?._id}`;
+
+              return await axios.patch(url, { stock: newStock });
+            });
+
+            await Promise.all(updateStockPromises);
+
+            Swal.fire({
+              icon: "success",
+              title: "Order Placed!",
+              text: "Your order has been submitted successfully.",
+              confirmButtonText: "OK",
+            });
+            dispatch(clearCart());
+            setIsInvalid(false);
+            navigate("/home");
+            setFormData({
+              fullName: null,
+              email: null,
+              phoneNo: null,
+              city: null,
+              countryInfo: { id: 1, country_name: "Bangladesh" },
+              zipCode: null,
+              address: null,
+              bkashNo: null,
+              transectionNo: null,
+              cardNumber: null,
+              cardExpDate: null,
+              cvcNo: null,
+            });
           }
-
-          const updateStockPromises = cartList?.map(async (item) => {
-            const newStock = item.stock - item.quantity;
-            const url = `http://localhost:5000/api/penguin/get-product-list/stock/${item?._id}`;
-
-            return await axios.patch(url, { stock: newStock });
-          });
-
-          await Promise.all(updateStockPromises);
-
-          Swal.fire({
-            icon: "success",
-            title: "Order Placed!",
-            text: "Your order has been submitted successfully.",
-            confirmButtonText: "OK",
-          });
-          dispatch(clearCart());
-          setIsInvalid(false);
-          navigate("/home");
-          setFormData({
-            fullName: null,
-            email: null,
-            phoneNo: null,
-            city: null,
-            countryInfo: { id: 1, country_name: "Bangladesh" },
-            zipCode: null,
-            address: null,
-            bkashNo: null,
-            transectionNo: null,
-            cardNumber: null,
-            cardExpDate: null,
-            cvcNo: null,
-          });
+        } finally {
+          setIsOrderLoading(false);
         }
       }
     } catch (error) {
@@ -734,16 +744,23 @@ const Checkout = () => {
                       <button
                         onClick={handleCouponCode}
                         disabled={
-                          couponInfo?.email &&
-                          couponInfo?.is_valid == true &&
-                          !couponInfo?.appliedAt
+                          isCouponLoading ||
+                          (couponInfo?.email &&
+                            couponInfo?.is_valid == true &&
+                            !couponInfo?.appliedAt)
                         }
-                        className="w-full bg-base-content text-base-100 py-2 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-1 rounded-md cursor-pointer"
+                        className="w-full bg-base-content text-base-100 py-2 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-1 rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        Apply
-                        <span className="group-hover:translate-x-2 transition-transform">
-                          →
-                        </span>
+                        {isCouponLoading ? (
+                          <span className="loading loading-spinner loading-sm"></span>
+                        ) : (
+                          <>
+                            Apply
+                            <span className="group-hover:translate-x-2 transition-transform">
+                              →
+                            </span>
+                          </>
+                        )}
                       </button>
                     </div>
 
@@ -758,12 +775,19 @@ const Checkout = () => {
                   {/* Place Order Button */}
                   <button
                     onClick={handleOrderSubmit}
-                    className="w-full bg-base-content text-base-100 py-4 mt-10 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-3 rounded-md cursor-pointer"
+                    disabled={isOrderLoading}
+                    className="w-full bg-base-content text-base-100 py-4 mt-10 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-3 rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Place Order
-                    <span className="group-hover:translate-x-2 transition-transform">
-                      →
-                    </span>
+                    {isOrderLoading ? (
+                      <span className="loading loading-spinner loading-sm"></span>
+                    ) : (
+                      <>
+                        Place Order
+                        <span className="group-hover:translate-x-2 transition-transform">
+                          →
+                        </span>
+                      </>
+                    )}
                   </button>
 
                   <p className="text-[9px] text-center mt-6 opacity-40 leading-relaxed uppercase font-bold tracking-tighter">

@@ -35,7 +35,7 @@ const TopBanner = () => {
             <div className="absolute -inset-10 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all duration-700"></div>
             <img
               src={images[currentImage]}
-              className="w-full max-w-xl rounded-3xl shadow-2xl rotate-2 group-hover:rotate-0 transition-transform duration-500 ease-out z-10 relative cursor-pointer"
+              className="h-[400px] w-full max-w-xl rounded-3xl shadow-2xl rotate-2 group-hover:rotate-0 transition-transform duration-500 ease-out z-10 relative cursor-pointer"
               alt="Featured Essential Product"
               title="Click here to explore more related product"
             />

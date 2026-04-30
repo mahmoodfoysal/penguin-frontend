@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../store/slice/cartSlice";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, isBestSeller }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // Capture stable reference time on mount to maintain component purity
+  const [referenceTime] = useState(() => Date.now());
+
+  // Calculate newness based on stable reference time
+  const isNew =
+    product.createdAt &&
+    referenceTime - new Date(product.createdAt).getTime() <
+      30 * 24 * 60 * 60 * 1000;
 
   const handleProductDetails = (item) => {
     navigate(`/product-details/${item._id}/${item.prod_id}`);
@@ -25,6 +34,19 @@ const ProductCard = ({ product }) => {
               className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-in-out"
               alt="prod image"
             />
+            {/* Badges */}
+            <div className="absolute top-5 left-5 z-20 flex flex-col gap-2">
+              {isNew && (
+                <span className="bg-accent text-white text-[10px] font-black px-3 py-1 uppercase tracking-widest rounded-full shadow-lg w-max">
+                  New
+                </span>
+              )}
+              {isBestSeller && (
+                <span className="bg-warning text-warning-content text-[10px] font-black px-3 py-1 uppercase tracking-widest rounded-full shadow-lg w-max">
+                  Best Seller
+                </span>
+              )}
+            </div>
             {/* Quick-add overlay */}
             <button
               onClick={(e) => {
@@ -65,7 +87,7 @@ const ProductCard = ({ product }) => {
               <span className="text-base-content/60 text-sm font-medium tracking-wide italic">
                 Stock: {product.stock}
               </span>
-              <button 
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
                   handleProductDetails(product);

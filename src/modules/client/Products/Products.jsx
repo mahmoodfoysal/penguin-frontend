@@ -9,6 +9,7 @@ import Brand from "../../../components/Brand";
 import PageHeader from "../../../components/PageHeader";
 import ComponentLoader from "../../../pages/ComponentLoader";
 import DataNotFound from "../../../pages/DataNotFound";
+import axios from "axios";
 
 const Products = () => {
   const pageInfo = [
@@ -34,7 +35,17 @@ const Products = () => {
   const categoryList = data.categories?.list_data || [];
 
   const [searchProductList, setSearchProductList] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [showNewestOnly, setShowNewestOnly] = useState(
+    location.state?.filter === "newest",
+  );
+  const [showBestSellerOnly, setShowBestSellerOnly] = useState(
+    location.state?.filter === "bestSeller",
+  );
+  const [reviewsList, setReviewsList] = useState([]);
+  
+  const [selectedCategory, setSelectedCategory] = useState(
+    location.state?.categoryId || null,
+  );
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [price, setPrice] = useState(0);
@@ -43,7 +54,9 @@ const Products = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [sortOption, setSortOption] = useState("newest");
+  const [sortOption, setSortOption] = useState(
+    location.state?.filter === "bestSeller" ? "bestSeller" : "newest"
+  );
 
   const itemsPerPage = 9;
 
@@ -53,9 +66,59 @@ const Products = () => {
       ? Math.max(...productsList.map((item) => item.price || 0))
       : 0;
 
+  // Capture stable reference time on mount to maintain component purity
+  const [referenceTime] = useState(() => Date.now());
+  const thirtyDaysAgo = referenceTime - 30 * 24 * 60 * 60 * 1000;
+
+  // Fetch reviews for best seller filtering
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list`
+        );
+        setReviewsList(response.data?.list_data || response.data || []);
+      } catch (error) {
+        console.error("Failed to fetch reviews", error);
+      }
+    };
+    fetchReviews();
+  }, []);
+
+  // Pre-calculate average ratings
+  const ratingsMap = useMemo(() => {
+    const map = {};
+    reviewsList.forEach((review) => {
+      const prodId = review.prod_id;
+      if (!map[prodId]) {
+        map[prodId] = { total: 0, count: 0 };
+      }
+      map[prodId].total += review.rating || 0;
+      map[prodId].count += 1;
+    });
+    return map;
+  }, [reviewsList]);
+
   // ================= FILTER LOGIC =================
   const filteredProducts = useMemo(() => {
     let result = productsList;
+
+    // NEW ARRIVALS FILTER (Last 30 days)
+    if (showNewestOnly) {
+      result = result.filter(
+        (item) => new Date(item.createdAt).getTime() >= thirtyDaysAgo,
+      );
+    }
+
+    // BEST SELLER FILTER
+    if (showBestSellerOnly) {
+      result = result.filter((item) => {
+        const stats = ratingsMap[item.prod_id];
+        if (!stats) return false;
+        const avg = stats.total / stats.count;
+        return avg >= 4;
+      });
+    }
 
     // SEARCH
     if (searchProductList) {
@@ -109,24 +172,43 @@ const Products = () => {
 
     // --- SORTING ---
     if (sortOption === "lowToHigh") {
-      result = [...result].sort((a, b) => a.price - b.price);
+      result = [...result].sort((a, b) => (a.price || 0) - (b.price || 0));
     } else if (sortOption === "highToLow") {
-      result = [...result].sort((a, b) => b.price - a.price);
+      result = [...result].sort((a, b) => (b.price || 0) - (a.price || 0));
     } else if (sortOption === "newest") {
-      result = [...result].sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at),
-      );
+      result = [...result].sort((a, b) => {
+        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        
+        // Handle invalid dates (NaN) by treating them as 0
+        const validTimeA = isNaN(timeA) ? 0 : timeA;
+        const validTimeB = isNaN(timeB) ? 0 : timeB;
+        
+        return validTimeB - validTimeA;
+      });
+    } else if (sortOption === "bestSeller") {
+      result = [...result].sort((a, b) => {
+        const statsA = ratingsMap[a.prod_id];
+        const statsB = ratingsMap[b.prod_id];
+        const avgA = statsA ? statsA.total / statsA.count : 0;
+        const avgB = statsB ? statsB.total / statsB.count : 0;
+        return avgB - avgA;
+      });
     }
 
     return result;
   }, [
     productsList,
+    showNewestOnly,
+    showBestSellerOnly,
     searchProductList,
     selectedCategory,
     selectedSubCategory,
     selectedBrands,
     price,
     sortOption,
+    thirtyDaysAgo,
+    ratingsMap,
   ]);
 
   // ================= PAGINATION =================
@@ -135,30 +217,13 @@ const Products = () => {
   const paginatedProducts = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredProducts.slice(start, start + itemsPerPage);
-  }, [filteredProducts, currentPage]);
-
-  // reset page on filter change
-  useEffect(() => {
-    // Schedule the state update after the current render
-    const timeout = setTimeout(() => {
-      setCurrentPage(1);
-    }, 0);
-
-    return () => clearTimeout(timeout);
-  }, [
-    searchProductList,
-    selectedCategory,
-    selectedSubCategory,
-    selectedBrands,
-    price,
-  ]);
+  }, [filteredProducts, currentPage, itemsPerPage]);
 
   // ================= HANDLERS =================
   const toggleCategory = (category) => {
     setOpenCategory((prev) =>
       prev === category.par_cat_name ? null : category.par_cat_name,
     );
-    console.log("prev", category);
     setSelectedCategory(category.par_cat_id);
     setSelectedSubCategory(null);
   };
@@ -208,6 +273,8 @@ const Products = () => {
   }, []);
 
   const handleClearFilter = () => {
+    setShowNewestOnly(false);
+    setShowBestSellerOnly(false);
     setSearchProductList("");
     setSelectedCategory(null);
     setSelectedSubCategory(null);
@@ -216,15 +283,39 @@ const Products = () => {
     setPrice(0);
   };
 
+  // Handle route state updates
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (location.state?.categoryId) {
+    if (location.state?.categoryId) {
+      setTimeout(() => {
         setSelectedCategory(location.state.categoryId);
-      }
-    }, 0);
-
-    return () => clearTimeout(timeout);
+      }, 0);
+    }
+    if (location.state?.filter === "newest") {
+      setTimeout(() => {
+        setShowNewestOnly(true);
+      }, 0);
+    }
+    if (location.state?.filter === "bestSeller") {
+      setTimeout(() => {
+        setShowBestSellerOnly(true);
+      }, 0);
+    }
   }, [location.state]);
+
+  // reset page on filter change
+  useEffect(() => {
+    setTimeout(() => {
+      setCurrentPage(1);
+    }, 0);
+  }, [
+    showNewestOnly,
+    showBestSellerOnly,
+    searchProductList,
+    selectedCategory,
+    selectedSubCategory,
+    selectedBrands,
+    price,
+  ]);
 
   return (
     <>
@@ -237,19 +328,34 @@ const Products = () => {
           <div className="container mx-auto px-6 py-8 flex flex-col lg:flex-row gap-12">
             {/* MOBILE FILTER TOGGLE */}
             <div className="lg:hidden mb-6">
-              <button 
-                onClick={() => setOpenCategory(openCategory === 'filters' ? null : 'filters')}
+              <button
+                onClick={() =>
+                  setOpenCategory(openCategory === "filters" ? null : "filters")
+                }
                 className="btn btn-outline w-full flex justify-between items-center"
               >
                 <span>Filter & Sort</span>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                  />
                 </svg>
               </button>
             </div>
 
             {/* LEFT SIDEBAR FILTERS */}
-            <aside className={`w-full lg:w-64 flex-shrink-0 ${openCategory === 'filters' ? 'block' : 'hidden lg:block'}`}>
+            <aside
+              className={`w-full lg:w-64 flex-shrink-0 ${openCategory === "filters" ? "block" : "hidden lg:block"}`}
+            >
               <div className="lg:sticky lg:top-28 space-y-10">
                 {/* SEARCH */}
                 <SearchBar
@@ -283,31 +389,48 @@ const Products = () => {
 
             {/* PRODUCT GRID & PAGINATION */}
             <main className="flex-grow">
-              {(searchProductList ||
+              {(showNewestOnly ||
+                showBestSellerOnly ||
+                searchProductList ||
                 selectedCategory ||
                 selectedSubCategory ||
                 selectedBrands?.length > 0 ||
                 price > 0) && (
-                <h4
-                  onClick={handleClearFilter}
-                  className="text-sm cursor-pointer hover:text-accent flex items-center gap-2"
-                >
-                  Clear All Filter
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={3}
-                    stroke="currentColor"
-                    className="w-3.5 h-3.5"
+                <div className="flex items-center justify-between mb-6">
+                  <h4
+                    onClick={handleClearFilter}
+                    className="text-sm cursor-pointer hover:text-accent flex items-center gap-2 font-bold uppercase tracking-widest text-accent"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </h4>
+                    Clear All Filter
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={3}
+                      stroke="currentColor"
+                      className="w-3.5 h-3.5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </h4>
+
+                  <div className="flex gap-2 flex-wrap">
+                    {showNewestOnly && (
+                      <span className="badge badge-accent badge-outline font-black uppercase italic text-[10px] py-3 px-4 rounded-none tracking-widest">
+                        New Arrivals Only
+                      </span>
+                    )}
+                    {showBestSellerOnly && (
+                      <span className="badge badge-warning badge-outline font-black uppercase italic text-[10px] py-3 px-4 rounded-none tracking-widest">
+                        Best Sellers Only
+                      </span>
+                    )}
+                  </div>
+                </div>
               )}
 
               <div className="flex justify-between items-center mb-8 pb-4 border-b border-base-content/5 font-heading text-[10px] font-bold uppercase tracking-[0.2em]">
@@ -325,6 +448,7 @@ const Products = () => {
                   onChange={(e) => setSortOption(e.target.value)}
                 >
                   <option value="newest">Sort: Newest</option>
+                  <option value="bestSeller">Sort: Best Seller</option>
                   <option value="lowToHigh">Price: Low to High</option>
                   <option value="highToLow">Price: High to Low</option>
                 </select>
@@ -338,9 +462,17 @@ const Products = () => {
                 ></DataNotFound>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-12">
-                  {paginatedProducts.map((item, index) => (
-                    <ProductCard product={item} key={index}></ProductCard>
-                  ))}
+                  {paginatedProducts.map((item, index) => {
+                    const stats = ratingsMap[item.prod_id];
+                    const isBestSeller = stats && stats.total / stats.count >= 4;
+                    return (
+                      <ProductCard
+                        product={item}
+                        key={index}
+                        isBestSeller={isBestSeller}
+                      ></ProductCard>
+                    );
+                  })}
                 </div>
               )}
 
@@ -388,7 +520,6 @@ const Products = () => {
           {/* <FeatureProducts></FeatureProducts> */}
         </div>
       )}
-      ]
     </>
   );
 };
