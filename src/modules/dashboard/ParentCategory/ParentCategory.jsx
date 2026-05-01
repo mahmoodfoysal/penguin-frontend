@@ -52,7 +52,7 @@ const ParentCategory = () => {
       _id: null,
       par_cat_id: "",
       par_cat_name: "",
-      status: "",
+      status: 1,
       isEdit: false,
     });
   };
@@ -62,8 +62,8 @@ const ParentCategory = () => {
     if (
       !formData.par_cat_name ||
       !formData.par_cat_id ||
-      !formData.status ||
-      !userInfo?.email
+      !userInfo?.email ||
+      !formData.status
     ) {
       setIsInvalid(true);
       Swal.fire({
@@ -134,6 +134,72 @@ const ParentCategory = () => {
       console.log(err);
     } finally {
       setIsLoadingButton(false);
+    }
+  };
+
+  const handleStatusUpdate = async (item) => {
+    const confirmation = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to submit?",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      confirmButtonText: "Ok",
+    });
+    const data = {
+      _id: item._id,
+      status: Number(item.status == 1 ? 0 : 1),
+      user_info: userInfo?.email,
+    };
+    console.log("data", data);
+    try {
+      if (confirmation.isConfirmed) {
+        Swal.fire({
+          title: "Processing...",
+          text: "Please wait...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+        const result = await axios.patch(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/update-parent-category-status/${item._id}`,
+          data,
+        );
+        if (result.data.status) {
+          Swal.close();
+          Swal.fire({
+            icon: "success",
+            title: `${result.data.message}`,
+            text: `${result.data.message}`,
+            confirmButtonText: "OK",
+          });
+          const obj = {
+            _id: result.data?.id,
+            par_cat_id: Number(item.par_cat_id),
+            par_cat_name: item.par_cat_name,
+            status: Number(result.data?.status_code),
+            user_info: userInfo?.email,
+          };
+
+          const index = categoryList?.findIndex(
+            (item) => item._id == result.data.id,
+          );
+
+          if (index > -1) {
+            const updatedList = [...categoryList];
+
+            updatedList[index] = obj;
+
+            setCategoryList(updatedList);
+          } else {
+            setCategoryList([obj, ...categoryList]);
+          }
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      Swal.close();
     }
   };
 
@@ -245,7 +311,7 @@ const ParentCategory = () => {
             <div className="hidden md:grid grid-cols-4 px-8 py-4 bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black opacity-40">
               <span className="text-left">Category Name</span>
               <span className="text-center">Category ID</span>
-              <span className="text-center">Status</span>
+              <span className="text-left">Status</span>
               <span className="text-right">Actions</span>
             </div>
 
@@ -262,10 +328,26 @@ const ParentCategory = () => {
                 <span className="text-[11px] font-black opacity-60 text-center">
                   {item.par_cat_id}
                 </span>
-                <span className="text-[11px] font-black opacity-60 text-center">
-                  {item.status}
+                <span className="text-[11px] font-black opacity-60 text-left">
+                  {item.status === 1 ? "Active" : "Inactive"}
                 </span>
                 <div className="flex justify-end gap-4">
+                  {item.status == 1 ? (
+                    <span
+                      onClick={() => handleStatusUpdate(item)}
+                      className="material-icons cursor-pointer hover:text-blue-600 me-2"
+                    >
+                      visibility
+                    </span>
+                  ) : (
+                    <span
+                      onClick={() => handleStatusUpdate(item)}
+                      className="material-icons cursor-pointer hover:text-blue-600 me-2"
+                    >
+                      visibility_off
+                    </span>
+                  )}
+
                   <span
                     onClick={() => handleEdit(item)}
                     className="material-icons cursor-pointer hover:text-blue-600 me-2"
@@ -395,15 +477,14 @@ const ParentCategory = () => {
               </button>
               <button
                 onClick={handleSubmit}
+                disabled={isLoadingButton}
                 className="px-8 bg-base-content text-base-100 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-accent transition-colors cursor-pointer rounded-sm"
               >
-                disabled={isLoadingButton}
                 {isLoadingButton ? (
                   <span className="loading loading-spinner loading-sm"></span>
                 ) : (
-                  "Submit Review"
+                  "Submit"
                 )}
-                Save
               </button>
             </div>
           </div>
