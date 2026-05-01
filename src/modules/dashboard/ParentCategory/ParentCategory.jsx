@@ -1,7 +1,187 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import { useLoaderData } from "react-router";
+import Swal from "sweetalert2";
 
 const ParentCategory = () => {
+  const userInfo = useSelector((state) => state.auth.userInfo);
+  const { parentCategoryData } = useLoaderData();
+  const [categoryList, setCategoryList] = useState(
+    parentCategoryData?.list_data,
+  );
+  console.log(parentCategoryData);
+  const [formData, setFormData] = useState({
+    _id: null,
+    par_cat_id: "",
+    par_cat_name: "",
+    status: "",
+    isEdit: false,
+  });
+  const statusList = [
+    {
+      value: 1,
+      label: "Active",
+    },
+    {
+      value: 0,
+      label: "InActive",
+    },
+  ];
+  const [isEdit, setIsEdit] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isInvalid, setIsInvalid] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredCategoryList = useMemo(() => {
+    if (!searchQuery) return categoryList;
+    return categoryList.filter((item) =>
+      item.par_cat_name.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+  }, [searchQuery, categoryList]);
+
+  const handleResetForm = () => {
+    setFormData({
+      _id: null,
+      par_cat_id: "",
+      par_cat_name: "",
+      status: "",
+      isEdit: false,
+    });
+  };
+
+  const handleSubmit = async () => {
+    setIsInvalid(false);
+    if (
+      !formData.par_cat_name ||
+      !formData.par_cat_id ||
+      !formData.status ||
+      !userInfo?.email
+    ) {
+      setIsInvalid(true);
+      Swal.fire({
+        icon: "error",
+        title: "Invalid or missing required fields",
+        text: "Check input field",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+    const confirmation = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to submit?",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      confirmButtonText: "Ok",
+    });
+    const data = {
+      _id: isEdit ? formData._id : null,
+      par_cat_id: Number(formData.par_cat_id),
+      par_cat_name: formData.par_cat_name,
+      status: Number(formData.status),
+      user_info: userInfo?.email,
+    };
+    console.log("data", data);
+    try {
+      if (confirmation.isConfirmed) {
+        const result = await axios.post(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-parent-category`,
+          data,
+        );
+        if (result.data.status) {
+          Swal.fire({
+            icon: "success",
+            title: `${result.data.message}`,
+            text: `${result.data.message}`,
+            confirmButtonText: "OK",
+          });
+          const obj = {
+            _id: result.data.id,
+            par_cat_id: Number(formData.par_cat_id),
+            par_cat_name: formData.par_cat_name,
+            status: formData.status,
+            user_info: userInfo?.email,
+          };
+          handleResetForm();
+
+          const index = categoryList?.findIndex(
+            (item) => item._id == result.data.id,
+          );
+
+          if (index > -1) {
+            const updatedList = [...categoryList];
+
+            updatedList[index] = obj;
+
+            setCategoryList(updatedList);
+          } else {
+            setCategoryList([obj, ...categoryList]);
+          }
+        }
+        setIsEdit(false);
+        setIsDrawerOpen(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleEdit = (item) => {
+    setIsEdit(true);
+    setIsDrawerOpen(true);
+    setFormData({
+      _id: item._id,
+      par_cat_id: item.par_cat_id,
+      par_cat_name: item.par_cat_name,
+      status: item.status,
+      isEdit: true,
+    });
+  };
+
+  const handleCancel = () => {
+    setIsDrawerOpen(false);
+    setIsEdit(false);
+    handleResetForm();
+  };
+
+  const handleRemove = async (item) => {
+    const confirmation = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to submit?",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      confirmButtonText: "Ok",
+    });
+    try {
+      if (confirmation.isConfirmed) {
+        const result = await axios.delete(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/delete-parent-category-list/${item._id}`,
+        );
+        if (result.data?.status) {
+          const index = categoryList.findIndex((list) => list._id === item._id);
+
+          if (index !== -1) {
+            const newcategoryList = [...categoryList];
+
+            newcategoryList.splice(index, 1);
+
+            setCategoryList(newcategoryList);
+          }
+          Swal.fire({
+            icon: "success",
+            title: `${result.data.message}`,
+            text: `${result.data.message}`,
+            confirmButtonText: "OK",
+          });
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div>
       <div className="p-4 min-h-screen bg-base-100 relative overflow-x-hidden">
@@ -28,44 +208,69 @@ const ParentCategory = () => {
           </button>
         </div>
 
+        {/* --- SEARCH BAR SECTION --- */}
+        <div className="mb-8 relative max-w-md">
+          <label className="text-[10px] font-black uppercase tracking-widest opacity-50 block mb-2">
+            Search Categories
+          </label>
+          <div className="relative flex items-center">
+            <span className="material-icons absolute left-0 text-sm opacity-30">
+              search
+            </span>
+            <input
+              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchQuery}
+              type="text"
+              placeholder="FILTER BY NAME..."
+              className="w-full bg-transparent border-b-2 border-base-content/10 focus:border-accent outline-none py-3 pl-7 text-xs font-bold uppercase tracking-widest transition-all placeholder:opacity-20"
+            />
+          </div>
+        </div>
+        {/* -------------------------- */}
+
         {/* 2. CATEGORY LIST VIEW */}
         <div className="bg-base-100 border border-base-content/5 rounded-sm shadow-sm">
           <div className="grid grid-cols-1 divide-y divide-black/5">
             {/* Header Row */}
             <div className="hidden md:grid grid-cols-4 px-8 py-4 bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black opacity-40">
-              <span>Category Name</span>
-              <span>Slug / URL</span>
-              <span>Items Count</span>
+              <span className="text-left">Category Name</span>
+              <span className="text-left">Category ID</span>
+              <span className="text-left">Status</span>
               <span className="text-right">Actions</span>
             </div>
 
             {/* List Items */}
-            {["Footwear", "Apparel", "Accessories", "Limited Drops"].map(
-              (cat, i) => (
-                <div
-                  key={i}
-                  className="grid grid-cols-1 md:grid-cols-4 px-8 py-6 items-center hover:bg-base-200/30 transition-colors group"
-                >
-                  <span className="font-heading font-bold text-sm uppercase tracking-tight group-hover:text-accent transition-colors">
-                    {cat}
+            {filteredCategoryList?.map((item, index) => (
+              <div
+                key={index}
+                className="grid grid-cols-1 md:grid-cols-4 px-8 py-6 items-center hover:bg-base-200/30 transition-colors group"
+              >
+                <span className="font-heading font-bold text-sm uppercase tracking-tight group-hover:text-accent transition-colors">
+                  {item.par_cat_name}
+                </span>
+
+                <span className="text-[11px] font-black opacity-60">
+                  {item.par_cat_id}
+                </span>
+                <span className="text-[11px] font-black opacity-60">
+                  {item.status}
+                </span>
+                <div className="flex justify-end gap-4">
+                  <span
+                    onClick={() => handleEdit(item)}
+                    className="material-icons cursor-pointer hover:text-blue-600 me-2"
+                  >
+                    edit
                   </span>
-                  <span className="text-[11px] font-mono opacity-40">
-                    /shop/{cat.toLowerCase()}
+                  <span
+                    onClick={() => handleRemove(item)}
+                    className="material-icons cursor-pointer hover:text-red-600"
+                  >
+                    delete
                   </span>
-                  <span className="text-[11px] font-black opacity-60">
-                    24 Items
-                  </span>
-                  <div className="flex justify-end gap-4">
-                    <button className="text-[9px] font-black uppercase tracking-widest hover:text-accent transition-all border-b border-transparent hover:border-accent">
-                      Edit
-                    </button>
-                    <button className="text-[9px] font-black uppercase tracking-widest text-red-500 hover:underline">
-                      Delete
-                    </button>
-                  </div>
                 </div>
-              ),
-            )}
+              </div>
+            ))}
           </div>
         </div>
 
@@ -105,9 +310,17 @@ const ParentCategory = () => {
                   Category Name <span className="text-red-600">*</span>
                 </label>
                 <input
+                  value={formData.par_cat_name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, par_cat_name: e.target.value })
+                  }
                   type="text"
                   placeholder="Cloths"
-                  className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
+                  className={`w-full border-b-2 ${
+                    isInvalid && !formData.par_cat_name
+                      ? "border-red-600"
+                      : "border-base-content/10"
+                  } border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10`}
                 />
               </div>
 
@@ -116,22 +329,64 @@ const ParentCategory = () => {
                   Category ID <span className="text-red-600">*</span>
                 </label>
                 <input
+                  value={formData.par_cat_id}
+                  onChange={(e) =>
+                    setFormData({ ...formData, par_cat_id: e.target.value })
+                  }
                   type="number"
                   placeholder="123"
-                  className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
+                  className={`w-full border-b-2 ${
+                    isInvalid && !formData.par_cat_id
+                      ? "border-red-600"
+                      : "border-base-content/10"
+                  } border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10`}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  Status <span className="text-red-600">*</span>
+                </label>
+                <select
+                  value={formData.status}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      status: e.target.value,
+                    })
+                  }
+                  className={`w-full border-b-2 ${
+                    isInvalid && !formData.status
+                      ? "border-red-600"
+                      : "border-base-content/10"
+                  } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent text-base-content uppercase tracking-wider cursor-pointer`}
+                >
+                  {/* Mapping your country list */}
+                  {statusList.map((status) => (
+                    <option
+                      key={status.value}
+                      value={status.value}
+                      className="bg-base-100 text-base-content"
+                    >
+                      {status.label}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
             {/* Drawer Footer Actions */}
             <div className="pt-5 border-t border-base-content/5 flex justify-center gap-4">
               <button
-                onClick={() => setIsDrawerOpen(false)}
+                onClick={handleCancel}
                 className="px-8 border border-base-content/10 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-base-content hover:text-base-100 transition-all cursor-pointer rounded-sm"
               >
                 Cancel
               </button>
-              <button className="px-8 bg-base-content text-base-100 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-accent transition-colors cursor-pointer rounded-sm">
+              <button
+                onClick={handleSubmit}
+                className="px-8 bg-base-content text-base-100 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-accent transition-colors cursor-pointer rounded-sm"
+              >
                 Save
               </button>
             </div>

@@ -257,6 +257,13 @@ const adminLoader = async () => {
   return { adminData };
 };
 
+const parentCategoryLoader = async () => {
+  const parentCategoryData = await fetchWithTimeout(
+    `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-parent-category`,
+  );
+  return { parentCategoryData };
+};
+
 const productsLoader = async () => {
   const [products, categories] = await Promise.all([
     fetchWithTimeout(
@@ -374,7 +381,11 @@ const router = createBrowserRouter([
             loader: adminLoader,
           },
 
-          { path: "parent-category", element: <ParentCategory /> },
+          {
+            path: "parent-category",
+            element: <ParentCategory />,
+            loader: parentCategoryLoader,
+          },
           { path: "sub-category", element: <SubCategory /> },
           { path: "add-product", element: <AddProduct /> },
           { path: "pending-order", element: <PendingOrder /> },
