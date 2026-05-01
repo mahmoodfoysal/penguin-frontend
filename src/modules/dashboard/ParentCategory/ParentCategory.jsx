@@ -1,8 +1,9 @@
 import axios from "axios";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
+import Pagination from "../../../components/Pagination";
 
 const ParentCategory = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
@@ -34,12 +35,26 @@ const ParentCategory = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoadingButton, setIsLoadingButton] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
   const filteredCategoryList = useMemo(() => {
     if (!searchQuery) return categoryList;
     return categoryList.filter((item) =>
       item.par_cat_name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [searchQuery, categoryList]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  const totalPages = Math.ceil(filteredCategoryList.length / itemsPerPage);
+
+  const paginatedCategoryList = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredCategoryList.slice(start, start + itemsPerPage);
+  }, [filteredCategoryList, currentPage]);
 
   const handleCreate = () => {
     setIsEdit(false);
@@ -310,6 +325,7 @@ const ParentCategory = () => {
             {/* <thead> equivalent */}
             <thead className="hidden md:table-header-group bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black opacity-40">
               <tr>
+                <th className="px-8 py-4">SL</th>
                 <th className="px-8 py-4">Category Name</th>
                 <th className="px-8 py-4 text-center">Category ID</th>
                 <th className="px-8 py-4">Status</th>
@@ -319,12 +335,17 @@ const ParentCategory = () => {
 
             {/* <tbody> equivalent */}
             <tbody className="divide-y divide-black/5">
-              {filteredCategoryList?.map((item, index) => (
+              {paginatedCategoryList?.map((item, index) => (
                 <tr
                   key={index}
                   className="hover:bg-base-200/30 transition-colors group"
                 >
                   {/* <td> cells */}
+                  <td className="px-8 py-6">
+                    <span className="font-heading font-bold text-sm  tracking-tight group-hover:text-accent transition-colors">
+                      {(currentPage - 1) * itemsPerPage + index + 1}
+                    </span>
+                  </td>
                   <td className="px-8 py-6">
                     <span className="font-heading font-bold text-sm  tracking-tight group-hover:text-accent transition-colors">
                       {item.par_cat_name}
@@ -375,6 +396,13 @@ const ParentCategory = () => {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination component */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
 
         {/* 3. SIDE DRAWER (OVERLAY) */}
         {/* Backdrop */}
