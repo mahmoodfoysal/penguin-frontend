@@ -262,9 +262,9 @@ const ParentCategory = () => {
     <div>
       <div className="p-4 min-h-screen bg-base-100 relative overflow-x-hidden">
         {/* 1. TOP BAR WITH ADD BUTTON */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-6">
           <div>
-            <h1 className="font-heading text-5xl font-black uppercase  tracking-tighter text-base-content">
+            <h1 className="font-heading text-3xl md:text-5xl font-black uppercase tracking-tighter text-base-content">
               Parent{" "}
               <span className="text-accent text-outline">Categories</span>
             </h1>
@@ -275,7 +275,7 @@ const ParentCategory = () => {
 
           <button
             onClick={handleCreate}
-            className="bg-base-content text-base-100 px-8 py-3 font-heading font-black uppercase tracking-[0.2em] text-xs hover:bg-accent transition-all flex items-center gap-3 group rounded-sm cursor-pointer"
+            className="w-full md:w-auto bg-base-content text-base-100 px-8 py-3 font-heading font-black uppercase tracking-[0.2em] text-xs hover:bg-accent transition-all flex items-center justify-center gap-3 group rounded-sm cursor-pointer"
           >
             Add New
             <span className="text-lg group-hover:rotate-90 transition-transform">
@@ -285,7 +285,7 @@ const ParentCategory = () => {
         </div>
 
         {/* --- SEARCH BAR SECTION --- */}
-        <div className="mb-8 relative max-w-md">
+        <div className="mb-8 relative max-w-full md:max-w-md">
           <label className="text-[10px] font-black uppercase tracking-widest opacity-50 block mb-2">
             Search Categories
           </label>

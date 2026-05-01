@@ -153,7 +153,7 @@ const MakeAdmin = () => {
     <div className="p-4">
       {/* 1. HEADER */}
       <header className="mb-8">
-        <h1 className="font-heading text-5xl font-black uppercase tracking-tighter">
+        <h1 className="font-heading text-3xl md:text-5xl font-black uppercase tracking-tighter">
           Admin <span className="text-accent text-outline">Control</span>
         </h1>
         <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mt-2">
@@ -168,7 +168,7 @@ const MakeAdmin = () => {
         </h3>
 
         <form
-          className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-end w-full"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end w-full"
           onSubmit={(e) => e.preventDefault()}
         >
           {/* Email Input */}

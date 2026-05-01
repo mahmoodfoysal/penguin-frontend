@@ -41,7 +41,9 @@ const DashboardHome = () => {
               className={`text-[9px] font-bold mt-1 ${stat.trend.includes("+") ? "text-green-500" : "text-red-500"}`}
             >
               {stat.trend}{" "}
-              <span className="opacity-40 text-base-content ml-1">vs last month</span>
+              <span className="opacity-40 text-base-content ml-1">
+                vs last month
+              </span>
             </p>
           </div>
         ))}
