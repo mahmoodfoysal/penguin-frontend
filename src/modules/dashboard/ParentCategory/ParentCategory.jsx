@@ -32,6 +32,7 @@ const ParentCategory = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isInvalid, setIsInvalid] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoadingButton, setIsLoadingButton] = useState(false);
 
   const filteredCategoryList = useMemo(() => {
     if (!searchQuery) return categoryList;
@@ -39,6 +40,12 @@ const ParentCategory = () => {
       item.par_cat_name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [searchQuery, categoryList]);
+
+  const handleCreate = () => {
+    setIsEdit(false);
+    setIsDrawerOpen(true);
+    handleResetForm();
+  };
 
   const handleResetForm = () => {
     setFormData({
@@ -85,6 +92,7 @@ const ParentCategory = () => {
     console.log("data", data);
     try {
       if (confirmation.isConfirmed) {
+        setIsLoadingButton(true);
         const result = await axios.post(
           `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-parent-category`,
           data,
@@ -124,6 +132,8 @@ const ParentCategory = () => {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoadingButton(false);
     }
   };
 
@@ -198,7 +208,7 @@ const ParentCategory = () => {
           </div>
 
           <button
-            onClick={() => setIsDrawerOpen(true)}
+            onClick={handleCreate}
             className="bg-base-content text-base-100 px-8 py-3 font-heading font-black uppercase tracking-[0.2em] text-xs hover:bg-accent transition-all flex items-center gap-3 group rounded-sm cursor-pointer"
           >
             Add New Category
@@ -221,7 +231,7 @@ const ParentCategory = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               value={searchQuery}
               type="text"
-              placeholder="FILTER BY NAME..."
+              placeholder="search"
               className="w-full bg-transparent border-b-2 border-base-content/10 focus:border-accent outline-none py-3 pl-7 text-xs font-bold uppercase tracking-widest transition-all placeholder:opacity-20"
             />
           </div>
@@ -234,8 +244,8 @@ const ParentCategory = () => {
             {/* Header Row */}
             <div className="hidden md:grid grid-cols-4 px-8 py-4 bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black opacity-40">
               <span className="text-left">Category Name</span>
-              <span className="text-left">Category ID</span>
-              <span className="text-left">Status</span>
+              <span className="text-center">Category ID</span>
+              <span className="text-center">Status</span>
               <span className="text-right">Actions</span>
             </div>
 
@@ -249,10 +259,10 @@ const ParentCategory = () => {
                   {item.par_cat_name}
                 </span>
 
-                <span className="text-[11px] font-black opacity-60">
+                <span className="text-[11px] font-black opacity-60 text-center">
                   {item.par_cat_id}
                 </span>
-                <span className="text-[11px] font-black opacity-60">
+                <span className="text-[11px] font-black opacity-60 text-center">
                   {item.status}
                 </span>
                 <div className="flex justify-end gap-4">
@@ -387,6 +397,12 @@ const ParentCategory = () => {
                 onClick={handleSubmit}
                 className="px-8 bg-base-content text-base-100 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-accent transition-colors cursor-pointer rounded-sm"
               >
+                disabled={isLoadingButton}
+                {isLoadingButton ? (
+                  <span className="loading loading-spinner loading-sm"></span>
+                ) : (
+                  "Submit Review"
+                )}
                 Save
               </button>
             </div>
