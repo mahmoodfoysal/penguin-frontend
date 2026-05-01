@@ -264,6 +264,13 @@ const parentCategoryLoader = async () => {
   return { parentCategoryData };
 };
 
+const subCategoryLoader = async () => {
+  const subCategoryData = await fetchWithTimeout(
+    `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-sub-category`,
+  );
+  return { subCategoryData };
+};
+
 const productsLoader = async () => {
   const [products, categories] = await Promise.all([
     fetchWithTimeout(
@@ -386,7 +393,12 @@ const router = createBrowserRouter([
             element: <ParentCategory />,
             loader: parentCategoryLoader,
           },
-          { path: "sub-category", element: <SubCategory /> },
+          {
+            path: "sub-category",
+            element: <SubCategory />,
+            loader: () =>
+              Promise.all([parentCategoryLoader(), subCategoryLoader()]),
+          },
           { path: "add-product", element: <AddProduct /> },
           { path: "pending-order", element: <PendingOrder /> },
         ],

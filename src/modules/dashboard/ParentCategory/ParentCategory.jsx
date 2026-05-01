@@ -298,7 +298,7 @@ const ParentCategory = () => {
               value={searchQuery}
               type="text"
               placeholder="search"
-              className="w-full bg-transparent border-b-2 border-base-content/10 focus:border-accent outline-none py-3 pl-7 text-xs font-bold uppercase tracking-widest transition-all placeholder:opacity-20"
+              className="w-full bg-transparent border-b-2 border-base-content/10 focus:border-accent outline-none py-3 pl-7 text-xs font-bold tracking-widest transition-all placeholder:opacity-20"
             />
           </div>
         </div>
@@ -326,7 +326,7 @@ const ParentCategory = () => {
                 >
                   {/* <td> cells */}
                   <td className="px-8 py-6">
-                    <span className="font-heading font-bold text-sm uppercase tracking-tight group-hover:text-accent transition-colors">
+                    <span className="font-heading font-bold text-sm  tracking-tight group-hover:text-accent transition-colors">
                       {item.par_cat_name}
                     </span>
                   </td>
@@ -337,7 +337,7 @@ const ParentCategory = () => {
 
                   <td className="px-8 py-6">
                     <span
-                      className={`text-[9px] font-black uppercase tracking-tighter px-2 py-1 border inline-block ${
+                      className={`text-[9px] font-black  tracking-tighter px-2 py-1 border inline-block ${
                         item.status === 1
                           ? "border-green-500 text-green-500"
                           : "border-base-content/20 opacity-40"
@@ -409,7 +409,7 @@ const ParentCategory = () => {
 
               {/* Drawer Header */}
               <div className="flex justify-between items-center mb-12">
-                <h2 className="font-heading text-3xl font-black uppercase italic tracking-tighter">
+                <h2 className="font-heading text-3xl font-black uppercase tracking-tighter">
                   {formData?._id ? "Edit" : "Add"}{" "}
                   <span className="text-accent">Category</span>
                 </h2>
@@ -433,7 +433,7 @@ const ParentCategory = () => {
                       isInvalid && !formData.par_cat_name
                         ? "border-red-600"
                         : "border-base-content/10"
-                    } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent uppercase`}
+                    } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent `}
                   />
                 </div>
 
@@ -474,7 +474,7 @@ const ParentCategory = () => {
                       isInvalid && !formData.status
                         ? "border-red-600"
                         : "border-base-content/10"
-                    } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent text-base-content uppercase tracking-wider cursor-pointer`}
+                    } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent text-base-content  tracking-wider cursor-pointer`}
                   >
                     {statusList.map((status) => (
                       <option
