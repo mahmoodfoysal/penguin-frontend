@@ -67,22 +67,31 @@ const SideBar = () => {
                     Pending
                   </button>
                 </NavLink>
-
-                <button className="w-full text-left px-6 py-2 text-[9px] uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all">
-                  Warehouse
-                </button>
-
-                <button className="w-full text-left px-6 py-2 text-[9px] uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all">
-                  Shipping
-                </button>
-
-                <button className="w-full text-left px-6 py-2 text-[9px] uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all">
-                  Delivery
-                </button>
-
-                <button className="w-full text-left px-6 py-2 text-[9px] uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all">
-                  Order Track
-                </button>
+                <NavLink to="warehouse">
+                  <button className="w-full text-left px-6 py-2 text-[9px] uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all">
+                    Warehouse
+                  </button>
+                </NavLink>
+                <NavLink to="shipping">
+                  <button className="w-full text-left px-6 py-2 text-[9px] uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all">
+                    Shipping
+                  </button>
+                </NavLink>
+                <NavLink to="delivery">
+                  <button className="w-full text-left px-6 py-2 text-[9px] uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all">
+                    Delivery
+                  </button>
+                </NavLink>
+                <NavLink to="completed">
+                  <button className="w-full text-left px-6 py-2 text-[9px] uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all">
+                    Completed
+                  </button>
+                </NavLink>
+                <NavLink to="rejected">
+                  <button className="w-full text-left px-6 py-2 text-[9px] uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all">
+                    Rejected
+                  </button>
+                </NavLink>
               </div>
             )}
           </div>

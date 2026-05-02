@@ -235,6 +235,31 @@ const router = createBrowserRouter([
             element: <PendingOrder />,
             loader: orderLoader,
           },
+          {
+            path: "warehouse",
+            element: <PendingOrder />,
+            loader: orderLoader,
+          },
+          {
+            path: "shipping",
+            element: <PendingOrder />,
+            loader: orderLoader,
+          },
+          {
+            path: "delivery",
+            element: <PendingOrder />,
+            loader: orderLoader,
+          },
+          {
+            path: "completed",
+            element: <PendingOrder />,
+            loader: orderLoader,
+          },
+          {
+            path: "rejected",
+            element: <PendingOrder />,
+            loader: orderLoader,
+          },
         ],
       },
     ],

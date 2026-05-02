@@ -1,36 +1,80 @@
 import axios from "axios";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+
 import { useSelector } from "react-redux";
 import { useLoaderData, useLocation } from "react-router";
 
 import Swal from "sweetalert2";
 import Pagination from "../../../components/Pagination";
 
+// Static configuration moved outside to preserve memoization
+const ROUTE_CONFIGS = {
+  "pending-order": { current: "P", next: "W", label: "Pending" },
+  warehouse: { current: "W", next: "S", label: "Warehouse" },
+  shipping: { current: "S", next: "D", label: "Shipping" },
+  delivery: { current: "D", next: "C", label: "Delivery" },
+  completed: { current: "C", next: null, label: "Completed" },
+  rejected: { current: "R", next: null, label: "Rejected" },
+};
+
+const STATUS_MAP = {
+  P: "Pending",
+  W: "Warehouse",
+  S: "Shipping",
+  D: "Delivery",
+  C: "Completed",
+  R: "Rejected",
+};
+
+const STATUS_STEPS = [
+  "Pending",
+  "Warehouse",
+  "Shipping",
+  "Delivery",
+  "Completed",
+];
+
 const PendingOrder = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
   const { orders } = useLoaderData();
 
   const [orderList, setOrderList] = useState(orders?.list_data);
-  console.log(orderList);
-
   const [selectedOrder, setSelectedOrder] = useState(null);
-
   const [searchQuery, setSearchQuery] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
+  const location = useLocation();
+
+  // Memoize config to prevent "Existing memoization could not be preserved" error
+  const config = useMemo(() => {
+    const currentPath = location.pathname.split("/").pop();
+    return ROUTE_CONFIGS[currentPath] || ROUTE_CONFIGS["pending-order"];
+  }, [location.pathname]);
+
+  // Handle page reset in a stable way
+  useEffect(() => {
+    setTimeout(() => {
+      setCurrentPage(1);
+    }, 0);
+  }, [config.current, searchQuery]);
+
   const filterOrderList = useMemo(() => {
-    let list = orderList?.filter((order) => order.order_status === "P") || [];
+    const currentStatus = config.current;
+
+    let list =
+      orderList?.filter((order) => order.order_status === currentStatus) || [];
 
     if (!searchQuery) return list;
+
     const lowSearch = searchQuery.toLowerCase();
     return list.filter((item) => {
       return Object.values(item).some((value) =>
         String(value).toLowerCase().includes(lowSearch),
       );
     });
-  }, [searchQuery, orderList]);
+  }, [searchQuery, orderList, config.current]);
 
   const totalPages = Math.ceil(filterOrderList?.length / itemsPerPage);
 
@@ -46,29 +90,23 @@ const PendingOrder = () => {
     setIsDetailsOpen(true);
   };
 
-  const statusSteps = ["Pending", "Warehouse", "Shipping", "Completed"];
+  const currentStatus = STATUS_MAP[selectedOrder?.order_status] || "Pending";
 
-  const statusMap = {
-    P: "Pending",
-    W: "Warehouse",
-    S: "Shipping",
-    C: "Completed",
-  };
-
-  const currentStatus = statusMap[selectedOrder?.order_status] || "Pending";
-
-  const location = useLocation();
-  const handleStatusUpdate = async (item) => {
+  const handleStatusUpdate = async (item, targetStatus = null) => {
     const confirmation = await Swal.fire({
       title: "Are you sure?",
-      text: "Do you want to submit?",
-      icon: "warning",
+      text:
+        targetStatus === "R"
+          ? "Do you want to reject this order?"
+          : "Do you want to submit?",
+      icon: targetStatus === "R" ? "error" : "warning",
       showCancelButton: true,
       cancelButtonText: "Cancel",
       confirmButtonText: "Ok",
     });
 
-    const newStatus = location.pathname.includes("pending-order") ? "S" : "W";
+    const newStatus = targetStatus || config.next;
+    if (!newStatus) return;
 
     const data = {
       _id: item._id,
@@ -127,18 +165,20 @@ const PendingOrder = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-6">
           <div>
             <h1 className="font-heading text-3xl md:text-5xl font-black uppercase tracking-tighter text-base-content">
-              Pending <span className="text-accent text-outline">Orders</span>
+              {config.label}{" "}
+              <span className="text-accent text-outline">Orders</span>
             </h1>
             <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mt-2">
-              Manage Pending Orders
+              Manage {config.label} Orders
             </p>
           </div>
         </div>
 
         <div className="mb-8 relative max-w-full md:max-w-md">
           <label className="text-[10px] font-black uppercase tracking-widest opacity-50 block mb-2">
-            Search Pending Orders
+            Search {config.label} Orders
           </label>
+
           <div className="relative flex items-center">
             <span className="material-icons absolute left-0 text-sm opacity-30">
               search
@@ -250,49 +290,62 @@ const PendingOrder = () => {
                         </button>
 
                         {/* Reject Button */}
-                        <button className="group relative px-3 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-red-500 to-rose-600 rounded-xl hover:from-red-600 hover:to-rose-700 hover:shadow-[0_10px_20px_rgba(225,_29,_72,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
-                          <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="w-4 h-4 transition-transform duration-300 group-hover:rotate-90"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M6 18L18 6M6 6l12 12"
-                              />
-                            </svg>
-                            Reject
-                          </span>
-                        </button>
+                        {config.next && (
+                          <button
+                            onClick={() => handleStatusUpdate(item, "R")}
+                            className="group relative px-3 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-red-500 to-rose-600 rounded-xl hover:from-red-600 hover:to-rose-700 hover:shadow-[0_10px_20px_rgba(225,_29,_72,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                          >
+                            <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-4 h-4 transition-transform duration-300 group-hover:rotate-90"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                              Reject
+                            </span>
+                          </button>
+                        )}
 
-                        {/* Approve Button */}
-                        <button
-                          onClick={() => handleStatusUpdate(item)}
-                          className="group relative px-3 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl hover:from-emerald-600 hover:to-teal-700 hover:shadow-[0_10px_20px_rgba(16,_185,_129,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
-                        >
-                          <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="w-4 h-4 transition-transform duration-300 group-hover:scale-110"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                            Approve
-                          </span>
-                        </button>
+                        {/* Approve Button (Hidden on Completed) */}
+                        {config.next && (
+                          <button
+                            onClick={() => handleStatusUpdate(item)}
+                            className="group relative px-3 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl hover:from-emerald-600 hover:to-teal-700 hover:shadow-[0_10px_20px_rgba(16,_185,_129,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                          >
+                            <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-4 h-4 transition-transform duration-300 group-hover:scale-110"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                              {config.next === "W"
+                                ? "To Warehouse"
+                                : config.next === "S"
+                                  ? "To Shipping"
+                                  : config.next === "D"
+                                    ? "To Delivery"
+                                    : "Complete"}
+                            </span>
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -360,10 +413,10 @@ const PendingOrder = () => {
                     {/* Progress Line */}
                     <div className="absolute top-1/2 left-0 w-full h-[2px] bg-base-content/10 -translate-y-1/2 z-0"></div>
 
-                    {statusSteps.map((step, index) => {
+                    {STATUS_STEPS.map((step, index) => {
                       const isCurrent = step === currentStatus;
                       const isPast =
-                        statusSteps.indexOf(currentStatus) >= index;
+                        STATUS_STEPS.indexOf(currentStatus) >= index;
 
                       return (
                         <div
@@ -639,13 +692,69 @@ const PendingOrder = () => {
                 </div>
               </div>
               {/* Footer Actions */}
-              <div className="pt-8 border-t border-base-content/5 mt-auto bg-base-100">
+              <div className="flex item-center gap-2 justify-center pt-8 border-t border-base-content/5 mt-auto bg-base-100">
                 <button
                   onClick={() => setIsDetailsOpen(false)}
-                  className="w-full bg-base-content text-base-100 py-5 font-heading font-black uppercase tracking-[0.3em] text-[11px] hover:bg-accent transition-colors rounded-sm"
+                  className="group relative px-3 py-1.5 font-bold text-base-100 transition-all duration-300 bg-base-content from-red-500 to-rose-600 rounded-xl hover:from-red-600 hover:to-rose-700 hover:shadow-[0_10px_20px_rgba(225,_29,_72,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                 >
                   Close Panel
                 </button>
+
+                {config.next && (
+                  <button
+                    onClick={() => handleStatusUpdate(selectedOrder, "R")}
+                    className="group relative px-3 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-red-500 to-rose-600 rounded-xl hover:from-red-600 hover:to-rose-700 hover:shadow-[0_10px_20px_rgba(225,_29,_72,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 transition-transform duration-300 group-hover:rotate-90"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                      Reject
+                    </span>
+                  </button>
+                )}
+
+                {config.next && (
+                  <button
+                    onClick={() => handleStatusUpdate(selectedOrder)}
+                    className="group relative px-3 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl hover:from-emerald-600 hover:to-teal-700 hover:shadow-[0_10px_20px_rgba(16,_185,_129,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 transition-transform duration-300 group-hover:scale-110"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      {config.next === "W"
+                        ? "To Warehouse"
+                        : config.next === "S"
+                          ? "To Shipping"
+                          : config.next === "D"
+                            ? "To Delivery"
+                            : "Complete"}
+                    </span>
+                  </button>
+                )}
               </div>
             </div>
           )}
