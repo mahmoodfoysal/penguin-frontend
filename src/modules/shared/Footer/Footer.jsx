@@ -1,10 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const Footer = () => {
   const user = useSelector((state) => state.auth.user);
   const role = useSelector((state) => state.auth.role);
+  const [promoEmail, setPromoEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isInvalid, setIsInvalid] = useState(false);
+
+  const handlePromoSubmit = async (e) => {
+    if (e) e.preventDefault();
+    setIsInvalid(false);
+
+    if (!promoEmail || !promoEmail.includes("@")) {
+      setIsInvalid(true);
+      Swal.fire({
+        icon: "error",
+        title: "Required Field",
+        text: "Please provide a valid tactical email address.",
+        confirmButtonColor: "#000",
+      });
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const response = await axios.post(
+        `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/insert-update-clain-promo-list`,
+        { email: promoEmail },
+      );
+
+      if (response.data.status) {
+        Swal.fire({
+          icon: "success",
+          title: "Promotion Email",
+          text: "You are now get promotion email from Penguin.",
+          confirmButtonColor: "#000",
+        });
+        setPromoEmail("");
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Link Failed",
+        text: error.response?.data?.message || "Communication disrupted.",
+        confirmButtonColor: "#000",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -24,11 +72,34 @@ const Footer = () => {
                 PENGUIN<span className="text-accent">.</span>
               </h2>
               <p className="max-w-xs text-xs font-bold uppercase tracking-widest leading-relaxed opacity-60">
-                High-performance gear engineered for the modern operative.
-                Precision quality. Tactical design.
+                A full solution for what you want
               </p>
               <div className="flex gap-4">
                 {/* SOCIALS with hover boxes */}
+
+                <a
+                  target="_blank"
+                  href="https://foysalmahmood.vercel.app/"
+                  className="w-10 h-10 border-2 border-current flex items-center justify-center hover:opacity-70 transition-all active:scale-90"
+                  title="View Portfolio"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="stroke-current"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                  </svg>
+                </a>
 
                 <a
                   target="black"
@@ -181,35 +252,42 @@ const Footer = () => {
                     </Link>
                   </li>
                 )}
-                <li>
-                  <a
-                    target="blank"
-                    href="https://foysalmahmood-portfolio.web.app/"
-                    className="hover:text-accent transition-colors block opacity-50"
-                  >
-                    Developer
-                  </a>
-                </li>
               </ul>
             </div>
 
             {/* NEWSLETTER SECTION */}
             <div className="md:col-span-4 space-y-4">
               <h4 className="font-heading font-black uppercase text-sm tracking-widest">
-                Join the Registry
+                Join with us
               </h4>
               <div className="relative">
                 <input
-                  type="text"
+                  type="email"
+                  value={promoEmail}
+                  onChange={(e) => {
+                    setPromoEmail(e.target.value);
+                    if (isInvalid) setIsInvalid(false);
+                  }}
+                  onKeyDown={(e) => e.key === "Enter" && handlePromoSubmit()}
                   placeholder="EMAIL_ADDRESS"
-                  className="w-full border-2 border-current p-4 text-xs font-mono outline-none focus:border-accent transition-colors pr-12 bg-transparent"
+                  className={`w-full border-2 p-4 text-xs font-mono outline-none transition-colors pr-12 bg-transparent ${isInvalid ? "border-red-600 animate-pulse" : "border-current focus:border-accent"}`}
                 />
-                <button className="btn btn-primary absolute right-0 top-0 h-full rounded-none border-none">
-                  →
+
+                <button
+                  onClick={handlePromoSubmit}
+                  disabled={isSubmitting}
+                  className="btn btn-primary absolute right-0 top-0 h-full rounded-none border-none min-w-[50px] flex items-center justify-center"
+                >
+                  {isSubmitting ? (
+                    <span className="loading loading-spinner loading-xs"></span>
+                  ) : (
+                    "→"
+                  )}
                 </button>
               </div>
+
               <p className="text-[9px] font-bold opacity-40 uppercase tracking-widest">
-                Receive tactical updates & drop alerts.
+                Receive promotion email from Penguin.
               </p>
             </div>
           </div>
