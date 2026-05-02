@@ -12,6 +12,7 @@ const SubCategory = () => {
     subCategoryData?.subCategoryData?.list_data,
   );
   const parentList = parentCategoryData?.parentCategoryData?.list_data;
+  const [selectedParentId, setSelectedParentId] = useState("");
 
   const [formData, setFormData] = useState({
     _id: null,
@@ -41,14 +42,20 @@ const SubCategory = () => {
   const itemsPerPage = 8;
 
   const filteredCategoryList = useMemo(() => {
-    if (!searchQuery) return categoryList;
+    if (!selectedParentId) return [];
+    let list =
+      categoryList?.filter(
+        (item) => Number(item.par_cat_id) === Number(selectedParentId),
+      ) || [];
+
+    if (!searchQuery) return list;
     const lowSearch = searchQuery.toLowerCase();
-    return categoryList.filter((item) => {
+    return list.filter((item) => {
       return Object.values(item).some((value) =>
         String(value).toLowerCase().includes(lowSearch),
       );
     });
-  }, [searchQuery, categoryList]);
+  }, [selectedParentId, searchQuery, categoryList]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -237,8 +244,10 @@ const SubCategory = () => {
     setIsDrawerOpen(true);
     setFormData({
       _id: item._id,
-      par_cat_id: item.par_cat_id,
-      par_cat_name: item.par_cat_name,
+      parCatInfo: {
+        par_cat_id: item.par_cat_id,
+        par_cat_name: item.par_cat_name,
+      },
       sub_cat_id: item.sub_cat_id,
       sub_cat_name: item.sub_cat_name,
       status: item.status,
@@ -314,22 +323,48 @@ const SubCategory = () => {
           </button>
         </div>
 
-        {/* --- SEARCH BAR SECTION --- */}
-        <div className="mb-8 relative max-w-full md:max-w-md">
-          <label className="text-[10px] font-black uppercase tracking-widest opacity-50 block mb-2">
-            Search Categories
-          </label>
-          <div className="relative flex items-center">
-            <span className="material-icons absolute left-0 text-sm opacity-30">
-              search
-            </span>
-            <input
-              onChange={(e) => setSearchQuery(e.target.value)}
-              value={searchQuery}
-              type="text"
-              placeholder="search"
-              className="w-full bg-transparent border-b-2 border-base-content/10 focus:border-accent outline-none py-3 pl-7 text-xs font-bold  tracking-widest transition-all placeholder:opacity-20"
-            />
+        {/* --- SELECTOR & SEARCH BAR SECTION --- */}
+        <div className="flex flex-col md:flex-row gap-8 mb-8 max-w-4xl">
+          <div className="flex-1 relative">
+            <label className="text-[10px] font-black uppercase tracking-widest opacity-50 block mb-2">
+              Filter by Parent Category
+            </label>
+            <select
+              value={selectedParentId}
+              onChange={(e) => setSelectedParentId(e.target.value)}
+              className="w-full bg-transparent border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-xs font-bold tracking-widest transition-all cursor-pointer"
+            >
+              <option value="" className="bg-base-100">
+                Select Parent Category
+              </option>
+              {parentList?.map((cat) => (
+                <option
+                  key={cat.par_cat_id}
+                  value={cat.par_cat_id}
+                  className="bg-base-100"
+                >
+                  {cat.par_cat_id} - {cat.par_cat_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex-1 relative">
+            <label className="text-[10px] font-black uppercase tracking-widest opacity-50 block mb-2">
+              Search Sub Categories
+            </label>
+            <div className="relative flex items-center">
+              <span className="material-icons absolute left-0 text-sm opacity-30">
+                search
+              </span>
+              <input
+                onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchQuery}
+                type="text"
+                placeholder="search"
+                className="w-full bg-transparent border-b-2 border-base-content/10 focus:border-accent outline-none py-3 pl-7 text-xs font-bold  tracking-widest transition-all placeholder:opacity-20"
+              />
+            </div>
           </div>
         </div>
         {/* -------------------------- */}
@@ -352,73 +387,86 @@ const SubCategory = () => {
 
             {/* <tbody> equivalent */}
             <tbody className="divide-y divide-black/5">
-              {paginatedCategoryList?.map((item, index) => (
-                <tr
-                  key={index}
-                  className="hover:bg-base-200/30 transition-colors group"
-                >
-                  {/* <td> cells */}
-                  <td className="px-8 py-6">
-                    <span className="font-heading font-bold text-sm  tracking-tight group-hover:text-accent transition-colors">
-                      {(currentPage - 1) * itemsPerPage + index + 1}
-                    </span>
-                  </td>
-                  <td className="px-8 py-6">
-                    <span className="font-heading font-bold text-sm  tracking-tight group-hover:text-accent transition-colors">
-                      {item.par_cat_name}
-                    </span>
-                  </td>
-
-                  <td className="px-8 py-6 text-center text-[11px] font-black opacity-60">
-                    {item.par_cat_id}
-                  </td>
-                  <td className="px-8 py-6">
-                    <span className="font-heading font-bold text-sm  tracking-tight group-hover:text-accent transition-colors">
-                      {item.sub_cat_name}
-                    </span>
-                  </td>
-
-                  <td className="px-8 py-6 text-center text-[11px] font-black opacity-60">
-                    {item.sub_cat_id}
-                  </td>
-
-                  <td className="px-8 py-6">
-                    <span
-                      className={`text-[9px] font-black  tracking-tighter px-2 py-1 border inline-block ${
-                        item.status === 1
-                          ? "border-green-500 text-green-500"
-                          : "border-base-content/20 opacity-40"
-                      }`}
-                    >
-                      {item.status === 1 ? "Active" : "Inactive"}
-                    </span>
-                  </td>
-
-                  <td className="px-8 py-6">
-                    <div className="flex justify-end gap-4">
-                      {/* Your Icon Logic */}
-                      <span
-                        onClick={() => handleStatusUpdate(item)}
-                        className="material-icons cursor-pointer hover:text-blue-600"
-                      >
-                        {item.status === 1 ? "visibility" : "visibility_off"}
+              {paginatedCategoryList?.length > 0 ? (
+                paginatedCategoryList?.map((item, index) => (
+                  <tr
+                    key={index}
+                    className="hover:bg-base-200/30 transition-colors group"
+                  >
+                    {/* <td> cells */}
+                    <td className="px-8 py-6">
+                      <span className="font-heading font-bold text-sm  tracking-tight group-hover:text-accent transition-colors">
+                        {(currentPage - 1) * itemsPerPage + index + 1}
                       </span>
-                      <span
-                        onClick={() => handleEdit(item)}
-                        className="material-icons cursor-pointer hover:text-blue-600"
-                      >
-                        edit
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className="font-heading font-bold text-sm  tracking-tight group-hover:text-accent transition-colors">
+                        {item.par_cat_name}
                       </span>
-                      <span
-                        onClick={() => handleRemove(item)}
-                        className="material-icons cursor-pointer hover:text-red-600"
-                      >
-                        delete
+                    </td>
+
+                    <td className="px-8 py-6 text-center text-[11px] font-black opacity-60">
+                      {item.par_cat_id}
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className="font-heading font-bold text-sm  tracking-tight group-hover:text-accent transition-colors">
+                        {item.sub_cat_name}
                       </span>
-                    </div>
+                    </td>
+
+                    <td className="px-8 py-6 text-center text-[11px] font-black opacity-60">
+                      {item.sub_cat_id}
+                    </td>
+
+                    <td className="px-8 py-6">
+                      <span
+                        className={`text-[9px] font-black  tracking-tighter px-2 py-1 border inline-block ${
+                          item.status === 1
+                            ? "border-green-500 text-green-500"
+                            : "border-base-content/20 opacity-40"
+                        }`}
+                      >
+                        {item.status === 1 ? "Active" : "Inactive"}
+                      </span>
+                    </td>
+
+                    <td className="px-8 py-6">
+                      <div className="flex justify-end gap-4">
+                        {/* Your Icon Logic */}
+                        <span
+                          onClick={() => handleStatusUpdate(item)}
+                          className="material-icons cursor-pointer hover:text-blue-600"
+                        >
+                          {item.status === 1 ? "visibility" : "visibility_off"}
+                        </span>
+                        <span
+                          onClick={() => handleEdit(item)}
+                          className="material-icons cursor-pointer hover:text-blue-600"
+                        >
+                          edit
+                        </span>
+                        <span
+                          onClick={() => handleRemove(item)}
+                          className="material-icons cursor-pointer hover:text-red-600"
+                        >
+                          delete
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="7"
+                    className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest"
+                  >
+                    {!selectedParentId
+                      ? "Please select a Parent Category"
+                      : "No Sub Categories found"}
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -477,15 +525,17 @@ const SubCategory = () => {
                     Parent Category <span className="text-red-600">*</span>
                   </label>
                   <select
-                    value={JSON.stringify(formData.parCatInfo) || ""}
-                    onChange={(e) =>
+                    value={formData.parCatInfo?.par_cat_id || ""}
+                    onChange={(e) => {
+                      const selectedId = e.target.value;
+                      const selectedCat = parentList?.find(
+                        (c) => String(c.par_cat_id) === String(selectedId),
+                      );
                       setFormData({
                         ...formData,
-                        parCatInfo: e.target.value
-                          ? JSON.parse(e.target.value)
-                          : null,
-                      })
-                    }
+                        parCatInfo: selectedCat || {},
+                      });
+                    }}
                     className={`w-full border-b-2 ${
                       isInvalid &&
                       (!formData.parCatInfo || !formData.parCatInfo.par_cat_id)
@@ -499,7 +549,7 @@ const SubCategory = () => {
                     {parentList?.map((category, index) => (
                       <option
                         key={index}
-                        value={JSON.stringify(category)}
+                        value={category.par_cat_id}
                         className="bg-base-100 text-base-content"
                       >
                         {category.par_cat_id} - {category.par_cat_name}

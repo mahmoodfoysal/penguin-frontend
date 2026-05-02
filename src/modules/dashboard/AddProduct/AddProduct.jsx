@@ -1,304 +1,1137 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import { useLoaderData } from "react-router";
+import Swal from "sweetalert2";
+import Pagination from "../../../components/Pagination";
 
 const AddProduct = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false); // For Add New
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false); // For Details View
-  const [selectedProduct, setSelectedProduct] = useState(null); // Data for Details
+  const userInfo = useSelector((state) => state.auth.userInfo);
+  const [parentCategoryData, subCategoryData, products] = useLoaderData();
+  const [productList, setProductList] = useState(products?.products?.list_data);
 
-  const handleOpenDetails = (id) => {
-    // In a real app, you'd fetch by ID or pass the object.
-    // Here we'll set mock data for the selected product.
-    setSelectedProduct({
-      id: id,
-      name: `Phantom Racer v.${id}`,
-      category: "Footwear",
-      price: "$120.00",
-      stock: "In Stock (50 units)",
-      desc: "High-performance racing shoes with carbon fiber plate and breathable mesh upper.",
+  const subCategoryList = subCategoryData?.subCategoryData?.list_data;
+  const parentCategoryList = parentCategoryData?.parentCategoryData?.list_data;
+
+  console.log("subCategoryList", subCategoryList);
+  console.log("parentCategoryList", parentCategoryList);
+  const [formData, setFormData] = useState({
+    _id: null,
+    par_cat_id: "",
+    sub_cat_id: "",
+    sub_sub_cat_id: "",
+    prod_id: "",
+    prod_image: "",
+    prod_name: "",
+    price: "",
+    prodTypeInfo: {},
+    stock: "",
+    prod_brand: "",
+    description: "",
+    currencyTypeInfo: {},
+    status: "",
+  });
+  const statusList = [
+    {
+      value: 1,
+      label: "Active",
+    },
+    {
+      value: 0,
+      label: "InActive",
+    },
+  ];
+
+  const currencyList = [
+    {
+      currency_id: 301,
+      currency_name: "BDT",
+    },
+    {
+      currency_id: 302,
+      currency_name: "USD",
+    },
+    {
+      currency_id: 303,
+      currency_name: "CAD",
+    },
+    {
+      currency_id: 304,
+      currency_name: "Yuan",
+    },
+    {
+      currency_id: 305,
+      currency_name: "Euro",
+    },
+  ];
+
+  const productTypeList = [
+    {
+      prod_type: "R",
+      prod_type_name: "Regular",
+    },
+    {
+      prod_type: "D",
+      prod_type_name: "Discount",
+    },
+    {
+      prod_type: "O",
+      prod_type_name: "Offer",
+    },
+  ];
+
+  const [isEdit, setIsEdit] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isInvalid, setIsInvalid] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoadingButton, setIsLoadingButton] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
+  const filteredproductList = useMemo(() => {
+    if (!searchQuery) return productList;
+    const lowSearch = searchQuery.toLowerCase();
+    return productList.filter((item) => {
+      return Object.values(item).some((value) =>
+        String(value).toLowerCase().includes(lowSearch),
+      );
     });
+  }, [searchQuery, productList]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  const totalPages = Math.ceil(filteredproductList?.length / itemsPerPage);
+
+  const paginatedproductList = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredproductList?.slice(start, start + itemsPerPage);
+  }, [filteredproductList, currentPage]);
+
+  const handleCreate = () => {
+    setIsEdit(false);
+    setIsDrawerOpen(true);
+    handleResetForm();
+  };
+
+  const handleResetForm = () => {
+    setFormData({
+      _id: null,
+      par_cat_id: "",
+      sub_cat_id: "",
+      sub_sub_cat_id: "",
+      prod_id: "",
+      prod_image: "",
+      prod_name: "",
+      price: "",
+      prodTypeInfo: {},
+      stock: "",
+      prod_brand: "",
+      description: "",
+      currencyTypeInfo: {},
+      status: 1,
+    });
+  };
+
+  const handleSubmit = async () => {
+    setIsInvalid(false);
+    if (
+      !formData.prod_name ||
+      !formData.prod_image ||
+      !formData.prod_id ||
+      !formData.status ||
+      !formData.par_cat_id ||
+      !formData.sub_cat_id ||
+      !formData.price ||
+      !formData.prodTypeInfo?.prod_type ||
+      !formData.currencyTypeInfo?.currency_id ||
+      !formData.prod_brand ||
+      !formData.stock ||
+      !formData.description ||
+      !userInfo?.email
+    ) {
+      setIsInvalid(true);
+      Swal.fire({
+        icon: "error",
+        title: "Invalid or missing required fields",
+        text: "Check input field",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+    const confirmation = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to submit?",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      confirmButtonText: "Ok",
+    });
+    const data = {
+      _id: isEdit ? formData._id : null,
+      prod_id: Number(formData.prod_id),
+      prod_name: formData.prod_name,
+      prod_image: formData.prod_image,
+      price: Number(formData.price),
+      stock: Number(formData.stock),
+      prod_brand: formData.prod_brand,
+      description: formData.description,
+      status: Number(formData.status),
+      par_cat_id: Number(formData?.par_cat_id),
+      sub_cat_id: Number(formData?.sub_cat_id),
+      prod_type: formData.prodTypeInfo?.prod_type,
+      prod_type_name: formData.prodTypeInfo?.prod_type_name,
+      currency_id: Number(formData.currencyTypeInfo?.currency_id),
+      currency_name: formData.currencyTypeInfo?.currency_name,
+      user_info: userInfo?.email,
+    };
+    console.log("data", data);
+    try {
+      if (confirmation.isConfirmed) {
+        setIsLoadingButton(true);
+        const result = await axios.post(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-product-list`,
+          data,
+        );
+        if (result.data.status) {
+          Swal.fire({
+            icon: "success",
+            title: `${result.data.message}`,
+            text: `${result.data.message}`,
+            confirmButtonText: "OK",
+          });
+          const obj = {
+            ...data,
+            _id: result.data.id,
+            createdAt: isEdit
+              ? productList.find((p) => p._id === result.data.id)?.createdAt
+              : new Date().toISOString(),
+          };
+          handleResetForm();
+
+          const index = productList?.findIndex(
+            (item) => item._id == result.data.id,
+          );
+
+          if (index > -1) {
+            const updatedList = [...productList];
+
+            updatedList[index] = obj;
+
+            setProductList(updatedList);
+          } else {
+            setProductList([obj, ...productList]);
+          }
+        }
+        setIsEdit(false);
+        setIsDrawerOpen(false);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoadingButton(false);
+    }
+  };
+
+  const handleStatusUpdate = async (item) => {
+    const confirmation = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to submit?",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      confirmButtonText: "Ok",
+    });
+    const data = {
+      _id: item._id,
+      status: Number(item.status == 1 ? 0 : 1),
+      user_info: userInfo?.email,
+    };
+    console.log("data", data);
+    try {
+      if (confirmation.isConfirmed) {
+        Swal.fire({
+          title: "Processing...",
+          text: "Please wait...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+        const result = await axios.patch(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/update-product-status/${item._id}`,
+          data,
+        );
+        if (result.data.status) {
+          Swal.close();
+          Swal.fire({
+            icon: "success",
+            title: `${result.data.message}`,
+            text: `${result.data.message}`,
+            confirmButtonText: "OK",
+          });
+          const obj = {
+            ...item,
+            status: Number(result.data?.status_code),
+            user_info: userInfo?.email,
+          };
+
+          const index = productList?.findIndex(
+            (item) => item._id == result.data.id,
+          );
+
+          if (index > -1) {
+            const updatedList = [...productList];
+
+            updatedList[index] = obj;
+
+            setProductList(updatedList);
+          } else {
+            setProductList([obj, ...productList]);
+          }
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      Swal.close();
+    }
+  };
+
+  const handleEdit = (item) => {
+    setIsEdit(true);
+    setIsDrawerOpen(true);
+    setFormData({
+      _id: item._id,
+      prod_id: item.prod_id,
+      prod_name: item.prod_name,
+      prod_image: item.prod_image,
+      price: item.price,
+      stock: item.stock,
+      prod_brand: item.prod_brand,
+      description: item.description,
+      status: item.status,
+
+      par_cat_id: item.par_cat_id,
+
+      sub_cat_id: item.sub_cat_id,
+
+      prodTypeInfo: {
+        prod_type: item.prod_type,
+        prod_type_name: item.prod_type_name,
+      },
+      currencyTypeInfo: {
+        currency_id: item.currency_id,
+        currency_name: item.currency_name,
+      },
+    });
+  };
+
+  const handleCancel = () => {
+    setIsDrawerOpen(false);
+    setIsEdit(false);
+    handleResetForm();
+  };
+
+  const handleRemove = async (item) => {
+    const confirmation = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to submit?",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      confirmButtonText: "Ok",
+    });
+    try {
+      if (confirmation.isConfirmed) {
+        const result = await axios.delete(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/delete-product-list/${item._id}`,
+        );
+        if (result.data?.status) {
+          const index = productList.findIndex((list) => list._id === item._id);
+
+          if (index !== -1) {
+            const newproductList = [...productList];
+
+            newproductList.splice(index, 1);
+
+            setProductList(newproductList);
+          }
+          Swal.fire({
+            icon: "success",
+            title: `${result.data.message}`,
+            text: `${result.data.message}`,
+            confirmButtonText: "OK",
+          });
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const handleDetails = (data) => {
+    setSelectedProduct(data);
     setIsDetailsOpen(true);
   };
+
   return (
     <div>
-      <div className="p-4  min-h-screen bg-base-100 font-body relative overflow-hidden">
-        {/* 1. GLOBAL HEADER AREA */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+      <div className="p-4 min-h-screen bg-base-100 relative overflow-x-hidden">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-6">
           <div>
-            <h1 className="font-heading text-5xl font-black uppercase tracking-tighter text-base-content">
+            <h1 className="font-heading text-3xl md:text-5xl font-black uppercase tracking-tighter text-base-content">
               Product <span className="text-accent text-outline">Vault</span>
             </h1>
             <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mt-2">
-              Manage Store Products
+              Manage Product Vault
             </p>
           </div>
 
           <button
-            onClick={() => setIsDrawerOpen(true)}
-            className="bg-base-content text-base-100 px-12 py-5 font-heading font-black uppercase tracking-[0.2em] text-[10px] hover:bg-accent transition-all flex items-center gap-4 group shadow-2xl shadow-black/10"
+            onClick={handleCreate}
+            className="w-full md:w-auto bg-base-content text-base-100 px-8 py-3 font-heading font-black uppercase tracking-[0.2em] text-xs hover:bg-accent transition-all flex items-center justify-center gap-3 group rounded-sm cursor-pointer"
           >
-            Add New Product
-            <span className="text-xl group-hover:scale-125 transition-transform">
+            Add New
+            <span className="text-lg group-hover:rotate-90 transition-transform">
               +
             </span>
           </button>
         </div>
 
-        {/* 2. DATA LIST VIEW (MAIN PAGE) */}
-        <div className="bg-base-100 border border-base-content/5 rounded-sm overflow-hidden shadow-sm">
+        <div className="mb-8 relative max-w-full md:max-w-md">
+          <label className="text-[10px] font-black uppercase tracking-widest opacity-50 block mb-2">
+            Search Products
+          </label>
+          <div className="relative flex items-center">
+            <span className="material-icons absolute left-0 text-sm opacity-30">
+              search
+            </span>
+            <input
+              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchQuery}
+              type="text"
+              placeholder="search"
+              className="w-full bg-transparent border-b-2 border-base-content/10 focus:border-accent outline-none py-3 pl-7 text-xs font-bold tracking-widest transition-all placeholder:opacity-20"
+            />
+          </div>
+        </div>
+
+        <div className="bg-base-100 border border-base-content/5 rounded-sm shadow-sm overflow-x-auto">
           <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-base-content text-base-100 font-heading text-[9px] uppercase tracking-[0.3em] font-black">
-                <th className="px-8 py-5">Product Info</th>
-                <th className="px-8 py-5">Category</th>
-                <th className="px-8 py-5">Price</th>
-                <th className="px-8 py-5">Stock</th>
-                <th className="px-8 py-5 text-center">Details</th>{" "}
-                {/* Added Column */}
-                <th className="px-8 py-5 text-right">Actions</th>
+            <thead className="hidden md:table-header-group bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black opacity-40">
+              <tr>
+                <th className="px-6 py-4">SL</th>
+                <th className="px-6 py-4">Image</th>
+                <th className="px-6 py-4">Product Name</th>
+                <th className="px-6 py-4">Type</th>
+                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4">Stock</th>
+                <th className="px-6 py-4">Price</th>
+
+                <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
-              {[1, 2, 3, 4, 5].map((id) => (
-                <tr
-                  key={id}
-                  className="group hover:bg-base-200/40 transition-colors"
-                >
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-base-200 border border-base-content/5 p-1 group-hover:border-accent transition-colors">
+              {paginatedproductList?.length > 0 ? (
+                paginatedproductList.map((item, index) => (
+                  <tr
+                    key={item._id}
+                    className="hover:bg-base-200/30 transition-colors group"
+                  >
+                    {/* 1. SL */}
+                    <td className="px-6 py-4 text-xs font-bold">
+                      {(currentPage - 1) * itemsPerPage + index + 1}
+                    </td>
+
+                    {/* 2. Image */}
+                    <td className="px-6 py-4">
+                      <div className="w-12 h-12 bg-base-200 rounded-sm overflow-hidden border border-base-content/10">
                         <img
-                          src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=100"
-                          className="w-full h-full object-contain grayscale group-hover:grayscale-0"
-                          alt="prod"
+                          src={item.prod_image}
+                          alt={item.prod_name}
+                          className="w-full h-full object-cover"
                         />
                       </div>
-                      <div>
-                        <p className="font-heading font-bold text-xs uppercase tracking-tight">
-                          Phantom Racer v.{id}
-                        </p>
-                        <p className="text-[9px] opacity-40 font-mono">
-                          SKU: VTX-00{id}
-                        </p>
+                    </td>
+
+                    {/* 3. Product ID & Name */}
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col">
+                        <span className="text-[11px] font-black opacity-60">
+                          #{item.prod_id}
+                        </span>
+                        <span className="text-xs font-bold uppercase tracking-tighter">
+                          {item.prod_name}
+                        </span>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6 text-[10px] font-black uppercase tracking-widest opacity-60">
-                    Footwear
-                  </td>
-                  <td className="px-8 py-6 font-heading font-black text-accent text-sm">
-                    $120.00
-                  </td>
-                  <td className="px-8 py-6">
-                    <span className="text-[10px] font-bold bg-green-50 text-green-600 px-2 py-1 uppercase tracking-tighter border border-green-200">
-                      In Stock
-                    </span>
-                  </td>
-                  {/* Details Button Cell */}
-                  <td className="px-8 py-6 text-center">
-                    <button
-                      onClick={() => handleOpenDetails(id)}
-                      className="text-[9px] font-black uppercase tracking-widest bg-base-content text-base-100 px-4 py-2 hover:bg-accent transition-all"
-                    >
-                      Details
-                    </button>
-                  </td>
-                  <td className="px-8 py-6 text-right">
-                    <button className="text-[9px] font-black uppercase tracking-widest hover:text-accent border-b-2 border-transparent hover:border-accent transition-all py-1">
-                      Manage
-                    </button>
+                    </td>
+
+                    {/* 4. Product Type */}
+                    <td className="px-6 py-4">
+                      <span className="text-[10px] font-bold opacity-70 bg-base-200 px-2 py-1 rounded-sm uppercase">
+                        {item.prod_type_name}
+                      </span>
+                    </td>
+
+                    {/* 5. Status */}
+                    <td className="px-6 py-4">
+                      <span
+                        className={`text-[9px] font-black tracking-tighter px-2 py-1 border inline-block ${
+                          item.status === 1
+                            ? "border-green-500 text-green-500"
+                            : "border-red-500 text-red-500 opacity-40"
+                        }`}
+                      >
+                        {item.status === 1 ? "ACTIVE" : "INACTIVE"}
+                      </span>
+                    </td>
+
+                    {/* 6. Stock */}
+                    <td className="px-6 py-4">
+                      <span
+                        className={`text-xs font-bold ${item.stock < 10 ? "text-red-500" : ""}`}
+                      >
+                        {item.stock}{" "}
+                        <span className="text-[9px] opacity-40">PCS</span>
+                      </span>
+                    </td>
+
+                    {/* 7. Price */}
+                    <td className="px-6 py-4 text-xs font-black">
+                      {item.price}{" "}
+                      <span className="text-[9px] opacity-50">
+                        {item.currency_name}
+                      </span>
+                    </td>
+
+                    {/* 9. Action */}
+                    <td className="px-6 py-4">
+                      <div className="flex justify-end gap-3">
+                        <span
+                          title="Details"
+                          onClick={() => handleDetails(item)}
+                          className="material-icons text-lg cursor-pointer hover:text-blue-600 transition-colors"
+                        >
+                          info
+                        </span>
+                        <span
+                          onClick={() => handleStatusUpdate(item)}
+                          className="material-icons text-lg cursor-pointer hover:text-accent transition-colors"
+                        >
+                          {item.status === 1 ? "visibility" : "visibility_off"}
+                        </span>
+                        <span
+                          onClick={() => handleEdit(item)}
+                          className="material-icons text-lg cursor-pointer hover:text-blue-600 transition-colors"
+                        >
+                          edit
+                        </span>
+                        <span
+                          onClick={() => handleRemove(item)}
+                          className="material-icons text-lg cursor-pointer hover:text-red-600 transition-colors"
+                        >
+                          delete
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="9"
+                    className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest"
+                  >
+                    No products available
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
 
-        {/* 3. SHARED BACKDROP */}
-        {(isDrawerOpen || isDetailsOpen) && (
-          <div
-            className="fixed inset-0 bg-base-content/60 backdrop-blur-md z-[100] transition-opacity duration-300"
-            onClick={() => {
-              setIsDrawerOpen(false);
-              setIsDetailsOpen(false);
-            }}
-          />
-        )}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
 
-        {/* 4. "ADD NEW" DRAWER (Unchanged) */}
-        <aside
-          className={`fixed top-0 right-0 h-full w-full max-w-lg bg-base-100 z-[101] shadow-[-30px_0px_60px_rgba(0,0,0,0.2)] transition-transform duration-500 ease-in-out transform ${
-            isDrawerOpen ? "translate-x-0" : "translate-x-full"
-          } border-l-4 border-base-content`}
-        >
-          <div className="h-full flex flex-col p-12 overflow-y-auto no-scrollbar">
-            <div className="mb-16 border-b border-base-content/5 pb-8">
-              <h2 className="font-heading text-4xl font-black uppercase italic tracking-tighter">
-                New <span className="text-accent text-outline">Product</span>
-              </h2>
-              <p className="text-[9px] font-black uppercase tracking-[0.4em] opacity-30 mt-2">
-                Initialize warehouse entry
-              </p>
-            </div>
+        <div className="relative">
+          {isDrawerOpen && (
+            <div
+              className="fixed inset-0 bg-base-content/60 backdrop-blur-sm z-[100] transition-opacity duration-300"
+              onClick={() => setIsDrawerOpen(false)}
+            />
+          )}
 
-            <div className="flex-grow space-y-12">
-              <div className="grid grid-cols-1 gap-12">
-                <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
-                    Product Title
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Apex Runner 2026"
-                    className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent uppercase tracking-tight"
-                  />
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
-                    Primary Category
-                  </label>
-                  <select className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold bg-transparent uppercase tracking-wider cursor-pointer appearance-none">
-                    <option>Footwear</option>
-                    <option>Apparel</option>
-                    <option>Accessories</option>
-                  </select>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-8">
-                <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
-                    Price (USD)
-                  </label>
-                  <input
-                    type="number"
-                    className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold bg-transparent"
-                    placeholder="0.00"
-                  />
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
-                    Stock Quantity
-                  </label>
-                  <input
-                    type="number"
-                    className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold bg-transparent"
-                    placeholder="100"
-                  />
-                </div>
-              </div>
-              <div className="space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
-                  Brief Description
-                </label>
-                <textarea
-                  rows="3"
-                  className="w-full border-2 border-base-content/5 p-4 focus:border-accent outline-none text-xs font-medium transition-colors bg-base-200/30 rounded-sm"
-                  placeholder="Product specifications..."
-                ></textarea>
-              </div>
-            </div>
-
-            <div className="pt-12 border-t-2 border-base-content mt-12 flex flex-col gap-4">
-              <button className="w-full bg-base-content text-base-100 py-6 font-heading font-black uppercase tracking-[0.3em] text-[11px] hover:bg-accent transition-colors">
-                Save Entry
-              </button>
+          <aside
+            className={`fixed top-0 right-0 h-full w-full max-w-xl bg-base-100 z-[101] shadow-[-20px_0px_50px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-out transform ${
+              isDrawerOpen ? "translate-x-0" : "translate-x-full"
+            }`}
+          >
+            <div className="h-full flex flex-col p-8 relative">
               <button
                 onClick={() => setIsDrawerOpen(false)}
-                className="w-full border border-base-content/10 py-5 font-heading font-black uppercase tracking-widest text-[11px] hover:bg-base-content hover:text-base-100 transition-all opacity-40 hover:opacity-100"
+                className={`absolute top-8 left-[-50px] md:left-[-60px] w-10 h-10 bg-base-100 border border-base-content/10 flex items-center justify-center rounded-full hover:bg-accent hover:text-white transition-all shadow-xl group z-[102] ${
+                  isDrawerOpen ? "opacity-100 visible" : "opacity-0 invisible"
+                }`}
               >
-                Cancel Process
+                <span className="material-icons text-sm group-hover:rotate-90 transition-transform">
+                  close
+                </span>
               </button>
-            </div>
-          </div>
-        </aside>
 
-        {/* 5. "DETAILS" VIEW DRAWER */}
-        <aside
-          className={`fixed top-0 right-0 h-full w-full max-w-lg bg-base-100 z-[101] shadow-[-30px_0px_60px_rgba(0,0,0,0.2)] transition-transform duration-500 ease-in-out transform ${
-            isDetailsOpen ? "translate-x-0" : "translate-x-full"
-          } border-l-4 border-accent`}
-        >
-          {selectedProduct && (
-            <div className="h-full flex flex-col p-12 overflow-y-auto no-scrollbar">
-              <div className="mb-12 flex justify-between items-start">
-                <div>
-                  <h2 className="font-heading text-4xl font-black uppercase italic tracking-tighter text-base-content">
-                    Product <span className="text-accent">Details</span>
-                  </h2>
-                  <p className="text-[9px] font-black uppercase tracking-[0.4em] opacity-30 mt-2">
-                    Technical Specifications
-                  </p>
-                </div>
-                <button
-                  onClick={() => setIsDetailsOpen(false)}
-                  className="text-3xl font-black hover:text-accent rotate-45 transition-transform"
-                >
-                  +
-                </button>
+              <div className="flex justify-between items-center mb-12">
+                <h2 className="font-heading text-3xl font-black uppercase tracking-tighter">
+                  {formData?._id ? "Edit" : "Add"}{" "}
+                  <span className="text-accent">Product</span>
+                </h2>
               </div>
 
-              <div className="space-y-10">
-                <div className="aspect-square bg-base-200 border border-base-content/5 p-8">
-                  <img
-                    src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=400"
-                    className="w-full h-full object-contain "
-                    alt="detail-img"
+              <div className="flex-grow space-y-10 overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    Product Name <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    value={formData.prod_name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, prod_name: e.target.value })
+                    }
+                    type="text"
+                    placeholder="e.g. Footwear"
+                    className={`w-full border-b-2 ${
+                      isInvalid && !formData.prod_name
+                        ? "border-red-600"
+                        : "border-base-content/10"
+                    } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent `}
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-8 border-t border-base-content/5 pt-8">
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
-                      Item Name
-                    </p>
-                    <p className="font-heading font-bold text-sm uppercase mt-1">
-                      {selectedProduct.name}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
-                      Category
-                    </p>
-                    <p className="font-heading font-bold text-sm uppercase mt-1">
-                      {selectedProduct.category}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
-                      Current Price
-                    </p>
-                    <p className="font-heading font-black text-accent text-lg mt-1">
-                      {selectedProduct.price}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
-                      Stock Status
-                    </p>
-                    <p className="font-heading font-bold text-sm uppercase mt-1 text-green-600">
-                      {selectedProduct.stock}
-                    </p>
-                  </div>
+                <div className="space-y-2 ">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    Product Image <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    value={formData.prod_image}
+                    onChange={(e) =>
+                      setFormData({ ...formData, prod_image: e.target.value })
+                    }
+                    type="url"
+                    placeholder="Enter url"
+                    className={`w-full border-b-2 ${
+                      isInvalid && !formData.prod_image
+                        ? "border-red-600"
+                        : "border-base-content/10"
+                    } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
+                  />
                 </div>
 
-                <div className="border-t border-base-content/5 pt-8">
-                  <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
-                    Description
-                  </p>
-                  <p className="text-xs font-medium leading-relaxed mt-4 opacity-70">
-                    {selectedProduct.desc}
-                  </p>
+                {/* Change 1: Added 'flex-wrap' and 'gap-y-8' to allow items to move to the next line */}
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-8 w-full">
+                  {/* Product ID */}
+                  <div className="space-y-2 w-[calc(50%-8px)]">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      Product ID <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      value={formData.prod_id}
+                      onChange={(e) =>
+                        setFormData({ ...formData, prod_id: e.target.value })
+                      }
+                      type="number"
+                      placeholder="101"
+                      className={`w-full border-b-2 ${
+                        isInvalid && !formData.prod_id
+                          ? "border-red-600"
+                          : "border-base-content/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
+                    />
+                  </div>
+
+                  {/* Status */}
+                  <div className="space-y-2 w-[calc(50%-8px)]">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      Status <span className="text-red-600">*</span>
+                    </label>
+                    <select
+                      value={formData.status}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          status: Number(e.target.value),
+                        })
+                      }
+                      className={`w-full border-b-2 ${
+                        isInvalid && !formData.status
+                          ? "border-red-600"
+                          : "border-base-content/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent text-base-content tracking-wider cursor-pointer`}
+                    >
+                      {statusList.map((status) => (
+                        <option
+                          key={status.value}
+                          value={status.value}
+                          className="bg-base-100 text-base-content"
+                        >
+                          {status.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Parent Category */}
+
+                  <div className="space-y-2 w-[calc(50%-8px)]">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      Parent Category <span className="text-red-600">*</span>
+                    </label>
+                    <select
+                      value={formData.par_cat_id}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          par_cat_id: Number(e.target.value),
+                        })
+                      }
+                      className={`w-full border-b-2 ${
+                        isInvalid && !formData.par_cat_id
+                          ? "border-red-600"
+                          : "border-base-content/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent text-base-content tracking-wider cursor-pointer`}
+                    >
+                      <option
+                        value=""
+                        className="bg-base-100 text-base-content"
+                      >
+                        Select Category
+                      </option>
+                      {parentCategoryList.map((category, index) => (
+                        <option
+                          key={index}
+                          value={category.par_cat_id}
+                          className="bg-base-100 text-base-content"
+                        >
+                          {category.par_cat_id} - {category.par_cat_name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Sub Category */}
+
+                  <div className="space-y-2 w-[calc(50%-8px)]">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      Sub Category <span className="text-red-600">*</span>
+                    </label>
+                    <select
+                      value={formData.sub_cat_id}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          sub_cat_id: Number(e.target.value),
+                        })
+                      }
+                      className={`w-full border-b-2 ${
+                        isInvalid && !formData.sub_cat_id
+                          ? "border-red-600"
+                          : "border-base-content/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent text-base-content tracking-wider cursor-pointer`}
+                    >
+                      <option
+                        value=""
+                        className="bg-base-100 text-base-content"
+                      >
+                        Select Category
+                      </option>
+                      {subCategoryList
+                        ?.filter(
+                          (category) =>
+                            Number(category.par_cat_id) ===
+                            Number(formData.par_cat_id),
+                        )
+                        ?.map((category, index) => (
+                          <option
+                            key={index}
+                            value={category.sub_cat_id}
+                            className="bg-base-100 text-base-content"
+                          >
+                            {category.sub_cat_id} - {category.sub_cat_name}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+
+                  {/* image  */}
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      Price <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      value={formData.price}
+                      onChange={(e) =>
+                        setFormData({ ...formData, price: e.target.value })
+                      }
+                      type="number"
+                      placeholder="Enter price"
+                      className={`w-full border-b-2 ${
+                        isInvalid && !formData.price
+                          ? "border-red-600"
+                          : "border-base-content/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent `}
+                    />
+                  </div>
+
+                  {/* prod type  */}
+                  <div className="space-y-2 w-[calc(50%-8px)]">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      Product Type <span className="text-red-600">*</span>
+                    </label>
+                    <select
+                      value={JSON.stringify(formData.prodTypeInfo) || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          prodTypeInfo: e.target.value
+                            ? JSON.parse(e.target.value)
+                            : null,
+                        })
+                      }
+                      className={`w-full border-b-2 ${
+                        isInvalid &&
+                        (!formData.prodTypeInfo ||
+                          !formData.prodTypeInfo.prod_type)
+                          ? "border-red-600"
+                          : "border-base-content/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent text-base-content  tracking-wider cursor-pointer`}
+                    >
+                      <option
+                        value=""
+                        className="bg-base-100 text-base-content"
+                      >
+                        Select Product Type
+                      </option>
+                      {productTypeList?.map((prod, index) => (
+                        <option
+                          key={index}
+                          value={JSON.stringify(prod)}
+                          className="bg-base-100 text-base-content"
+                        >
+                          {prod.prod_type} - {prod.prod_type_name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* currency  */}
+
+                  <div className="space-y-2 w-[calc(50%-8px)]">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      Currency Type <span className="text-red-600">*</span>
+                    </label>
+                    <select
+                      value={JSON.stringify(formData.currencyTypeInfo) || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          currencyTypeInfo: e.target.value
+                            ? JSON.parse(e.target.value)
+                            : null,
+                        })
+                      }
+                      className={`w-full border-b-2 ${
+                        isInvalid &&
+                        (!formData.currencyTypeInfo ||
+                          !formData.currencyTypeInfo.currency_id)
+                          ? "border-red-600"
+                          : "border-base-content/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent text-base-content  tracking-wider cursor-pointer`}
+                    >
+                      <option
+                        value=""
+                        className="bg-base-100 text-base-content"
+                      >
+                        Select Currency Type
+                      </option>
+                      {currencyList?.map((currency, index) => (
+                        <option
+                          key={index}
+                          value={JSON.stringify(currency)}
+                          className="bg-base-100 text-base-content"
+                        >
+                          {currency.currency_id} - {currency.currency_name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-2 w-[calc(50%-8px)] ">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      Brand Name <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      value={formData.prod_brand}
+                      onChange={(e) =>
+                        setFormData({ ...formData, prod_brand: e.target.value })
+                      }
+                      type="text"
+                      placeholder="Enter Brand"
+                      className={`w-full border-b-2 ${
+                        isInvalid && !formData.prod_brand
+                          ? "border-red-600"
+                          : "border-base-content/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent `}
+                    />
+                  </div>
+                  <div className="space-y-2 w-[calc(50%-8px)]">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      Stock <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      value={formData.stock}
+                      onChange={(e) =>
+                        setFormData({ ...formData, stock: e.target.value })
+                      }
+                      type="number"
+                      placeholder="Enter stock"
+                      className={`w-full border-b-2 ${
+                        isInvalid && !formData.stock
+                          ? "border-red-600"
+                          : "border-base-content/10"
+                      } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent `}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2  ">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    Description <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
+                    type="text-area"
+                    placeholder="Enter description"
+                    className={`w-full border-b-2 ${
+                      isInvalid && !formData.description
+                        ? "border-red-600"
+                        : "border-base-content/10"
+                    } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent `}
+                  />
                 </div>
               </div>
 
-              <button
-                onClick={() => setIsDetailsOpen(false)}
-                className="mt-12 w-full bg-base-content text-base-100 py-6 font-heading font-black uppercase tracking-[0.3em] text-[11px] hover:bg-accent transition-colors"
-              >
-                Close Details
-              </button>
+              <div className="pt-8 border-t border-base-content/5 flex justify-center gap-4 mt-auto">
+                <button
+                  onClick={handleCancel}
+                  className="px-8 border border-base-content/10 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-base-content hover:text-base-100 transition-all cursor-pointer rounded-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  disabled={isLoadingButton}
+                  className="px-8 bg-base-content text-base-100 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-accent transition-colors cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
+                >
+                  {isLoadingButton ? (
+                    <span className="loading loading-spinner loading-xs"></span>
+                  ) : (
+                    "Submit"
+                  )}
+                </button>
+              </div>
             </div>
-          )}
-        </aside>
+          </aside>
+
+          {/* 5. "DETAILS" VIEW DRAWER */}
+
+          {/* --- BACKDROP FOR CLICK-OUTSIDE --- */}
+          <div
+            className={`fixed inset-0 bg-black/20 backdrop-blur-[2px] z-[100] transition-opacity duration-300 ${
+              isDetailsOpen ? "opacity-100 visible" : "opacity-0 invisible"
+            }`}
+            onClick={() => setIsDetailsOpen(false)}
+          />
+
+          <aside
+            className={`fixed top-0 right-0 h-full w-full max-w-xl bg-base-100 z-[101] shadow-[-20px_0px_50px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-out transform ${
+              isDetailsOpen ? "translate-x-0" : "translate-x-full"
+            } border-l border-base-content/5`}
+          >
+            {selectedProduct && (
+              <div className="h-full flex flex-col p-8 relative">
+                {/* Floating Close Button */}
+                <button
+                  onClick={() => setIsDetailsOpen(false)}
+                  className={`absolute top-8 left-[-50px] md:left-[-60px] w-10 h-10 bg-base-100 border border-base-content/10 flex items-center justify-center rounded-full hover:bg-accent hover:text-white transition-all shadow-xl group z-[102] ${
+                    isDetailsOpen
+                      ? "opacity-100 visible"
+                      : "opacity-0 invisible"
+                  }`}
+                >
+                  <span className="material-icons text-sm group-hover:rotate-90 transition-transform">
+                    close
+                  </span>
+                </button>
+
+                {/* Header */}
+                <div className="mb-8">
+                  <h2 className="font-heading text-3xl font-black uppercase tracking-tighter text-base-content">
+                    Product <span className="text-accent">Details</span>
+                  </h2>
+                  <p className="text-[10px] font-black uppercase tracking-widest opacity-30 mt-2">
+                    SKU: {selectedProduct.prod_id}
+                  </p>
+                </div>
+
+                {/* Content Area */}
+                <div className="flex-grow space-y-8 overflow-y-auto pr-2 custom-scrollbar">
+                  {/* Product Image */}
+
+                  {/* Info Grid */}
+                  <div className="space-y-10">
+                    {/* 1. Image Section - Optimized for Dark Mode with a slight tint */}
+                    <div className="aspect-square bg-white/[0.03] border border-base-content/5  rounded-sm overflow-hidden relative group">
+                      <img
+                        src={selectedProduct.prod_image}
+                        className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
+                        alt={selectedProduct.prod_name}
+                      />
+                    </div>
+
+                    {/* 2. Primary Info Grid */}
+                    <div className="grid grid-cols-2 gap-y-10 gap-x-6 border-t border-base-content/5 pt-8">
+                      {/* Product Name */}
+                      <div className="col-span-2">
+                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                          Product Name
+                        </p>
+                        <p className="font-heading font-bold text-2xl uppercase mt-1 leading-none tracking-tighter">
+                          {selectedProduct.prod_name}
+                        </p>
+                      </div>
+
+                      {/* Brand */}
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                          Brand
+                        </p>
+                        <p className="font-heading font-bold text-sm uppercase mt-1 tracking-tight">
+                          {selectedProduct.prod_brand}
+                        </p>
+                      </div>
+
+                      {/* Price */}
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                          Current Price
+                        </p>
+                        <p className="font-heading font-black text-xl mt-1 leading-none">
+                          {selectedProduct.price}{" "}
+                          <span className="text-[10px] text-base-content/40 ml-1">
+                            {selectedProduct.currency_name}
+                          </span>
+                        </p>
+                      </div>
+
+                      {/* Stock */}
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                          Availability
+                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <div
+                            className={`w-2 h-2 rounded-full ${selectedProduct.stock > 0 ? "bg-green-500 animate-pulse" : "bg-red-500"}`}
+                          />
+                          <p className="font-heading font-bold text-sm uppercase ">
+                            {selectedProduct.stock}{" "}
+                            <span className="opacity-50 text-[10px]">
+                              in stock
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                          Product Type
+                        </p>
+                        <p className="font-heading font-bold text-sm uppercase">
+                          {selectedProduct.prod_type_name}{" "}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                          Date Added
+                        </p>
+                        <p className="font-heading font-bold text-sm uppercase">
+                          {new Date(
+                            selectedProduct.createdAt,
+                          ).toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          })}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* 3. Category Hierarchy (Technical IDs) */}
+                    <div className="border-t border-base-content/5 pt-8">
+                      <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-4">
+                        Category Mapping
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <div className="px-3 py-1 border border-base-content/10 rounded-full flex items-center gap-2">
+                          <span className="text-[8px] font-black opacity-30 uppercase">
+                            Parent
+                          </span>
+                          <span className="text-[10px] font-bold">
+                            ID: {selectedProduct.par_cat_id}
+                          </span>
+                        </div>
+                        <div className="px-3 py-1 border border-base-content/10 rounded-full flex items-center gap-2">
+                          <span className="text-[8px] font-black opacity-30 uppercase">
+                            Sub
+                          </span>
+                          <span className="text-[10px] font-bold">
+                            ID: {selectedProduct.sub_cat_id}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 4. Description */}
+                    <div className="border-t border-base-content/5 pt-4 pb-4">
+                      <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                        Description
+                      </p>
+                      <p className="text-xs font-medium leading-relaxed mt-4 opacity-70 border-l-2 border-accent/20 pl-4 py-1 ">
+                        {selectedProduct.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Actions */}
+                <div className="pt-8 border-t border-base-content/5 mt-auto bg-base-100">
+                  <button
+                    onClick={() => setIsDetailsOpen(false)}
+                    className="w-full bg-base-content text-base-100 py-5 font-heading font-black uppercase tracking-[0.3em] text-[11px] hover:bg-accent transition-colors rounded-sm"
+                  >
+                    Close Panel
+                  </button>
+                </div>
+              </div>
+            )}
+          </aside>
+        </div>
       </div>
     </div>
   );

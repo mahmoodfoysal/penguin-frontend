@@ -243,7 +243,7 @@ const fetchWithTimeout = async (url, options = {}, timeout = 7000) => {
 // ------------------
 // ✅ Loaders
 // ------------------
-const homeLoader = async () => {
+const productLoader = async () => {
   const products = await fetchWithTimeout(
     `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
   );
@@ -324,7 +324,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/home" /> },
 
-      { path: "home", element: <Home />, loader: homeLoader },
+      { path: "home", element: <Home />, loader: productLoader },
 
       { path: "products", element: <Products />, loader: productsLoader },
 
@@ -399,7 +399,16 @@ const router = createBrowserRouter([
             loader: () =>
               Promise.all([parentCategoryLoader(), subCategoryLoader()]),
           },
-          { path: "add-product", element: <AddProduct /> },
+          {
+            path: "add-product",
+            element: <AddProduct />,
+            loader: () =>
+              Promise.all([
+                parentCategoryLoader(),
+                subCategoryLoader(),
+                productLoader(),
+              ]),
+          },
           { path: "pending-order", element: <PendingOrder /> },
         ],
       },
