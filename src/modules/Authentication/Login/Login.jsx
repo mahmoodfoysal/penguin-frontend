@@ -178,10 +178,10 @@ const Login = () => {
     <>
       <div className="bg-base-100 min-h-screen font-body selection:bg-accent selection:text-white flex flex-col lg:flex-row">
         {/* LEFT SIDE: BRAND IMPACT (Hidden on Mobile) */}
-        <div className="hidden lg:flex lg:w-1/2 bg-base-content relative overflow-hidden items-center justify-center p-20">
+        <div className="hidden lg:flex lg:w-1/2 bg-base-200 relative overflow-hidden items-center justify-center p-20">
           {/* Background Decorative Text */}
           <div className="absolute inset-0 opacity-10 flex flex-col justify-center items-center select-none pointer-events-none">
-            <span className="font-heading font-black text-[20vw] leading-none uppercase  text-base-100 text-outline">
+            <span className="font-heading font-black text-[20vw] leading-none uppercase  text-base-content text-outline">
               Penguin
             </span>
             <span className="font-heading font-black text-[20vw] leading-none uppercase  text-accent">
@@ -190,7 +190,7 @@ const Login = () => {
           </div>
 
           {/* Featured Image / Message */}
-          <div className="relative z-10 text-base-100">
+          <div className="relative z-10 text-base-content">
             <h2 className="font-heading text-7xl font-black uppercase  tracking-tighter leading-none mb-6">
               Join with <br />{" "}
               <span className="text-accent text-outline">Penguin</span>

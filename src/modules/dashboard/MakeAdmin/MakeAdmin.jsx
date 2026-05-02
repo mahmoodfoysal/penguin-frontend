@@ -10,11 +10,13 @@ const MakeAdmin = () => {
   const [adminList, setAdminList] = useState(adminData?.list_data);
   const [formData, setFormData] = useState({
     _id: null,
-    email: null,
-    roleInfo: {},
+    email: "",
+    roleInfo: null,
     isEdit: false,
   });
   const [isEdit, setIsEdit] = useState(false);
+  const [isInvalid, setIsInvalid] = useState(false);
+
 
   const accessList = [
     {
@@ -35,20 +37,34 @@ const MakeAdmin = () => {
     setFormData({
       _id: null,
       email: "",
-      full_name: "",
       roleInfo: null,
     });
+    setIsInvalid(false);
   };
 
+
   const handleSubmitAdmin = async () => {
+    setIsInvalid(false);
+    if (!formData.email || !formData.roleInfo?.role_id) {
+      setIsInvalid(true);
+      Swal.fire({
+        icon: "error",
+        title: "Incomplete Information",
+        text: "Please enter a user email and select an access level.",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
     const confirmation = await Swal.fire({
       title: "Are you sure?",
-      text: "Do you want to submit?",
+      text: "Do you want to assign this role?",
       icon: "warning",
       showCancelButton: true,
       cancelButtonText: "Cancel",
       confirmButtonText: "Ok",
     });
+
     const data = {
       _id: isEdit ? formData._id : null,
       email: formData.email,
@@ -71,25 +87,25 @@ const MakeAdmin = () => {
             confirmButtonText: "OK",
           });
           const obj = {
-            _id: result.data.id,
+            _id: result.data.id || formData._id,
             email: formData.email,
             role: formData.roleInfo?.role,
             role_id: formData.roleInfo?.role_id,
+            user_info: userInfo?.email, // Ensure Super Admin name persists
           };
 
           const index = adminList?.findIndex(
-            (item) => item.id == result.data.id,
+            (item) => item._id == (result.data.id || formData._id),
           );
 
           if (index > -1) {
             const updatedList = [...adminList];
-
             updatedList[index] = obj;
-
             setAdminList(updatedList);
           } else {
             setAdminList([obj, ...adminList]);
           }
+
           handleResetForm();
         }
         setIsEdit(false);
@@ -98,7 +114,10 @@ const MakeAdmin = () => {
       Swal.fire({
         icon: "error",
         title: "Admin Assignment Failed",
-        text: err.response?.data?.message || err.message || "Failed to assign admin role",
+        text:
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to assign admin role",
       });
     }
   };
@@ -153,7 +172,10 @@ const MakeAdmin = () => {
       Swal.fire({
         icon: "error",
         title: "Deletion Failed",
-        text: err.response?.data?.message || err.message || "Failed to remove admin access",
+        text:
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to remove admin access",
       });
     }
   };
@@ -191,8 +213,9 @@ const MakeAdmin = () => {
               }
               type="email"
               placeholder="user@vortexlabs.com"
-              className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-xs font-bold transition-colors bg-transparent"
+              className={`w-full border-b-2 bg-transparent outline-none py-3 text-xs font-bold transition-all ${isInvalid && !formData.email ? "border-red-600" : "border-base-content/10 focus:border-accent"}`}
             />
+
           </div>
 
           {/* Role Dropdown */}
@@ -205,14 +228,21 @@ const MakeAdmin = () => {
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  roleInfo: JSON.parse(e.target.value),
+                  roleInfo: e.target.value === "null" ? null : JSON.parse(e.target.value),
                 })
               }
-              className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-xs font-bold bg-transparent uppercase tracking-wider cursor-pointer"
+              className={`w-full border-b-2 bg-transparent outline-none py-3 text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${isInvalid && !formData.roleInfo?.role_id ? "border-red-600" : "border-base-content/10 focus:border-accent"}`}
             >
-              <option>Select Role</option>
+              <option value="null" className="bg-base-100 text-base-content">
+
+                Select Role
+              </option>
               {accessList?.map((item, index) => (
-                <option value={JSON.stringify(item)} key={index}>
+                <option
+                  value={JSON.stringify(item)}
+                  key={index}
+                  className="bg-base-100 text-base-content"
+                >
                   {item?.role}
                 </option>
               ))}
@@ -251,6 +281,7 @@ const MakeAdmin = () => {
           <table className="w-full text-left">
             <thead>
               <tr className="bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black text-base-content/40">
+                <th className="px-3 py-3">SL</th>
                 <th className="px-3 py-3">Super Admin</th>
                 <th className="px-3 py-3">Email</th>
                 <th className="px-3 py-3">Role</th>
@@ -265,8 +296,10 @@ const MakeAdmin = () => {
                   key={index}
                   className="group hover:bg-base-200/30 transition-colors"
                 >
+                  <td className="px-3 py-3 font-bold text-xs">{index + 1}</td>
                   <td className="px-3 py-3">{item.user_info}</td>
                   <td className="px-3 py-3">{item.email}</td>
+
                   <td className="px-3 py-3">
                     <span className="inline-block border border-base-content/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full group-hover:border-accent group-hover:text-accent transition-colors">
                       {item.role}
