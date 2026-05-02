@@ -58,7 +58,7 @@ const Login = () => {
         const user = result.user;
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
-        console.log(token);
+
         dispatch(setUser({ token: user.accessToken }));
         if (token) {
           const url = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/admin/get-admin-list/${user.email}`;
@@ -71,7 +71,11 @@ const Login = () => {
       .catch((error) => {
         setIsLoading(false);
         setAuthError(error.message);
-        console.log(error.message);
+        Swal.fire({
+          icon: "error",
+          title: "Authentication Failed",
+          text: error.message || "Failed to sign in with Google",
+        });
       });
   };
 
@@ -99,11 +103,11 @@ const Login = () => {
           photoURL: photo,
           phoneNumber: null,
         });
-        console.log(user);
+
         dispatch(setUser({ token: user.accessToken }));
         setFormData({});
 
-        console.log(user.accessToken);
+
         setIsLoading(false);
         navigate(location.state?.from?.pathname || "/home");
         setIsInvalid(false);
@@ -117,7 +121,11 @@ const Login = () => {
       .catch((error) => {
         setIsLoading(false);
         setAuthError(error.message);
-        console.log(error.message);
+        Swal.fire({
+          icon: "error",
+          title: "Registration Failed",
+          text: error.message || "Failed to create account",
+        });
       });
   };
 
@@ -159,7 +167,11 @@ const Login = () => {
       .catch((error) => {
         setIsLoading(false);
         setAuthError(error.message);
-        console.log(error.message);
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: error.message || "Failed to sign in",
+        });
       });
   };
 

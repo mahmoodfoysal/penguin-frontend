@@ -125,7 +125,7 @@ const ProductDetails = () => {
   };
 
   const handleBuyNow = (product) => {
-    console.log(product);
+
     dispatch(setOrderProduct({ ...product, quantity: 1 }));
     navigate("/buy-product");
   };
@@ -164,7 +164,7 @@ const ProductDetails = () => {
       sub_cat_id: sub_cat_id,
     };
 
-    console.log(data);
+
 
     const confirmation = await Swal.fire({
       title: "Are you sure?",
@@ -222,13 +222,17 @@ const ProductDetails = () => {
           setClientRating(0);
         }
       } catch (error) {
-        console.error("Failed to submit review", error);
+        Swal.fire({
+          icon: "error",
+          title: "Review Submission Failed",
+          text: error.response?.data?.message || error.message || "Failed to submit review",
+        });
       } finally {
         setIsReviewLoading(false);
       }
     }
 
-    console.log(clientComment, clientRating);
+
   };
 
   const totalRating = commentList.reduce(

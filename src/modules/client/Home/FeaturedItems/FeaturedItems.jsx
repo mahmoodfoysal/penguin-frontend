@@ -12,22 +12,23 @@ const FeaturedItems = () => {
     const getFeaturedItems = (arr, count) => {
       const result = [];
       const usedIndices = new Set();
-      
+
       // Let's just pick items from the end of the array for variety
       const startIndex = Math.max(0, (arr?.length || 0) - count * 2);
 
       while (result.length < count && usedIndices.size < arr?.length) {
-        const index = startIndex + Math.floor(Math.random() * (arr.length - startIndex));
+        const index =
+          startIndex + Math.floor(Math.random() * (arr.length - startIndex));
         if (index < arr.length && !usedIndices.has(index)) {
           usedIndices.add(index);
           result.push(arr[index]);
-        } else if (usedIndices.size >= (arr.length - startIndex)) {
-            // fallback if we run out of elements in the subset
-            const fallbackIndex = Math.floor(Math.random() * arr.length);
-            if(!usedIndices.has(fallbackIndex)){
-                usedIndices.add(fallbackIndex);
-                result.push(arr[fallbackIndex]);
-            }
+        } else if (usedIndices.size >= arr.length - startIndex) {
+          // fallback if we run out of elements in the subset
+          const fallbackIndex = Math.floor(Math.random() * arr.length);
+          if (!usedIndices.has(fallbackIndex)) {
+            usedIndices.add(fallbackIndex);
+            result.push(arr[fallbackIndex]);
+          }
         }
       }
 
@@ -47,7 +48,8 @@ const FeaturedItems = () => {
             Featured Items
           </h2>
           <p className="text-lg text-base-content/60 font-light max-w-2xl">
-            Hand-picked by our interior designers. These pieces are guaranteed to elevate your living space.
+            Hand-picked by our interior designers. These pieces are guaranteed
+            to elevate your living space.
           </p>
         </div>
         <Link
@@ -70,11 +72,11 @@ const FeaturedItems = () => {
           ))}
         </div>
       )}
-      
+
       <div className="mt-10 sm:hidden text-center">
-         <Link to="/products" className="btn btn-outline border-base-300 w-full">
-            View Collection
-         </Link>
+        <Link to="/products" className="btn btn-outline border-base-300 w-full">
+          View Collection
+        </Link>
       </div>
     </section>
   );

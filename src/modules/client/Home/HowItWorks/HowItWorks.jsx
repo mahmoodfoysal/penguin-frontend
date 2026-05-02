@@ -5,23 +5,27 @@ const HowItWorks = () => {
     {
       num: "01",
       title: "Browse & Select",
-      description: "Explore our extensive collection and find the perfect pieces that match your style."
+      description:
+        "Explore our extensive collection and find the perfect pieces that match your style.",
     },
     {
       num: "02",
       title: "Secure Checkout",
-      description: "Add items to your cart and proceed through our fast, 100% secure payment gateway."
+      description:
+        "Add items to your cart and proceed through our fast, 100% secure payment gateway.",
     },
     {
       num: "03",
       title: "Fast Delivery",
-      description: "We carefully package your items and deliver them right to your doorstep swiftly."
+      description:
+        "We carefully package your items and deliver them right to your doorstep swiftly.",
     },
     {
       num: "04",
       title: "Enjoy Your Home",
-      description: "Unbox, setup, and enjoy your beautifully upgraded living space with your new items."
-    }
+      description:
+        "Unbox, setup, and enjoy your beautifully upgraded living space with your new items.",
+    },
   ];
 
   return (
@@ -32,7 +36,8 @@ const HowItWorks = () => {
             How It Works
           </h2>
           <p className="text-lg text-base-content/60 font-light">
-            Your journey to a beautiful home is simple and straightforward. Here are the four simple steps.
+            Your journey to a beautiful home is simple and straightforward. Here
+            are the four simple steps.
           </p>
         </div>
 
@@ -44,7 +49,7 @@ const HowItWorks = () => {
               </div>
               <h3 className="text-xl font-bold mb-3">{step.title}</h3>
               <p className="text-base-content/70">{step.description}</p>
-              
+
               {/* Connector Line for Desktop */}
               {index < steps.length - 1 && (
                 <div className="hidden lg:block absolute top-12 left-[60%] w-full h-[2px] bg-base-300 z-0">

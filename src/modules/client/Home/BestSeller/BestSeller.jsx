@@ -15,7 +15,7 @@ const BestSeller = () => {
 
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list`
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list`,
         );
         const reviews = response.data?.list_data || response.data || [];
 
@@ -36,7 +36,7 @@ const BestSeller = () => {
           if (!stats) return false;
           const averageRating = stats.total / stats.count;
           // You specified if rating < 4 then match, but best seller standard is >= 4
-          return averageRating >= 4; 
+          return averageRating >= 4;
         });
 
         // If no products match, fallback to some items or just show the matching ones
@@ -76,7 +76,11 @@ const BestSeller = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
           {bestSellerProd.map((product, index) => (
-            <ProductCard product={product} key={index} isBestSeller={true}></ProductCard>
+            <ProductCard
+              product={product}
+              key={index}
+              isBestSeller={true}
+            ></ProductCard>
           ))}
         </div>
       )}

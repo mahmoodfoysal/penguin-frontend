@@ -7,6 +7,7 @@ import PageHeader from "../../../components/PageHeader";
 import Pagination from "../../../components/Pagination";
 import ComponentLoader from "../../../pages/ComponentLoader";
 import DataNotFound from "../../../pages/DataNotFound";
+import Swal from "sweetalert2";
 
 const Blogs = () => {
   const pageInfo = [
@@ -56,7 +57,14 @@ const Blogs = () => {
         );
         setBlogsList(sorted);
       } catch (error) {
-        console.error("Failed to fetch blogs", error);
+        Swal.fire({
+          icon: "error",
+          title: "Data Loading Failed",
+          text:
+            error.response?.data?.message ||
+            error.message ||
+            "Failed to load blog data",
+        });
       } finally {
         setIsLoading(false);
       }

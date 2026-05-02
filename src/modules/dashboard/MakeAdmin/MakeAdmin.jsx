@@ -56,7 +56,7 @@ const MakeAdmin = () => {
       role_id: formData.roleInfo?.role_id,
       user_info: userInfo?.email,
     };
-    console.log("data", data);
+
     try {
       if (confirmation.isConfirmed) {
         const result = await axios.post(
@@ -95,7 +95,11 @@ const MakeAdmin = () => {
         setIsEdit(false);
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Admin Assignment Failed",
+        text: err.response?.data?.message || err.message || "Failed to assign admin role",
+      });
     }
   };
 
@@ -146,7 +150,11 @@ const MakeAdmin = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Deletion Failed",
+        text: err.response?.data?.message || err.message || "Failed to remove admin access",
+      });
     }
   };
   return (

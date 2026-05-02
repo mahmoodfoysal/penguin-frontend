@@ -13,8 +13,6 @@ const AddProduct = () => {
   const subCategoryList = subCategoryData?.subCategoryData?.list_data;
   const parentCategoryList = parentCategoryData?.parentCategoryData?.list_data;
 
-  console.log("subCategoryList", subCategoryList);
-  console.log("parentCategoryList", parentCategoryList);
   const [formData, setFormData] = useState({
     _id: null,
     par_cat_id: "",
@@ -192,7 +190,6 @@ const AddProduct = () => {
       user_info: userInfo?.email,
     };
 
-    console.log("data", data);
     try {
       if (confirmation.isConfirmed) {
         setIsLoadingButton(true);
@@ -234,7 +231,14 @@ const AddProduct = () => {
         setIsDrawerOpen(false);
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Submission Error",
+        text:
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to submit product",
+      });
     } finally {
       setIsLoadingButton(false);
     }
@@ -254,7 +258,7 @@ const AddProduct = () => {
       status: Number(item.status == 1 ? 0 : 1),
       user_info: userInfo?.email,
     };
-    console.log("data", data);
+
     try {
       if (confirmation.isConfirmed) {
         Swal.fire({
@@ -299,7 +303,14 @@ const AddProduct = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Status Update Failed",
+        text:
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to update product status",
+      });
       Swal.close();
     }
   };
@@ -373,7 +384,11 @@ const AddProduct = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.response?.data?.message || err.message || "error",
+      });
     }
   };
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);

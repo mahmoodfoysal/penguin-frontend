@@ -11,7 +11,7 @@ const ParentCategory = () => {
   const [categoryList, setCategoryList] = useState(
     parentCategoryData?.list_data,
   );
-  console.log(parentCategoryData);
+
   const [formData, setFormData] = useState({
     _id: null,
     par_cat_id: "",
@@ -107,7 +107,7 @@ const ParentCategory = () => {
       status: Number(formData.status),
       user_info: userInfo?.email,
     };
-    console.log("data", data);
+
     try {
       if (confirmation.isConfirmed) {
         setIsLoadingButton(true);
@@ -149,7 +149,11 @@ const ParentCategory = () => {
         setIsDrawerOpen(false);
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Submission Error",
+        text: err.response?.data?.message || err.message || "Failed to submit category",
+      });
     } finally {
       setIsLoadingButton(false);
     }
@@ -169,7 +173,7 @@ const ParentCategory = () => {
       status: Number(item.status == 1 ? 0 : 1),
       user_info: userInfo?.email,
     };
-    console.log("data", data);
+
     try {
       if (confirmation.isConfirmed) {
         Swal.fire({
@@ -216,7 +220,11 @@ const ParentCategory = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Status Update Failed",
+        text: err.response?.data?.message || err.message || "Failed to update status",
+      });
       Swal.close();
     }
   };
@@ -272,7 +280,11 @@ const ParentCategory = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Deletion Failed",
+        text: err.response?.data?.message || err.message || "Failed to delete category",
+      });
     }
   };
 

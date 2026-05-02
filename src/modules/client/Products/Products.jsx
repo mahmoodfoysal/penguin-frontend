@@ -10,6 +10,7 @@ import PageHeader from "../../../components/PageHeader";
 import ComponentLoader from "../../../pages/ComponentLoader";
 import DataNotFound from "../../../pages/DataNotFound";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const Products = () => {
   const pageInfo = [
@@ -42,7 +43,7 @@ const Products = () => {
     location.state?.filter === "bestSeller",
   );
   const [reviewsList, setReviewsList] = useState([]);
-  
+
   const [selectedCategory, setSelectedCategory] = useState(
     location.state?.categoryId || null,
   );
@@ -55,7 +56,7 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [sortOption, setSortOption] = useState(
-    location.state?.filter === "bestSeller" ? "bestSeller" : "newest"
+    location.state?.filter === "bestSeller" ? "bestSeller" : "newest",
   );
 
   const itemsPerPage = 9;
@@ -75,11 +76,18 @@ const Products = () => {
     const fetchReviews = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list`
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list`,
         );
         setReviewsList(response.data?.list_data || response.data || []);
       } catch (error) {
-        console.error("Failed to fetch reviews", error);
+        Swal.fire({
+          icon: "error",
+          title: "Failed to load reviews",
+          text:
+            error.response?.data?.message ||
+            error.message ||
+            "Failed to load reviews",
+        });
       }
     };
     fetchReviews();
@@ -179,11 +187,11 @@ const Products = () => {
       result = [...result].sort((a, b) => {
         const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
         const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-        
+
         // Handle invalid dates (NaN) by treating them as 0
         const validTimeA = isNaN(timeA) ? 0 : timeA;
         const validTimeB = isNaN(timeB) ? 0 : timeB;
-        
+
         return validTimeB - validTimeA;
       });
     } else if (sortOption === "bestSeller") {
@@ -464,7 +472,8 @@ const Products = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-12">
                   {paginatedProducts.map((item, index) => {
                     const stats = ratingsMap[item.prod_id];
-                    const isBestSeller = stats && stats.total / stats.count >= 4;
+                    const isBestSeller =
+                      stats && stats.total / stats.count >= 4;
                     return (
                       <ProductCard
                         product={item}

@@ -1,10 +1,16 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation } from "swiper/modules";
 import { Rating } from "@smastrom/react-rating";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
 import "@smastrom/react-rating/style.css";
+
 import axios from "axios";
 
 const Testimonials = () => {
-  const scrollRef = useRef(null);
   const [reviews, setReviews] = useState([]);
 
   // Fetch Reviews
@@ -12,11 +18,10 @@ const Testimonials = () => {
     const fetchReviews = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list`
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list`,
         );
         const data = response.data?.list_data || response.data || [];
-        
-        // Filter good reviews with comments and take top 10
+
         const goodReviews = data
           .filter((r) => r.rating >= 4 && r.comment)
           .slice(0, 10);
@@ -26,7 +31,8 @@ const Testimonials = () => {
           role: "Design Lover",
           comment: r.comment,
           rating: r.rating || 5,
-          avatar: r.image_url || `https://i.pravatar.cc/150?img=${(i % 50) + 1}`,
+          avatar:
+            r.image_url || `https://i.pravatar.cc/150?img=${(i % 50) + 1}`,
         }));
 
         setReviews(formattedReviews);
@@ -38,114 +44,136 @@ const Testimonials = () => {
     fetchReviews();
   }, []);
 
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth, scrollWidth } = scrollRef.current;
-      
-      // Calculate scroll amount: one card width + gap (gap-8 is 32px)
-      const firstChild = scrollRef.current.firstElementChild;
-      const scrollAmount = firstChild ? firstChild.offsetWidth + 32 : clientWidth;
-      
-      let scrollTo =
-        direction === "left"
-          ? scrollLeft - scrollAmount
-          : scrollLeft + scrollAmount;
-
-      // Wrap around logic
-      if (direction === "right" && scrollLeft + clientWidth >= scrollWidth - 10) {
-        scrollTo = 0; // Go back to start
-      } else if (direction === "left" && scrollLeft <= 0) {
-        scrollTo = scrollWidth; // Go to end
-      }
-
-      scrollRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
-    }
-  };
-
-  // Auto-scroll Carousel
-  useEffect(() => {
-    if (reviews.length === 0) return;
-    const interval = setInterval(() => {
-      scroll("right");
-    }, 4000); // Scroll every 4 seconds
-
-    return () => clearInterval(interval);
-  }, [reviews]);
+  if (reviews.length === 0) return null;
 
   return (
-    <section className="py-20 px-6 max-w-7xl mx-auto" id="testimonials">
-      <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-        <div className="max-w-2xl">
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-base-content mb-4">
-            Loved by Thousands
-          </h2>
-          <p className="text-lg text-base-content/60 font-light">
-            Don't just take our word for it. Here is what our community of
-            design lovers has to say.
-          </p>
-        </div>
+    <section
+      className="py-12 md:py-24 max-w-full overflow-x-hidden bg-base-100"
+      id="testimonials"
+    >
+      <div className="container mx-auto px-4 md:px-10 overflow-hidden">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-16 gap-8">
+          <div className="max-w-2xl">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-base-content mb-4 italic break-words">
+              Loved by{" "}
+              <span className="text-primary text-outline">Thousands</span>
+            </h2>
+            <p className="text-[10px] md:text-xs font-black uppercase tracking-widest opacity-40 max-w-md leading-relaxed">
+              "The standard of excellence in every piece of equipment"
+            </p>
+          </div>
 
-        {/* NAVIGATION BUTTONS */}
-        <div className="flex gap-2">
-          <button
-            onClick={() => scroll("left")}
-            className="btn btn-circle btn-outline border-base-300 hover:bg-primary hover:border-primary group"
-          >
-            <span className="group-hover:-translate-x-1 transition-transform">
-              ←
-            </span>
-          </button>
-          <button
-            onClick={() => scroll("right")}
-            className="btn btn-circle btn-outline border-base-300 hover:bg-primary hover:border-primary group"
-          >
-            <span className="group-hover:translate-x-1 transition-transform">
-              →
-            </span>
-          </button>
-        </div>
-      </div>
-
-      {/* SCROLLABLE CONTAINER */}
-      <div
-        ref={scrollRef}
-        className="flex overflow-x-auto gap-8 pb-8 no-scrollbar snap-x snap-mandatory"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-      >
-        {reviews.length > 0 ? (
-          reviews.map((review, index) => (
-            <div
-              key={index}
-              className="flex-shrink-0 w-full md:w-[calc(33.333%-1.5rem)] snap-start card bg-base-100 shadow-xl border border-base-200"
+          {/* CUSTOM NAVIGATION BUTTONS */}
+          <div className="flex gap-4 self-start sm:self-end lg:self-center">
+            <button
+              className="testimonial-prev btn btn-circle btn-outline border-base-content/10 hover:bg-primary hover:border-primary transition-all active:scale-90"
+              aria-label="Previous testimonial"
             >
-              <div className="card-body flex flex-col">
-                <Rating
-                  style={{ maxWidth: 120 }}
-                  value={review.rating}
-                  readOnly
-                />
-                <p className="py-6 text-base-content/80 text-lg italic leading-relaxed flex-grow line-clamp-4">
-                  "{review.comment}"
-                </p>
-                <div className="flex items-center gap-4 mt-auto pt-4 border-t border-base-200">
-                  <div className="avatar">
-                    <div className="w-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                      <img src={review.avatar} alt={review.name} />
+              ←
+            </button>
+            <button
+              className="testimonial-next btn btn-circle btn-outline border-base-content/10 hover:bg-primary hover:border-primary transition-all active:scale-90"
+              aria-label="Next testimonial"
+            >
+              →
+            </button>
+          </div>
+        </div>
+
+        <Swiper
+          modules={[Autoplay, Navigation]}
+          spaceBetween={24}
+          slidesPerView={1}
+          loop={true}
+          grabCursor={true}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          navigation={{
+            nextEl: ".testimonial-next",
+            prevEl: ".testimonial-prev",
+          }}
+          breakpoints={{
+            // Tablet (>= 768px)
+            768: {
+              slidesPerView: 2,
+              spaceBetween: 24,
+            },
+            // Desktop (>= 1024px)
+            1024: {
+              slidesPerView: 4,
+              spaceBetween: 24,
+            },
+          }}
+          className="w-full pb-16"
+        >
+          {reviews.map((review, index) => (
+            <SwiperSlide key={index} className="h-auto">
+              <div className="group h-full p-2">
+                <div className="bg-base-100 h-full rounded-2xl p-6 md:p-8 border border-base-content/5 shadow-sm hover:shadow-2xl hover:border-primary/20 transition-all duration-500 flex flex-col relative overflow-hidden">
+                  {/* Decorative Accent */}
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
+
+                  {/* Header: Profile */}
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="relative">
+                      <div className="w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden ring-2 ring-primary/20 ring-offset-2 ring-offset-base-100 group-hover:ring-primary transition-all duration-500">
+                        <img
+                          src={review.avatar}
+                          alt={review.name}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="absolute -bottom-1 -right-1 bg-primary text-white p-1 rounded-full shadow-lg scale-0 group-hover:scale-100 transition-transform duration-500">
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="font-heading font-black uppercase text-base md:text-lg tracking-tighter truncate leading-none">
+                        {review.name}
+                      </h4>
+                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mt-1 truncate">
+                        {review.role}
+                      </p>
                     </div>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-base-content">{review.name}</h4>
-                    <p className="text-sm text-base-content/60">{review.role}</p>
+
+                  {/* Body: Quote */}
+                  <div className="relative flex-grow">
+                    <span className="absolute -top-4 -left-2 text-primary/10 text-6xl font-serif select-none group-hover:text-primary/20 transition-colors">
+                      “
+                    </span>
+                    <p className="relative z-10 text-base-content/80 text-sm md:text-base italic leading-relaxed line-clamp-6 pt-2">
+                      {review.comment}
+                    </p>
+                  </div>
+
+                  {/* Footer: Rating */}
+                  <div className="mt-8 pt-6 border-t border-base-content/5 flex items-center justify-between">
+                    <Rating
+                      style={{ maxWidth: 100 }}
+                      value={review.rating}
+                      readOnly
+                    />
+                    <div className="text-[10px] font-bold opacity-30 uppercase tracking-widest group-hover:opacity-100 group-hover:text-primary transition-all">
+                      Verified
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <div className="w-full text-center py-10 opacity-50">
-            <span className="loading loading-spinner loading-lg"></span>
-          </div>
-        )}
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </section>
   );

@@ -114,7 +114,6 @@ const PendingOrder = () => {
       user_info: userInfo?.email,
     };
 
-    console.log("data", data);
     try {
       if (confirmation.isConfirmed) {
         Swal.fire({
@@ -154,7 +153,14 @@ const PendingOrder = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Order Update Failed",
+        text:
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to update order status",
+      });
       Swal.close();
     }
   };

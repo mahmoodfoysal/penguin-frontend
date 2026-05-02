@@ -114,9 +114,15 @@ const Checkout = () => {
           confirmButtonText: "OK",
         });
       }
-      console.log(result);
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Coupon Error",
+        text:
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to apply coupon",
+      });
     } finally {
       setIsCouponLoading(false);
     }
@@ -232,10 +238,9 @@ const Checkout = () => {
 
           if (result.status) {
             if (couponInfo) {
-              const url = await axios.patch(
+              await axios.patch(
                 `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/update-coupon-list/${couponInfo?._id}/${couponInfo?.email}`,
               );
-              console.log(url);
             }
 
             const updateStockPromises = cartList?.map(async (item) => {
@@ -276,7 +281,14 @@ const Checkout = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Order Placement Failed",
+        text:
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to submit order",
+      });
     }
   };
 

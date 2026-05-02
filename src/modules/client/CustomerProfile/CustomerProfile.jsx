@@ -47,7 +47,11 @@ const CustomerProfile = () => {
           setOrderData(orderRes.data.list_data);
         }
       } catch (err) {
-        console.error("Error fetching profile data:", err);
+        Swal.fire({
+          icon: "error",
+          title: "Data Loading Failed",
+          text: err.response?.data?.message || err.message || "Failed to load profile data",
+        });
       } finally {
         setIsLoading(false);
       }
@@ -119,7 +123,7 @@ const CustomerProfile = () => {
 
       Swal.fire("Error", errorMessage, "error");
 
-      console.error("Profile update error details:", err.response?.data || err);
+
     }
   };
 

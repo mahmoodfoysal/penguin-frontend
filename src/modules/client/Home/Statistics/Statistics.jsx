@@ -10,7 +10,7 @@ const Statistics = () => {
     { label: "Active Products", value: `${productsCount}+` },
     { label: "Happy Customers", value: "15k+" },
     { label: "Years Experience", value: "10+" },
-    { label: "Awards Won", value: "24" }
+    { label: "Awards Won", value: "24" },
   ];
 
   return (
@@ -18,7 +18,10 @@ const Statistics = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-primary-content/20">
           {stats.map((stat, index) => (
-            <div key={index} className="flex flex-col items-center justify-center p-4">
+            <div
+              key={index}
+              className="flex flex-col items-center justify-center p-4"
+            >
               <h3 className="text-4xl md:text-5xl font-black mb-2 tracking-tighter">
                 {stat.value}
               </h3>

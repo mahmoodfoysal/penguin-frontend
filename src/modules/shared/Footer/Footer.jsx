@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router";
+import { useSelector } from "react-redux";
 
 const Footer = () => {
+  const user = useSelector((state) => state.auth.user);
+  const role = useSelector((state) => state.auth.role);
+
   return (
     <>
       <footer className="bg-base-100 text-base-content pt-16 pb-8 px-6 mt-20 relative overflow-hidden border-t border-base-content/10">
@@ -15,7 +19,7 @@ const Footer = () => {
         <div className="container mx-auto relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
             {/* BRAND SECTION */}
-            <div className="md:col-span-5 space-y-6">
+            <div className="md:col-span-4 space-y-6">
               <h2 className="font-heading text-5xl font-black uppercase italic tracking-tighter leading-none">
                 PENGUIN<span className="text-accent">.</span>
               </h2>
@@ -75,11 +79,19 @@ const Footer = () => {
             </div>
 
             {/* QUICK LINKS */}
-            <div className="md:col-span-3 space-y-4">
+            <div className="md:col-span-2 space-y-4">
               <h4 className="font-heading font-black uppercase text-sm tracking-widest border-b-2 border-base-content inline-block mb-2">
                 Navigation
               </h4>
               <ul className="space-y-2 text-[11px] font-black uppercase tracking-tighter">
+                <li>
+                  <Link
+                    to="/home"
+                    className="hover:text-accent transition-colors block"
+                  >
+                    Home
+                  </Link>
+                </li>
                 <li>
                   <Link
                     to="/products"
@@ -90,20 +102,92 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    to="/cart"
+                    to="/blogs"
                     className="hover:text-accent transition-colors block"
                   >
-                    Cart
+                    Blogs
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/about"
+                    className="hover:text-accent transition-colors block"
+                  >
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/contact"
+                    className="hover:text-accent transition-colors block"
+                  >
+                    Contact
                   </Link>
                 </li>
 
+                {role?.email && (
+                  <li>
+                    <Link
+                      to="/dashboard"
+                      className="hover:text-accent transition-colors block text-accent"
+                    >
+                      Dashboard
+                    </Link>
+                  </li>
+                )}
+              </ul>
+            </div>
+
+            {/* ACCOUNT SECTION */}
+            <div className="md:col-span-2 space-y-4">
+              <h4 className="font-heading font-black uppercase text-sm tracking-widest border-b-2 border-base-content inline-block mb-2">
+                Account
+              </h4>
+              <ul className="space-y-2 text-[11px] font-black uppercase tracking-tighter">
+                {user ? (
+                  <>
+                    <li>
+                      <Link
+                        to="/profile"
+                        className="hover:text-accent transition-colors block"
+                      >
+                        Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/order-history"
+                        className="hover:text-accent transition-colors block"
+                      >
+                        Orders
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/cart"
+                        className="hover:text-accent transition-colors block"
+                      >
+                        Cart
+                      </Link>
+                    </li>
+                  </>
+                ) : (
+                  <li>
+                    <Link
+                      to="/login"
+                      className="hover:text-accent transition-colors block"
+                    >
+                      Login / Join
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <a
                     target="blank"
                     href="https://foysalmahmood-portfolio.web.app/"
-                    className="hover:text-accent transition-colors block"
+                    className="hover:text-accent transition-colors block opacity-50"
                   >
-                    Developer Portfolio
+                    Developer
                   </a>
                 </li>
               </ul>

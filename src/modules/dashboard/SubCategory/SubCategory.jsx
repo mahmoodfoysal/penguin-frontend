@@ -121,7 +121,7 @@ const SubCategory = () => {
       status: Number(formData.status),
       user_info: userInfo?.email,
     };
-    console.log("data", data);
+
     try {
       if (confirmation.isConfirmed) {
         setIsLoadingButton(true);
@@ -165,7 +165,11 @@ const SubCategory = () => {
         setIsDrawerOpen(false);
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Submission Error",
+        text: err.response?.data?.message || err.message || "Failed to submit sub-category",
+      });
     } finally {
       setIsLoadingButton(false);
     }
@@ -185,7 +189,7 @@ const SubCategory = () => {
       status: Number(item.status == 1 ? 0 : 1),
       user_info: userInfo?.email,
     };
-    console.log("data", data);
+
     try {
       if (confirmation.isConfirmed) {
         Swal.fire({
@@ -234,7 +238,11 @@ const SubCategory = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Status Update Failed",
+        text: err.response?.data?.message || err.message || "Failed to update status",
+      });
       Swal.close();
     }
   };
@@ -294,7 +302,11 @@ const SubCategory = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Deletion Failed",
+        text: err.response?.data?.message || err.message || "Failed to delete sub-category",
+      });
     }
   };
 

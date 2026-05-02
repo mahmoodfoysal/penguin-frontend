@@ -184,7 +184,11 @@ const DirectCheckOut = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Order Submission Failed",
+        text: error.response?.data?.message || error.message || "Failed to place order",
+      });
     }
   };
 
