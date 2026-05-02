@@ -209,8 +209,8 @@ const PendingOrder = () => {
                 <th className="px-6 py-4">Contact</th>
                 <th className="px-6 py-4">Date</th>
                 <th className="px-6 py-4">Items</th>
-                <th className="px-6 py-4">Total Bill</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+                <th className="px-2 py-4">Total Bill</th>
+                <th className="px-2 py-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
@@ -269,12 +269,12 @@ const PendingOrder = () => {
                     </td>
 
                     {/* 9. Action */}
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-2 py-4 text-right">
                       <div className="flex justify-end items-center gap-3">
                         {/* Details Button */}
                         <button
                           onClick={() => handleDetails(item)}
-                          className="group relative px-3 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-xl hover:from-indigo-600 hover:to-blue-700 hover:shadow-[0_10px_20px_rgba(79,_70,_229,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                          className="group relative px-1.5 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-xl hover:from-indigo-600 hover:to-blue-700 hover:shadow-[0_10px_20px_rgba(79,_70,_229,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                         >
                           <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
                             <svg
@@ -299,7 +299,7 @@ const PendingOrder = () => {
                         {config.next && (
                           <button
                             onClick={() => handleStatusUpdate(item, "R")}
-                            className="group relative px-3 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-red-500 to-rose-600 rounded-xl hover:from-red-600 hover:to-rose-700 hover:shadow-[0_10px_20px_rgba(225,_29,_72,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                            className="group relative px-1.5 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-red-500 to-rose-600 rounded-xl hover:from-red-600 hover:to-rose-700 hover:shadow-[0_10px_20px_rgba(225,_29,_72,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                           >
                             <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
                               <svg
@@ -325,7 +325,7 @@ const PendingOrder = () => {
                         {config.next && (
                           <button
                             onClick={() => handleStatusUpdate(item)}
-                            className="group relative px-3 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl hover:from-emerald-600 hover:to-teal-700 hover:shadow-[0_10px_20px_rgba(16,_185,_129,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                            className="group relative px-1.5 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl hover:from-emerald-600 hover:to-teal-700 hover:shadow-[0_10px_20px_rgba(16,_185,_129,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                           >
                             <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
                               <svg
@@ -362,7 +362,7 @@ const PendingOrder = () => {
                     colSpan="8"
                     className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest"
                   >
-                    No pending orders found
+                    Not Found
                   </td>
                 </tr>
               )}

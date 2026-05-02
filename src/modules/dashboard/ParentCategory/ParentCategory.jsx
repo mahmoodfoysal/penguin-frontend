@@ -152,7 +152,10 @@ const ParentCategory = () => {
       Swal.fire({
         icon: "error",
         title: "Submission Error",
-        text: err.response?.data?.message || err.message || "Failed to submit category",
+        text:
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to submit category",
       });
     } finally {
       setIsLoadingButton(false);
@@ -223,7 +226,10 @@ const ParentCategory = () => {
       Swal.fire({
         icon: "error",
         title: "Status Update Failed",
-        text: err.response?.data?.message || err.message || "Failed to update status",
+        text:
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to update status",
       });
       Swal.close();
     }
@@ -283,7 +289,10 @@ const ParentCategory = () => {
       Swal.fire({
         icon: "error",
         title: "Deletion Failed",
-        text: err.response?.data?.message || err.message || "Failed to delete category",
+        text:
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to delete category",
       });
     }
   };
@@ -349,65 +358,77 @@ const ParentCategory = () => {
             </thead>
 
             {/* <tbody> equivalent */}
+
             <tbody className="divide-y divide-black/5">
-              {paginatedCategoryList?.map((item, index) => (
-                <tr
-                  key={index}
-                  className="hover:bg-base-200/30 transition-colors group"
-                >
-                  {/* <td> cells */}
-                  <td className="px-8 py-6">
-                    <span className="font-heading font-bold text-sm  tracking-tight group-hover:text-accent transition-colors">
-                      {(currentPage - 1) * itemsPerPage + index + 1}
-                    </span>
-                  </td>
-                  <td className="px-8 py-6">
-                    <span className="font-heading font-bold text-sm  tracking-tight group-hover:text-accent transition-colors">
-                      {item.par_cat_name}
-                    </span>
-                  </td>
-
-                  <td className="px-8 py-6 text-center text-[11px] font-black opacity-60">
-                    {item.par_cat_id}
-                  </td>
-
-                  <td className="px-8 py-6">
-                    <span
-                      className={`text-[9px] font-black  tracking-tighter px-2 py-1 border inline-block ${
-                        item.status === 1
-                          ? "border-green-500 text-green-500"
-                          : "border-base-content/20 opacity-40"
-                      }`}
-                    >
-                      {item.status === 1 ? "Active" : "Inactive"}
-                    </span>
-                  </td>
-
-                  <td className="px-8 py-6">
-                    <div className="flex justify-end gap-4">
-                      {/* Your Icon Logic */}
-                      <span
-                        onClick={() => handleStatusUpdate(item)}
-                        className="material-icons cursor-pointer hover:text-blue-600"
-                      >
-                        {item.status === 1 ? "visibility" : "visibility_off"}
-                      </span>
-                      <span
-                        onClick={() => handleEdit(item)}
-                        className="material-icons cursor-pointer hover:text-blue-600"
-                      >
-                        edit
-                      </span>
-                      <span
-                        onClick={() => handleRemove(item)}
-                        className="material-icons cursor-pointer hover:text-red-600"
-                      >
-                        delete
-                      </span>
-                    </div>
+              {!paginatedCategoryList.length ? (
+                <tr>
+                  <td
+                    colSpan="8"
+                    className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest"
+                  >
+                    Not Found
                   </td>
                 </tr>
-              ))}
+              ) : (
+                paginatedCategoryList?.map((item, index) => (
+                  <tr
+                    key={index}
+                    className="hover:bg-base-200/30 transition-colors group"
+                  >
+                    {/* <td> cells */}
+                    <td className="px-8 py-6">
+                      <span className="font-heading font-bold text-sm  tracking-tight group-hover:text-accent transition-colors">
+                        {(currentPage - 1) * itemsPerPage + index + 1}
+                      </span>
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className="font-heading font-bold text-sm  tracking-tight group-hover:text-accent transition-colors">
+                        {item.par_cat_name}
+                      </span>
+                    </td>
+
+                    <td className="px-8 py-6 text-center text-[11px] font-black opacity-60">
+                      {item.par_cat_id}
+                    </td>
+
+                    <td className="px-8 py-6">
+                      <span
+                        className={`text-[9px] font-black  tracking-tighter px-2 py-1 border inline-block ${
+                          item.status === 1
+                            ? "border-green-500 text-green-500"
+                            : "border-base-content/20 opacity-40"
+                        }`}
+                      >
+                        {item.status === 1 ? "Active" : "Inactive"}
+                      </span>
+                    </td>
+
+                    <td className="px-8 py-6">
+                      <div className="flex justify-end gap-4">
+                        {/* Your Icon Logic */}
+                        <span
+                          onClick={() => handleStatusUpdate(item)}
+                          className="material-icons cursor-pointer hover:text-blue-600"
+                        >
+                          {item.status === 1 ? "visibility" : "visibility_off"}
+                        </span>
+                        <span
+                          onClick={() => handleEdit(item)}
+                          className="material-icons cursor-pointer hover:text-blue-600"
+                        >
+                          edit
+                        </span>
+                        <span
+                          onClick={() => handleRemove(item)}
+                          className="material-icons cursor-pointer hover:text-red-600"
+                        >
+                          delete
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

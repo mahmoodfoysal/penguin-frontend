@@ -29,6 +29,11 @@ const SideBar = () => {
               <span>Make Admin</span>
             </button>
           </NavLink>
+          <NavLink to="/dashboard/coupon-discount">
+            <button className="w-full flex items-center gap-4 px-4 py-4 hover:bg-accent transition-colors font-heading font-bold uppercase text-[10px] tracking-[0.2em]">
+              <span>Coupon Discount</span>
+            </button>
+          </NavLink>
           <NavLink to="/dashboard/parent-category">
             <button className="w-full flex items-center gap-4 px-4 py-4 hover:bg-accent transition-colors font-heading font-bold uppercase text-[10px] tracking-[0.2em]">
               <span>Parent Category</span>

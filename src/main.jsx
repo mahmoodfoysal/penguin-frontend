@@ -37,6 +37,7 @@ import Blogs from "./modules/client/Blogs/Blogs.jsx";
 import BlogDetails from "./modules/client/BlogDetails/BlogDetails.jsx";
 import OrderHistory from "./modules/client/OrderHistory/OrderHistory.jsx";
 import CustomerProfile from "./modules/client/CustomerProfile/CustomerProfile.jsx";
+import CouponDiscount from "./modules/dashboard/CouponDiscount/CouponDiscount.jsx";
 
 // ------------------
 // ✅ Utility: fetch with timeout (FIXED)
@@ -78,6 +79,13 @@ const adminLoader = async () => {
     `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-admin-list`,
   );
   return { adminData };
+};
+
+const couponDiscountLoader = async () => {
+  const couponData = await fetchWithTimeout(
+    `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/admin/get-coupon-list`,
+  );
+  return { couponData };
 };
 
 const parentCategoryLoader = async () => {
@@ -278,6 +286,11 @@ const router = createBrowserRouter([
             path: "rejected",
             element: <PendingOrder />,
             loader: orderLoader,
+          },
+          {
+            path: "coupon-discount",
+            element: <CouponDiscount />,
+            loader: couponDiscountLoader,
           },
         ],
       },
