@@ -325,7 +325,7 @@ const Checkout = () => {
           {/* 1. COMPACT HEADER */}
           <div className="border-b border-base-content/5 py-8">
             <div className="container mx-auto px-6 flex justify-between items-center">
-              <h1 className="font-heading text-5xl font-black uppercase tracking-tighter italic">
+              <h1 className="font-heading text-5xl font-black uppercase tracking-tighter ">
                 Check<span className="text-accent text-outline">out</span>
               </h1>
               <Link
@@ -688,7 +688,7 @@ const Checkout = () => {
               {/* RIGHT COLUMN: ORDER SUMMARY */}
               <div className="w-full lg:w-[400px]">
                 <div className="sticky top-28 bg-base-200/50 p-8 border border-base-content/5 rounded-sm">
-                  <h3 className="font-heading text-2xl font-black uppercase italic mb-8">
+                  <h3 className="font-heading text-2xl font-black uppercase  mb-8">
                     Order <span className="text-accent">Summary</span>
                   </h3>
 

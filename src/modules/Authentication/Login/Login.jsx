@@ -107,7 +107,6 @@ const Login = () => {
         dispatch(setUser({ token: user.accessToken }));
         setFormData({});
 
-
         setIsLoading(false);
         navigate(location.state?.from?.pathname || "/home");
         setIsInvalid(false);
@@ -182,17 +181,17 @@ const Login = () => {
         <div className="hidden lg:flex lg:w-1/2 bg-base-content relative overflow-hidden items-center justify-center p-20">
           {/* Background Decorative Text */}
           <div className="absolute inset-0 opacity-10 flex flex-col justify-center items-center select-none pointer-events-none">
-            <span className="font-heading font-black text-[20vw] leading-none uppercase italic text-base-100 text-outline">
+            <span className="font-heading font-black text-[20vw] leading-none uppercase  text-base-100 text-outline">
               Penguin
             </span>
-            <span className="font-heading font-black text-[20vw] leading-none uppercase italic text-accent">
+            <span className="font-heading font-black text-[20vw] leading-none uppercase  text-accent">
               Gear
             </span>
           </div>
 
           {/* Featured Image / Message */}
           <div className="relative z-10 text-base-100">
-            <h2 className="font-heading text-7xl font-black uppercase italic tracking-tighter leading-none mb-6">
+            <h2 className="font-heading text-7xl font-black uppercase  tracking-tighter leading-none mb-6">
               Join with <br />{" "}
               <span className="text-accent text-outline">Penguin</span>
             </h2>
@@ -207,7 +206,7 @@ const Login = () => {
           <div className="w-full max-w-md">
             {/* Header */}
             <div className="mb-12">
-              <h1 className="font-heading text-5xl font-black uppercase italic tracking-tighter mb-2">
+              <h1 className="font-heading text-5xl font-black uppercase  tracking-tighter mb-2">
                 {isLogin ? "Welcome " : "Create "}
                 <span className="text-accent">
                   {isLogin ? "Back" : "Account"}
@@ -242,7 +241,6 @@ const Login = () => {
                   />
                 </div>
               )}
-
               {!isLogin && (
                 <div className="space-y-1">
                   <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
@@ -259,7 +257,6 @@ const Login = () => {
                   />
                 </div>
               )}
-
               <div className="space-y-1">
                 <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
                   Email Address <span className="text-red-600">*</span>
@@ -278,7 +275,6 @@ const Login = () => {
                   placeholder="name@email.com"
                 />
               </div>
-
               <div className="space-y-1">
                 <div className="flex justify-between items-center">
                   <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
@@ -309,7 +305,8 @@ const Login = () => {
                   }`}
                   placeholder={`${!passVisible ? "*********" : "12333333333"}`}
                 />
-              </div>              {/* CTA Buttons */}
+              </div>{" "}
+              {/* CTA Buttons */}
               <div className="pt-6 space-y-2">
                 {authError && (
                   <div className="bg-red-50 border-l-4 border-red-600 p-4 mb-4 animate-in fade-in slide-in-from-top-2 duration-300">

@@ -45,7 +45,7 @@ const Forbidden = () => {
         </span>
 
         {/* MAIN HEADING */}
-        <h1 className="font-heading text-6xl md:text-8xl font-black uppercase italic tracking-tighter leading-[0.8] mb-8">
+        <h1 className="font-heading text-6xl md:text-8xl font-black uppercase  tracking-tighter leading-[0.8] mb-8">
           Access <br />
           <span className="text-accent text-outline">Denied</span>
         </h1>

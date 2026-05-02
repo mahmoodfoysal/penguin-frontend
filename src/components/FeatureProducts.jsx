@@ -6,7 +6,7 @@ const FeatureProducts = () => {
       {/* 4. FEATURED PRODUCTS (Horizontal Scroll) */}
       <div className="container mx-auto px-6">
         <div className="flex justify-between items-end mb-10">
-          <h2 className="font-heading text-4xl font-black uppercase italic tracking-tighter">
+          <h2 className="font-heading text-4xl font-black uppercase  tracking-tighter">
             Featured <span className="text-accent">Drops</span>
           </h2>
           <button className="btn btn-link btn-xs font-heading font-bold uppercase tracking-widest text-base-content no-underline hover:text-accent">

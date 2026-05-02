@@ -5,7 +5,7 @@ const DataNotFound = ({ backMsg, mainMsg1, mainMsg2 }) => {
     <>
       <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-base-100 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none pointer-events-none opacity-[0.03]">
-          <h1 className="font-heading text-[30vw] font-black tracking-tighter uppercase leading-none italic">
+          <h1 className="font-heading text-[30vw] font-black tracking-tighter uppercase leading-none ">
             {backMsg}
           </h1>
         </div>

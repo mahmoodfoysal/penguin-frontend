@@ -76,7 +76,7 @@ const ProductCard = ({ product, isBestSeller }) => {
               {product.prod_name}
             </h3>
             <div className="flex justify-between items-center mt-2">
-              <span className="text-base-content/60 text-sm font-medium tracking-wide italic">
+              <span className="text-base-content/60 text-sm font-medium tracking-wide ">
                 {product.prod_brand}
               </span>
               <span className="font-extrabold text-xl text-primary">
@@ -84,7 +84,7 @@ const ProductCard = ({ product, isBestSeller }) => {
               </span>
             </div>
             <div className="flex justify-between items-center mt-2">
-              <span className="text-base-content/60 text-sm font-medium tracking-wide italic">
+              <span className="text-base-content/60 text-sm font-medium tracking-wide ">
                 Stock: {product.stock}
               </span>
               <button
@@ -92,7 +92,7 @@ const ProductCard = ({ product, isBestSeller }) => {
                   e.stopPropagation();
                   handleProductDetails(product);
                 }}
-                className="btn btn-ghost btn-xs font-black uppercase tracking-widest hover:text-accent p-0"
+                className="text-[11px] font-black uppercase tracking-widest text-base-content/60 hover:text-accent transition-all duration-300 cursor-pointer"
               >
                 View Details →
               </button>

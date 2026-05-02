@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import ProductCard from "../../../../components/ProductCard";
-import ComponentLoader from "../../../../pages/ComponentLoader";
+import SkeletonCard from "../../../../pages/SkeletonCard";
 
 const NewestArrivalProducts = () => {
   const { products } = useLoaderData();
@@ -49,7 +49,7 @@ const NewestArrivalProducts = () => {
       </div>
 
       {!products?.list_data ? (
-        <ComponentLoader></ComponentLoader>
+        <SkeletonCard></SkeletonCard>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
           {newestSellerList.map((product, index) => (

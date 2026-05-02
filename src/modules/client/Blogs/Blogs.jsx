@@ -8,6 +8,7 @@ import Pagination from "../../../components/Pagination";
 import ComponentLoader from "../../../pages/ComponentLoader";
 import DataNotFound from "../../../pages/DataNotFound";
 import Swal from "sweetalert2";
+import SkeletonCard from "../../../pages/SkeletonCard";
 
 const Blogs = () => {
   const pageInfo = [
@@ -220,11 +221,12 @@ const Blogs = () => {
               </div>
 
               {!paginatedBlogs?.length ? (
-                <DataNotFound
-                  backMsg="Lost"
-                  mainMsg1="Articles"
-                  mainMsg2="Void"
-                ></DataNotFound>
+                // <DataNotFound
+                //   backMsg="Lost"
+                //   mainMsg1="Articles"
+                //   mainMsg2="Void"
+                // ></DataNotFound>
+                <SkeletonCard></SkeletonCard>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12">
                   {paginatedBlogs.map((blog, index) => (

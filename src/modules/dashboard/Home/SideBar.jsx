@@ -12,7 +12,7 @@ const SideBar = () => {
     <div className="nav-link-style-admin">
       <aside className="w-72 bg-base-100 border-r border-base-content/10 text-base-content flex flex-col sticky top-0 h-screen shrink-0">
         <div className="p-8">
-          <h2 className="font-heading text-2xl font-black uppercase italic tracking-tighter">
+          <h2 className="font-heading text-2xl font-black uppercase  tracking-tighter">
             Penguin <span className="text-accent">Admin</span>
           </h2>
         </div>
@@ -134,7 +134,7 @@ const SideBar = () => {
         {/* User Status at Bottom */}
         <div className="p-6 border-t border-base-content/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center font-heading font-black italic">
+            <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center font-heading font-black ">
               A
             </div>
             <div>

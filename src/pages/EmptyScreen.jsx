@@ -42,7 +42,7 @@ const EmptyScreen = ({ text }) => {
 
           {/* TYPOGRAPHY AREA */}
           <div className="space-y-4">
-            <h1 className="font-heading text-5xl md:text-7xl font-black uppercase italic tracking-tighter leading-none">
+            <h1 className="font-heading text-5xl md:text-7xl font-black uppercase  tracking-tighter leading-none">
               {text.first}{" "}
               <span className="text-accent text-outline">{text.second}</span>
             </h1>

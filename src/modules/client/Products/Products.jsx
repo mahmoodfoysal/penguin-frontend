@@ -428,12 +428,12 @@ const Products = () => {
 
                   <div className="flex gap-2 flex-wrap">
                     {showNewestOnly && (
-                      <span className="badge badge-accent badge-outline font-black uppercase italic text-[10px] py-3 px-4 rounded-none tracking-widest">
+                      <span className="badge badge-accent badge-outline font-black uppercase  text-[10px] py-3 px-4 rounded-none tracking-widest">
                         New Arrivals Only
                       </span>
                     )}
                     {showBestSellerOnly && (
-                      <span className="badge badge-warning badge-outline font-black uppercase italic text-[10px] py-3 px-4 rounded-none tracking-widest">
+                      <span className="badge badge-warning badge-outline font-black uppercase  text-[10px] py-3 px-4 rounded-none tracking-widest">
                         Best Sellers Only
                       </span>
                     )}

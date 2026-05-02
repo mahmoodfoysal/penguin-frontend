@@ -10,7 +10,7 @@ const ErrorPage = () => {
     <div className="min-h-screen bg-base-100 text-base-content font-body flex flex-col items-center justify-center p-8 overflow-hidden relative selection:bg-accent selection:text-white">
       {/* 1. MASSIVE 404 WATERMARK */}
       <div className="absolute inset-0 flex items-center justify-center opacity-[0.04] pointer-events-none select-none">
-        <h2 className="font-heading text-[35vw] font-black italic uppercase leading-none tracking-tighter">
+        <h2 className="font-heading text-[35vw] font-black  uppercase leading-none tracking-tighter">
           404
         </h2>
       </div>
@@ -40,7 +40,7 @@ const ErrorPage = () => {
         </div>
 
         {/* HEADER */}
-        <h1 className="font-heading text-6xl md:text-9xl font-black uppercase italic tracking-tighter leading-[0.8] mb-8">
+        <h1 className="font-heading text-6xl md:text-9xl font-black uppercase  tracking-tighter leading-[0.8] mb-8">
           Path <br />
           <span className="text-accent text-outline">Missing</span>
         </h1>

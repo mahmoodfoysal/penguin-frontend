@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import BlogCard from "../../../../components/BlogCard";
 import { Link } from "react-router-dom";
+import SkeletonCard from "../../../../pages/SkeletonCard";
 
 const BlogPreview = () => {
   const [blogs, setBlogs] = useState([]);
@@ -22,10 +23,7 @@ const BlogPreview = () => {
             b.short_description ||
             b.long_description?.substring(0, 100) + "..." ||
             "Read more about this topic...",
-          image:
-            b.image_url ||
-            b.image ||
-            "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+          image: b.image,
           date:
             b.date || b.createdAt
               ? new Date(b.date || b.createdAt).toLocaleDateString()
@@ -65,9 +63,7 @@ const BlogPreview = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         {isLoading ? (
-          <div className="col-span-1 md:col-span-4 text-center py-10 opacity-50">
-            <span className="loading loading-spinner loading-lg"></span>
-          </div>
+          <SkeletonCard></SkeletonCard>
         ) : (
           blogs.map((blog, index) => (
             <BlogCard blog={blog} key={index}></BlogCard>

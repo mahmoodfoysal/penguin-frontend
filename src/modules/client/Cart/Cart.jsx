@@ -202,7 +202,7 @@ const Cart = () => {
               {/* RIGHT: CART TOTAL SIDEBAR */}
               <div className="w-full lg:w-96">
                 <div className="bg-base-200/50 p-8 sticky top-28 border border-base-content/5">
-                  <h2 className="font-heading text-2xl font-black uppercase italic mb-8 border-b border-base-content pb-4">
+                  <h2 className="font-heading text-2xl font-black uppercase  mb-8 border-b border-base-content pb-4">
                     Cart <span className="text-accent">Total</span>
                   </h2>
 

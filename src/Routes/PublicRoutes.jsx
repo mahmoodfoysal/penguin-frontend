@@ -12,7 +12,6 @@ const PublicRoutes = ({ children }) => {
     (userInfo && Object.keys(userInfo).length > 0);
 
   if (isAuthenticated) {
-    // ✅ Redirect to previous page OR home
     const from = location.state?.from?.pathname || "/home";
     return <Navigate to={from} replace />;
   }

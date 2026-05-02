@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import ProductCard from "../../../../components/ProductCard";
-import ComponentLoader from "../../../../pages/ComponentLoader";
+import SkeletonCard from "../../../../pages/SkeletonCard";
 
 const FeaturedItems = () => {
   const { products } = useLoaderData();
   const [featuredProducts, setFeaturedProducts] = useState([]);
 
   useEffect(() => {
-    // Select different random products to contrast with New Arrivals
     const getFeaturedItems = (arr, count) => {
       const result = [];
       const usedIndices = new Set();
 
-      // Let's just pick items from the end of the array for variety
       const startIndex = Math.max(0, (arr?.length || 0) - count * 2);
 
       while (result.length < count && usedIndices.size < arr?.length) {
@@ -23,7 +21,6 @@ const FeaturedItems = () => {
           usedIndices.add(index);
           result.push(arr[index]);
         } else if (usedIndices.size >= arr.length - startIndex) {
-          // fallback if we run out of elements in the subset
           const fallbackIndex = Math.floor(Math.random() * arr.length);
           if (!usedIndices.has(fallbackIndex)) {
             usedIndices.add(fallbackIndex);
@@ -64,7 +61,7 @@ const FeaturedItems = () => {
       </div>
 
       {!products?.list_data?.length ? (
-        <ComponentLoader></ComponentLoader>
+        <SkeletonCard></SkeletonCard>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
           {featuredProducts.map((product, index) => (

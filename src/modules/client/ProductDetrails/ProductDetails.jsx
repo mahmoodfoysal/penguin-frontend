@@ -125,7 +125,6 @@ const ProductDetails = () => {
   };
 
   const handleBuyNow = (product) => {
-
     dispatch(setOrderProduct({ ...product, quantity: 1 }));
     navigate("/buy-product");
   };
@@ -163,8 +162,6 @@ const ProductDetails = () => {
       par_cat_id: par_cat_id,
       sub_cat_id: sub_cat_id,
     };
-
-
 
     const confirmation = await Swal.fire({
       title: "Are you sure?",
@@ -225,14 +222,15 @@ const ProductDetails = () => {
         Swal.fire({
           icon: "error",
           title: "Review Submission Failed",
-          text: error.response?.data?.message || error.message || "Failed to submit review",
+          text:
+            error.response?.data?.message ||
+            error.message ||
+            "Failed to submit review",
         });
       } finally {
         setIsReviewLoading(false);
       }
     }
-
-
   };
 
   const totalRating = commentList.reduce(
@@ -299,7 +297,7 @@ const ProductDetails = () => {
                     </span>
                   </div>
 
-                  <h1 className="font-heading text-5xl md:text-7xl font-black uppercase tracking-tighter italic leading-none mb-4">
+                  <h1 className="font-heading text-5xl md:text-7xl font-black uppercase tracking-tighter  leading-none mb-4">
                     {prod_name}
                   </h1>
 
@@ -352,7 +350,7 @@ const ProductDetails = () => {
 
                       {/* Number Display */}
                       <div className="flex-1 h-full flex items-center justify-center bg-base-100">
-                        <span className="font-heading font-black text-lg italic tracking-tighter">
+                        <span className="font-heading font-black text-lg  tracking-tighter">
                           {cartQuantity}
                         </span>
                       </div>
@@ -411,7 +409,7 @@ const ProductDetails = () => {
                 <div className="flex flex-col lg:flex-row gap-16">
                   {/* Review Form */}
                   <div className="w-full lg:w-1/3">
-                    <h2 className="font-heading text-3xl font-black uppercase italic mb-6">
+                    <h2 className="font-heading text-3xl font-black uppercase  mb-6">
                       Write a <span className="text-accent">Review</span>
                     </h2>
                     <div className="space-y-4">
@@ -489,7 +487,7 @@ const ProductDetails = () => {
                   {/* Customer Feedback List */}
 
                   <div className="w-full lg:w-2/3">
-                    <h2 className="font-heading text-3xl font-black uppercase italic mb-6">
+                    <h2 className="font-heading text-3xl font-black uppercase  mb-6">
                       Customer <span className="text-accent">Comments</span>
                     </h2>
 
@@ -532,7 +530,7 @@ const ProductDetails = () => {
                                   readOnly
                                 />
                               </div>
-                              <p className="text-sm opacity-70 leading-relaxed italic break-words whitespace-pre-wrap">
+                              <p className="text-sm opacity-70 leading-relaxed  break-words whitespace-pre-wrap">
                                 {item.comment}
                               </p>
                               <div className="mt-4 text-[10px] font-bold opacity-30 uppercase tracking-widest">

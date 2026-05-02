@@ -11,7 +11,7 @@ const Footer = () => {
       <footer className="bg-base-100 text-base-content pt-16 pb-8 px-6 mt-20 relative overflow-hidden border-t border-base-content/10">
         {/* 1. LARGE BACKGROUND WATERMARK */}
         <div className="absolute -bottom-10 -right-10 opacity-[0.03] select-none pointer-events-none">
-          <h2 className="font-heading text-[20vw] font-black uppercase italic leading-none">
+          <h2 className="font-heading text-[20vw] font-black uppercase  leading-none">
             Penguin
           </h2>
         </div>
@@ -20,7 +20,7 @@ const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
             {/* BRAND SECTION */}
             <div className="md:col-span-4 space-y-6">
-              <h2 className="font-heading text-5xl font-black uppercase italic tracking-tighter leading-none">
+              <h2 className="font-heading text-5xl font-black uppercase  tracking-tighter leading-none">
                 PENGUIN<span className="text-accent">.</span>
               </h2>
               <p className="max-w-xs text-xs font-bold uppercase tracking-widest leading-relaxed opacity-60">

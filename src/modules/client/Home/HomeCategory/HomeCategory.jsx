@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import ComponentLoader from "../../../../pages/ComponentLoader";
+import SkeletonCard from "../../../../pages/SkeletonCard";
 
 const HomeCategory = () => {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ const HomeCategory = () => {
     <>
       <section className="px-6 py-12 max-w-[1400px] mx-auto w-full w-100">
         {!categories?.length ? (
-          <ComponentLoader></ComponentLoader>
+          <SkeletonCard></SkeletonCard>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
             {categories.slice(0, 4).map((item, index) => {

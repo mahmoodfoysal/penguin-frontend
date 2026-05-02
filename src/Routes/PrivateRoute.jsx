@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router";
+import ComponentLoader from "../pages/ComponentLoader";
 
 const PrivateRoute = ({ children }) => {
   const userInfo = useSelector((state) => state.auth.userInfo);
@@ -10,9 +11,7 @@ const PrivateRoute = ({ children }) => {
   const location = useLocation();
 
   if (isPageLoading) {
-    return (
-      <span className="loading loading-bars loading-xl text-center"></span>
-    );
+    return <ComponentLoader></ComponentLoader>;
   }
   const isLoggedIn =
     (userInfo && Object.keys(userInfo).length > 0) ||

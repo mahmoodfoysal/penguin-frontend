@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import Pagination from "../../../components/Pagination";
 
-
 const OrderHistory = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [orderList, setOrderList] = useState([]);
@@ -15,7 +14,6 @@ const OrderHistory = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
-
 
   const statusSteps = [
     "Pending",
@@ -58,9 +56,10 @@ const OrderHistory = () => {
   }, [activeTab]);
 
   const filteredOrders = useMemo(() => {
-
     if (activeTab === "orders") {
-      return orderList.filter((o) => o.order_status !== "C" && o.order_status !== "R");
+      return orderList.filter(
+        (o) => o.order_status !== "C" && o.order_status !== "R",
+      );
     } else if (activeTab === "history") {
       return orderList.filter((o) => o.order_status === "C");
     } else if (activeTab === "cancel") {
@@ -77,7 +76,6 @@ const OrderHistory = () => {
   }, [filteredOrders, currentPage]);
 
   const handleViewDetails = (order) => {
-
     setSelectedOrder(order);
     setIsModalOpen(true);
   };
@@ -87,7 +85,7 @@ const OrderHistory = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-12 text-center">
-          <h1 className="text-4xl md:text-6xl font-heading font-black uppercase tracking-tighter text-base-content italic">
+          <h1 className="text-4xl md:text-6xl font-heading font-black uppercase tracking-tighter text-base-content ">
             My <span className="text-accent text-outline">Orders</span>
           </h1>
           <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40 mt-4">
@@ -228,7 +226,6 @@ const OrderHistory = () => {
             )}
           </>
         ) : (
-
           <div className="text-center py-24 bg-base-100 rounded-3xl border-2 border-dashed border-base-content/10">
             <div className="w-20 h-20 bg-base-200 rounded-full flex items-center justify-center mx-auto mb-6">
               <svg
@@ -271,7 +268,7 @@ const OrderHistory = () => {
             <div className="p-8 border-b border-base-content/5 flex justify-between items-center bg-base-100/50 backdrop-blur-sm sticky top-0 z-10">
               <div>
                 <h2 className="text-2xl font-heading font-black uppercase tracking-tighter">
-                  Order <span className="text-accent italic">Details</span>
+                  Order <span className="text-accent ">Details</span>
                 </h2>
                 <p className="text-[9px] font-black uppercase tracking-[0.2em] opacity-40 mt-1">
                   ID: {selectedOrder._id}
@@ -322,7 +319,10 @@ const OrderHistory = () => {
                       const isCurrent = currentIdx === idx;
 
                       return (
-                        <div key={step} className="relative z-10 flex flex-col items-center gap-3">
+                        <div
+                          key={step}
+                          className="relative z-10 flex flex-col items-center gap-3"
+                        >
                           <div
                             className={`w-4 h-4 rounded-full border-2 transition-all duration-500 ${
                               isCurrent
@@ -371,7 +371,8 @@ const OrderHistory = () => {
                             {item.prod_name}
                           </h5>
                           <p className="text-[10px] font-bold opacity-40">
-                            Qty: {item.quantity} × {item.currency_name} {item.price}
+                            Qty: {item.quantity} × {item.currency_name}{" "}
+                            {item.price}
                           </p>
                         </div>
                       </div>
@@ -390,7 +391,8 @@ const OrderHistory = () => {
                       <div className="flex justify-between text-[10px] font-bold opacity-60">
                         <span>Subtotal</span>
                         <span>
-                          {selectedOrder.currency_name} {selectedOrder.sub_total}
+                          {selectedOrder.currency_name}{" "}
+                          {selectedOrder.sub_total}
                         </span>
                       </div>
                       <div className="flex justify-between text-[10px] font-bold opacity-60">
@@ -402,7 +404,8 @@ const OrderHistory = () => {
                       <div className="flex justify-between text-[10px] font-bold opacity-60">
                         <span>VAT</span>
                         <span>
-                          {selectedOrder.currency_name} {selectedOrder.vat_total}
+                          {selectedOrder.currency_name}{" "}
+                          {selectedOrder.vat_total}
                         </span>
                       </div>
                       <div className="flex justify-between items-end pt-6 border-t border-white/10 mt-6">
@@ -410,7 +413,8 @@ const OrderHistory = () => {
                           Total Amount
                         </span>
                         <span className="text-3xl font-heading font-black text-accent tracking-tighter">
-                          {selectedOrder.currency_name} {selectedOrder.total_amount}
+                          {selectedOrder.currency_name}{" "}
+                          {selectedOrder.total_amount}
                         </span>
                       </div>
                     </div>
@@ -423,9 +427,12 @@ const OrderHistory = () => {
                     </h4>
                     <div className="space-y-4">
                       <div>
-                        <p className="text-xs font-black uppercase">{selectedOrder.full_name}</p>
+                        <p className="text-xs font-black uppercase">
+                          {selectedOrder.full_name}
+                        </p>
                         <p className="text-[10px] font-bold opacity-60 mt-1">
-                          {selectedOrder.address}, {selectedOrder.city}, {selectedOrder.zip}
+                          {selectedOrder.address}, {selectedOrder.city},{" "}
+                          {selectedOrder.zip}
                         </p>
                         <p className="text-[10px] font-bold opacity-60 mt-1">
                           {selectedOrder.phone_no}
