@@ -201,15 +201,23 @@ const NavBar = () => {
                       </p>
                     </div>
                     <ul className="space-y-1">
-                      {["Profile", "Order History", "Wishlist", "Settings"].map(
-                        (item) => (
-                          <li key={item}>
-                            <button className="w-full text-left px-4 py-2 font-heading font-bold text-[10px] uppercase tracking-widest hover:bg-accent hover:text-base-100 transition-colors">
-                              {item}
-                            </button>
-                          </li>
-                        ),
-                      )}
+                      <li>
+                        <Link
+                          to="/order-history"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="block w-full text-left px-4 py-2 font-heading font-bold text-[10px] uppercase tracking-widest hover:bg-accent hover:text-base-100 transition-colors"
+                        >
+                          Order History
+                        </Link>
+                      </li>
+                      {["Profile", "Wishlist", "Settings"].map((item) => (
+                        <li key={item}>
+                          <button className="w-full text-left px-4 py-2 font-heading font-bold text-[10px] uppercase tracking-widest hover:bg-accent hover:text-base-100 transition-colors">
+                            {item}
+                          </button>
+                        </li>
+                      ))}
+
                       <li className="pt-2 border-t border-base-content/5 mt-2">
                         <button
                           onClick={handleLogOut}
@@ -290,7 +298,9 @@ const NavBar = () => {
                     { name: "Blogs", path: "/blogs" },
                     { name: "About", path: "/about" },
                     { name: "Contact", path: "/contact" },
+                    { name: "My Orders", path: "/order-history" },
                   ].map((link) => (
+
                     <li key={link.name}>
                       <NavLink
                         to={link.path}
