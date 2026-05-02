@@ -202,7 +202,7 @@ const NavBar = () => {
                         {userInfo?.name}
                       </p>
                       <p className="text-[9px] font-bold opacity-40 uppercase tracking-tighter">
-                        Premium Member
+                        Welcome to Penguin Gear
                       </p>
                     </div>
                     <ul className="space-y-1">
