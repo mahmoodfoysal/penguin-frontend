@@ -210,13 +210,15 @@ const NavBar = () => {
                           Order History
                         </Link>
                       </li>
-                      {["Profile", "Wishlist", "Settings"].map((item) => (
-                        <li key={item}>
-                          <button className="w-full text-left px-4 py-2 font-heading font-bold text-[10px] uppercase tracking-widest hover:bg-accent hover:text-base-100 transition-colors">
-                            {item}
-                          </button>
-                        </li>
-                      ))}
+                      <li>
+                        <Link
+                          to="/profile"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="block w-full text-left px-4 py-2 font-heading font-bold text-[10px] uppercase tracking-widest hover:bg-accent hover:text-base-100 transition-colors"
+                        >
+                          Profile
+                        </Link>
+                      </li>
 
                       <li className="pt-2 border-t border-base-content/5 mt-2">
                         <button
@@ -300,7 +302,6 @@ const NavBar = () => {
                     { name: "Contact", path: "/contact" },
                     { name: "My Orders", path: "/order-history" },
                   ].map((link) => (
-
                     <li key={link.name}>
                       <NavLink
                         to={link.path}

@@ -36,6 +36,7 @@ import PublicRoutes from "./Routes/PublicRoutes.jsx";
 import Blogs from "./modules/client/Blogs/Blogs.jsx";
 import BlogDetails from "./modules/client/BlogDetails/BlogDetails.jsx";
 import OrderHistory from "./modules/client/OrderHistory/OrderHistory.jsx";
+import CustomerProfile from "./modules/client/CustomerProfile/CustomerProfile.jsx";
 
 // ------------------
 // ✅ Utility: fetch with timeout (FIXED)
@@ -199,6 +200,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <OrderHistory />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <PrivateRoute>
+            <CustomerProfile></CustomerProfile>
           </PrivateRoute>
         ),
       },
