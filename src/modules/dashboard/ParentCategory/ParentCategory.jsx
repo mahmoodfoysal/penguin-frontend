@@ -40,9 +40,12 @@ const ParentCategory = () => {
 
   const filteredCategoryList = useMemo(() => {
     if (!searchQuery) return categoryList;
-    return categoryList.filter((item) =>
-      item.par_cat_name.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
+    const lowSearch = searchQuery.toLowerCase();
+    return categoryList.filter((item) => {
+      return Object.values(item).some((value) =>
+        String(value).toLowerCase().includes(lowSearch),
+      );
+    });
   }, [searchQuery, categoryList]);
 
   useEffect(() => {
