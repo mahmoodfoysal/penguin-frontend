@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, Link } from "react-router-dom";
+
 import PageHeader from "../../../components/PageHeader";
 import BlogCard from "../../../components/BlogCard";
 import Pagination from "../../../components/Pagination";
@@ -106,7 +107,7 @@ const BlogDetails = () => {
               <span className="badge badge-primary font-bold shadow-sm py-3 px-6 uppercase tracking-widest text-xs">
                 {displayCategory}
               </span>
-              <h1 className="font-heading text-4xl md:text-6xl font-black uppercase tracking-tighter italic leading-none">
+              <h1 className="font-heading text-4xl md:text-6xl font-black uppercase tracking-tighter  leading-none">
                 {title}
               </h1>
               <div className="flex items-center justify-center gap-4 text-xs font-bold uppercase tracking-widest opacity-50">
@@ -128,7 +129,7 @@ const BlogDetails = () => {
             {/* Content Body */}
             <div className="prose prose-lg max-w-none text-base-content/80">
               {short_description && (
-                <p className="text-xl font-medium leading-relaxed italic border-l-4 border-accent pl-6 mb-8 text-base-content">
+                <p className="text-xl font-medium leading-relaxed  border-l-4 border-accent pl-6 mb-8 text-base-content">
                   {short_description}
                 </p>
               )}
@@ -138,57 +139,14 @@ const BlogDetails = () => {
               </div>
             </div>
 
-            <div className="border-t border-base-content/10 pt-8 mt-12 flex items-center justify-between">
-              <div className="flex gap-4">
-                <button className="btn btn-outline btn-sm rounded-full btn-circle hover:bg-accent hover:border-accent hover:text-white transition-all">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                  </svg>
-                </button>
-                <button className="btn btn-outline btn-sm rounded-full btn-circle hover:bg-accent hover:border-accent hover:text-white transition-all">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
-                  </svg>
-                </button>
-                <button className="btn btn-outline btn-sm rounded-full btn-circle hover:bg-accent hover:border-accent hover:text-white transition-all">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                    <rect x="2" y="9" width="4" height="12"></rect>
-                    <circle cx="4" cy="4" r="2"></circle>
-                  </svg>
-                </button>
-              </div>
-            </div>
+            {/* <div className="border-t border-base-content/10 pt-8 mt-12 flex items-center justify-center">
+              <Link
+                to="/buy-product"
+                className="btn btn-primary px-10 py-4 rounded-full font-heading font-black uppercase tracking-widest text-xs hover:shadow-2xl hover:shadow-primary/40 transition-all hover:-translate-y-1"
+              >
+                Buy Now
+              </Link>
+            </div> */}
           </div>
         </div>
 
