@@ -2,7 +2,8 @@ import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLoaderData } from "react-router";
-import Swal from "sweetalert2";
+import { showSuccess, showError, showConfirmation } from "../../../components/Alert";
+
 import Pagination from "../../../components/Pagination";
 
 const ParentCategory = () => {
@@ -84,22 +85,14 @@ const ParentCategory = () => {
       !formData.status
     ) {
       setIsInvalid(true);
-      Swal.fire({
-        icon: "error",
-        title: "Invalid or missing required fields",
-        text: "Check input field",
-        confirmButtonText: "OK",
-      });
+      showError("Invalid or missing required fields", "Check input field");
       return;
     }
-    const confirmation = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to submit?",
-      icon: "warning",
-      showCancelButton: true,
-      cancelButtonText: "Cancel",
-      confirmButtonText: "Ok",
-    });
+    const confirmation = await showConfirmation(
+      "Are you sure?",
+      "Do you want to submit?"
+    );
+
     const data = {
       _id: isEdit ? formData._id : null,
       par_cat_id: Number(formData.par_cat_id),
@@ -116,13 +109,9 @@ const ParentCategory = () => {
           data,
         );
         if (result.data.status) {
-          Swal.fire({
-            icon: "success",
-            title: `${result.data.message}`,
-            text: `${result.data.message}`,
-            confirmButtonText: "OK",
-          });
+          showSuccess("Success", result.data.message);
           const obj = {
+
             _id: result.data.id,
             par_cat_id: Number(formData.par_cat_id),
             par_cat_name: formData.par_cat_name,
@@ -149,28 +138,14 @@ const ParentCategory = () => {
         setIsDrawerOpen(false);
       }
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Submission Error",
-        text:
-          err.response?.data?.message ||
-          err.message ||
-          "Failed to submit category",
-      });
+      showError("Submission Error", err.response?.data?.message || err.message || "Failed to submit category");
     } finally {
       setIsLoadingButton(false);
     }
   };
 
   const handleStatusUpdate = async (item) => {
-    const confirmation = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to submit?",
-      icon: "warning",
-      showCancelButton: true,
-      cancelButtonText: "Cancel",
-      confirmButtonText: "Ok",
-    });
+    const confirmation = await showConfirmation("Are you sure?", "Do you want to update status?");
     const data = {
       _id: item._id,
       status: Number(item.status == 1 ? 0 : 1),
@@ -179,26 +154,12 @@ const ParentCategory = () => {
 
     try {
       if (confirmation.isConfirmed) {
-        Swal.fire({
-          title: "Processing...",
-          text: "Please wait...",
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
         const result = await axios.patch(
           `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/update-parent-category-status/${item._id}`,
           data,
         );
         if (result.data.status) {
-          Swal.close();
-          Swal.fire({
-            icon: "success",
-            title: `${result.data.message}`,
-            text: `${result.data.message}`,
-            confirmButtonText: "OK",
-          });
+          showSuccess("Success", result.data.message);
           const obj = {
             _id: result.data?.id,
             par_cat_id: Number(item.par_cat_id),
@@ -223,15 +184,7 @@ const ParentCategory = () => {
         }
       }
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Status Update Failed",
-        text:
-          err.response?.data?.message ||
-          err.message ||
-          "Failed to update status",
-      });
-      Swal.close();
+      showError("Status Update Failed", err.response?.data?.message || err.message || "Failed to update status");
     }
   };
 
@@ -254,14 +207,7 @@ const ParentCategory = () => {
   };
 
   const handleRemove = async (item) => {
-    const confirmation = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to submit?",
-      icon: "warning",
-      showCancelButton: true,
-      cancelButtonText: "Cancel",
-      confirmButtonText: "Ok",
-    });
+    const confirmation = await showConfirmation("Are you sure?", "Do you want to delete this category?");
     try {
       if (confirmation.isConfirmed) {
         const result = await axios.delete(
@@ -277,23 +223,11 @@ const ParentCategory = () => {
 
             setCategoryList(newcategoryList);
           }
-          Swal.fire({
-            icon: "success",
-            title: `${result.data.message}`,
-            text: `${result.data.message}`,
-            confirmButtonText: "OK",
-          });
+          showSuccess("Success", result.data.message);
         }
       }
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Deletion Failed",
-        text:
-          err.response?.data?.message ||
-          err.message ||
-          "Failed to delete category",
-      });
+      showError("Deletion Failed", err.response?.data?.message || err.message || "Failed to delete category");
     }
   };
 

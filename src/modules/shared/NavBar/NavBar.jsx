@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { logout, setUserInfo } from "../../../store/slice/user";
 import initilizationAuthentication from "../../../firebase/firebase.init";
-import Swal from "sweetalert2";
+import { showError } from "../../../components/Alert";
 
 initilizationAuthentication();
 
@@ -61,11 +61,10 @@ const NavBar = () => {
         navigate("/home");
       })
       .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Logout Error",
-          text: error.message || "Failed to log out",
-        });
+        showError(
+          "Sign In Failed",
+          error.response?.data?.message || error.message,
+        );
       });
   };
 

@@ -1,16 +1,23 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import PageHeader from "../../../components/PageHeader";
 import { Link, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setOrderProduct } from "../../../store/slice/buyProduct";
 import axios from "axios";
-import Swal from "sweetalert2";
+import {
+  showSuccess,
+  showError,
+  showConfirmation,
+  showProcessing,
+} from "../../../components/Alert";
+
 import ComponentLoader from "../../../pages/ComponentLoader";
 const DirectCheckOut = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const orderProduct = useSelector((state) => state.buy.orderProduct);
+  const userInfo = useSelector((state) => state.auth.userInfo);
 
   const [formData, setFormData] = useState({
     fullName: null,
@@ -28,6 +35,10 @@ const DirectCheckOut = () => {
   });
   const [paymentMethod, setPaymentMethod] = useState(1);
   const [isInvalid, setIsInvalid] = useState(false);
+  const [couponCode, setCouponCode] = useState(null);
+  const [couponInfo, setCouponInfo] = useState(null);
+  const [isCouponLoading, setIsCouponLoading] = useState(false);
+  const [isOrderLoading, setIsOrderLoading] = useState(false);
 
   const paymentModeList = [
     { id: 1, label: "Cash on Delivery" },
@@ -54,21 +65,56 @@ const DirectCheckOut = () => {
     },
   ];
 
+  const subTotal =
+    (Number(orderProduct?.price) || 0) * (Number(orderProduct?.quantity) || 0);
+  const totalVat = 0.6;
+  const shippingCost = 2;
+
+  const discount = useMemo(() => {
+    if (!couponInfo || !subTotal) return 0;
+    const disAmt = Number(couponInfo.per_dis_amt) || 0;
+    if (couponInfo.operator === "-") return disAmt;
+    if (couponInfo.operator === "*") return (subTotal * disAmt) / 100;
+    return 0;
+  }, [couponInfo, subTotal]);
+
+  const totalAmount = subTotal + totalVat + shippingCost - discount;
+
+  const handleCouponCode = async () => {
+    setIsCouponLoading(true);
+    try {
+      const result = await axios.get(
+        `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-match-coupon-list/${userInfo?.email}/${couponCode}`,
+      );
+
+      if (result.data?.is_valid === true && !result.data?.appliedAt) {
+        setCouponInfo(result.data);
+        showSuccess("Success", "Coupon Applied Successfully");
+      } else if (result.data?.is_valid === true && result.data?.appliedAt) {
+        showError("Error", "Coupon already used");
+      } else {
+        showError("Error", "Coupon not valid");
+      }
+    } catch (error) {
+      showError(
+        "Coupon Error",
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to apply coupon",
+      );
+    } finally {
+      setIsCouponLoading(false);
+    }
+  };
+
   const handleOrderSubmit = async () => {
     try {
       setIsInvalid(false);
-      const confirmation = await Swal.fire({
-        title: "Are you sure?",
-        text: "Do you want to submit this order?",
-        icon: "warning",
-        showCancelButton: true,
-        cancelButtonText: "Cancel",
-        confirmButtonText: "Ok",
-      });
 
+      // 1. General Validation
       if (
-        !formData.fullName ||
-        !formData.email ||
+        !userInfo?.name ||
+        !userInfo?.email ||
         !formData.phoneNo ||
         !formData.countryInfo ||
         !formData.countryInfo.id ||
@@ -79,45 +125,40 @@ const DirectCheckOut = () => {
         !orderProduct
       ) {
         setIsInvalid(true);
-        Swal.fire({
-          icon: "error",
-          title: "Invalid or missing required fields",
-          text: "Check input field",
-          confirmButtonText: "OK",
-        });
+        showError("Invalid or missing required fields", "Check input field");
         return;
       }
 
+
+      // 2. Payment Specific Validation
       if (paymentMethod === 2) {
         // Bkash payment validation
         if (!formData.bkashNo || !formData.transectionNo) {
           setIsInvalid(true);
-          Swal.fire({
-            icon: "error",
-            title: "Invalid or missing required fields",
-            text: "Check input field",
-            confirmButtonText: "OK",
-          });
+          showError("Invalid or missing required fields", "Check input field");
           return;
         }
       } else if (paymentMethod === 3) {
         // Card payment validation
         if (!formData.cardNumber || !formData.cardExpDate || !formData.cvcNo) {
           setIsInvalid(true);
-          Swal.fire({
-            icon: "error",
-            title: "Invalid or missing required fields",
-            text: "Check input field",
-            confirmButtonText: "OK",
-          });
+          showError("Invalid or missing required fields", "Check input field");
           return;
         }
       }
 
+      // 3. Confirmation
+      const confirmation = await showConfirmation(
+        "Confirm Order",
+        "Do you want to submit this order?",
+      );
+
+      if (!confirmation.isConfirmed) return;
+
       const data = {
         _id: null,
-        full_name: formData.fullName,
-        email: formData.email,
+        full_name: userInfo?.name,
+        email: userInfo?.email,
         phone_no: Number(formData.phoneNo),
         city: formData.city,
         country_name: formData.countryInfo?.country_name,
@@ -126,14 +167,15 @@ const DirectCheckOut = () => {
         zip: Number(formData.zipCode),
         address: formData.address,
         card_no: paymentMethod === 3 ? Number(formData.cardNumber) : null,
-        card_exp_date: paymentMethod === 3 ? formData.card_exp_date : null,
+        card_exp_date: paymentMethod === 3 ? formData.cardExpDate : null,
         card_cvc: paymentMethod === 3 ? Number(formData.cvcNo) : null,
         sub_total: subTotal,
         vat_total: totalVat,
         shipping: shippingCost,
-        total_amount: subTotal + totalVat + shippingCost,
+        total_amount: totalAmount,
         order_status: "P",
-        order_date: formData.cardExpDate,
+        order_date: new Date().toISOString(),
+
         payment_method: paymentMethod,
         bkash_no: paymentMethod === 2 ? formData.bkashNo : null,
         bkash_trns_no: paymentMethod === 2 ? formData.transectionNo : null,
@@ -152,46 +194,38 @@ const DirectCheckOut = () => {
             quantity: orderProduct.quantity,
           },
         ],
+        discount: discount || 0,
       };
-      if (confirmation.isConfirmed) {
-        const url = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-order-list`;
-        const result = await axios.post(url, data);
 
-        if (result.status) {
-          Swal.fire({
-            icon: "success",
-            title: "Order Placed!",
-            text: "Your order has been submitted successfully.",
-            confirmButtonText: "OK",
-          });
-          dispatch(setOrderProduct({}));
-          setIsInvalid(false);
-          navigate("/home");
-          setFormData({
-            fullName: null,
-            email: null,
-            phoneNo: null,
-            city: null,
-            countryInfo: { id: 1, country_name: "Bangladesh" },
-            zipCode: null,
-            address: null,
-            bkashNo: null,
-            transectionNo: null,
-            cardNumber: null,
-            cardExpDate: null,
-            cvcNo: null,
-          });
+      setIsOrderLoading(true);
+      showProcessing();
+      const result = await axios.post(
+        `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-order-list`,
+        data,
+      );
+
+      if (result.data.status) {
+        if (couponInfo) {
+          await axios.patch(
+            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/update-coupon-list/${couponInfo?._id}/${userInfo?.email}`,
+          );
         }
+
+        const newStock = orderProduct.stock - orderProduct.quantity;
+        const stockUrl = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list/stock/${orderProduct?._id}`;
+        await axios.patch(stockUrl, { stock: newStock });
+
+        await showSuccess("Order Success", result.data.message);
+        dispatch(setOrderProduct(null));
+        navigate("/home");
       }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Order Submission Failed",
-        text:
-          error.response?.data?.message ||
-          error.message ||
-          "Failed to place order",
-      });
+    } catch (err) {
+      showError(
+        "Submission Failed",
+        err.response?.data?.message || err.message,
+      );
+    } finally {
+      setIsOrderLoading(false);
     }
   };
 
@@ -220,11 +254,6 @@ const DirectCheckOut = () => {
     navigate(-1);
   };
 
-  const subTotal = orderProduct.price * orderProduct.quantity;
-
-  const totalVat = 0.6;
-
-  const shippingCost = 2;
   return (
     <>
       {!orderProduct ? (
@@ -271,16 +300,14 @@ const DirectCheckOut = () => {
                       </label>
                       <input
                         type="text"
-                        value={formData.fullName}
-                        onChange={(e) =>
-                          setFormData({ ...formData, fullName: e.target.value })
-                        }
+                        value={userInfo?.name}
                         className={`w-full border-b-2 ${
-                          isInvalid && !formData.fullName
+                          isInvalid && !userInfo.name
                             ? "border-red-600"
                             : "border-base-content/10"
                         } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                         placeholder="John Doe"
+                        disabled
                       />
                     </div>
                     <div className="space-y-2">
@@ -288,17 +315,15 @@ const DirectCheckOut = () => {
                         Email <span className="text-red-600">*</span>
                       </label>
                       <input
-                        value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
-                        }
+                        value={userInfo?.email}
                         type="email"
                         className={`w-full border-b-2 ${
-                          isInvalid && !formData.email
+                          isInvalid && !userInfo.email
                             ? "border-red-600"
                             : "border-base-content/10"
                         } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                         placeholder="user@user.com"
+                        disabled
                       />
                     </div>
                     <div className="space-y-2">
@@ -705,12 +730,7 @@ const DirectCheckOut = () => {
                   <div className="border-t border-base-content/10 pt-6 space-y-3">
                     <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
                       <span>Subtotal</span>
-                      <span>
-                        ${" "}
-                        {(orderProduct.price * orderProduct.quantity).toFixed(
-                          2,
-                        )}
-                      </span>
+                      <span>${Number(subTotal).toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
                       <span>Shipping</span>
@@ -720,10 +740,52 @@ const DirectCheckOut = () => {
                       <span>VAT</span>
                       <span>${Number(totalVat).toFixed(2)}</span>
                     </div>
+
+                    {discount > 0 && (
+                      <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-green-600">
+                        <span>Discount</span>
+                        <span>-${Number(discount).toFixed(2)}</span>
+                      </div>
+                    )}
+
+                    <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-base-content/5 gap-4">
+                      <input
+                        value={couponCode}
+                        disabled={
+                          couponInfo?.is_valid == true && !couponInfo?.appliedAt
+                        }
+                        onChange={(e) => setCouponCode(e.target.value)}
+                        type="text"
+                        placeholder="Enter coupon code"
+                        className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none text-sm font-bold transition-colors bg-transparent placeholder:bg-base-100 text-base-content"
+                      />
+
+                      <button
+                        onClick={handleCouponCode}
+                        disabled={
+                          isCouponLoading ||
+                          (couponInfo?.is_valid == true &&
+                            !couponInfo?.appliedAt)
+                        }
+                        className="w-full bg-base-content text-base-100 py-2 font-heading font-black uppercase tracking-[0.3em] text-[10px] hover:bg-accent transition-all group flex items-center justify-center gap-1 rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isCouponLoading ? (
+                          <span className="loading loading-spinner loading-xs"></span>
+                        ) : (
+                          <>
+                            Apply
+                            <span className="group-hover:translate-x-2 transition-transform">
+                              →
+                            </span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+
                     <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-base-content/5 mt-4">
                       <span>Total Amount</span>
                       <span className="text-accent text-2xl">
-                        ${Number(subTotal + shippingCost + totalVat).toFixed(2)}
+                        ${Number(totalAmount).toFixed(2)}
                       </span>
                     </div>
                   </div>
@@ -731,12 +793,19 @@ const DirectCheckOut = () => {
                   {/* Place Order Button */}
                   <button
                     onClick={handleOrderSubmit}
-                    className="w-full bg-base-content text-base-100 py-4 mt-10 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-3 rounded-md cursor-pointer"
+                    disabled={isOrderLoading}
+                    className="w-full bg-base-content text-base-100 py-4 mt-10 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-3 rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Place Order
-                    <span className="group-hover:translate-x-2 transition-transform">
-                      →
-                    </span>
+                    {isOrderLoading ? (
+                      <span className="loading loading-spinner loading-sm"></span>
+                    ) : (
+                      <>
+                        Place Order
+                        <span className="group-hover:translate-x-2 transition-transform">
+                          →
+                        </span>
+                      </>
+                    )}
                   </button>
 
                   <p className="text-[9px] text-center mt-6 opacity-40 leading-relaxed uppercase font-bold tracking-tighter">

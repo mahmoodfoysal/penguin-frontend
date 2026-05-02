@@ -2,7 +2,13 @@ import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLoaderData } from "react-router";
-import Swal from "sweetalert2";
+import {
+  showSuccess,
+  showError,
+  showConfirmation,
+  showProcessing,
+} from "../../../components/Alert";
+
 import Pagination from "../../../components/Pagination";
 
 const AddProduct = () => {
@@ -151,22 +157,15 @@ const AddProduct = () => {
       !userInfo?.email
     ) {
       setIsInvalid(true);
-      Swal.fire({
-        icon: "error",
-        title: "Invalid or missing required fields",
-        text: "Check input field",
-        confirmButtonText: "OK",
-      });
+      showError(
+        "Validation Failed",
+        "Please fill in all mandatory fields and ensure categories are selected.",
+      );
       return;
     }
-    const confirmation = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to submit?",
-      icon: "warning",
-      showCancelButton: true,
-      cancelButtonText: "Cancel",
-      confirmButtonText: "Ok",
-    });
+
+    const confirmation = await showConfirmation();
+
     const data = {
       _id: isEdit ? formData._id : null,
       prod_id: Number(formData.prod_id),
@@ -192,18 +191,13 @@ const AddProduct = () => {
 
     try {
       if (confirmation.isConfirmed) {
-        setIsLoadingButton(true);
+        showProcessing();
         const result = await axios.post(
           `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-product-list`,
           data,
         );
         if (result.data.status) {
-          Swal.fire({
-            icon: "success",
-            title: `${result.data.message}`,
-            text: `${result.data.message}`,
-            confirmButtonText: "OK",
-          });
+          await showSuccess("Successful.", result.data.message);
           const obj = {
             ...data,
             _id: result.data.id,
@@ -231,28 +225,21 @@ const AddProduct = () => {
         setIsDrawerOpen(false);
       }
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Submission Error",
-        text:
-          err.response?.data?.message ||
-          err.message ||
-          "Failed to submit product",
-      });
+      showError(
+        "Submission Failed",
+        err.response?.data?.message || err.message,
+      );
     } finally {
       setIsLoadingButton(false);
     }
   };
 
   const handleStatusUpdate = async (item) => {
-    const confirmation = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to submit?",
-      icon: "warning",
-      showCancelButton: true,
-      cancelButtonText: "Cancel",
-      confirmButtonText: "Ok",
-    });
+    const confirmation = await showConfirmation(
+      "Update Status?",
+      "Do you want to change this product's visibility?",
+    );
+
     const data = {
       _id: item._id,
       status: Number(item.status == 1 ? 0 : 1),
@@ -261,26 +248,13 @@ const AddProduct = () => {
 
     try {
       if (confirmation.isConfirmed) {
-        Swal.fire({
-          title: "Processing...",
-          text: "Please wait...",
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
+        showProcessing();
         const result = await axios.patch(
           `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/update-product-status/${item._id}`,
           data,
         );
         if (result.data.status) {
-          Swal.close();
-          Swal.fire({
-            icon: "success",
-            title: `${result.data.message}`,
-            text: `${result.data.message}`,
-            confirmButtonText: "OK",
-          });
+          showSuccess(result.data.message);
           const obj = {
             ...item,
             status: Number(result.data?.status_code),
@@ -303,15 +277,10 @@ const AddProduct = () => {
         }
       }
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Status Update Failed",
-        text:
-          err.response?.data?.message ||
-          err.message ||
-          "Failed to update product status",
-      });
-      Swal.close();
+      showError(
+        "Status Update Failed",
+        err.response?.data?.message || err.message,
+      );
     }
   };
 
@@ -352,16 +321,14 @@ const AddProduct = () => {
   };
 
   const handleRemove = async (item) => {
-    const confirmation = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to submit?",
-      icon: "warning",
-      showCancelButton: true,
-      cancelButtonText: "Cancel",
-      confirmButtonText: "Ok",
-    });
+    const confirmation = await showConfirmation(
+      "Delete Product?",
+      "Are you sure you want to remove this product permanently?",
+    );
+
     try {
       if (confirmation.isConfirmed) {
+        showProcessing();
         const result = await axios.delete(
           `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/delete-product-list/${item._id}`,
         );
@@ -375,20 +342,11 @@ const AddProduct = () => {
 
             setProductList(newproductList);
           }
-          Swal.fire({
-            icon: "success",
-            title: `${result.data.message}`,
-            text: `${result.data.message}`,
-            confirmButtonText: "OK",
-          });
+          showSuccess(result.data.message);
         }
       }
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: err.response?.data?.message || err.message || "error",
-      });
+      showError("Deletion Failed", err.response?.data?.message || err.message);
     }
   };
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);

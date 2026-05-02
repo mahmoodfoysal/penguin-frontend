@@ -13,7 +13,8 @@ import { useDispatch } from "react-redux";
 import { setUser, setRole } from "../../../store/slice/user";
 
 import axios from "axios";
-import Swal from "sweetalert2";
+import { showSuccess, showError } from "../../../components/Alert";
+
 
 initilizationAuthentication();
 
@@ -66,17 +67,17 @@ const Login = () => {
           dispatch(setRole(response.data));
         }
         setIsLoading(false);
+        await showSuccess("Success!", "Login successful.");
         navigate(location.state?.from?.pathname || "/home");
+
       })
+
       .catch((error) => {
         setIsLoading(false);
         setAuthError(error.message);
-        Swal.fire({
-          icon: "error",
-          title: "Authentication Failed",
-          text: error.message || "Failed to sign in with Google",
-        });
+        showError("Authentication Failed", error.message || "Failed to sign in with Google");
       });
+
   };
 
   // create account
@@ -95,7 +96,8 @@ const Login = () => {
 
     setIsLoading(true);
     createUserWithEmailAndPassword(auth, userEmail, userPassword)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
+
         const user = userCredential.user;
         // Update user profile
         updateProfile(user, {
@@ -108,24 +110,18 @@ const Login = () => {
         setFormData({});
 
         setIsLoading(false);
-        navigate(location.state?.from?.pathname || "/home");
         setIsInvalid(false);
-        Swal.fire({
-          icon: "success",
-          title: "Success!",
-          text: "Registration successful.",
-          confirmButtonText: "OK",
-        });
+        await showSuccess("Success!", "Registration successful.");
+        navigate(location.state?.from?.pathname || "/home");
+
       })
       .catch((error) => {
         setIsLoading(false);
         setAuthError(error.message);
-        Swal.fire({
-          icon: "error",
-          title: "Registration Failed",
-          text: error.message || "Failed to create account",
-        });
+        showError("Registration Failed", error.message || "Failed to create account");
       });
+
+
   };
 
   // login
@@ -154,24 +150,17 @@ const Login = () => {
         setFormData({});
         setIsInvalid(false);
         setIsLoading(false);
+        await showSuccess("Success!", "Login successful.");
         navigate(location.state?.from?.pathname || "/home");
-        Swal.fire({
-          icon: "success",
-          title: "Success!",
-          text: "Login successful.",
-          confirmButtonText: "OK",
-        });
-      })
 
+      })
       .catch((error) => {
         setIsLoading(false);
         setAuthError(error.message);
-        Swal.fire({
-          icon: "error",
-          title: "Login Failed",
-          text: error.message || "Failed to sign in",
-        });
+        showError("Login Failed", error.message || "Failed to sign in");
       });
+
+
   };
 
   return (

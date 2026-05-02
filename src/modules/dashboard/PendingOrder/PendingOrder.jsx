@@ -4,7 +4,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLoaderData, useLocation } from "react-router";
 
-import Swal from "sweetalert2";
+import {
+  showSuccess,
+  showError,
+  showConfirmation,
+  showProcessing,
+} from "../../../components/Alert";
+
 import Pagination from "../../../components/Pagination";
 
 // Static configuration moved outside to preserve memoization
@@ -93,17 +99,12 @@ const PendingOrder = () => {
   const currentStatus = STATUS_MAP[selectedOrder?.order_status] || "Pending";
 
   const handleStatusUpdate = async (item, targetStatus = null) => {
-    const confirmation = await Swal.fire({
-      title: "Are you sure?",
-      text:
-        targetStatus === "R"
-          ? "Do you want to reject this order?"
-          : "Do you want to submit?",
-      icon: targetStatus === "R" ? "error" : "warning",
-      showCancelButton: true,
-      cancelButtonText: "Cancel",
-      confirmButtonText: "Ok",
-    });
+    const confirmation = await showConfirmation(
+      "Are you sure?",
+      targetStatus === "R"
+        ? "Do you want to reject this order?"
+        : "Do you want to submit?",
+    );
 
     const newStatus = targetStatus || config.next;
     if (!newStatus) return;
@@ -116,26 +117,13 @@ const PendingOrder = () => {
 
     try {
       if (confirmation.isConfirmed) {
-        Swal.fire({
-          title: "Processing...",
-          text: "Please wait...",
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
+        showProcessing();
         const result = await axios.patch(
           `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/update-order-status/${item._id}`,
           data,
         );
         if (result.data.status) {
-          Swal.close();
-          Swal.fire({
-            icon: "success",
-            title: `${result.data.message}`,
-            text: `${result.data.message}`,
-            confirmButtonText: "OK",
-          });
+          await showSuccess("Success", result.data.message);
           const updatedOrder = {
             ...item,
             order_status: result.data?.status_code || newStatus,
@@ -153,15 +141,10 @@ const PendingOrder = () => {
         }
       }
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Order Update Failed",
-        text:
-          err.response?.data?.message ||
-          err.message ||
-          "Failed to update order status",
-      });
-      Swal.close();
+      showError(
+        "Order Update Failed",
+        err.response?.data?.message || err.message,
+      );
     }
   };
 

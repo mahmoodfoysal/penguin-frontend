@@ -10,7 +10,8 @@ import PageHeader from "../../../components/PageHeader";
 import ComponentLoader from "../../../pages/ComponentLoader";
 import DataNotFound from "../../../pages/DataNotFound";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { showError } from "../../../components/Alert";
+
 
 const Products = () => {
   const pageInfo = [
@@ -80,15 +81,9 @@ const Products = () => {
         );
         setReviewsList(response.data?.list_data || response.data || []);
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Failed to load reviews",
-          text:
-            error.response?.data?.message ||
-            error.message ||
-            "Failed to load reviews",
-        });
+        showError("Failed to load reviews", error.response?.data?.message || error.message);
       }
+
     };
     fetchReviews();
   }, []);

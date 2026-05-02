@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { showSuccess, showError } from "../../../components/Alert";
+
 
 const Footer = () => {
   const user = useSelector((state) => state.auth.user);
@@ -17,14 +18,10 @@ const Footer = () => {
 
     if (!promoEmail || !promoEmail.includes("@")) {
       setIsInvalid(true);
-      Swal.fire({
-        icon: "error",
-        title: "Required Field",
-        text: "Please provide a valid tactical email address.",
-        confirmButtonColor: "#000",
-      });
+      showError("Required Field", "Please provide a valid tactical email address.");
       return;
     }
+
 
     try {
       setIsSubmitting(true);
@@ -34,22 +31,13 @@ const Footer = () => {
       );
 
       if (response.data.status) {
-        Swal.fire({
-          icon: "success",
-          title: "Promotion Email",
-          text: "You are now get promotion email from Penguin.",
-          confirmButtonColor: "#000",
-        });
+        showSuccess("Promotion Email", "You are now get promotion email from Penguin.");
         setPromoEmail("");
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Link Failed",
-        text: error.response?.data?.message || "Communication disrupted.",
-        confirmButtonColor: "#000",
-      });
+      showError("Link Failed", error.response?.data?.message || "Communication disrupted.");
     } finally {
+
       setIsSubmitting(false);
     }
   };

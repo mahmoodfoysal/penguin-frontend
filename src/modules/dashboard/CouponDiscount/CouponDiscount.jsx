@@ -2,8 +2,14 @@ import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLoaderData } from "react-router";
-import Swal from "sweetalert2";
+import {
+  showSuccess,
+  showError,
+  showConfirmation,
+} from "../../../components/Alert";
+
 import Pagination from "../../../components/Pagination";
+import Swal from "sweetalert2";
 
 const CouponDiscount = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
@@ -89,21 +95,17 @@ const CouponDiscount = () => {
       !formData.operator
     ) {
       setIsInvalid(true);
-      Swal.fire({
-        icon: "error",
-        title: "Required Fields Missing",
-        text: "Please fill in all mandatory fields",
-      });
+      showError(
+        "Required Fields Missing",
+        "Please fill in all mandatory fields",
+      );
       return;
     }
 
-    const confirmation = await Swal.fire({
-      title: "Confirm Submission",
-      text: "Are you sure you want to save this coupon?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Yes, Save",
-    });
+    const confirmation = await showConfirmation(
+      "Are you sure?",
+      "Do you want to submit this coupon?",
+    );
 
     if (confirmation.isConfirmed) {
       const data = {
@@ -123,11 +125,7 @@ const CouponDiscount = () => {
         );
 
         if (result.data.status) {
-          Swal.fire({
-            icon: "success",
-            title: "Success",
-            text: result.data.message,
-          });
+          showSuccess("Coupon Success", result.data.message);
 
           const newObj = { ...data, _id: result.data.id || formData._id };
           const index = couponList.findIndex((item) => item._id === newObj._id);
@@ -171,14 +169,12 @@ const CouponDiscount = () => {
   };
 
   const handleRemove = async (item) => {
-    const confirmation = await Swal.fire({
-      title: "Delete Coupon?",
-      text: "This action cannot be undone.",
-      icon: "error",
-      showCancelButton: true,
-      confirmButtonText: "Delete",
-      confirmButtonColor: "#ef4444",
-    });
+    const confirmation = await showConfirmation(
+      "Delete Coupon?",
+      "Are you want to sure?",
+      "Delete",
+      "Cancel",
+    );
 
     if (confirmation.isConfirmed) {
       try {
@@ -188,10 +184,10 @@ const CouponDiscount = () => {
         );
         if (result.data.status) {
           setCouponList(couponList.filter((c) => c._id !== item._id));
-          Swal.fire("Deleted!", "Coupon has been removed.", "success");
+          showSuccess("Deleted!", "Coupon has been removed.");
         }
       } catch (err) {
-        Swal.fire("Error", "Failed to delete coupon", `${err}`);
+        showError("Error", `Failed to delete coupon: ${err.message}`);
       }
     }
   };
@@ -249,7 +245,6 @@ const CouponDiscount = () => {
               <th className="px-8 py-4 text-center">Discount</th>
               <th className="px-8 py-4 text-center">Usage</th>
               <th className="px-8 py-4 text-right">Actions</th>
-
             </tr>
           </thead>
           <tbody className="divide-y divide-black/5">
@@ -289,7 +284,9 @@ const CouponDiscount = () => {
                     </span>
                   </td>
                   <td className="px-8 py-6 text-center">
-                    <span className={`text-[9px] font-black tracking-tighter px-2 py-1 border inline-block ${item.flag === 1 ? "border-red-500 text-red-500" : "border-green-500 text-green-500"}`}>
+                    <span
+                      className={`text-[9px] font-black tracking-tighter px-2 py-1 border inline-block ${item.flag === 1 ? "border-red-500 text-red-500" : "border-green-500 text-green-500"}`}
+                    >
                       {item.flag === 1 ? "USED" : "UNUSED"}
                     </span>
                   </td>

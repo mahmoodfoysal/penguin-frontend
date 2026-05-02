@@ -2,7 +2,11 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useLoaderData } from "react-router";
-import Swal from "sweetalert2";
+import {
+  showSuccess,
+  showError,
+  showConfirmation,
+} from "../../../components/Alert";
 
 const MakeAdmin = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
@@ -16,7 +20,6 @@ const MakeAdmin = () => {
   });
   const [isEdit, setIsEdit] = useState(false);
   const [isInvalid, setIsInvalid] = useState(false);
-
 
   const accessList = [
     {
@@ -42,28 +45,18 @@ const MakeAdmin = () => {
     setIsInvalid(false);
   };
 
-
   const handleSubmitAdmin = async () => {
     setIsInvalid(false);
     if (!formData.email || !formData.roleInfo?.role_id) {
       setIsInvalid(true);
-      Swal.fire({
-        icon: "error",
-        title: "Incomplete Information",
-        text: "Please enter a user email and select an access level.",
-        confirmButtonText: "OK",
-      });
+      showError(
+        "Incomplete Information",
+        "Please enter a user email and select an access level.",
+      );
       return;
     }
 
-    const confirmation = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to assign this role?",
-      icon: "warning",
-      showCancelButton: true,
-      cancelButtonText: "Cancel",
-      confirmButtonText: "Ok",
-    });
+    const confirmation = await showConfirmation();
 
     const data = {
       _id: isEdit ? formData._id : null,
@@ -80,12 +73,7 @@ const MakeAdmin = () => {
           data,
         );
         if (result.data.status) {
-          Swal.fire({
-            icon: "success",
-            title: `${result.data.message}`,
-            text: `${result.data.message}`,
-            confirmButtonText: "OK",
-          });
+          showSuccess(result.data.message, result.data.message);
           const obj = {
             _id: result.data.id || formData._id,
             email: formData.email,
@@ -111,14 +99,12 @@ const MakeAdmin = () => {
         setIsEdit(false);
       }
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Admin Assignment Failed",
-        text:
-          err.response?.data?.message ||
+      showError(
+        "Admin Assignment Failed",
+        err.response?.data?.message ||
           err.message ||
           "Failed to assign admin role",
-      });
+      );
     }
   };
 
@@ -137,14 +123,10 @@ const MakeAdmin = () => {
   };
 
   const handleRemove = async (item) => {
-    const confirmation = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to submit?",
-      icon: "warning",
-      showCancelButton: true,
-      cancelButtonText: "Cancel",
-      confirmButtonText: "Ok",
-    });
+    const confirmation = await showConfirmation(
+      "Are you sure?",
+      "Do you want to remove this admin?",
+    );
     try {
       if (confirmation.isConfirmed) {
         const result = await axios.delete(
@@ -160,23 +142,16 @@ const MakeAdmin = () => {
 
             setAdminList(newAdminList);
           }
-          Swal.fire({
-            icon: "success",
-            title: `${result.data.message}`,
-            text: `${result.data.message}`,
-            confirmButtonText: "OK",
-          });
+          showSuccess(result.data.message, result.data.message);
         }
       }
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Deletion Failed",
-        text:
-          err.response?.data?.message ||
+      showError(
+        "Deletion Failed",
+        err.response?.data?.message ||
           err.message ||
           "Failed to remove admin access",
-      });
+      );
     }
   };
   return (
@@ -215,7 +190,6 @@ const MakeAdmin = () => {
               placeholder="user@vortexlabs.com"
               className={`w-full border-b-2 bg-transparent outline-none py-3 text-xs font-bold transition-all ${isInvalid && !formData.email ? "border-red-600" : "border-base-content/10 focus:border-accent"}`}
             />
-
           </div>
 
           {/* Role Dropdown */}
@@ -228,13 +202,15 @@ const MakeAdmin = () => {
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  roleInfo: e.target.value === "null" ? null : JSON.parse(e.target.value),
+                  roleInfo:
+                    e.target.value === "null"
+                      ? null
+                      : JSON.parse(e.target.value),
                 })
               }
               className={`w-full border-b-2 bg-transparent outline-none py-3 text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${isInvalid && !formData.roleInfo?.role_id ? "border-red-600" : "border-base-content/10 focus:border-accent"}`}
             >
               <option value="null" className="bg-base-100 text-base-content">
-
                 Select Role
               </option>
               {accessList?.map((item, index) => (

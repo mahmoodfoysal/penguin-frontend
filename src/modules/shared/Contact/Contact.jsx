@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
 import PageHeader from "../../../components/PageHeader";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { showSuccess, showError, showConfirmation } from "../../../components/Alert";
+
 
 const Contact = () => {
   const formRef = useRef(null);
@@ -44,26 +45,22 @@ const Contact = () => {
     setErrors(newErrors);
 
     if (newErrors.name || newErrors.email || newErrors.message) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Please fill in the required fields (Name, Email, and Message).",
-        confirmButtonColor: "#000",
-      });
+      showError(
+        "Oops...",
+        "Please fill in the required fields (Name, Email, and Message)."
+      );
       return;
     }
 
-    const confirmation = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to send this message?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Yes, send it!",
-      cancelButtonText: "Abort",
-      confirmButtonColor: "#000",
-    });
+    const confirmation = await showConfirmation(
+      "Are you sure?",
+      "Do you want to send this message?",
+      "Yes, send it!",
+      "Abort"
+    );
 
     if (!confirmation.isConfirmed) return;
+
 
     try {
       setIsSending(true);
@@ -91,22 +88,17 @@ const Contact = () => {
       );
 
       if (response.status === 200) {
-        Swal.fire({
-          title: "Sent!",
-          text: "Your message has been sent successfully.",
-          icon: "success",
-          confirmButtonColor: "#000",
-        });
+        await showSuccess("Sent!", "Your message has been sent successfully.");
         setFormData({ name: "", email: "", phone: "", message: "" });
       }
+
     } catch (error) {
-      Swal.fire({
-        title: "Error!",
-        text: `Failed to send: ${error.response?.data || error.message || "Communication disrupted."}`,
-        icon: "error",
-        confirmButtonColor: "#000",
-      });
+      showError(
+        "Error!",
+        `Failed to send: ${error.response?.data || error.message || "Communication disrupted."}`
+      );
     } finally {
+
       setIsSending(false);
     }
   };
