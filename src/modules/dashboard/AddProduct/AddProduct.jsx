@@ -30,7 +30,9 @@ const AddProduct = () => {
     description: "",
     currencyTypeInfo: {},
     status: "",
+    discount: "",
   });
+
   const statusList = [
     {
       value: 1,
@@ -73,10 +75,6 @@ const AddProduct = () => {
     {
       prod_type: "D",
       prod_type_name: "Discount",
-    },
-    {
-      prod_type: "O",
-      prod_type_name: "Offer",
     },
   ];
 
@@ -132,6 +130,7 @@ const AddProduct = () => {
       description: "",
       currencyTypeInfo: {},
       status: 1,
+      discount: "",
     });
   };
 
@@ -150,6 +149,7 @@ const AddProduct = () => {
       !formData.prod_brand ||
       !formData.stock ||
       !formData.description ||
+      (formData.prodTypeInfo?.prod_type === "D" && !formData.discount) ||
       !userInfo?.email
     ) {
       setIsInvalid(true);
@@ -185,8 +185,13 @@ const AddProduct = () => {
       prod_type_name: formData.prodTypeInfo?.prod_type_name,
       currency_id: Number(formData.currencyTypeInfo?.currency_id),
       currency_name: formData.currencyTypeInfo?.currency_name,
+      discount:
+        formData.prodTypeInfo?.prod_type === "D"
+          ? Number(formData.discount)
+          : 0,
       user_info: userInfo?.email,
     };
+
     console.log("data", data);
     try {
       if (confirmation.isConfirmed) {
@@ -325,6 +330,7 @@ const AddProduct = () => {
         currency_id: item.currency_id,
         currency_name: item.currency_name,
       },
+      discount: item.discount || "",
     });
   };
 
@@ -828,6 +834,27 @@ const AddProduct = () => {
                     </select>
                   </div>
 
+                  {formData.prodTypeInfo?.prod_type === "D" && (
+                    <div className="space-y-2 w-[calc(50%-8px)]">
+                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                        Discount Amount <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        value={formData.discount}
+                        onChange={(e) =>
+                          setFormData({ ...formData, discount: e.target.value })
+                        }
+                        type="number"
+                        placeholder="e.g. 50"
+                        className={`w-full border-b-2 ${
+                          isInvalid && !formData.discount
+                            ? "border-red-600"
+                            : "border-base-content/10"
+                        } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
+                      />
+                    </div>
+                  )}
+
                   {/* currency  */}
 
                   <div className="space-y-2 w-[calc(50%-8px)]">
@@ -1026,6 +1053,19 @@ const AddProduct = () => {
                           {selectedProduct.prod_brand}
                         </p>
                       </div>
+                      {selectedProduct.prod_type === "D" && (
+                        <div>
+                          <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                            Discount
+                          </p>
+                          <p className="font-heading font-bold text-sm uppercase mt-1 tracking-tight">
+                            {selectedProduct.discount}{" "}
+                            <span className="text-[10px] text-base-content/40 ml-1">
+                              {selectedProduct.currency_name}
+                            </span>
+                          </p>
+                        </div>
+                      )}
 
                       {/* Price */}
                       <div>
