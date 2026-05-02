@@ -9,7 +9,8 @@ import {
 import PageHeader from "../../../components/PageHeader";
 import { Link, useNavigate } from "react-router";
 import EmptyScreen from "../../../pages/EmptyScreen.jsx";
-import Swal from "sweetalert2";
+import { showSuccess, showConfirmation } from "../../../components/Alert";
+
 
 const Cart = () => {
   const emptyInfo = {
@@ -44,28 +45,28 @@ const Cart = () => {
   };
 
   const handleRemoveItem = async (product) => {
-    const confirmation = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to remove from cart",
-      icon: "warning",
-      showCancelButton: true,
-      cancelButtonText: "Cancel",
-      confirmButtonText: "Ok",
-    });
+    const confirmation = await showConfirmation(
+      "Remove Item",
+      "Do you want to remove this item from your cart?",
+    );
     if (confirmation.isConfirmed) {
       dispatch(removeFromCart(product._id));
-      Swal.fire({
-        icon: "success",
-        title: "Item remove from cart",
-        text: "Success",
-        confirmButtonText: "OK",
-      });
+      showSuccess("Success", "Item removed from cart");
     }
   };
 
-  const handleClearCart = () => {
-    dispatch(clearCart());
+
+  const handleClearCart = async () => {
+    const confirmation = await showConfirmation(
+      "Clear Cart",
+      "Are you sure you want to remove all items from your cart?",
+    );
+    if (confirmation.isConfirmed) {
+      dispatch(clearCart());
+      showSuccess("Success", "Cart cleared successfully");
+    }
   };
+
 
   const handleCheckOut = () => {
     navigate("/checkout");

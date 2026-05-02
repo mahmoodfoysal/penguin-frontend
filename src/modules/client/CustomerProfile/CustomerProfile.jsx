@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import Swal from "sweetalert2";
+import {
+  showSuccess,
+  showError,
+  showConfirmation,
+  showProcessing,
+} from "../../../components/Alert";
+
 
 const CustomerProfile = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
@@ -47,12 +53,12 @@ const CustomerProfile = () => {
           setOrderData(orderRes.data.list_data);
         }
       } catch (err) {
-        Swal.fire({
-          icon: "error",
-          title: "Data Loading Failed",
-          text: err.response?.data?.message || err.message || "Failed to load profile data",
-        });
+        showError(
+          "Data Loading Failed",
+          err.response?.data?.message || err.message || "Failed to load profile data",
+        );
       } finally {
+
         setIsLoading(false);
       }
     };
@@ -61,34 +67,24 @@ const CustomerProfile = () => {
 
   const handleUpdateProfile = async () => {
     if (!profileData?._id) {
-      Swal.fire({
-        icon: "error",
-        title: "Update Prevented",
-        text: "User Identity (_id) not found. Please refresh the page.",
-      });
+      showError(
+        "Update Prevented",
+        "User Identity (_id) not found. Please refresh the page.",
+      );
       return;
     }
 
-    const confirmation = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to update your profile?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, update it!",
-      cancelButtonText: "No, cancel!",
-    });
+
+    const confirmation = await showConfirmation(
+      "Are you sure?",
+      "Do you want to update your profile?",
+    );
 
     if (!confirmation.isConfirmed) return;
 
     try {
-      Swal.fire({
-        title: "Updating...",
-        text: "Please wait while we save your changes",
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
-      });
+      showProcessing("Updating...", "Please wait while we save your changes");
+
 
       const response = await axios.post(
         `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/insert-update-user-list`,
@@ -103,28 +99,18 @@ const CustomerProfile = () => {
         response.status === 200 ||
         response.status === 201
       ) {
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: response.data.message || "Profile updated successfully!",
-          confirmButtonText: "OK",
-        });
+        await showSuccess("Success", response.data.message || "Profile updated successfully!");
         setIsEditModalOpen(false);
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: response.data.message || "Update failed",
-        });
+        showError("Error", response.data.message || "Update failed");
       }
+
     } catch (err) {
       const errorMessage =
         err.response?.data?.message || err.message || "Something went wrong";
-
-      Swal.fire("Error", errorMessage, "error");
-
-
+      showError("Error", errorMessage);
     }
+
   };
 
   const stats = [
