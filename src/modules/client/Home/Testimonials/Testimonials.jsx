@@ -28,8 +28,8 @@ const Testimonials = () => {
           .slice(0, 10);
 
         const formattedReviews = goodReviews.map((r) => ({
-          name: r.full_name || "Verified Customer",
-          role: "Design Lover",
+          name: r.full_name,
+
           comment: r.comment,
           rating: r.rating,
           avatar: r.image_url,
@@ -58,9 +58,7 @@ const Testimonials = () => {
               Loved by Thousands
             </h2>
             <p className="text-lg text-base-content/60 font-light max-w-2xl">
-              Don’t just take our word for it. Join a global community of design
-              lovers and see why thousands of users trust us to bring their
-              creative visions to life every single day.
+              Our clients love our products, and we love them back.
             </p>
           </div>
 
@@ -169,9 +167,6 @@ const Testimonials = () => {
                         value={review.rating}
                         readOnly
                       />
-                      <div className="text-[10px] font-bold opacity-30 uppercase tracking-widest group-hover:opacity-100 group-hover:text-primary transition-all">
-                        Verified
-                      </div>
                     </div>
                   </div>
                 </div>
