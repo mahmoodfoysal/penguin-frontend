@@ -1,189 +1,3 @@
-// import { StrictMode } from "react";
-// import { Provider } from "react-redux";
-// import { store } from "./store/store.js";
-// import { createRoot } from "react-dom/client";
-// import "./index.css";
-// import App from "./App.jsx";
-// import { ClickToComponent } from "click-to-react-component";
-// import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
-// import Home from "./modules/client/Home/Home/Home";
-// import AdminHome from "./modules/dashboard/Home/AdminHome.jsx";
-// import Products from "./modules/client/Products/Products.jsx";
-// import ProductDetails from "./modules/client/ProductDetrails/ProductDetails.jsx";
-// import Cart from "./modules/client/Cart/Cart.jsx";
-// import Checkout from "./modules/client/Checkout/Checkout.jsx";
-// import Login from "./modules/Authentication/Login/Login.jsx";
-// import MakeAdmin from "./modules/dashboard/MakeAdmin/MakeAdmin.jsx";
-// import ParentCategory from "./modules/dashboard/ParentCategory/ParentCategory.jsx";
-// import SubCategory from "./modules/dashboard/SubCategory/SubCategory.jsx";
-// import AddProduct from "./modules/dashboard/AddProduct/AddProduct.jsx";
-// import PendingOrder from "./modules/dashboard/PendingOrder/PendingOrder.jsx";
-// import Contact from "./modules/shared/Contact/Contact.jsx";
-// import AboutUs from "./modules/shared/AboutUs/AboutUs.jsx";
-// import DashboardHome from "./modules/dashboard/Home/DashboardHome.jsx";
-// import PrivateRoute from "./Routes/PrivateRoute.jsx";
-// import AdminRoute from "./Routes/AdminRoute.jsx";
-// import ErrorPage from "./pages/ErrorPage.jsx";
-// import DirectCheckOut from "./modules/client/Checkout/DirectCheckOut.jsx";
-// import PublicRoutes from "./Routes/PublicRoutes.jsx";
-
-// const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <App></App>,
-//     children: [
-//       { index: true, element: <Navigate to="/home" /> },
-//       {
-//         path: "home",
-//         element: <Home></Home>,
-//         loader: async () =>
-//           await fetch(
-//             "${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list",
-//           ),
-//       },
-//       {
-//         path: "products",
-//         element: <Products></Products>,
-//         loader: async () => {
-//           const products = await fetch(
-//             "${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list",
-//           );
-//           const categories = await fetch(
-//             "${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/client/get-all-categories",
-//           );
-//           return {
-//             products: await products.json(),
-//             categories: await categories.json(),
-//           };
-//         },
-//       },
-//       {
-//         path: "product-details/:id/:prod_id",
-//         element: <ProductDetails></ProductDetails>,
-//         loader: async ({ params }) => {
-//           const products = await fetch(
-//             "${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list",
-//           );
-//           const details = await fetch(
-//             `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
-//           );
-//           return {
-//             products: await products.json(),
-//             product_details: await details.json(),
-//           };
-//         },
-//       },
-//       {
-//         path: "cart",
-//         element: <Cart></Cart>,
-//       },
-//       {
-//         path: "checkout",
-//         element: (
-//           <PrivateRoute>
-//             <Checkout></Checkout>
-//           </PrivateRoute>
-//         ),
-//       },
-//       {
-//         path: "buy-product",
-//         element: (
-//           <PrivateRoute>
-//             <DirectCheckOut></DirectCheckOut>
-//           </PrivateRoute>
-//         ),
-//       },
-//       {
-//         path: "login",
-//         element: (
-//           <PublicRoutes>
-//             <Login></Login>
-//           </PublicRoutes>
-//         ),
-//       },
-//       {
-//         path: "contact",
-//         element: <Contact></Contact>,
-//       },
-//       {
-//         path: "about",
-//         element: <AboutUs></AboutUs>,
-//       },
-//       {
-//         path: "/dashboard",
-//         element: (
-//           <AdminRoute>
-//             <AdminHome></AdminHome>
-//           </AdminRoute>
-//         ),
-//         children: [
-//           {
-//             index: true,
-//             element: (
-//               <AdminRoute>
-//                 <DashboardHome></DashboardHome>
-//               </AdminRoute>
-//             ),
-//           },
-//           {
-//             path: "/dashboard/make-admin",
-//             element: (
-//               <AdminRoute>
-//                 <MakeAdmin></MakeAdmin>
-//               </AdminRoute>
-//             ),
-//           },
-//           {
-//             path: "/dashboard/parent-category",
-//             element: (
-//               <AdminRoute>
-//                 <ParentCategory></ParentCategory>
-//               </AdminRoute>
-//             ),
-//           },
-//           {
-//             path: "/dashboard/sub-category",
-//             element: (
-//               <AdminRoute>
-//                 <SubCategory></SubCategory>
-//               </AdminRoute>
-//             ),
-//           },
-//           {
-//             path: "/dashboard/add-product",
-//             element: (
-//               <AdminRoute>
-//                 <AddProduct></AddProduct>
-//               </AdminRoute>
-//             ),
-//           },
-//           {
-//             path: "/dashboard/pending-order",
-//             element: (
-//               <AdminRoute>
-//                 <PendingOrder></PendingOrder>
-//               </AdminRoute>
-//             ),
-//           },
-//         ],
-//       },
-//     ],
-//   },
-//   {
-//     path: "*",
-//     element: <ErrorPage></ErrorPage>,
-//   },
-// ]);
-
-// createRoot(document.getElementById("root")).render(
-//   <StrictMode>
-//     <Provider store={store}>
-//       <ClickToComponent />
-//       <RouterProvider router={router} />
-//     </Provider>
-//   </StrictMode>,
-// );
-
 import { StrictMode } from "react";
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
@@ -248,6 +62,13 @@ const productLoader = async () => {
     `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
   );
   return { products };
+};
+
+const orderLoader = async () => {
+  const orders = await fetchWithTimeout(
+    `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-order-list`,
+  );
+  return { orders };
 };
 
 const adminLoader = async () => {
@@ -409,7 +230,11 @@ const router = createBrowserRouter([
                 productLoader(),
               ]),
           },
-          { path: "pending-order", element: <PendingOrder /> },
+          {
+            path: "pending-order",
+            element: <PendingOrder />,
+            loader: orderLoader,
+          },
         ],
       },
     ],
