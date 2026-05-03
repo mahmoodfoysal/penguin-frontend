@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import ReactApexChart from "react-apexcharts";
 import axios from "axios";
 import ComponentLoader from "../../../pages/ComponentLoader";
+import { formatDateDDMonYYYY } from "../../../utils/dateFormat";
 
 const DashboardHome = () => {
   const [currentTheme, setCurrentTheme] = useState(
@@ -57,6 +58,7 @@ const DashboardHome = () => {
     });
 
     const sortedDates = Object.keys(revenueByDate).sort();
+    const formattedDates = sortedDates.map((date) => formatDateDDMonYYYY(date));
     const lineSeries = [
       {
         name: "Revenue",
@@ -113,7 +115,7 @@ const DashboardHome = () => {
     );
 
     // 4. Stats
-    const totalSales = orderList.reduce(
+    const totalSubtotal = orderList.reduce(
       (sum, order) => sum + (parseFloat(order.sub_total) || 0),
       0,
     );
@@ -121,6 +123,14 @@ const DashboardHome = () => {
       (sum, order) => sum + (parseFloat(order.vat_total) || 0),
       0,
     );
+    const totalShipping = orderList.reduce(
+      (sum, order) => sum + (parseFloat(order.shipping) || 0),
+      0,
+    );
+    const grossSales = totalSubtotal + totalShipping + totalVat;
+    const netRevenue = grossSales * 0.1;
+    const otherBalance = grossSales - netRevenue - totalVat - totalShipping;
+
     const pendingOrders = orderList.filter(
       (order) => order.order_status === "P",
     ).length;
@@ -131,11 +141,19 @@ const DashboardHome = () => {
     return {
       lineSeries,
       sortedDates,
+      formattedDates,
       barSeries,
       months,
       donutLabels,
       donutSeries,
-      totalSales,
+      financialSeries: [netRevenue, otherBalance, totalVat, totalShipping],
+      financialLabels: [
+        "Net Revenue (10%)",
+        "Subtotal Remnant",
+        "VAT Total",
+        "Shipping Cost",
+      ],
+      totalSales: grossSales,
       totalVat,
       pendingOrders,
       completedOrders,
@@ -193,7 +211,7 @@ const DashboardHome = () => {
       strokeDashArray: 5,
     },
     xaxis: {
-      categories: processedData?.sortedDates || [],
+      categories: processedData?.formattedDates || [],
       axisBorder: { show: false },
       axisTicks: { show: false },
       labels: { style: { colors: textColor } },
@@ -273,11 +291,11 @@ const DashboardHome = () => {
       background: "transparent",
     },
     theme: { mode: currentTheme },
-    labels: processedData?.donutLabels || [],
-    colors: ["#008FFB", "#00E396", "#FEB019", "#FF4560", "#775DD0"],
+    labels: processedData?.financialLabels || [],
+    colors: ["#facc15", "#3b82f6", "#ef4444", "#10b981"],
     stroke: { width: 0 },
     title: {
-      text: "Net Revenue (10%)",
+      text: "Financial Breakdown",
       align: "left",
       style: {
         fontSize: "16px",
@@ -294,14 +312,14 @@ const DashboardHome = () => {
             show: true,
             total: {
               show: true,
-              label: "Net Revenue",
+              label: "Gross Sales",
               formatter: () =>
-                `$${processedData?.donutSeries.reduce((a, b) => a + b, 0).toFixed(0)}`,
+                `$${processedData?.totalSales.toFixed(2)}`,
               style: { fontWeight: "900", color: textColor },
             },
             value: {
               show: true,
-              formatter: (val) => `$${parseFloat(val).toFixed(0)}`,
+              formatter: (val) => `$${parseFloat(val).toFixed(2)}`,
               style: { color: textColor },
             },
             label: {
@@ -360,7 +378,7 @@ const DashboardHome = () => {
         <div className="bg-base-100 border border-base-content/5 p-6 rounded-sm shadow-sm transition-all hover:shadow-xl hover:border-accent/20">
           <ReactApexChart
             options={donutChartOptions}
-            series={processedData?.donutSeries || []}
+            series={processedData?.financialSeries || []}
             type="donut"
             height={350}
           />

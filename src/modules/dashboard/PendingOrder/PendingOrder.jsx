@@ -12,6 +12,7 @@ import {
 } from "../../../components/Alert";
 
 import Pagination from "../../../components/Pagination";
+import { formatDateDDMMYYYYHHmm } from "../../../utils/dateFormat";
 
 // Static configuration moved outside to preserve memoization
 const ROUTE_CONFIGS = {
@@ -232,7 +233,7 @@ const PendingOrder = () => {
                     {/* 5. Date */}
                     <td className="px-6 py-4">
                       <span className="text-[10px] font-black opacity-40 uppercase">
-                        {item.order_date}
+                        {formatDateDDMMYYYYHHmm(item.order_date)}
                       </span>
                     </td>
 
@@ -395,7 +396,7 @@ const PendingOrder = () => {
                       Live Tracking Status
                     </p>
                     <p className="text-xs font-bold text-accent">
-                      Date: {selectedOrder.order_date}
+                      Date: {formatDateDDMMYYYYHHmm(selectedOrder.order_date)}
                     </p>
                   </div>
                   <div className="flex justify-between relative w-full px-2">
@@ -666,11 +667,13 @@ const PendingOrder = () => {
                 </div>
                 <div className="flex justify-between text-xs font-black uppercase opacity-40 pt-3 border-t border-base-content/5 mt-3">
                   <span>Created At</span>
-                  <span>{selectedOrder.createdAt}</span>
+                  <span>{formatDateDDMMYYYYHHmm(selectedOrder.createdAt)}</span>
                 </div>
                 <div className="flex justify-between text-xs font-black uppercase opacity-40">
                   <span>Order Date</span>
-                  <span>{selectedOrder.order_date}</span>
+                  <span>
+                    {formatDateDDMMYYYYHHmm(selectedOrder.order_date)}
+                  </span>
                 </div>
 
                 <div className="flex justify-between font-heading font-black text-2xl uppercase mt-4">

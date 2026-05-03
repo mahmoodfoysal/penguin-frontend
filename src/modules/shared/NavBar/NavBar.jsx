@@ -73,7 +73,7 @@ const NavBar = () => {
   return (
     <>
       <div className="sticky top-0 z-50 px-4 py-2">
-        <div className="navbar bg-base-100 rounded-2xl border border-base-200 shadow-sm relative overflow-hidden">
+        <div className="navbar bg-base-100 rounded-2xl border border-base-200 shadow-sm relative">
           <TopLoadingBar />
 
           <div className="navbar-start">
