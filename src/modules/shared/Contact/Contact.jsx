@@ -1,8 +1,11 @@
 import React, { useState, useRef } from "react";
 import PageHeader from "../../../components/PageHeader";
 import axios from "axios";
-import { showSuccess, showError, showConfirmation } from "../../../components/Alert";
-
+import {
+  showSuccess,
+  showError,
+  showConfirmation,
+} from "../../../components/Alert";
 
 const Contact = () => {
   const formRef = useRef(null);
@@ -47,7 +50,7 @@ const Contact = () => {
     if (newErrors.name || newErrors.email || newErrors.message) {
       showError(
         "Oops...",
-        "Please fill in the required fields (Name, Email, and Message)."
+        "Please fill in the required fields (Name, Email, and Message).",
       );
       return;
     }
@@ -56,11 +59,10 @@ const Contact = () => {
       "Are you sure?",
       "Do you want to send this message?",
       "Yes, send it!",
-      "Abort"
+      "Abort",
     );
 
     if (!confirmation.isConfirmed) return;
-
 
     try {
       setIsSending(true);
@@ -75,9 +77,9 @@ const Contact = () => {
         template_id: templateId,
         user_id: publicKey,
         template_params: {
-          from_name: formData.name,
-          from_email: formData.email,
-          from_phone: formData.phone,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
           message: formData.message,
         },
       };
@@ -91,14 +93,12 @@ const Contact = () => {
         await showSuccess("Sent!", "Your message has been sent successfully.");
         setFormData({ name: "", email: "", phone: "", message: "" });
       }
-
     } catch (error) {
       showError(
         "Error!",
-        `Failed to send: ${error.response?.data || error.message || "Communication disrupted."}`
+        `Failed to send: ${error.response?.data || error.message || "Communication disrupted."}`,
       );
     } finally {
-
       setIsSending(false);
     }
   };
@@ -223,7 +223,7 @@ const Contact = () => {
                   </label>
                   <input
                     name="phone"
-                    type="text"
+                    type="number"
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="ENTER PHONE"
