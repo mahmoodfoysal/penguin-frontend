@@ -40,6 +40,7 @@ import OrderHistory from "./modules/client/OrderHistory/OrderHistory.jsx";
 import CustomerProfile from "./modules/client/CustomerProfile/CustomerProfile.jsx";
 import CouponDiscount from "./modules/dashboard/CouponDiscount/CouponDiscount.jsx";
 import axios from "axios";
+import Review from "./modules/dashboard/Review/Review.jsx";
 
 // Set global axios timeout for Render's free tier cold starts
 axios.defaults.timeout = 60000;
@@ -180,6 +181,10 @@ const router = createBrowserRouter([
           {
             path: "coupon-discount",
             element: <CouponDiscount />,
+          },
+          {
+            path: "review",
+            element: <Review />,
           },
         ],
       },

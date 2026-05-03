@@ -395,6 +395,13 @@ const NavBar = () => {
                     >
                       Add Blogs
                     </NavLink>
+                    <NavLink
+                      to="/dashboard/review"
+                      onClick={() => setIsDrawerOpen(false)}
+                      className="block px-4 py-3 hover:bg-accent hover:text-white transition-colors font-heading font-bold uppercase text-[10px] tracking-[0.2em]"
+                    >
+                      All Review
+                    </NavLink>
 
                     {/* Orders Dropdown */}
                     <div className="space-y-1">
