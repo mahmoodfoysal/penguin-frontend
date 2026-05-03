@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { Link, useLoaderData, useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 import ProductCard from "./../../../components/ProductCard";
 // import FeatureProducts from "../../../components/FeatureProducts";
 import SearchBar from "../../../components/SearchBar";
@@ -26,7 +26,28 @@ const Products = () => {
       last_name: "Products",
     },
   ];
-  const data = useLoaderData();
+  const [data, setData] = useState({ products: null, categories: null });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProductsData = async () => {
+      try {
+        const [productsRes, categoriesRes] = await Promise.all([
+          axios.get(`${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`),
+          axios.get(`${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/client/get-all-categories`)
+        ]);
+        setData({
+          products: productsRes.data,
+          categories: categoriesRes.data
+        });
+      } catch (error) {
+        console.error("Failed to fetch products data", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProductsData();
+  }, []);
 
   const location = useLocation();
 
@@ -326,7 +347,7 @@ const Products = () => {
   return (
     <>
       <PageHeader pageInfo={pageInfo}></PageHeader>
-      {!productsList.length ? (
+      {isLoading ? (
         <ComponentLoader></ComponentLoader>
       ) : (
         <div className="bg-base-100 min-h-screen font-body selection:bg-accent selection:text-white">

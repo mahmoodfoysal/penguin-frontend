@@ -1,7 +1,6 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLoaderData } from "react-router";
 import {
   showSuccess,
   showError,
@@ -10,8 +9,24 @@ import {
 
 const MakeAdmin = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
-  const { adminData } = useLoaderData();
-  const [adminList, setAdminList] = useState(adminData?.list_data);
+  const [adminList, setAdminList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-admin-list`,
+        );
+        setAdminList(res.data?.list_data || []);
+      } catch (error) {
+        console.error("Failed to fetch admin list", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchAdmins();
+  }, []);
   const [formData, setFormData] = useState({
     _id: null,
     email: "",
@@ -267,42 +282,53 @@ const MakeAdmin = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
-              {adminList.map((item, index) => (
-                <tr
-                  key={index}
-                  className="group hover:bg-base-200/30 transition-colors"
-                >
-                  <td className="px-3 py-3 font-bold text-xs">{index + 1}</td>
-                  <td className="px-3 py-3">{item.user_info}</td>
-                  <td className="px-3 py-3">{item.email}</td>
-
-                  <td className="px-3 py-3">
-                    <span className="inline-block border border-base-content/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full group-hover:border-accent group-hover:text-accent transition-colors">
-                      {item.role}
-                    </span>
-                  </td>
-                  <td className="px-3 py-3 text-[11px] font-bold opacity-40 uppercase">
-                    {item.createdAt}
-                  </td>
-                  <td className="px-3 py-3 text-[11px] font-bold opacity-40 uppercase">
-                    {item.modifiedAt}
-                  </td>
-                  <td className="px-3 py-3 text-right">
-                    <span
-                      onClick={() => handleEdit(item)}
-                      className="material-icons cursor-pointer hover:text-blue-600 me-2"
-                    >
-                      edit
-                    </span>
-                    <span
-                      onClick={() => handleRemove(item)}
-                      className="material-icons cursor-pointer hover:text-red-600"
-                    >
-                      delete
-                    </span>
+              {isLoading ? (
+                <tr>
+                  <td
+                    colSpan="7"
+                    className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest"
+                  >
+                    Loading...
                   </td>
                 </tr>
-              ))}
+              ) : (
+                adminList.map((item, index) => (
+                  <tr
+                    key={index}
+                    className="group hover:bg-base-200/30 transition-colors"
+                  >
+                    <td className="px-3 py-3 font-bold text-xs">{index + 1}</td>
+                    <td className="px-3 py-3">{item.user_info}</td>
+                    <td className="px-3 py-3">{item.email}</td>
+
+                    <td className="px-3 py-3">
+                      <span className="inline-block border border-base-content/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full group-hover:border-accent group-hover:text-accent transition-colors">
+                        {item.role}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 text-[11px] font-bold opacity-40 uppercase">
+                      {item.createdAt}
+                    </td>
+                    <td className="px-3 py-3 text-[11px] font-bold opacity-40 uppercase">
+                      {item.modifiedAt}
+                    </td>
+                    <td className="px-3 py-3 text-right">
+                      <span
+                        onClick={() => handleEdit(item)}
+                        className="material-icons cursor-pointer hover:text-blue-600 me-2"
+                      >
+                        edit
+                      </span>
+                      <span
+                        onClick={() => handleRemove(item)}
+                        className="material-icons cursor-pointer hover:text-red-600"
+                      >
+                        delete
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

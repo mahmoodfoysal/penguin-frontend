@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLoaderData } from "react-router";
+import { Link } from "react-router";
 import ProductCard from "../../../../components/ProductCard";
 import SkeletonCard from "../../../../pages/SkeletonCard";
 
-const NewestArrivalProducts = () => {
-  const { products } = useLoaderData();
+const NewestArrivalProducts = ({ productsData }) => {
+  const products = productsData?.products;
 
   const [newestSellerList, setNewestProduct] = useState([]);
 

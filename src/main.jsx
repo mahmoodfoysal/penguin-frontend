@@ -39,111 +39,14 @@ import BlogDetails from "./modules/client/BlogDetails/BlogDetails.jsx";
 import OrderHistory from "./modules/client/OrderHistory/OrderHistory.jsx";
 import CustomerProfile from "./modules/client/CustomerProfile/CustomerProfile.jsx";
 import CouponDiscount from "./modules/dashboard/CouponDiscount/CouponDiscount.jsx";
+import axios from "axios";
+
+// Set global axios timeout for Render's free tier cold starts
+axios.defaults.timeout = 60000;
 
 // ------------------
 // ✅ Utility: fetch with timeout (FIXED)
 // ------------------
-const fetchWithTimeout = async (url, options = {}, timeout = 7000) => {
-  const res = await Promise.race([
-    fetch(url, options),
-    new Promise((_, reject) =>
-      setTimeout(() => reject(new Error("Request timed out")), timeout),
-    ),
-  ]);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch");
-  }
-
-  return res.json();
-};
-
-// ------------------
-// ✅ Loaders
-// ------------------
-const productLoader = async () => {
-  const products = await fetchWithTimeout(
-    `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
-  );
-  return { products };
-};
-
-const orderLoader = async () => {
-  const orders = await fetchWithTimeout(
-    `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-order-list`,
-  );
-  return { orders };
-};
-
-const adminLoader = async () => {
-  const adminData = await fetchWithTimeout(
-    `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-admin-list`,
-  );
-  return { adminData };
-};
-
-const couponDiscountLoader = async () => {
-  const couponData = await fetchWithTimeout(
-    `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/admin/get-coupon-list`,
-  );
-  return { couponData };
-};
-
-const parentCategoryLoader = async () => {
-  const parentCategoryData = await fetchWithTimeout(
-    `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-parent-category`,
-  );
-  return { parentCategoryData };
-};
-
-const subCategoryLoader = async () => {
-  const subCategoryData = await fetchWithTimeout(
-    `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-sub-category`,
-  );
-  return { subCategoryData };
-};
-
-const productsLoader = async () => {
-  const [products, categories] = await Promise.all([
-    fetchWithTimeout(
-      `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
-    ),
-    fetchWithTimeout(
-      `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/client/get-all-categories`,
-    ),
-  ]);
-
-  return { products, categories };
-};
-
-const productDetailsLoader = async ({ params }) => {
-  const [products, product_details, comments] = await Promise.all([
-    fetchWithTimeout(
-      `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
-    ),
-    fetchWithTimeout(
-      `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list/${params.id}/${params.prod_id}`,
-    ),
-    fetchWithTimeout(
-      `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list/${params.prod_id}`,
-    ),
-  ]);
-
-  return { products, product_details, comments };
-};
-
-const blogDetailsLoader = async ({ params }) => {
-  const [blogs, blogDetails] = await Promise.all([
-    fetchWithTimeout(
-      `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-blog-list`,
-    ),
-    fetchWithTimeout(
-      `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-blog-list/${params.id}`,
-    ),
-  ]);
-
-  return { blogs, blogDetails };
-};
 
 // ------------------
 // ✅ Router
@@ -156,14 +59,13 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/home" /> },
 
-      { path: "home", element: <Home />, loader: productLoader },
+      { path: "home", element: <Home /> },
 
-      { path: "products", element: <Products />, loader: productsLoader },
+      { path: "products", element: <Products /> },
 
       {
         path: "product-details/:id/:prod_id",
         element: <ProductDetails />,
-        loader: productDetailsLoader,
       },
 
       { path: "cart", element: <Cart /> },
@@ -201,7 +103,6 @@ const router = createBrowserRouter([
       {
         path: "blog-details/:id",
         element: <BlogDetails />,
-        loader: blogDetailsLoader,
       },
 
       {
@@ -234,29 +135,19 @@ const router = createBrowserRouter([
           {
             path: "make-admin",
             element: <MakeAdmin />,
-            loader: adminLoader,
           },
 
           {
             path: "parent-category",
             element: <ParentCategory />,
-            loader: parentCategoryLoader,
           },
           {
             path: "sub-category",
             element: <SubCategory />,
-            loader: () =>
-              Promise.all([parentCategoryLoader(), subCategoryLoader()]),
           },
           {
             path: "add-product",
             element: <AddProduct />,
-            loader: () =>
-              Promise.all([
-                parentCategoryLoader(),
-                subCategoryLoader(),
-                productLoader(),
-              ]),
           },
           {
             path: "add-blogs",
@@ -265,37 +156,30 @@ const router = createBrowserRouter([
           {
             path: "pending-order",
             element: <PendingOrder />,
-            loader: orderLoader,
           },
           {
             path: "warehouse",
             element: <PendingOrder />,
-            loader: orderLoader,
           },
           {
             path: "shipping",
             element: <PendingOrder />,
-            loader: orderLoader,
           },
           {
             path: "delivery",
             element: <PendingOrder />,
-            loader: orderLoader,
           },
           {
             path: "completed",
             element: <PendingOrder />,
-            loader: orderLoader,
           },
           {
             path: "rejected",
             element: <PendingOrder />,
-            loader: orderLoader,
           },
           {
             path: "coupon-discount",
             element: <CouponDiscount />,
-            loader: couponDiscountLoader,
           },
         ],
       },

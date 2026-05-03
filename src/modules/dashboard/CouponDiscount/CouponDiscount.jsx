@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLoaderData } from "react-router";
 import {
   showSuccess,
   showError,
@@ -13,17 +12,25 @@ import Swal from "sweetalert2";
 
 const CouponDiscount = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
-  const { couponData } = useLoaderData();
-  // Safe initialization: handles both { list_data: [] } and direct array responses
   const [couponList, setCouponList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (couponData) {
-      const list =
-        couponData.list_data || (Array.isArray(couponData) ? couponData : []);
-      setCouponList(list);
-    }
-  }, [couponData]);
+    const fetchCoupons = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/admin/get-coupon-list`,
+        );
+        const data = res.data?.list_data || (Array.isArray(res.data) ? res.data : []);
+        setCouponList(data);
+      } catch (error) {
+        console.error("Failed to fetch coupons", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCoupons();
+  }, []);
 
   const [formData, setFormData] = useState({
     _id: null,
@@ -248,7 +255,13 @@ const CouponDiscount = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-black/5">
-            {!paginatedCouponList.length ? (
+            {isLoading ? (
+              <tr>
+                <td colSpan="6" className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest">
+                  Loading...
+                </td>
+              </tr>
+            ) : !paginatedCouponList.length ? (
               <tr>
                 <td
                   colSpan="6"

@@ -361,6 +361,13 @@ const NavBar = () => {
                       Make Admin
                     </NavLink>
                     <NavLink
+                      to="/dashboard/coupon-discount"
+                      onClick={() => setIsDrawerOpen(false)}
+                      className="block px-4 py-3 hover:bg-accent hover:text-white transition-colors font-heading font-bold uppercase text-[10px] tracking-[0.2em]"
+                    >
+                      Coupon Discount
+                    </NavLink>
+                    <NavLink
                       to="/dashboard/parent-category"
                       onClick={() => setIsDrawerOpen(false)}
                       className="block px-4 py-3 hover:bg-accent hover:text-white transition-colors font-heading font-bold uppercase text-[10px] tracking-[0.2em]"
@@ -373,6 +380,20 @@ const NavBar = () => {
                       className="block px-4 py-3 hover:bg-accent hover:text-white transition-colors font-heading font-bold uppercase text-[10px] tracking-[0.2em]"
                     >
                       Sub Category
+                    </NavLink>
+                    <NavLink
+                      to="/dashboard/add-product"
+                      onClick={() => setIsDrawerOpen(false)}
+                      className="block px-4 py-3 hover:bg-accent hover:text-white transition-colors font-heading font-bold uppercase text-[10px] tracking-[0.2em]"
+                    >
+                      Add Products
+                    </NavLink>
+                    <NavLink
+                      to="/dashboard/add-blogs"
+                      onClick={() => setIsDrawerOpen(false)}
+                      className="block px-4 py-3 hover:bg-accent hover:text-white transition-colors font-heading font-bold uppercase text-[10px] tracking-[0.2em]"
+                    >
+                      Add Blogs
                     </NavLink>
 
                     {/* Orders Dropdown */}
@@ -390,17 +411,29 @@ const NavBar = () => {
                       </button>
                       {openMenus.orders && (
                         <div className="bg-base-content/5 ml-4 border-l border-accent/30 py-2">
-                          {["Pending", "Warehouse", "Shipping", "Delivery"].map(
-                            (sub) => (
-                              <button
-                                key={sub}
-                                onClick={() => setIsDrawerOpen(false)}
-                                className="w-full text-left px-6 py-2 text-[9px] uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all"
-                              >
-                                {sub}
-                              </button>
-                            ),
-                          )}
+                          {[
+                            { name: "Pending", path: "/dashboard/pending-order" },
+                            { name: "Warehouse", path: "/dashboard/warehouse" },
+                            { name: "Shipping", path: "/dashboard/shipping" },
+                            { name: "Delivery", path: "/dashboard/delivery" },
+                            { name: "Completed", path: "/dashboard/completed" },
+                            { name: "Rejected", path: "/dashboard/rejected" },
+                          ].map((sub) => (
+                            <NavLink
+                              key={sub.name}
+                              to={sub.path}
+                              onClick={() => setIsDrawerOpen(false)}
+                              className={({ isActive }) =>
+                                `block w-full text-left px-6 py-2 text-[9px] uppercase tracking-widest transition-all ${
+                                  isActive
+                                    ? "text-accent opacity-100 font-black"
+                                    : "opacity-60 hover:opacity-100 hover:text-accent"
+                                }`
+                              }
+                            >
+                              {sub.name}
+                            </NavLink>
+                          ))}
                         </div>
                       )}
                     </div>

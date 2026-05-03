@@ -25,7 +25,7 @@ const Blogs = () => {
   const [openCategory, setOpenCategory] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8; // 2 rows of 4 cards
+  const itemsPerPage = 8;
 
   useEffect(() => {
     const fetchBlogs = async () => {

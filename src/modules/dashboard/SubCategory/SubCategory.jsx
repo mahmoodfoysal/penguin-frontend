@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLoaderData } from "react-router";
 import {
   showSuccess,
   showError,
@@ -14,11 +13,27 @@ import Swal from "sweetalert2";
 
 const SubCategory = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
-  const [parentCategoryData, subCategoryData] = useLoaderData();
-  const [categoryList, setCategoryList] = useState(
-    subCategoryData?.subCategoryData?.list_data,
-  );
-  const parentList = parentCategoryData?.parentCategoryData?.list_data;
+  const [categoryList, setCategoryList] = useState([]);
+  const [parentList, setParentList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategoryData = async () => {
+      try {
+        const [parentRes, subRes] = await Promise.all([
+          axios.get(`${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-parent-category`),
+          axios.get(`${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-sub-category`)
+        ]);
+        setParentList(parentRes.data?.list_data || []);
+        setCategoryList(subRes.data?.list_data || []);
+      } catch (error) {
+        console.error("Failed to fetch sub-category data", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCategoryData();
+  }, []);
   const [selectedParentId, setSelectedParentId] = useState("");
 
   const [formData, setFormData] = useState({
@@ -369,7 +384,13 @@ const SubCategory = () => {
 
             {/* <tbody> equivalent */}
             <tbody className="divide-y divide-black/5">
-              {paginatedCategoryList?.length > 0 ? (
+              {isLoading ? (
+                <tr>
+                  <td colSpan="7" className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest">
+                    Loading...
+                  </td>
+                </tr>
+              ) : paginatedCategoryList?.length > 0 ? (
                 paginatedCategoryList?.map((item, index) => (
                   <tr
                     key={index}

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useLoaderData, useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import PageHeader from "../../../components/PageHeader";
@@ -18,35 +18,68 @@ import { timeCount } from "../../../utils/timeCount";
 import DataNotFound from "../../../pages/DataNotFound";
 
 const ProductDetails = () => {
-  const data = useLoaderData();
+  const { id, prod_id: p_id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [data, setData] = useState({
+    products: null,
+    product_details: null,
+    comments: null,
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      setIsLoading(true);
+      try {
+        const [productsRes, detailsRes, commentsRes] = await Promise.all([
+          axios.get(
+            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
+          ),
+          axios.get(
+            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list/${id}/${p_id}`,
+          ),
+          axios.get(
+            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list/${p_id}`,
+          ),
+        ]);
+        setData({
+          products: productsRes.data,
+          product_details: detailsRes.data,
+          comments: commentsRes.data,
+        });
+        setCommentList(commentsRes.data?.list_data || []);
+      } catch (error) {
+        console.error("Failed to fetch product details", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchDetails();
+  }, [id, p_id]);
+
   const [currentPage, setCurrentPage] = useState(1);
-
   const [clientRating, setClientRating] = useState(0);
-
-  const [clientComment, setClientComment] = useState(null);
-
+  const [clientComment, setClientComment] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
   const [isReviewLoading, setIsReviewLoading] = useState(false);
 
-  const productList = data.products?.list_data;
+  const productList = data.products?.list_data || [];
+  const [commentList, setCommentList] = useState([]);
 
-  const [commentList, setCommentList] = useState(data.comments?.list_data);
-
+  const details = data.product_details?.details_data || {};
   const {
     _id,
     prod_image,
     stock,
-
     prod_name,
     price,
     description,
     par_cat_id,
     sub_cat_id,
     prod_id,
-  } = data.product_details.details_data;
+  } = details;
 
   const cartList = useSelector((state) => state.cart.cart);
   const userInfo = useSelector((state) => state.auth.userInfo);
@@ -242,7 +275,7 @@ const ProductDetails = () => {
 
   return (
     <>
-      {!data ? (
+      {isLoading ? (
         <ComponentLoader></ComponentLoader>
       ) : (
         <>

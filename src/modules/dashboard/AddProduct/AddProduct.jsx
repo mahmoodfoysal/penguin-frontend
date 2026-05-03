@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLoaderData } from "react-router";
 import {
   showSuccess,
   showError,
@@ -13,11 +12,36 @@ import Pagination from "../../../components/Pagination";
 
 const AddProduct = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
-  const [parentCategoryData, subCategoryData, products] = useLoaderData();
-  const [productList, setProductList] = useState(products?.products?.list_data);
+  const [productList, setProductList] = useState([]);
+  const [parentCategoryList, setParentCategoryList] = useState([]);
+  const [subCategoryList, setSubCategoryList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const subCategoryList = subCategoryData?.subCategoryData?.list_data;
-  const parentCategoryList = parentCategoryData?.parentCategoryData?.list_data;
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const [parentRes, subRes, prodRes] = await Promise.all([
+          axios.get(
+            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-parent-category`,
+          ),
+          axios.get(
+            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-sub-category`,
+          ),
+          axios.get(
+            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
+          ),
+        ]);
+        setParentCategoryList(parentRes.data?.list_data || []);
+        setSubCategoryList(subRes.data?.list_data || []);
+        setProductList(prodRes.data?.list_data || []);
+      } catch (error) {
+        console.error("Failed to fetch product data", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchAllData();
+  }, []);
 
   const [formData, setFormData] = useState({
     _id: null,
@@ -415,7 +439,16 @@ const AddProduct = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
-              {paginatedproductList?.length > 0 ? (
+              {isLoading ? (
+                <tr>
+                  <td
+                    colSpan="9"
+                    className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest"
+                  >
+                    Loading...
+                  </td>
+                </tr>
+              ) : paginatedproductList?.length > 0 ? (
                 paginatedproductList.map((item, index) => (
                   <tr
                     key={item._id}

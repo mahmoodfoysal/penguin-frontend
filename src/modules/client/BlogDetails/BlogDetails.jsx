@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { useLoaderData, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 
 import PageHeader from "../../../components/PageHeader";
 import BlogCard from "../../../components/BlogCard";
@@ -10,11 +11,37 @@ import DataNotFound from "../../../pages/DataNotFound";
 const ITEMS_PER_PAGE = 4;
 
 const BlogDetails = () => {
-  const data = useLoaderData();
-
+  const { id } = useParams();
+  const [data, setData] = useState({ blogs: null, blogDetails: null });
+  const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Safely extract blog data so we can use its properties in dependencies
+  useEffect(() => {
+    const fetchBlogData = async () => {
+      setIsLoading(true);
+      try {
+        const [blogsRes, detailsRes] = await Promise.all([
+          axios.get(
+            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-blog-list`,
+          ),
+          axios.get(
+            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-blog-list/${id}`,
+          ),
+        ]);
+        setData({
+          blogs: blogsRes.data,
+          blogDetails: detailsRes.data,
+        });
+      } catch (error) {
+        console.error("Failed to fetch blog details", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchBlogData();
+  }, [id]);
+
+  // Safely extract blog data
   const blog =
     data?.blogDetails?.list_data?.[0] ||
     data?.blogDetails?.details_data ||
@@ -62,11 +89,11 @@ const BlogDetails = () => {
     return allRelatedBlogs.slice(start, start + ITEMS_PER_PAGE);
   }, [allRelatedBlogs, currentPage]);
 
-  if (!data || !data.blogDetails) {
+  if (isLoading) {
     return <ComponentLoader />;
   }
 
-  if (!blog) {
+  if (!blog || Object.keys(blog).length === 0) {
     return <DataNotFound backMsg="Back" mainMsg1="Blog" mainMsg2="Not Found" />;
   }
 

@@ -1,46 +1,42 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import BlogCard from "../../../../components/BlogCard";
 import { Link } from "react-router-dom";
 import SkeletonCard from "../../../../pages/SkeletonCard";
 
-const BlogPreview = () => {
+const BlogPreview = ({ blogsData }) => {
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-blog-list`,
-        );
-        const data = response.data?.list_data || response.data || [];
-        const shuffled = [...data].sort(() => 0.5 - Math.random());
-        const selected = shuffled.slice(0, 4).map((b) => ({
-          _id: b._id,
-          title: b.title || "Design Inspiration",
-          excerpt:
-            b.short_description ||
-            b.long_description?.substring(0, 100) + "..." ||
-            "Read more about this topic...",
-          image: b.image,
-          date:
-            b.date || b.createdAt
-              ? new Date(b.date || b.createdAt).toLocaleDateString()
-              : "Recent",
-          category: b.category || "Design",
-        }));
-
-        setBlogs(selected);
-      } catch (error) {
-        console.error("Failed to fetch blogs", error);
-      } finally {
+    if (!blogsData?.blogs) {
+      setTimeout(() => {
         setIsLoading(false);
-      }
-    };
+      }, 0);
+      return;
+    }
 
-    fetchBlogs();
-  }, []);
+    const data = blogsData.blogs.list_data || blogsData.blogs || [];
+    const shuffled = [...data].sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, 4).map((b) => ({
+      _id: b._id,
+      title: b.title || "Design Inspiration",
+      excerpt:
+        b.short_description ||
+        b.long_description?.substring(0, 100) + "..." ||
+        "Read more about this topic...",
+      image: b.image,
+      date:
+        b.date || b.createdAt
+          ? new Date(b.date || b.createdAt).toLocaleDateString()
+          : "Recent",
+      category: b.category || "Design",
+    }));
+
+    setTimeout(() => {
+      setBlogs(selected);
+      setIsLoading(false);
+    }, 0);
+  }, [blogsData]);
 
   return (
     <section className="py-20 px-6 max-w-7xl mx-auto" id="blog">

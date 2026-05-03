@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 
 import { useSelector } from "react-redux";
-import { useLoaderData, useLocation } from "react-router";
+import { useLocation } from "react-router";
 
 import {
   showSuccess,
@@ -43,9 +43,27 @@ const STATUS_STEPS = [
 
 const PendingOrder = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
-  const { orders } = useLoaderData();
+  const [orders, setOrders] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [orderList, setOrderList] = useState(orders?.list_data);
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-order-list`,
+        );
+        setOrders(res.data);
+        setOrderList(res.data?.list_data || []);
+      } catch (error) {
+        console.error("Failed to fetch orders", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchOrders();
+  }, []);
+
+  const [orderList, setOrderList] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 

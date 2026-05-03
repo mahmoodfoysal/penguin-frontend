@@ -1,17 +1,30 @@
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLoaderData } from "react-router";
 import { showSuccess, showError, showConfirmation } from "../../../components/Alert";
 
 import Pagination from "../../../components/Pagination";
 
 const ParentCategory = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
-  const { parentCategoryData } = useLoaderData();
-  const [categoryList, setCategoryList] = useState(
-    parentCategoryData?.list_data,
-  );
+  const [categoryList, setCategoryList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-parent-category`,
+        );
+        setCategoryList(res.data?.list_data || []);
+      } catch (error) {
+        console.error("Failed to fetch categories", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const [formData, setFormData] = useState({
     _id: null,
@@ -294,7 +307,13 @@ const ParentCategory = () => {
             {/* <tbody> equivalent */}
 
             <tbody className="divide-y divide-black/5">
-              {!paginatedCategoryList.length ? (
+              {isLoading ? (
+                <tr>
+                  <td colSpan="8" className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest">
+                    Loading...
+                  </td>
+                </tr>
+              ) : !paginatedCategoryList.length ? (
                 <tr>
                   <td
                     colSpan="8"

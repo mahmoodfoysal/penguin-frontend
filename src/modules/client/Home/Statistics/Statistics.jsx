@@ -1,10 +1,5 @@
-import React from "react";
-import { useLoaderData } from "react-router";
-
-const Statistics = () => {
-  // Try to use loader data if available
-  const loaderData = useLoaderData();
-  const productsCount = loaderData?.products?.list_data?.length || 240;
+const Statistics = ({ productsData }) => {
+  const productsCount = productsData?.products?.list_data?.length || 240;
 
   const stats = [
     { label: "Active Products", value: `${productsCount}+` },

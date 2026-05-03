@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLoaderData } from "react-router";
+import { Link } from "react-router";
 import ProductCard from "../../../../components/ProductCard";
 import SkeletonCard from "../../../../pages/SkeletonCard";
 
-const FeaturedItems = () => {
-  const { products } = useLoaderData();
+const FeaturedItems = ({ productsData }) => {
+  const products = productsData?.products;
   const [featuredProducts, setFeaturedProducts] = useState([]);
 
   useEffect(() => {

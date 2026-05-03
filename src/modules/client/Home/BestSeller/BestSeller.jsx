@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLoaderData } from "react-router";
+import { Link } from "react-router";
 import ProductCard from "../../../../components/ProductCard";
 import axios from "axios";
 import SkeletonCard from "../../../../pages/SkeletonCard";
 
-const BestSeller = () => {
-  const { products } = useLoaderData();
+const BestSeller = ({ productsData }) => {
+  const products = productsData?.products;
 
   const [bestSellerProd, setBestSellerProd] = useState([]);
 
