@@ -68,7 +68,7 @@ const ProductDetails = () => {
   ];
 
   const filterRelatedProduct = productList.filter(
-    (item) => item.par_cat_id == par_cat_id,
+    (item) => item.par_cat_id == par_cat_id && item.status == 1,
   );
 
   // ================= PAGINATION =================

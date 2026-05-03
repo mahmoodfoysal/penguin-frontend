@@ -22,7 +22,11 @@ const NewestArrivalProducts = () => {
     };
 
     setTimeout(() => {
-      setNewestProduct(getNewestItems(products?.list_data));
+      setNewestProduct(
+        getNewestItems(
+          products?.list_data?.filter((item) => item.status === 1),
+        ),
+      );
     }, 0);
   }, [products]);
   return (

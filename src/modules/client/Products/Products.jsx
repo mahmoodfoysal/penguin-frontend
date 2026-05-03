@@ -12,7 +12,6 @@ import DataNotFound from "../../../pages/DataNotFound";
 import axios from "axios";
 import { showError } from "../../../components/Alert";
 
-
 const Products = () => {
   const pageInfo = [
     {
@@ -32,9 +31,11 @@ const Products = () => {
   const location = useLocation();
 
   // Safe fallback for API data
-  const productsList = data.products?.list_data || [];
+  const productsList =
+    data.products?.list_data?.filter((item) => item.status === 1) || [];
 
-  const categoryList = data.categories?.list_data || [];
+  const categoryList =
+    data.categories?.list_data?.filter((item) => item.status === 1) || [];
 
   const [searchProductList, setSearchProductList] = useState("");
   const [showNewestOnly, setShowNewestOnly] = useState(
@@ -81,9 +82,11 @@ const Products = () => {
         );
         setReviewsList(response.data?.list_data || response.data || []);
       } catch (error) {
-        showError("Failed to load reviews", error.response?.data?.message || error.message);
+        showError(
+          "Failed to load reviews",
+          error.response?.data?.message || error.message,
+        );
       }
-
     };
     fetchReviews();
   }, []);

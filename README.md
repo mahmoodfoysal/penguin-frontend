@@ -4,7 +4,7 @@ A full-stack MERN e-commerce platform featuring Redux state management, Firebase
 
 ## Live Demo
 
-- Live URL: [https://penguin-shopping.web.app/home/](https://penguin-shopping.web.app/home/)
+- Live URL: [https://penguin-ecom.vercel.app/home](https://penguin-ecom.vercel.app/home)
 
 ## Repository
 
@@ -22,12 +22,55 @@ A full-stack MERN e-commerce platform featuring Redux state management, Firebase
 - MongoDB
 - Tailwind CSS
 - Daisy UI
+- ApexCharts
+- Material Icons
 
 ## Key Features
 
 - Advanced filtering (Category, Price, Brand) and sorting
 - Secure Admin & Super Admin dashboard for total site control
 - Dynamic product details with reviews and ratings
+- Customer Profile Section
+- Product Review Section
+- Order Management Section
+- Order tracking system
+- Cupon code system
+- Blog Section
+- Dashboard Overview
+
+## Protected Routes
+
+- Login and Registration
+- Dashboard
+- Checkout
+- Profile
+- Order History
+
+## Public routes
+
+- Home
+- Product Details
+- Product
+- Blogs
+- About
+- Contact
+- Cart
+
+## Short Description
+
+- Navbar: switching routing and user information
+- Landing Page: A attractive standard landing page for the e-commerce website. Where customer can see best seller, New arrivals, Featured products, Categories Card, Blogs, Offers, Coupon codes, services
+- Products Page: This page show all products. Here category, brand, price and search filter.
+- Product Details Page: This page show specific product details. Related products also show in the bottom.
+- Customer Authentication: Secure login and registration using Firebase authentication.
+- Order Management: Track and manage orders with detailed status updates.
+- Customer Profile: View and edit profile information with order history.
+- Blog System: Read and interact with blog posts.
+- Blog Details Page: This page show specific blog details. In the bottom show related blog
+- Dashboard Overview: Get insights into sales, orders, add products, add categories add coupon, add admin, add blog.
+- Pagination: It add where many data comes.
+- Products, category, blogs all have a status. If status 1 then only product show. If 0 then product is inactive.
+- Footer have full functional. Footer email address use for promotional massage.
 
 ## Setup and Installation
 

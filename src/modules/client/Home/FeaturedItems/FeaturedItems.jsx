@@ -33,7 +33,12 @@ const FeaturedItems = () => {
     };
 
     setTimeout(() => {
-      setFeaturedProducts(getFeaturedItems(products?.list_data, 4));
+      setFeaturedProducts(
+        getFeaturedItems(
+          products?.list_data?.filter((item) => item.status === 1),
+          4,
+        ),
+      );
     }, 0);
   }, [products]);
 
