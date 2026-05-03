@@ -138,7 +138,6 @@ const SideBar = () => {
           </div>
         </nav>
 
-        {/* User Status at Bottom */}
         <div className="p-6 border-t border-base-content/10">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center font-heading font-black ">
