@@ -14,7 +14,7 @@ import {
 } from "./store/slice/user";
 import NavBar from "./modules/shared/NavBar/NavBar.jsx";
 
-import Footer from "./modules/Shared/Footer/Footer.jsx";
+import Footer from "./modules/shared/Footer/Footer.jsx";
 import axios from "axios";
 import ScrollToTop from "./components/ScrollToTop";
 
