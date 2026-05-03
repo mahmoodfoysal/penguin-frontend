@@ -7,19 +7,32 @@
   --color-base-content: #1f2937;
 }
 
-[data-theme='dark'] {
+[data-theme="dark"] {
   --color-base-100: #0f172a; /* Slate 900 */
   --color-base-content: #f8fafc;
 }
 
 /* Force Navbar and Footer to use the same background color */
-.navbar, footer {
+.navbar,
+footer {
   background-color: var(--color-base-100) !important;
   color: var(--color-base-content) !important;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Ensure the sticky container for navbar is transparent */
 .sticky.top-0 {
   background-color: transparent !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 }

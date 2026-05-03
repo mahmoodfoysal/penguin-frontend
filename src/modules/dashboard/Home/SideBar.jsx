@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router";
 import "./SideBar.css";
+import { useSelector } from "react-redux";
 
 const SideBar = () => {
+  const userInfo = useSelector((state) => state.auth.userInfo);
   const [openMenus, setOpenMenus] = useState({ orders: false, home: false });
 
   const toggleMenu = (menu) => {
@@ -140,11 +142,17 @@ const SideBar = () => {
         <div className="p-6 border-t border-base-content/10">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center font-heading font-black ">
-              A
+              <img
+                className="w-full h-full object-cover rounded-full"
+                src={userInfo?.photo}
+                alt="Foysal Mahmood"
+              />
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase">Admin User</p>
-              <p className="text-[8px] opacity-40 uppercase">V-Labs Level 5</p>
+              <p className="text-[10px] font-black uppercase">
+                {userInfo?.name}
+              </p>
+              <p className="text-[8px] opacity-40 uppercase">Version: 2.0</p>
             </div>
           </div>
         </div>
