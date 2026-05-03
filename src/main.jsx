@@ -23,6 +23,7 @@ import Login from "./modules/Authentication/Login/Login.jsx";
 import MakeAdmin from "./modules/dashboard/MakeAdmin/MakeAdmin.jsx";
 import ParentCategory from "./modules/dashboard/ParentCategory/ParentCategory.jsx";
 import SubCategory from "./modules/dashboard/SubCategory/SubCategory.jsx";
+import AddBlogs from "./modules/dashboard/AddBlogs/AddBlogs.jsx";
 import AddProduct from "./modules/dashboard/AddProduct/AddProduct.jsx";
 import PendingOrder from "./modules/dashboard/PendingOrder/PendingOrder.jsx";
 import Contact from "./modules/shared/Contact/Contact.jsx";
@@ -256,6 +257,10 @@ const router = createBrowserRouter([
                 subCategoryLoader(),
                 productLoader(),
               ]),
+          },
+          {
+            path: "add-blogs",
+            element: <AddBlogs />,
           },
           {
             path: "pending-order",

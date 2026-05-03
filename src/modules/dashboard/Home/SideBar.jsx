@@ -53,6 +53,12 @@ const SideBar = () => {
             </button>
           </NavLink>
 
+          <NavLink to="/dashboard/add-blogs">
+            <button className="w-full flex items-center gap-4 px-4 py-4 hover:bg-accent transition-colors font-heading font-bold uppercase text-[10px] tracking-[0.2em]">
+              <span>Add Blogs</span>
+            </button>
+          </NavLink>
+
           {/* DROPDOWN 1: ORDERS */}
           <div className="space-y-1">
             <button
