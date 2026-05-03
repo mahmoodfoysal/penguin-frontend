@@ -10,7 +10,6 @@ import initilizationAuthentication from "../../../firebase/firebase.init";
 import { showError } from "../../../components/Alert";
 import TopLoadingBar from "../../../components/TopLoadingBar";
 
-
 initilizationAuthentication();
 
 const auth = getAuth();
@@ -102,6 +101,11 @@ const NavBar = () => {
               to="/home"
               className="btn btn-ghost text-xl font-black tracking-tighter uppercase"
             >
+              <img
+                className={`h-10 w-auto object-contain ${theme === "dark" ? "brightness-0 invert" : ""}`}
+                src="/penguin_logo.png"
+                alt="Penguin Gear"
+              />
               Penguin
             </Link>
           </div>
