@@ -8,6 +8,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout, setUserInfo } from "../../../store/slice/user";
 import initilizationAuthentication from "../../../firebase/firebase.init";
 import { showError } from "../../../components/Alert";
+import TopLoadingBar from "../../../components/TopLoadingBar";
+
 
 initilizationAuthentication();
 
@@ -71,7 +73,9 @@ const NavBar = () => {
   return (
     <>
       <div className="sticky top-0 z-50 px-4 py-2">
-        <div className="navbar bg-base-100 rounded-2xl border border-base-200 shadow-sm">
+        <div className="navbar bg-base-100 rounded-2xl border border-base-200 shadow-sm relative overflow-hidden">
+          <TopLoadingBar />
+
           <div className="navbar-start">
             <div className="lg:hidden">
               <button

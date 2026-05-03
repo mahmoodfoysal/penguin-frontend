@@ -52,7 +52,6 @@ const Blogs = () => {
           category: b.category || "Design",
         }));
 
-        // Sort newest first
         const sorted = formatted.sort(
           (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
         );
@@ -129,7 +128,7 @@ const Blogs = () => {
     <>
       <PageHeader pageInfo={pageInfo}></PageHeader>
       {isLoading ? (
-        <ComponentLoader></ComponentLoader>
+        <SkeletonCard></SkeletonCard>
       ) : (
         <div className="bg-base-100 min-h-screen font-body selection:bg-accent selection:text-white">
           <div className="container mx-auto px-6 py-8 flex flex-col lg:flex-row gap-12">
@@ -221,12 +220,11 @@ const Blogs = () => {
               </div>
 
               {!paginatedBlogs?.length ? (
-                // <DataNotFound
-                //   backMsg="Lost"
-                //   mainMsg1="Articles"
-                //   mainMsg2="Void"
-                // ></DataNotFound>
-                <SkeletonCard></SkeletonCard>
+                <DataNotFound
+                  backMsg="Lost"
+                  mainMsg1="Articles"
+                  mainMsg2="Void"
+                ></DataNotFound>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12">
                   {paginatedBlogs.map((blog, index) => (
