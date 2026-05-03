@@ -24,40 +24,6 @@ const auth = getAuth();
 
 function App() {
   const dispatch = useDispatch();
-  // get currently signin user
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-  //     const sessionUser = sessionStorage.getItem("penguin-shopping");
-
-  //     const userData = {
-  //       name: firebaseUser.displayName,
-  //       email: firebaseUser.email,
-  //       photo: firebaseUser.photoURL,
-  //       token: firebaseUser.accessToken,
-  //     };
-
-  //     dispatch(setUserInfo(userData));
-
-  //     // ✅ 1. If session exists → use it
-  //     if (sessionUser) {
-  //       dispatch(setUser(JSON.parse(sessionUser)));
-  //       return;
-  //     }
-
-  //     // ✅ 2. Otherwise use Firebase user
-  //     if (firebaseUser) {
-  //       const token = {
-  //         token: firebaseUser.accessToken,
-  //       };
-  //       dispatch(setUser(token));
-  //     } else {
-  //       dispatch(logout());
-  //     }
-
-  //   });
-
-  //   return () => unsubscribe();
-  // }, [dispatch]);
 
   useEffect(() => {
     dispatch(setIsPageLoading(true));
