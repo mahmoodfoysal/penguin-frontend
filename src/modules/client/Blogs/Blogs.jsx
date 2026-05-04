@@ -9,6 +9,7 @@ import ComponentLoader from "../../../pages/ComponentLoader";
 import DataNotFound from "../../../pages/DataNotFound";
 import Swal from "sweetalert2";
 import SkeletonCard from "../../../pages/SkeletonCard";
+import { Navigate } from "react-router";
 
 const Blogs = () => {
   const pageInfo = [
@@ -224,6 +225,8 @@ const Blogs = () => {
                   backMsg="Lost"
                   mainMsg1="Articles"
                   mainMsg2="Void"
+                  handleBtn={handleClearFilter}
+                  btnTxt="Clear All Filters"
                 ></DataNotFound>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12">
