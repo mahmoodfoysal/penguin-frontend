@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import ProductCard from "../../../../components/ProductCard";
 import SkeletonCard from "../../../../pages/SkeletonCard";
 
-const FeaturedItems = ({ productsData }) => {
+const FeaturedItems = ({ productsData, isLoading }) => {
   const products = productsData?.products;
   const [featuredProducts, setFeaturedProducts] = useState([]);
 
@@ -65,7 +65,7 @@ const FeaturedItems = ({ productsData }) => {
         </Link>
       </div>
 
-      {!products?.list_data?.length ? (
+      {isLoading ? (
         <SkeletonCard></SkeletonCard>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">

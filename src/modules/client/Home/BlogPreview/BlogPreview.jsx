@@ -3,15 +3,12 @@ import BlogCard from "../../../../components/BlogCard";
 import { Link } from "react-router-dom";
 import SkeletonCard from "../../../../pages/SkeletonCard";
 
-const BlogPreview = ({ blogsData }) => {
+const BlogPreview = ({ blogsData, isLoading }) => {
   const [blogs, setBlogs] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!blogsData?.blogs) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 0);
+      setTimeout(() => {}, 0);
       return;
     }
 
@@ -34,7 +31,6 @@ const BlogPreview = ({ blogsData }) => {
 
     setTimeout(() => {
       setBlogs(selected);
-      setIsLoading(false);
     }, 0);
   }, [blogsData]);
 

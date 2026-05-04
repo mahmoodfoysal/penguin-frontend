@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import ProductCard from "../../../../components/ProductCard";
 import SkeletonCard from "../../../../pages/SkeletonCard";
 
-const NewestArrivalProducts = ({ productsData }) => {
+const NewestArrivalProducts = ({ productsData, isLoading }) => {
   const products = productsData?.products;
 
   const [newestSellerList, setNewestProduct] = useState([]);
@@ -52,7 +52,7 @@ const NewestArrivalProducts = ({ productsData }) => {
         </Link>
       </div>
 
-      {!products?.list_data ? (
+      {isLoading ? (
         <SkeletonCard></SkeletonCard>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">

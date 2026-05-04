@@ -17,9 +17,10 @@ import Newsletter from "../Newsletter/Newsletter";
 const Home = () => {
   const [products, setProducts] = useState(null);
   const [blogs, setBlogs] = useState(null);
-  // const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchData = async () => {
       try {
         const [productsRes, blogsRes] = await Promise.all([
@@ -35,7 +36,7 @@ const Home = () => {
       } catch (error) {
         console.error("Failed to fetch home data", error);
       } finally {
-        // setIsLoading(false);
+        setIsLoading(false);
       }
     };
     fetchData();
@@ -46,14 +47,14 @@ const Home = () => {
       <TopBanner />
       <Features />
       <HomeCategory />
-      <FeaturedItems productsData={products} />
-      <NewArriveProducts productsData={products} />
+      <FeaturedItems productsData={products} isLoading={isLoading} />
+      <NewArriveProducts productsData={products} isLoading={isLoading} />
       <Services />
-      <BestSeller productsData={products} />
+      <BestSeller productsData={products} isLoading={isLoading} />
       <HowItWorks />
       <Statistics productsData={products} />
       <Testimonials />
-      <BlogPreview blogsData={blogs} />
+      <BlogPreview blogsData={blogs} isLoading={isLoading} />
       <FAQ />
       <Newsletter />
     </div>

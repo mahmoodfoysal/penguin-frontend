@@ -4,7 +4,7 @@ import ProductCard from "../../../../components/ProductCard";
 import axios from "axios";
 import SkeletonCard from "../../../../pages/SkeletonCard";
 
-const BestSeller = ({ productsData }) => {
+const BestSeller = ({ productsData, isLoading }) => {
   const products = productsData?.products;
 
   const [bestSellerProd, setBestSellerProd] = useState([]);
@@ -68,7 +68,7 @@ const BestSeller = ({ productsData }) => {
         </Link>
       </div>
 
-      {!products?.list_data ? (
+      {isLoading ? (
         <SkeletonCard></SkeletonCard>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
