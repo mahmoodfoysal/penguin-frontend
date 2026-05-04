@@ -8,15 +8,10 @@ import {
 } from "../../../store/slice/cartSlice.js";
 import PageHeader from "../../../components/PageHeader";
 import { Link, useNavigate } from "react-router";
-import EmptyScreen from "../../../pages/EmptyScreen.jsx";
 import { showSuccess, showConfirmation } from "../../../components/Alert";
-
+import DataNotFound from "../../../pages/DataNotFound.jsx";
 
 const Cart = () => {
-  const emptyInfo = {
-    first: "Cart is",
-    second: "empty",
-  };
   const pageInfo = [
     {
       parent_route_name: "",
@@ -55,7 +50,6 @@ const Cart = () => {
     }
   };
 
-
   const handleClearCart = async () => {
     const confirmation = await showConfirmation(
       "Clear Cart",
@@ -66,7 +60,6 @@ const Cart = () => {
       showSuccess("Success", "Cart cleared successfully");
     }
   };
-
 
   const handleCheckOut = () => {
     navigate("/checkout");
@@ -94,7 +87,13 @@ const Cart = () => {
     <div>
       <PageHeader pageInfo={pageInfo}></PageHeader>
       {!cartList.length ? (
-        <EmptyScreen text={emptyInfo}></EmptyScreen>
+        <DataNotFound
+          backMsg="Empty"
+          mainMsg1="Your cart"
+          mainMsg2="is empty"
+          handleBtn={() => navigate("/products")}
+          btnTxt="Back to Products"
+        ></DataNotFound>
       ) : (
         <div className="bg-base-100 min-h-screen font-body selection:bg-accent selection:text-white">
           {/* 2. MAIN CONTENT */}

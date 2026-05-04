@@ -6,7 +6,7 @@ import { clearCart } from "../../../store/slice/cartSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import Swal from "sweetalert2";
-import ComponentLoader from "../../../pages/ComponentLoader";
+import DataNotFound from "../../../pages/DataNotFound";
 
 const Checkout = () => {
   const dispatch = useDispatch();
@@ -319,7 +319,13 @@ const Checkout = () => {
   return (
     <>
       {!cartList.length ? (
-        <ComponentLoader></ComponentLoader>
+        <DataNotFound
+          backMsg="Lost"
+          mainMsg1="Your cart is"
+          mainMsg2="Empty"
+          handleClearFilter={() => navigate("/cart")}
+          btnTxt="Back to Cart"
+        ></DataNotFound>
       ) : (
         <div className="bg-base-100 min-h-screen font-body selection:bg-accent selection:text-white">
           {/* 1. COMPACT HEADER */}

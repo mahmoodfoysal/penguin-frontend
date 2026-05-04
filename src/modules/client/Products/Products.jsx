@@ -33,12 +33,16 @@ const Products = () => {
     const fetchProductsData = async () => {
       try {
         const [productsRes, categoriesRes] = await Promise.all([
-          axios.get(`${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`),
-          axios.get(`${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/client/get-all-categories`)
+          axios.get(
+            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
+          ),
+          axios.get(
+            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/client/get-all-categories`,
+          ),
         ]);
         setData({
           products: productsRes.data,
-          categories: categoriesRes.data
+          categories: categoriesRes.data,
         });
       } catch (error) {
         console.error("Failed to fetch products data", error);
@@ -486,6 +490,8 @@ const Products = () => {
                   backMsg="Lost"
                   mainMsg1="Data"
                   mainMsg2="Void"
+                  handleBtn={handleClearFilter}
+                  btnTxt="Clear Filter"
                 ></DataNotFound>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-12">

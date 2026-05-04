@@ -1,6 +1,6 @@
 import React from "react";
 
-const DataNotFound = ({ backMsg, mainMsg1, mainMsg2 }) => {
+const DataNotFound = ({ backMsg, mainMsg1, mainMsg2, handleBtn, btnTxt }) => {
   return (
     <>
       <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-base-100 relative overflow-hidden">
@@ -38,6 +38,11 @@ const DataNotFound = ({ backMsg, mainMsg1, mainMsg2 }) => {
           </h2>
 
           <div className="h-1.5 w-24 bg-base-content mx-auto mt-4 mb-8"></div>
+          {handleBtn && (
+            <button onClick={handleBtn} className="btn btn-accent text-white">
+              {btnTxt}
+            </button>
+          )}
         </div>
       </div>
     </>

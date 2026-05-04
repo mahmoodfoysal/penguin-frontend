@@ -53,7 +53,7 @@ const DashboardHome = () => {
     const revenueByDate = {};
     orderList.forEach((order) => {
       const date = order.order_date;
-      const amount = parseFloat(order.total_amount) || 0;
+      const amount = parseFloat(order.sub_total * 0.1) || 0;
       revenueByDate[date] = (revenueByDate[date] || 0) + amount;
     });
 
@@ -313,8 +313,7 @@ const DashboardHome = () => {
             total: {
               show: true,
               label: "Gross Sales",
-              formatter: () =>
-                `$${processedData?.totalSales.toFixed(2)}`,
+              formatter: () => `$${processedData?.totalSales.toFixed(2)}`,
               style: { fontWeight: "900", color: textColor },
             },
             value: {
