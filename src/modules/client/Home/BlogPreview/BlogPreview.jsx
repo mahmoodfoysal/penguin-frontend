@@ -53,15 +53,15 @@ const BlogPreview = ({ blogsData, isLoading }) => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        {isLoading ? (
-          <SkeletonCard></SkeletonCard>
-        ) : (
-          blogs.map((blog, index) => (
+      {isLoading ? (
+        <SkeletonCard></SkeletonCard>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {blogs.map((blog, index) => (
             <BlogCard blog={blog} key={index}></BlogCard>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
 
       <div className="mt-12 text-center md:hidden">
         <Link

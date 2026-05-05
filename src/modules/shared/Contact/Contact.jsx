@@ -77,6 +77,7 @@ const Contact = () => {
         template_id: templateId,
         user_id: publicKey,
         template_params: {
+          platform: "Penguin Gear Ltd.",
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
