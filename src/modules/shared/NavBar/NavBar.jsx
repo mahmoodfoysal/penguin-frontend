@@ -99,14 +99,14 @@ const NavBar = () => {
             </div>
             <Link
               to="/home"
-              className="btn btn-ghost text-xl font-black tracking-tighter uppercase"
+              className="md:btn md:btn-ghost text-xl font-black tracking-tighter uppercase"
             >
               <img
                 className={`h-10 w-auto object-contain ${theme === "dark" ? "brightness-0 invert" : ""}`}
                 src="/penguin_logo.png"
                 alt="Penguin Gear"
               />
-              Penguin
+              <span class="hidden md:inline-block">Penguin</span>
             </Link>
           </div>
           <div className="navbar-center hidden lg:flex nav-link-style">
@@ -419,7 +419,10 @@ const NavBar = () => {
                       {openMenus.orders && (
                         <div className="bg-base-content/5 ml-4 border-l border-accent/30 py-2">
                           {[
-                            { name: "Pending", path: "/dashboard/pending-order" },
+                            {
+                              name: "Pending",
+                              path: "/dashboard/pending-order",
+                            },
                             { name: "Warehouse", path: "/dashboard/warehouse" },
                             { name: "Shipping", path: "/dashboard/shipping" },
                             { name: "Delivery", path: "/dashboard/delivery" },
