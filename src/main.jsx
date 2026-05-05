@@ -39,19 +39,11 @@ import BlogDetails from "./modules/client/BlogDetails/BlogDetails.jsx";
 import OrderHistory from "./modules/client/OrderHistory/OrderHistory.jsx";
 import CustomerProfile from "./modules/client/CustomerProfile/CustomerProfile.jsx";
 import CouponDiscount from "./modules/dashboard/CouponDiscount/CouponDiscount.jsx";
-import axios from "axios";
 import Review from "./modules/dashboard/Review/Review.jsx";
+import SuperAdmin from "./Routes/SuperAdmin.jsx";
+import Admin from "./Routes/Admin.jsx";
+import Manager from "./Routes/Manager.jsx";
 
-// Set global axios timeout for Render's free tier cold starts
-axios.defaults.timeout = 60000;
-
-// ------------------
-// ✅ Utility: fetch with timeout (FIXED)
-// ------------------
-
-// ------------------
-// ✅ Router
-// ------------------
 const router = createBrowserRouter([
   {
     path: "/",
@@ -135,56 +127,110 @@ const router = createBrowserRouter([
 
           {
             path: "make-admin",
-            element: <MakeAdmin />,
+            element: (
+              <SuperAdmin>
+                <MakeAdmin />,
+              </SuperAdmin>
+            ),
           },
 
           {
             path: "parent-category",
-            element: <ParentCategory />,
+            element: (
+              <Admin>
+                <ParentCategory />,
+              </Admin>
+            ),
           },
           {
             path: "sub-category",
-            element: <SubCategory />,
+            element: (
+              <Admin>
+                <SubCategory />,
+              </Admin>
+            ),
           },
           {
             path: "add-product",
-            element: <AddProduct />,
+            element: (
+              <Admin>
+                <AddProduct />,
+              </Admin>
+            ),
           },
           {
             path: "add-blogs",
-            element: <AddBlogs />,
+            element: (
+              <Admin>
+                <AddBlogs />,
+              </Admin>
+            ),
           },
-          {
-            path: "pending-order",
-            element: <PendingOrder />,
-          },
-          {
-            path: "warehouse",
-            element: <PendingOrder />,
-          },
-          {
-            path: "shipping",
-            element: <PendingOrder />,
-          },
-          {
-            path: "delivery",
-            element: <PendingOrder />,
-          },
-          {
-            path: "completed",
-            element: <PendingOrder />,
-          },
-          {
-            path: "rejected",
-            element: <PendingOrder />,
-          },
+
           {
             path: "coupon-discount",
-            element: <CouponDiscount />,
+            element: (
+              <Admin>
+                <CouponDiscount />,
+              </Admin>
+            ),
           },
           {
             path: "review",
-            element: <Review />,
+            element: (
+              <SuperAdmin>
+                <Review />,
+              </SuperAdmin>
+            ),
+          },
+
+          {
+            path: "pending-order",
+            element: (
+              <Manager>
+                <PendingOrder />,
+              </Manager>
+            ),
+          },
+          {
+            path: "warehouse",
+            element: (
+              <Manager>
+                <PendingOrder />,
+              </Manager>
+            ),
+          },
+          {
+            path: "shipping",
+            element: (
+              <Manager>
+                <PendingOrder />,
+              </Manager>
+            ),
+          },
+          {
+            path: "delivery",
+            element: (
+              <Manager>
+                <PendingOrder />,
+              </Manager>
+            ),
+          },
+          {
+            path: "completed",
+            element: (
+              <Manager>
+                <PendingOrder />,
+              </Manager>
+            ),
+          },
+          {
+            path: "rejected",
+            element: (
+              <Manager>
+                <PendingOrder />,
+              </Manager>
+            ),
           },
         ],
       },

@@ -47,7 +47,7 @@ const MakeAdmin = () => {
     },
     {
       role_id: 202,
-      role: "Modarator",
+      role: "Manager",
     },
   ];
 
