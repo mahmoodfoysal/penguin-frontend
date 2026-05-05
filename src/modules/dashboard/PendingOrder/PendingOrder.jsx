@@ -43,25 +43,6 @@ const STATUS_STEPS = [
 
 const PendingOrder = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
-  const [orders, setOrders] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-order-list`,
-        );
-        setOrders(res.data);
-        setOrderList(res.data?.list_data || []);
-      } catch (error) {
-        console.error("Failed to fetch orders", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchOrders();
-  }, []);
 
   const [orderList, setOrderList] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -71,6 +52,21 @@ const PendingOrder = () => {
   const itemsPerPage = 8;
 
   const location = useLocation();
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-order-list`,
+        );
+
+        setOrderList(res.data?.list_data || []);
+      } catch (error) {
+        console.error("Failed to fetch orders", error);
+      }
+    };
+    fetchOrders();
+  }, []);
 
   // Memoize config to prevent "Existing memoization could not be preserved" error
   const config = useMemo(() => {
@@ -203,7 +199,7 @@ const PendingOrder = () => {
 
         <div className="bg-base-100 border border-base-content/5 rounded-sm shadow-sm overflow-x-auto">
           <table className="w-full text-left border-collapse">
-            <thead className="hidden md:table-header-group bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black opacity-40">
+            <thead className="hidden md:table-header-group bg-base-200/50 font-heading text-[10px] tracking-widest font-black opacity-40">
               <tr className="text-left border-b border-base-content/10">
                 <th className="px-6 py-4">SL</th>
                 <th className="px-6 py-4">Name</th>
@@ -229,7 +225,7 @@ const PendingOrder = () => {
 
                     {/* 2. Name */}
                     <td className="px-6 py-4">
-                      <span className="text-xs font-bold uppercase tracking-tighter">
+                      <span className="text-xs font-bold tracking-tighter">
                         {item.full_name}
                       </span>
                     </td>
@@ -259,14 +255,14 @@ const PendingOrder = () => {
                     <td className="px-6 py-4">
                       <span className="text-xs font-bold">
                         {item.order_list?.length || 0}{" "}
-                        <span className="text-[9px] opacity-40">ITEMS</span>
+                        <span className="text-[9px] opacity-40">Items</span>
                       </span>
                     </td>
 
                     {/* 7. Total Bill */}
                     <td className="px-6 py-4">
                       <span className="text-xs font-black text-accent">
-                        ${item.total_amount}
+                        ${item.total_amount?.toFixed(2)}
                       </span>
                     </td>
 
@@ -278,7 +274,7 @@ const PendingOrder = () => {
                           onClick={() => handleDetails(item)}
                           className="group relative px-1.5 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-xl hover:from-indigo-600 hover:to-blue-700 hover:shadow-[0_10px_20px_rgba(79,_70,_229,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                         >
-                          <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
+                          <span className="flex items-center gap-2 text-[11px]  tracking-wider">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               className="w-4 h-4 transition-transform duration-300 group-hover:scale-110"
@@ -303,7 +299,7 @@ const PendingOrder = () => {
                             onClick={() => handleStatusUpdate(item, "R")}
                             className="group relative px-1.5 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-red-500 to-rose-600 rounded-xl hover:from-red-600 hover:to-rose-700 hover:shadow-[0_10px_20px_rgba(225,_29,_72,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                           >
-                            <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
+                            <span className="flex items-center gap-2 text-[11px] tracking-wider">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="w-4 h-4 transition-transform duration-300 group-hover:rotate-90"
@@ -329,7 +325,7 @@ const PendingOrder = () => {
                             onClick={() => handleStatusUpdate(item)}
                             className="group relative px-1.5 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl hover:from-emerald-600 hover:to-teal-700 hover:shadow-[0_10px_20px_rgba(16,_185,_129,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                           >
-                            <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
+                            <span className="flex items-center gap-2 text-[11px] tracking-wider">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="w-4 h-4 transition-transform duration-300 group-hover:scale-110"
@@ -402,7 +398,7 @@ const PendingOrder = () => {
                   Order <span className="text-accent">Details</span>
                 </h2>
                 <p className="text-[10px] font-black uppercase tracking-widest opacity-30 mt-2">
-                  ORDER ID: {selectedOrder._id}
+                  ORDER ID: {selectedOrder.order_id}
                 </p>
               </div>
               {/* Scrollable Body */}
@@ -446,7 +442,7 @@ const PendingOrder = () => {
 
                           {/* Status Label */}
                           <span
-                            className={`font-black uppercase tracking-tighter transition-colors duration-300
+                            className={`font-black tracking-tighter transition-colors duration-300
             ${isCurrent ? "text-accent" : "opacity-40"} 
             text-[10px] sm:text-xs`}
                           >
@@ -465,21 +461,21 @@ const PendingOrder = () => {
                   </p>
                   <div className="grid grid-cols-1 gap-4">
                     <div>
-                      <label className="text-xs font-black uppercase opacity-30 block mb-1">
+                      <label className="text-xs font-black opacity-30 block mb-1">
                         Recipient
                       </label>
-                      <p className="text-sm font-bold uppercase tracking-tight">
+                      <p className="text-sm font-bold tracking-tight">
                         {selectedOrder.full_name}
                       </p>
                     </div>
                     <div>
-                      <label className="text-xs font-black uppercase opacity-30 block mb-1">
+                      <label className="text-xs font-black  opacity-30 block mb-1">
                         Email
                       </label>
                       <p className="text-sm font-bold">{selectedOrder.email}</p>
                     </div>
                     <div>
-                      <label className="text-xs font-black uppercase opacity-30 block mb-1">
+                      <label className="text-xs font-black opacity-30 block mb-1">
                         Address
                       </label>
                       <p className="text-sm font-medium opacity-70 leading-relaxed">
@@ -490,7 +486,7 @@ const PendingOrder = () => {
                     </div>
                     <div className="flex gap-10">
                       <div>
-                        <label className="text-xs font-black uppercase opacity-30 block mb-1">
+                        <label className="text-xs font-black opacity-30 block mb-1">
                           Contact
                         </label>
                         <p className="text-sm font-mono font-bold">
@@ -498,10 +494,10 @@ const PendingOrder = () => {
                         </p>
                       </div>
                       <div>
-                        <label className="text-xs font-black uppercase opacity-30 block mb-1">
+                        <label className="text-xs font-black  opacity-30 block mb-1">
                           Payment Mode
                         </label>
-                        <p className="text-sm font-bold uppercase tracking-tighter">
+                        <p className="text-sm font-bold  tracking-tighter">
                           {selectedOrder.payment_method === 1
                             ? "Cash"
                             : selectedOrder.payment_method === 2
@@ -522,15 +518,15 @@ const PendingOrder = () => {
                     {selectedOrder.payment_method === 2 && (
                       <div className="flex gap-10">
                         <div>
-                          <label className="text-[8px] font-black uppercase opacity-30 block">
+                          <label className="text-[8px] font-black  opacity-30 block">
                             bKash No
                           </label>
-                          <p className="text-[10px] font-bold uppercase">
+                          <p className="text-[10px] font-bold ">
                             {selectedOrder.bkash_no}
                           </p>
                         </div>
                         <div>
-                          <label className="text-[8px] font-black uppercase opacity-30 block">
+                          <label className="text-[8px] font-black opacity-30 block">
                             Trns ID
                           </label>
                           <p className="text-[10px] font-bold uppercase">
@@ -542,26 +538,26 @@ const PendingOrder = () => {
                     {selectedOrder.payment_method === 3 && (
                       <div className="grid grid-cols-3 gap-4">
                         <div>
-                          <label className="text-[8px] font-black uppercase opacity-30 block">
+                          <label className="text-[8px] font-black opacity-30 block">
                             Card No
                           </label>
-                          <p className="text-[10px] font-bold uppercase">
+                          <p className="text-[10px] font-bold">
                             {selectedOrder.card_no}
                           </p>
                         </div>
                         <div>
-                          <label className="text-[8px] font-black uppercase opacity-30 block">
+                          <label className="text-[8px] font-black opacity-30 block">
                             Exp Date
                           </label>
-                          <p className="text-[10px] font-bold uppercase">
+                          <p className="text-[10px] font-bold ">
                             {selectedOrder.card_exp_date}
                           </p>
                         </div>
                         <div>
-                          <label className="text-[8px] font-black uppercase opacity-30 block">
+                          <label className="text-[8px] font-black  opacity-30 block">
                             CVC
                           </label>
-                          <p className="text-[10px] font-bold uppercase">
+                          <p className="text-[10px] font-bold">
                             {selectedOrder.card_cvc}
                           </p>
                         </div>
@@ -605,12 +601,12 @@ const PendingOrder = () => {
 
                           {/* Specific Fields */}
                           <div className="flex-grow">
-                            <h4 className="font-heading font-black text-sm uppercase tracking-tight text-accent mb-3 text-center sm:text-left">
+                            <h4 className="font-heading font-black text-sm tracking-tight text-accent mb-3 text-center sm:text-left">
                               {item.prod_name}
                             </h4>
                             <div className="grid grid-cols-2 gap-4">
                               <div>
-                                <label className="text-[10px] font-black uppercase opacity-30 block">
+                                <label className="text-[10px] font-black opacity-30 block">
                                   Product ID
                                 </label>
                                 <p className="text-xs font-bold">
@@ -618,7 +614,7 @@ const PendingOrder = () => {
                                 </p>
                               </div>
                               <div>
-                                <label className="text-[10px] font-black uppercase opacity-30 block">
+                                <label className="text-[10px] font-black opacity-30 block">
                                   Price
                                 </label>
                                 <p className="text-xs font-bold">
@@ -626,16 +622,16 @@ const PendingOrder = () => {
                                 </p>
                               </div>
                               <div>
-                                <label className="text-[10px] font-black uppercase opacity-30 block">
+                                <label className="text-[10px] font-black opacity-30 block">
                                   Discount
                                 </label>
-                                <p className="text-xs font-bold text-green-600">
+                                <p className="text-xs font-bold ">
                                   {item.discount_price || 0}{" "}
                                   {item.currency_name}
                                 </p>
                               </div>
                               <div>
-                                <label className="text-[10px] font-black uppercase opacity-30 block">
+                                <label className="text-[10px] font-black  opacity-30 block">
                                   Quantity
                                 </label>
                                 <p className="text-xs font-bold">
@@ -643,7 +639,7 @@ const PendingOrder = () => {
                                 </p>
                               </div>
                               <div>
-                                <label className="text-[10px] font-black uppercase opacity-30 block">
+                                <label className="text-[10px] font-black  opacity-30 block">
                                   In Stock
                                 </label>
                                 <p className="text-xs font-bold">
@@ -651,11 +647,17 @@ const PendingOrder = () => {
                                 </p>
                               </div>
                               <div>
-                                <label className="text-[10px] font-black uppercase opacity-30 block text-accent">
+                                <label className="text-[10px] font-black  opacity-30 block">
                                   Subtotal
                                 </label>
-                                <p className="text-xs font-black text-accent">
-                                  ${(item.price * item.quantity).toFixed(2)}
+                                <p className="text-xs font-bold">
+                                  $
+                                  {(
+                                    (item.discount_price
+                                      ? item.discount_price
+                                      : item.price) * item.quantity
+                                  ).toFixed(2)}{" "}
+                                  {item.currency_name}
                                 </p>
                               </div>
                             </div>
@@ -669,25 +671,26 @@ const PendingOrder = () => {
               {/* Close Scrollable Body */}
               {/* TOTALS */}
               <div className="mt-auto pt-8 border-t-2 border-base-content space-y-2">
-                <div className="flex justify-between text-xs font-black uppercase opacity-40">
+                <div className="flex justify-between text-xs font-black opacity-40">
                   <span>Subtotal</span>
                   <span>
-                    ${selectedOrder.sub_total} {selectedOrder.currency_name}
+                    ${selectedOrder.sub_total?.toFixed(2)}{" "}
+                    {selectedOrder.currency_name}
                   </span>
                 </div>
-                <div className="flex justify-between text-xs font-black uppercase opacity-40">
+                <div className="flex justify-between text-xs font-black  opacity-40">
                   <span>VAT Total</span>
-                  <span>${selectedOrder.vat_total}</span>
+                  <span>${selectedOrder.vat_total?.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-xs font-black uppercase opacity-40">
+                <div className="flex justify-between text-xs font-black opacity-40">
                   <span>Shipping Cost</span>
-                  <span>${selectedOrder.shipping}</span>
+                  <span>${selectedOrder.shipping?.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-xs font-black uppercase opacity-40 pt-3 border-t border-base-content/5 mt-3">
+                <div className="flex justify-between text-xs font-black  opacity-40 pt-3 border-t border-base-content/5 mt-3">
                   <span>Created At</span>
                   <span>{formatDateDDMMYYYYHHmm(selectedOrder.createdAt)}</span>
                 </div>
-                <div className="flex justify-between text-xs font-black uppercase opacity-40">
+                <div className="flex justify-between text-xs font-black opacity-40">
                   <span>Order Date</span>
                   <span>
                     {formatDateDDMMYYYYHHmm(selectedOrder.order_date)}
@@ -697,7 +700,7 @@ const PendingOrder = () => {
                 <div className="flex justify-between font-heading font-black text-2xl uppercase mt-4">
                   <span>Total Amount</span>
                   <span className="text-accent">
-                    ${selectedOrder.total_amount}
+                    ${selectedOrder.total_amount?.toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -707,7 +710,7 @@ const PendingOrder = () => {
                   onClick={() => setIsDetailsOpen(false)}
                   className="group relative px-3 py-1.5 font-bold text-base-100 transition-all duration-300 bg-base-content from-red-500 to-rose-600 rounded-xl hover:from-red-600 hover:to-rose-700 hover:shadow-[0_10px_20px_rgba(225,_29,_72,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                 >
-                  Close Panel
+                  <span className="text-[12px]">Close Panel</span>
                 </button>
 
                 {config.next && (
@@ -715,7 +718,7 @@ const PendingOrder = () => {
                     onClick={() => handleStatusUpdate(selectedOrder, "R")}
                     className="group relative px-3 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-red-500 to-rose-600 rounded-xl hover:from-red-600 hover:to-rose-700 hover:shadow-[0_10px_20px_rgba(225,_29,_72,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                   >
-                    <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
+                    <span className="flex items-center gap-2 text-[12px]  tracking-wider">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="w-4 h-4 transition-transform duration-300 group-hover:rotate-90"
@@ -740,7 +743,7 @@ const PendingOrder = () => {
                     onClick={() => handleStatusUpdate(selectedOrder)}
                     className="group relative px-3 py-1.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl hover:from-emerald-600 hover:to-teal-700 hover:shadow-[0_10px_20px_rgba(16,_185,_129,_0.4)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                   >
-                    <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider">
+                    <span className="flex items-center gap-2 text-[12px]  tracking-wider">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="w-4 h-4 transition-transform duration-300 group-hover:scale-110"

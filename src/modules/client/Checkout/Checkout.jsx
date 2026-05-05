@@ -22,11 +22,11 @@ const Checkout = () => {
     countryInfo: { id: 1, country_name: "Bangladesh" },
     zipCode: null,
     address: null,
-    bkashNo: null,
-    transectionNo: null,
-    cardNumber: null,
-    cardExpDate: null,
-    cvcNo: null,
+    bkash_no: null,
+    bkash_trns_no: null,
+    card_no: null,
+    cvc_no: null,
+    card_exp_date: null,
   });
   const [paymentMethod, setPaymentMethod] = useState(1);
   const [isInvalid, setIsInvalid] = useState(false);
@@ -164,7 +164,7 @@ const Checkout = () => {
 
       if (paymentMethod === 2) {
         // Bkash payment validation
-        if (!formData.bkashNo || !formData.transectionNo) {
+        if (!formData.bkash_no || !formData.bkash_trns_no) {
           setIsInvalid(true);
           Swal.fire({
             icon: "error",
@@ -176,7 +176,7 @@ const Checkout = () => {
         }
       } else if (paymentMethod === 3) {
         // Card payment validation
-        if (!formData.cardNumber || !formData.cardExpDate || !formData.cvcNo) {
+        if (!formData.card_no || !formData.card_exp_date || !formData.cvc_no) {
           setIsInvalid(true);
           Swal.fire({
             icon: "error",
@@ -198,7 +198,7 @@ const Checkout = () => {
           stock: item.stock,
           currency_name: item.currency_name,
           currency_id: item.currency_id,
-          discount_price: item.discount_price,
+          discount_price: item.discount,
           quantity: item.quantity,
         };
       });
@@ -214,22 +214,22 @@ const Checkout = () => {
 
         zip: Number(formData.zipCode),
         address: formData.address,
-        card_no: paymentMethod === 3 ? Number(formData.cardNumber) : null,
+        card_no: paymentMethod === 3 ? Number(formData.card_no) : null,
         card_exp_date: paymentMethod === 3 ? formData.card_exp_date : null,
-        card_cvc: paymentMethod === 3 ? Number(formData.cvcNo) : null,
+        card_cvc: paymentMethod === 3 ? Number(formData.cvc_no) : null,
         sub_total: subTotal,
         vat_total: totalVat,
         shipping: shippingCost,
         total_amount: totalAmount,
         discount: discount || 0,
         order_status: "P",
-        order_date: formData.cardExpDate,
         payment_method: paymentMethod,
-        bkash_no: paymentMethod === 2 ? formData.bkashNo : null,
-        bkash_trns_no: paymentMethod === 2 ? formData.transectionNo : null,
+        bkash_no: paymentMethod === 2 ? Number(formData.bkash_no) : null,
+        bkash_trns_no: paymentMethod === 2 ? formData.bkash_trns_no : null,
         cash_on_delivery: paymentMethod === 1 ? "Cash on delivery" : null,
         order_list: orderList,
       };
+      console.log("data", data);
       if (confirmation.isConfirmed) {
         setIsOrderLoading(true);
         try {
@@ -269,11 +269,11 @@ const Checkout = () => {
               countryInfo: { id: 1, country_name: "Bangladesh" },
               zipCode: null,
               address: null,
-              bkashNo: null,
-              transectionNo: null,
-              cardNumber: null,
-              cardExpDate: null,
-              cvcNo: null,
+              bkash_no: null,
+              bkash_trns_no: null,
+              card_no: null,
+              cvc_no: null,
+              card_exp_date: null,
             });
           }
         } finally {
@@ -295,7 +295,10 @@ const Checkout = () => {
   const { subTotal, totalVat, totalAmount, shippingCost, discount } =
     useMemo(() => {
       const subTotal = cartList.reduce(
-        (acc, item) => acc + (item.price || 0) * (item.quantity || 0),
+        (acc, item) =>
+          acc +
+          (item.discount ? item.discount : item.price || 0) *
+            (item.quantity || 0),
         0,
       );
 
@@ -336,7 +339,7 @@ const Checkout = () => {
               </h1>
               <Link
                 onClick={() => navigate(-1)}
-                className="text-[10px] font-black uppercase tracking-widest border-b border-base-content pb-1 hover:text-accent hover:border-accent transition-all"
+                className="text-[10px] font-black tracking-widest border-b border-base-content pb-1 hover:text-accent hover:border-accent transition-all"
               >
                 Back to Bag
               </Link>
@@ -363,7 +366,7 @@ const Checkout = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black tracking-widest opacity-50">
                         Full Name <span className="text-red-600">*</span>
                       </label>
                       <input
@@ -379,7 +382,7 @@ const Checkout = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black tracking-widest opacity-50">
                         Email <span className="text-red-600">*</span>
                       </label>
                       <input
@@ -395,7 +398,7 @@ const Checkout = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black tracking-widest opacity-50">
                         Phone No <span className="text-red-600">*</span>
                       </label>
                       <input
@@ -413,7 +416,7 @@ const Checkout = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black tracking-widest opacity-50">
                         Country <span className="text-red-600">*</span>
                       </label>
                       <select
@@ -429,7 +432,7 @@ const Checkout = () => {
                           (!formData.countryInfo || !formData.countryInfo.id)
                             ? "border-red-600"
                             : "border-base-content/10"
-                        } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent uppercase tracking-wider cursor-pointer`}
+                        } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent tracking-wider cursor-pointer`}
                       >
                         {countryList.map((item) => (
                           <option
@@ -444,7 +447,7 @@ const Checkout = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black tracking-widest opacity-50">
                         City
                       </label>
                       <input
@@ -462,7 +465,7 @@ const Checkout = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black tracking-widest opacity-50">
                         Zip Code
                       </label>
                       <input
@@ -481,7 +484,7 @@ const Checkout = () => {
                     </div>
 
                     <div className="md:col-span-2 space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black tracking-widest opacity-50">
                         Street Address
                       </label>
                       <input
@@ -546,7 +549,7 @@ const Checkout = () => {
                       {paymentMethod === 1 && (
                         <div className="border-2 border-base-content p-6 relative">
                           <div className="flex justify-between items-center mb-6">
-                            <span className="font-heading font-black text-xs uppercase tracking-widest">
+                            <span className="font-heading font-black text-xs tracking-widest">
                               When product arrive you must pay first then get
                               the product
                             </span>
@@ -572,21 +575,21 @@ const Checkout = () => {
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                              <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                              <label className="text-[10px] font-black tracking-widest opacity-50">
                                 Account No{" "}
                                 <span className="text-red-600">*</span>
                               </label>
                               <input
                                 type="number"
-                                value={formData.bkashNo}
+                                value={formData.bkash_no}
                                 onChange={(e) =>
                                   setFormData({
                                     ...formData,
-                                    bkashNo: e.target.value,
+                                    bkash_no: e.target.value,
                                   })
                                 }
                                 className={`w-full border-b-2 ${
-                                  isInvalid && !formData.bkashNo
+                                  isInvalid && !formData.bkash_no
                                     ? "border-red-600"
                                     : "border-base-content/10"
                                 } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
@@ -594,21 +597,21 @@ const Checkout = () => {
                               />
                             </div>
                             <div className="space-y-2">
-                              <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                              <label className="text-[10px] font-black tracking-widest opacity-50">
                                 Transection No{" "}
                                 <span className="text-red-600">*</span>
                               </label>
                               <input
                                 type="text"
-                                value={formData.transectionNo}
+                                value={formData.bkash_trns_no}
                                 onChange={(e) =>
                                   setFormData({
                                     ...formData,
-                                    transectionNo: e.target.value,
+                                    bkash_trns_no: e.target.value,
                                   })
                                 }
                                 className={`w-full border-b-2 ${
-                                  isInvalid && !formData.transectionNo
+                                  isInvalid && !formData.bkash_trns_no
                                     ? "border-red-600"
                                     : "border-base-content/10"
                                 } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
@@ -634,16 +637,16 @@ const Checkout = () => {
                           </div>
                           <div className="space-y-6">
                             <input
-                              value={formData.cardNumber}
+                              value={formData.card_no}
                               onChange={(e) =>
                                 setFormData({
                                   ...formData,
-                                  cardNumber: e.target.value,
+                                  card_no: e.target.value,
                                 })
                               }
                               type="number"
                               className={`w-full border-b-2 ${
-                                isInvalid && !formData.cardNumber
+                                isInvalid && !formData.card_no
                                   ? "border-red-600"
                                   : "border-base-content/10"
                               } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
@@ -651,32 +654,32 @@ const Checkout = () => {
                             />
                             <div className="grid grid-cols-2 gap-6">
                               <input
-                                value={formData.cardExpDate}
+                                value={formData.card_exp_date}
                                 onChange={(e) =>
                                   setFormData({
                                     ...formData,
-                                    cardExpDate: e.target.value,
+                                    card_exp_date: e.target.value,
                                   })
                                 }
                                 type="date"
                                 className={`w-full border-b-2 ${
-                                  isInvalid && !formData.cardExpDate
+                                  isInvalid && !formData.card_exp_date
                                     ? "border-red-600"
                                     : "border-base-content/10"
                                 } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
                                 placeholder="MM / YY"
                               />
                               <input
-                                value={formData.cvcNo}
+                                value={formData.cvc_no}
                                 onChange={(e) =>
                                   setFormData({
                                     ...formData,
-                                    cvcNo: e.target.value,
+                                    cvc_no: e.target.value,
                                   })
                                 }
                                 type="number"
                                 className={`w-full border-b-2 ${
-                                  isInvalid && !formData.cvcNo
+                                  isInvalid && !formData.cvc_no
                                     ? "border-red-600"
                                     : "border-base-content/10"
                                 } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
@@ -710,15 +713,24 @@ const Checkout = () => {
                           />
                         </div>
                         <div className="flex-grow">
-                          <h4 className="font-heading font-bold text-xs uppercase leading-tight">
+                          <h4 className="font-heading font-bold text-xs leading-tight">
                             {item.prod_name}
                           </h4>
-                          <p className="text-[10px] uppercase opacity-50 font-bold mt-1">
+                          <p className="text-[10px] opacity-50 font-bold mt-1">
                             Size: std / Qty: {item.quantity}
                           </p>
-                          <p className="font-heading font-black text-xs mt-2">
-                            ${item.price}
-                          </p>
+                          {item.discount > 0 ? (
+                            <p className="font-heading font-black text-xs mt-2">
+                              <span className="">${item.discount || 0}</span>{" "}
+                              <span className="line-through text-[12px] text-red-500">
+                                ${item.price}
+                              </span>
+                            </p>
+                          ) : (
+                            <p className="font-heading font-black text-xs mt-2">
+                              <span className="">${item.price}</span>
+                            </p>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -726,30 +738,30 @@ const Checkout = () => {
 
                   {/* Totals */}
                   <div className="border-t border-base-content/10 pt-6 space-y-3">
-                    <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
-                      <span>Subtotal</span>
+                    <div className="flex justify-between text-xs font-bold tracking-widest opacity-60">
+                      <span>Sub Total</span>
                       <span>${Number(subTotal).toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
-                      <span>Shipping</span>
+                    <div className="flex justify-between text-xs font-bold tracking-widest opacity-60">
+                      <span>Shipping Fee</span>
                       {cartList?.length > 5 ? (
                         <span className="text-green-600">FREE</span>
                       ) : (
                         <span>${Number(shippingCost).toFixed(2)}</span>
                       )}
                     </div>
-                    <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
+                    <div className="flex justify-between text-xs font-bold tracking-widest opacity-60">
                       <span>VAT</span>
                       <span>${Number(totalVat).toFixed(2)}</span>
                     </div>
                     {discount > 0 && (
-                      <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
+                      <div className="flex justify-between text-xs font-bold tracking-widest opacity-60">
                         <span>Discount</span>
                         <span>${Number(discount).toFixed(2)}</span>
                       </div>
                     )}
 
-                    <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-base-content/5 gap-4">
+                    <div className="flex justify-between font-heading font-black text-lg  tracking-tighter pt-4 border-t border-base-content/5 gap-4">
                       <input
                         value={couponCode}
                         disabled={
@@ -771,7 +783,7 @@ const Checkout = () => {
                             couponInfo?.is_valid == true &&
                             !couponInfo?.appliedAt)
                         }
-                        className="w-full bg-base-content text-base-100 py-2 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-1 rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-base-content text-base-100 py-2 font-heading font-black  tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-1 rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {isCouponLoading ? (
                           <span className="loading loading-spinner loading-sm"></span>
@@ -798,7 +810,7 @@ const Checkout = () => {
                   <button
                     onClick={handleOrderSubmit}
                     disabled={isOrderLoading}
-                    className="w-full bg-base-content text-base-100 py-4 mt-10 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-3 rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-base-content text-base-100 py-4 mt-10 font-heading font-black tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-3 rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isOrderLoading ? (
                       <span className="loading loading-spinner loading-sm"></span>

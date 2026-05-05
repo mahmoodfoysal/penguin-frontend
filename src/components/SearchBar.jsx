@@ -10,7 +10,7 @@ const SearchBar = ({ searchProductList, setSearchProductList }) => {
       <div className="relative group">
         <input
           type="text"
-          placeholder="KEYWORDS..."
+          placeholder="Keywords..."
           className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-xs font-bold transition-colors bg-transparent uppercase tracking-tighter pr-10"
           value={searchProductList}
           onChange={(e) => setSearchProductList(e.target.value)}

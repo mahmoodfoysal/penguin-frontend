@@ -79,6 +79,7 @@ const ProductDetails = () => {
     par_cat_id,
     sub_cat_id,
     prod_id,
+    discount,
   } = details;
 
   const cartList = useSelector((state) => state.cart.cart);
@@ -325,26 +326,34 @@ const ProductDetails = () => {
                       value={averageRating}
                       readOnly
                     />
-                    <span className="text-[10px] font-bold opacity-50 uppercase tracking-widest">
+                    <span className="text-[10px] font-bold opacity-50 tracking-widest">
                       ({commentList?.length || 0} Reviews)
                     </span>
                   </div>
 
-                  <h1 className="font-heading text-5xl md:text-7xl font-black uppercase tracking-tighter  leading-none mb-4">
+                  <h1 className="font-heading text-5xl md:text-7xl font-black tracking-tighter  leading-none mb-4">
                     {prod_name}
                   </h1>
 
-                  <div className="flex items-baseline gap-4 mb-8">
-                    <span className="font-heading font-bold text-4xl text-base-content">
-                      ${price}
-                    </span>
-                    <span className="font-heading font-bold text-xl line-through opacity-30">
-                      $310.00**
-                    </span>
-                  </div>
+                  {discount ? (
+                    <div className="flex items-baseline gap-4 mb-8">
+                      <span className="font-heading font-bold text-4xl text-base-content">
+                        ${discount}
+                      </span>
+                      <span className="font-heading font-bold text-xl line-through opacity-30">
+                        ${price}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-baseline gap-4 mb-8">
+                      <span className="font-heading font-bold text-4xl text-base-content">
+                        ${price}
+                      </span>
+                    </div>
+                  )}
 
                   <div className="mb-8 border-l-4 border-accent pl-6">
-                    <h3 className="font-heading font-black uppercase tracking-widest text-xs mb-2">
+                    <h3 className="font-heading font-black  tracking-widest text-xs mb-2">
                       Description
                     </h3>
                     <p className="text-sm leading-relaxed opacity-70">
@@ -354,7 +363,7 @@ const ProductDetails = () => {
 
                   {/* QUANTITY SELECTOR (NEW) */}
                   <div className="mb-6 space-y-3 flex flex-col items-center ">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
+                    <label className="text-[10px] font-black  tracking-[0.2em] opacity-40">
                       Select Quantity
                     </label>
                     <div className="flex items-center border-2 border-base-content w-full md:w-48 h-12 overflow-hidden group">
@@ -419,7 +428,7 @@ const ProductDetails = () => {
                       onClick={() =>
                         handleAddToCart(data.product_details.details_data)
                       }
-                      className="bg-base-content text-base-100 py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-accent transition-colors rounded-md cursor-pointer"
+                      className="bg-base-content text-base-100 py-4 font-heading font-black  tracking-[0.2em] text-sm hover:bg-accent transition-colors rounded-md cursor-pointer"
                     >
                       Add to Cart
                     </button>
@@ -427,7 +436,7 @@ const ProductDetails = () => {
                       onClick={() =>
                         handleBuyNow(data.product_details.details_data)
                       }
-                      className="bg-accent text-base-100 py-4 font-heading font-black uppercase tracking-[0.2em] text-sm hover:bg-base-content transition-colors rounded-md cursor-pointer"
+                      className="bg-accent text-base-100 py-4 font-heading font-black  tracking-[0.2em] text-sm hover:bg-base-content transition-colors rounded-md cursor-pointer"
                     >
                       Buy Now
                     </button>
@@ -448,7 +457,7 @@ const ProductDetails = () => {
                     <div className="space-y-4">
                       <div className="flex-grow space-y-2">
                         <div className="space-y-2">
-                          <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                          <label className="text-[10px] font-black  tracking-widest opacity-50">
                             Full Name<span className="text-red-600">*</span>
                           </label>
                           <input
@@ -461,7 +470,7 @@ const ProductDetails = () => {
                         </div>
 
                         <div className="space-y-2">
-                          <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                          <label className="text-[10px] font-black  tracking-widest opacity-50">
                             Email <span className="text-red-600">*</span>
                           </label>
                           <input
@@ -554,7 +563,7 @@ const ProductDetails = () => {
                             {/* 2. CONTENT AREA */}
                             <div className="flex-grow min-w-0">
                               <div className="flex justify-between items-center mb-1 gap-2">
-                                <h4 className="font-heading font-black uppercase text-sm truncate">
+                                <h4 className="font-heading font-black  text-sm truncate">
                                   {item?.full_name}
                                 </h4>
                                 <Rating
@@ -566,7 +575,7 @@ const ProductDetails = () => {
                               <p className="text-sm opacity-70 leading-relaxed  break-words whitespace-pre-wrap">
                                 {item.comment}
                               </p>
-                              <div className="mt-4 text-[10px] font-bold opacity-30 uppercase tracking-widest">
+                              <div className="mt-4 text-[10px] font-bold opacity-30  tracking-widest">
                                 {timeCount(item.createdAt)}
                               </div>
                             </div>

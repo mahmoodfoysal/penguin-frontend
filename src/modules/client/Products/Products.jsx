@@ -430,7 +430,7 @@ const Products = () => {
                 <div className="flex items-center justify-between mb-6">
                   <h4
                     onClick={handleClearFilter}
-                    className="text-sm cursor-pointer hover:text-accent flex items-center gap-2 font-bold uppercase tracking-widest text-accent"
+                    className="text-sm cursor-pointer hover:text-accent flex items-center gap-2 font-bold tracking-widest text-accent"
                   >
                     Clear All Filter
                     <svg
@@ -464,7 +464,7 @@ const Products = () => {
                 </div>
               )}
 
-              <div className="flex justify-between items-center mb-8 pb-4 border-b border-base-content/5 font-heading text-[10px] font-bold uppercase tracking-[0.2em]">
+              <div className="flex justify-between items-center mb-8 pb-4 border-b border-base-content/5 font-heading text-[10px] font-bold tracking-[0.2em]">
                 <span>
                   Showing {(currentPage - 1) * itemsPerPage + 1}-
                   {Math.min(

@@ -27,10 +27,10 @@ const DirectCheckOut = () => {
     countryInfo: { id: 1, country_name: "Bangladesh" },
     zipCode: null,
     address: null,
-    bkashNo: null,
-    transectionNo: null,
-    cardNumber: null,
-    cardExpDate: null,
+    bkash_no: null,
+    bkash_trns_no: null,
+    card_no: null,
+    card_exp_date: null,
     cvcNo: null,
   });
   const [paymentMethod, setPaymentMethod] = useState(1);
@@ -66,7 +66,9 @@ const DirectCheckOut = () => {
   ];
 
   const subTotal =
-    (Number(orderProduct?.price) || 0) * (Number(orderProduct?.quantity) || 0);
+    (Number(
+      orderProduct?.discount ? orderProduct?.discount : orderProduct?.price,
+    ) || 0) * (Number(orderProduct?.quantity) || 0);
   const totalVat = 0.6;
   const shippingCost = 2;
 
@@ -129,18 +131,17 @@ const DirectCheckOut = () => {
         return;
       }
 
-
       // 2. Payment Specific Validation
       if (paymentMethod === 2) {
         // Bkash payment validation
-        if (!formData.bkashNo || !formData.transectionNo) {
+        if (!formData.bkash_no || !formData.bkash_trns_no) {
           setIsInvalid(true);
           showError("Invalid or missing required fields", "Check input field");
           return;
         }
       } else if (paymentMethod === 3) {
         // Card payment validation
-        if (!formData.cardNumber || !formData.cardExpDate || !formData.cvcNo) {
+        if (!formData.card_no || !formData.card_exp_date || !formData.cvcNo) {
           setIsInvalid(true);
           showError("Invalid or missing required fields", "Check input field");
           return;
@@ -166,8 +167,8 @@ const DirectCheckOut = () => {
 
         zip: Number(formData.zipCode),
         address: formData.address,
-        card_no: paymentMethod === 3 ? Number(formData.cardNumber) : null,
-        card_exp_date: paymentMethod === 3 ? formData.cardExpDate : null,
+        card_no: paymentMethod === 3 ? Number(formData.card_no) : null,
+        card_exp_date: paymentMethod === 3 ? formData.card_exp_date : null,
         card_cvc: paymentMethod === 3 ? Number(formData.cvcNo) : null,
         sub_total: subTotal,
         vat_total: totalVat,
@@ -177,8 +178,8 @@ const DirectCheckOut = () => {
         order_date: new Date().toISOString(),
 
         payment_method: paymentMethod,
-        bkash_no: paymentMethod === 2 ? formData.bkashNo : null,
-        bkash_trns_no: paymentMethod === 2 ? formData.transectionNo : null,
+        bkash_no: paymentMethod === 2 ? Number(formData.bkash_no) : null,
+        bkash_trns_no: paymentMethod === 2 ? formData.bkash_trns_no : null,
         cash_on_delivery: paymentMethod === 1 ? "Cash on delivery" : null,
         order_list: [
           {
@@ -190,7 +191,7 @@ const DirectCheckOut = () => {
             stock: orderProduct.stock,
             currency_name: orderProduct.currency_name,
             currency_id: orderProduct.currency_id,
-            discount_price: orderProduct.discount_price,
+            discount_price: orderProduct.discount,
             quantity: orderProduct.quantity,
           },
         ],
@@ -268,7 +269,7 @@ const DirectCheckOut = () => {
               </h1>
               <Link
                 onClick={() => navigate(-1)}
-                className="text-[10px] font-black uppercase tracking-widest border-b border-base-content pb-1 hover:text-accent hover:border-accent transition-all"
+                className="text-[10px] font-black  tracking-widest border-b border-base-content pb-1 hover:text-accent hover:border-accent transition-all"
               >
                 Back to Bag
               </Link>
@@ -295,7 +296,7 @@ const DirectCheckOut = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black tracking-widest opacity-50">
                         Full Name <span className="text-red-600">*</span>
                       </label>
                       <input
@@ -311,7 +312,7 @@ const DirectCheckOut = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black tracking-widest opacity-50">
                         Email <span className="text-red-600">*</span>
                       </label>
                       <input
@@ -327,7 +328,7 @@ const DirectCheckOut = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black  tracking-widest opacity-50">
                         Phone No <span className="text-red-600">*</span>
                       </label>
                       <input
@@ -345,7 +346,7 @@ const DirectCheckOut = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black tracking-widest opacity-50">
                         Country <span className="text-red-600">*</span>
                       </label>
                       <select
@@ -361,10 +362,14 @@ const DirectCheckOut = () => {
                           (!formData.countryInfo || !formData.countryInfo.id)
                             ? "border-red-600"
                             : "border-base-content/10"
-                        } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent uppercase tracking-wider cursor-pointer`}
+                        } focus:border-accent outline-none py-3 text-sm font-bold bg-transparent tracking-wider cursor-pointer`}
                       >
                         {countryList.map((item) => (
-                          <option key={item.id} value={JSON.stringify(item)}>
+                          <option
+                            key={item.id}
+                            value={JSON.stringify(item)}
+                            className="bg-base-100 text-base-content"
+                          >
                             {item.country_name}
                           </option>
                         ))}
@@ -372,7 +377,7 @@ const DirectCheckOut = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black tracking-widest opacity-50">
                         City
                       </label>
                       <input
@@ -390,7 +395,7 @@ const DirectCheckOut = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black tracking-widest opacity-50">
                         Zip Code
                       </label>
                       <input
@@ -409,7 +414,7 @@ const DirectCheckOut = () => {
                     </div>
 
                     <div className="md:col-span-2 space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black  tracking-widest opacity-50">
                         Street Address
                       </label>
                       <input
@@ -474,7 +479,7 @@ const DirectCheckOut = () => {
                       {paymentMethod === 1 && (
                         <div className="border-2 border-base-content p-6 relative">
                           <div className="flex justify-between items-center mb-6">
-                            <span className="font-heading font-black text-xs uppercase tracking-widest">
+                            <span className="font-heading font-black text-xs tracking-widest">
                               When product arrive you must pay first then get
                               the product
                             </span>
@@ -500,21 +505,21 @@ const DirectCheckOut = () => {
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                              <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                              <label className="text-[10px] font-black tracking-widest opacity-50">
                                 Account No{" "}
                                 <span className="text-red-600">*</span>
                               </label>
                               <input
                                 type="number"
-                                value={formData.bkashNo}
+                                value={formData.bkash_no}
                                 onChange={(e) =>
                                   setFormData({
                                     ...formData,
-                                    bkashNo: e.target.value,
+                                    bkash_no: e.target.value,
                                   })
                                 }
                                 className={`w-full border-b-2 ${
-                                  isInvalid && !formData.bkashNo
+                                  isInvalid && !formData.bkash_no
                                     ? "border-red-600"
                                     : "border-base-content/10"
                                 } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
@@ -522,21 +527,21 @@ const DirectCheckOut = () => {
                               />
                             </div>
                             <div className="space-y-2">
-                              <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                              <label className="text-[10px] font-black  tracking-widest opacity-50">
                                 Transection No{" "}
                                 <span className="text-red-600">*</span>
                               </label>
                               <input
                                 type="text"
-                                value={formData.transectionNo}
+                                value={formData.bkash_trns_no}
                                 onChange={(e) =>
                                   setFormData({
                                     ...formData,
-                                    transectionNo: e.target.value,
+                                    bkash_trns_no: e.target.value,
                                   })
                                 }
                                 className={`w-full border-b-2 ${
-                                  isInvalid && !formData.transectionNo
+                                  isInvalid && !formData.bkash_trns_no
                                     ? "border-red-600"
                                     : "border-base-content/10"
                                 } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
@@ -562,16 +567,16 @@ const DirectCheckOut = () => {
                           </div>
                           <div className="space-y-6">
                             <input
-                              value={formData.cardNumber}
+                              value={formData.card_no}
                               onChange={(e) =>
                                 setFormData({
                                   ...formData,
-                                  cardNumber: e.target.value,
+                                  card_no: e.target.value,
                                 })
                               }
                               type="number"
                               className={`w-full border-b-2 ${
-                                isInvalid && !formData.cardNumber
+                                isInvalid && !formData.card_no
                                   ? "border-red-600"
                                   : "border-base-content/10"
                               } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
@@ -579,16 +584,16 @@ const DirectCheckOut = () => {
                             />
                             <div className="grid grid-cols-2 gap-6">
                               <input
-                                value={formData.cardExpDate}
+                                value={formData.card_exp_date}
                                 onChange={(e) =>
                                   setFormData({
                                     ...formData,
-                                    cardExpDate: e.target.value,
+                                    card_exp_date: e.target.value,
                                   })
                                 }
                                 type="date"
                                 className={`w-full border-b-2 ${
-                                  isInvalid && !formData.cardExpDate
+                                  isInvalid && !formData.card_exp_date
                                     ? "border-red-600"
                                     : "border-base-content/10"
                                 } focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent`}
@@ -643,19 +648,37 @@ const DirectCheckOut = () => {
                       {/* 2. PRODUCT DETAILS */}
                       <div className="flex-grow">
                         <div className="flex justify-between items-start">
-                          <h4 className="font-heading font-black text-[10px] md:text-xs uppercase leading-tight tracking-tight max-w-[120px]">
+                          <h4 className="font-heading font-black text-[10px] md:text-xs  leading-tight tracking-tight max-w-[120px]">
                             {orderProduct.prod_name}
                           </h4>
                           {/* Price - Bold/ to stand out */}
-                          <p className="font-heading font-black text-xs  text-accent">
-                            $
-                            {(
-                              orderProduct.price * orderProduct.quantity
-                            ).toFixed(2)}
-                          </p>
+
+                          {orderProduct.discount ? (
+                            <p className="font-heading font-black text-xs  text-accent">
+                              <span className="text-red-600 line-through">
+                                $
+                                {(
+                                  orderProduct.price * orderProduct.quantity
+                                ).toFixed(2)}
+                              </span>{" "}
+                              <span>
+                                $
+                                {(
+                                  orderProduct.discount * orderProduct.quantity
+                                ).toFixed(2)}
+                              </span>
+                            </p>
+                          ) : (
+                            <p className="font-heading font-black text-xs  text-accent">
+                              $
+                              {(
+                                orderProduct.price * orderProduct.quantity
+                              ).toFixed(2)}
+                            </p>
+                          )}
                         </div>
 
-                        <p className="text-[9px] uppercase opacity-40 font-bold mt-1 tracking-widest">
+                        <p className="text-[9px]  opacity-40 font-bold mt-1 tracking-widest">
                           Size: std
                         </p>
 
@@ -728,27 +751,27 @@ const DirectCheckOut = () => {
 
                   {/* Totals */}
                   <div className="border-t border-base-content/10 pt-6 space-y-3">
-                    <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
+                    <div className="flex justify-between text-xs font-bold tracking-widest opacity-60">
                       <span>Subtotal</span>
                       <span>${Number(subTotal).toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
+                    <div className="flex justify-between text-xs font-bold  tracking-widest opacity-60">
                       <span>Shipping</span>
                       <span>${Number(shippingCost).toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between text-xs font-bold uppercase tracking-widest opacity-60">
+                    <div className="flex justify-between text-xs font-bold  tracking-widest opacity-60">
                       <span>VAT</span>
                       <span>${Number(totalVat).toFixed(2)}</span>
                     </div>
 
                     {discount > 0 && (
-                      <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-green-600">
+                      <div className="flex justify-between text-xs font-bold  tracking-widest text-green-600">
                         <span>Discount</span>
                         <span>-${Number(discount).toFixed(2)}</span>
                       </div>
                     )}
 
-                    <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-base-content/5 gap-4">
+                    <div className="flex justify-between font-heading font-black text-lg  tracking-tighter pt-4 border-t border-base-content/5 gap-4">
                       <input
                         value={couponCode}
                         disabled={
@@ -767,7 +790,7 @@ const DirectCheckOut = () => {
                           (couponInfo?.is_valid == true &&
                             !couponInfo?.appliedAt)
                         }
-                        className="w-full bg-base-content text-base-100 py-2 font-heading font-black uppercase tracking-[0.3em] text-[10px] hover:bg-accent transition-all group flex items-center justify-center gap-1 rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-base-content text-base-100 py-2 font-heading font-black tracking-[0.3em] text-[10px] hover:bg-accent transition-all group flex items-center justify-center gap-1 rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {isCouponLoading ? (
                           <span className="loading loading-spinner loading-xs"></span>
@@ -794,7 +817,7 @@ const DirectCheckOut = () => {
                   <button
                     onClick={handleOrderSubmit}
                     disabled={isOrderLoading}
-                    className="w-full bg-base-content text-base-100 py-4 mt-10 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-3 rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-base-content text-base-100 py-4 mt-10 font-heading font-black  tracking-[0.3em] text-sm hover:bg-accent transition-all group flex items-center justify-center gap-3 rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isOrderLoading ? (
                       <span className="loading loading-spinner loading-sm"></span>

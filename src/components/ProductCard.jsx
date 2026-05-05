@@ -37,12 +37,12 @@ const ProductCard = ({ product, isBestSeller }) => {
             {/* Badges */}
             <div className="absolute top-5 left-5 z-20 flex flex-col gap-2">
               {isNew && (
-                <span className="bg-accent text-white text-[10px] font-black px-3 py-1 uppercase tracking-widest rounded-full shadow-lg w-max">
+                <span className="bg-accent text-white text-[10px] font-black px-3 py-1  tracking-widest rounded-full shadow-lg w-max">
                   New
                 </span>
               )}
               {isBestSeller && (
-                <span className="bg-warning text-warning-content text-[10px] font-black px-3 py-1 uppercase tracking-widest rounded-full shadow-lg w-max">
+                <span className="bg-warning text-warning-content text-[10px] font-black px-3 py-1 tracking-widest rounded-full shadow-lg w-max">
                   Best Seller
                 </span>
               )}
@@ -79,9 +79,18 @@ const ProductCard = ({ product, isBestSeller }) => {
               <span className="text-base-content/60 text-sm font-medium tracking-wide ">
                 {product.prod_brand}
               </span>
-              <span className="font-extrabold text-xl text-primary">
-                ${product.price}
-              </span>
+              {product?.discount ? (
+                <span className="font-extrabold text-xl text-primary">
+                  <span className="line-through text-red-600 mr-2">
+                    ${product.price?.toFixed(2)}
+                  </span>
+                  <span>${product?.discount?.toFixed(2)}</span>
+                </span>
+              ) : (
+                <span className="font-extrabold text-xl text-primary">
+                  ${product.price?.toFixed(2)}
+                </span>
+              )}
             </div>
             <div className="flex justify-between items-center mt-2">
               <span className="text-base-content/60 text-sm font-medium tracking-wide ">
@@ -92,7 +101,7 @@ const ProductCard = ({ product, isBestSeller }) => {
                   e.stopPropagation();
                   handleProductDetails(product);
                 }}
-                className="text-[11px] font-black uppercase tracking-widest text-base-content/60 hover:text-accent transition-all duration-300 cursor-pointer"
+                className="text-[11px] font-black tracking-widest text-base-content/60 hover:text-accent transition-all duration-300 cursor-pointer"
               >
                 View Details →
               </button>

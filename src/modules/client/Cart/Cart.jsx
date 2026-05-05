@@ -66,7 +66,11 @@ const Cart = () => {
   };
 
   const subTotal = useMemo(() => {
-    return cartList.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    return cartList.reduce(
+      (acc, item) =>
+        acc + (item?.discount ? item.discount : item.price) * item.quantity,
+      0,
+    );
   }, [cartList]);
 
   const shippingCost = useMemo(() => {
@@ -107,6 +111,7 @@ const Cart = () => {
                       <tr className="border-b-2 border-base-content font-heading text-xs uppercase tracking-[0.2em] font-black">
                         <th className="pb-4">Product</th>
                         <th className="pb-4 text-center">Price</th>
+                        <th className="pb-4 text-center">Discount</th>
                         <th className="pb-4 text-center">Quantity</th>
                         <th className="pb-4 text-center">Total</th>
                         <th className="pb-4 text-right">Action</th>
@@ -126,10 +131,10 @@ const Cart = () => {
                                 />
                               </div>
                               <div>
-                                <h4 className="font-heading font-black uppercase text-sm leading-tight">
+                                <h4 className="font-heading font-black  text-sm leading-tight">
                                   {item.prod_name}
                                 </h4>
-                                <p className="text-[10px] uppercase font-bold opacity-40 mt-1 tracking-widest">
+                                <p className="text-[10px]  font-bold opacity-40 mt-1 tracking-widest">
                                   Size: Standard
                                 </p>
                               </div>
@@ -139,6 +144,9 @@ const Cart = () => {
                           {/* Price */}
                           <td className="py-8 text-center font-heading font-bold text-sm">
                             ${item.price}
+                          </td>
+                          <td className="py-8 text-center font-heading font-bold text-sm">
+                            ${item.discount || 0}
                           </td>
 
                           {/* Quantity Selector */}
@@ -164,7 +172,10 @@ const Cart = () => {
 
                           {/* Total */}
                           <td className="py-8 text-center font-heading font-black text-accent text-sm">
-                            ${item.price * item.quantity}
+                            $
+                            {item.discount
+                              ? item.discount * item.quantity
+                              : item.price * item.quantity}
                           </td>
 
                           {/* Action */}
@@ -186,13 +197,13 @@ const Cart = () => {
                 <div className="mt-8 flex justify-between items-center">
                   <Link
                     onClick={() => navigate(-1)}
-                    className="text-xs font-heading font-black uppercase tracking-widest border-b-2 border-base-content pb-1 hover:border-accent hover:text-accent transition-all"
+                    className="text-xs font-heading font-black tracking-widest border-b-2 border-base-content pb-1 hover:border-accent hover:text-accent transition-all"
                   >
                     ← Continue Shopping
                   </Link>
                   <button
                     onClick={() => handleClearCart()}
-                    className="text-xs font-heading font-black uppercase tracking-widest opacity-40 hover:opacity-100 cursor-pointer"
+                    className="text-xs font-heading font-black tracking-widest opacity-40 hover:opacity-100 cursor-pointer"
                   >
                     Clear Cart
                   </button>
@@ -207,24 +218,24 @@ const Cart = () => {
                   </h2>
 
                   <div className="space-y-4">
-                    <div className="flex justify-between font-heading font-bold text-xs uppercase tracking-widest">
+                    <div className="flex justify-between font-heading font-bold text-xs  tracking-widest">
                       <span className="opacity-50">Sub Total</span>
                       <span>${Number(subTotal).toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between font-heading font-bold text-xs uppercase tracking-widest">
-                      <span className="opacity-50">Shipping</span>
+                    <div className="flex justify-between font-heading font-bold text-xs  tracking-widest">
+                      <span className="opacity-50">Shipping Fee</span>
                       {cartList?.length > 5 ? (
                         <span className="text-green-600">FREE</span>
                       ) : (
                         <span>${Number(shippingCost).toFixed(2)}</span>
                       )}
                     </div>
-                    <div className="flex justify-between font-heading font-bold text-xs uppercase tracking-widest">
+                    <div className="flex justify-between font-heading font-bold text-xs  tracking-widest">
                       <span className="opacity-50">Estimated Tax</span>
                       <span>${Number(totalVat).toFixed(2)}</span>
                     </div>
 
-                    <div className="flex justify-between font-heading font-black text-lg uppercase tracking-tighter pt-4 border-t border-base-content/5 mt-4">
+                    <div className="flex justify-between font-heading font-black text-lg  tracking-tighter pt-4 border-t border-base-content/5 mt-4">
                       <span>Total Amount</span>
                       <span className="text-accent text-2xl">
                         ${Number(subTotal + shippingCost + totalVat).toFixed(2)}
@@ -235,7 +246,7 @@ const Cart = () => {
                   <div className="mt-10 space-y-3">
                     <button
                       onClick={handleCheckOut}
-                      className="w-full bg-base-content text-base-100 py-4 font-heading font-black uppercase tracking-[0.3em] text-sm hover:bg-accent transition-colors shadow-xl shadow-black/10 rounded-md cursor-pointer"
+                      className="w-full bg-base-content text-base-100 py-4 font-heading font-black tracking-[0.3em] text-sm hover:bg-accent transition-colors shadow-xl shadow-black/10 rounded-md cursor-pointer"
                     >
                       Proceed To Checkout
                     </button>
