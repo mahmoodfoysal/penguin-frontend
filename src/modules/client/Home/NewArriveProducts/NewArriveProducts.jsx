@@ -18,7 +18,8 @@ const NewestArrivalProducts = ({ productsData, isLoading }) => {
         (item) => new Date(item.createdAt).getTime() >= thirtyDaysAgo,
       );
 
-      return newest.slice(0, 4);
+      // Shuffle and take 4
+      return newest.sort(() => Math.random() - 0.5).slice(0, 4);
     };
 
     setTimeout(() => {

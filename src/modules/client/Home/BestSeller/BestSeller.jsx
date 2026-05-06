@@ -37,7 +37,9 @@ const BestSeller = ({ productsData, isLoading }) => {
           return averageRating >= 4;
         });
 
-        setBestSellerProd(bestSellers.slice(0, 4));
+        setBestSellerProd(
+          bestSellers.sort(() => Math.random() - 0.5).slice(0, 4),
+        );
       } catch (error) {
         console.error("Failed to fetch reviews for best sellers", error);
       }
