@@ -9,6 +9,7 @@ import {
 } from "../../../components/Alert";
 
 import Pagination from "../../../components/Pagination";
+import ComponentLoader from "../../../pages/ComponentLoader";
 
 const AddProduct = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
@@ -406,7 +407,7 @@ const AddProduct = () => {
         </div>
 
         <div className="mb-8 relative max-w-full md:max-w-md">
-          <label className="text-[10px] font-black uppercase tracking-widest opacity-50 block mb-2">
+          <label className="text-[10px] font-black tracking-widest opacity-50 block mb-2">
             Search Products
           </label>
           <div className="relative flex items-center">
@@ -425,7 +426,7 @@ const AddProduct = () => {
 
         <div className="bg-base-100 border border-base-content/5 rounded-sm shadow-sm overflow-x-auto">
           <table className="w-full text-left border-collapse">
-            <thead className="hidden md:table-header-group bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black opacity-40">
+            <thead className="hidden md:table-header-group bg-base-200/50 font-heading text-[10px] tracking-widest font-black opacity-40">
               <tr>
                 <th className="px-6 py-4">SL</th>
                 <th className="px-6 py-4">Image</th>
@@ -443,9 +444,9 @@ const AddProduct = () => {
                 <tr>
                   <td
                     colSpan="9"
-                    className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest"
+                    className="px-8 py-12 text-center text-[10px] font-black uppercase tracking-widest"
                   >
-                    Loading...
+                    <ComponentLoader />
                   </td>
                 </tr>
               ) : paginatedproductList?.length > 0 ? (
@@ -606,7 +607,7 @@ const AddProduct = () => {
 
               <div className="flex-grow space-y-10 overflow-y-auto pr-2 custom-scrollbar">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  <label className="text-[10px] font-black tracking-widest opacity-50">
                     Product Name <span className="text-red-600">*</span>
                   </label>
                   <input
@@ -625,7 +626,7 @@ const AddProduct = () => {
                 </div>
 
                 <div className="space-y-2 ">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  <label className="text-[10px] font-black tracking-widest opacity-50">
                     Product Image <span className="text-red-600">*</span>
                   </label>
                   <input
@@ -647,7 +648,7 @@ const AddProduct = () => {
                 <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-8 w-full">
                   {/* Product ID */}
                   <div className="space-y-2 w-[calc(50%-8px)]">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Product ID <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -667,7 +668,7 @@ const AddProduct = () => {
 
                   {/* Status */}
                   <div className="space-y-2 w-[calc(50%-8px)]">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Status <span className="text-red-600">*</span>
                     </label>
                     <select
@@ -699,7 +700,7 @@ const AddProduct = () => {
                   {/* Parent Category */}
 
                   <div className="space-y-2 w-[calc(50%-8px)]">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Parent Category <span className="text-red-600">*</span>
                     </label>
                     <select
@@ -737,7 +738,7 @@ const AddProduct = () => {
                   {/* Sub Category */}
 
                   <div className="space-y-2 w-[calc(50%-8px)]">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Sub Category <span className="text-red-600">*</span>
                     </label>
                     <select
@@ -781,7 +782,7 @@ const AddProduct = () => {
                   {/* image  */}
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Price <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -801,7 +802,7 @@ const AddProduct = () => {
 
                   {/* prod type  */}
                   <div className="space-y-2 w-[calc(50%-8px)]">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Product Type <span className="text-red-600">*</span>
                     </label>
                     <select
@@ -842,7 +843,7 @@ const AddProduct = () => {
 
                   {formData.prodTypeInfo?.prod_type === "D" && (
                     <div className="space-y-2 w-[calc(50%-8px)]">
-                      <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                      <label className="text-[10px] font-black tracking-widest opacity-50">
                         Discount Amount <span className="text-red-600">*</span>
                       </label>
                       <input
@@ -864,7 +865,7 @@ const AddProduct = () => {
                   {/* currency  */}
 
                   <div className="space-y-2 w-[calc(50%-8px)]">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Currency Type <span className="text-red-600">*</span>
                     </label>
                     <select
@@ -904,7 +905,7 @@ const AddProduct = () => {
                   </div>
 
                   <div className="space-y-2 w-[calc(50%-8px)] ">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Brand Name <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -922,7 +923,7 @@ const AddProduct = () => {
                     />
                   </div>
                   <div className="space-y-2 w-[calc(50%-8px)]">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Stock <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -941,7 +942,7 @@ const AddProduct = () => {
                   </div>
                 </div>
                 <div className="space-y-2  ">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  <label className="text-[10px] font-black tracking-widest opacity-50">
                     Description <span className="text-red-600">*</span>
                   </label>
                   <input
@@ -963,14 +964,14 @@ const AddProduct = () => {
               <div className="pt-8 border-t border-base-content/5 flex justify-center gap-4 mt-auto">
                 <button
                   onClick={handleCancel}
-                  className="px-8 border border-base-content/10 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-base-content hover:text-base-100 transition-all cursor-pointer rounded-sm"
+                  className="px-8 border border-base-content/10 py-3 font-heading font-black tracking-widest text-[10px] hover:bg-base-content hover:text-base-100 transition-all cursor-pointer rounded-sm"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={isLoadingButton}
-                  className="px-8 bg-base-content text-base-100 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-accent transition-colors cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
+                  className="px-8 bg-base-content text-base-100 py-3 font-heading font-black tracking-widest text-[10px] hover:bg-accent transition-colors cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
                 >
                   {isLoadingButton ? (
                     <span className="loading loading-spinner loading-xs"></span>

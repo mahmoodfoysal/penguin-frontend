@@ -141,10 +141,10 @@ const Testimonials = () => {
                         </div>
                       </div>
                       <div className="min-w-0">
-                        <h4 className="font-heading font-black uppercase text-base md:text-lg tracking-tighter truncate leading-none">
+                        <h4 className="font-heading font-black text-base md:text-lg tracking-tighter truncate leading-none">
                           {review.name}
                         </h4>
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mt-1 truncate">
+                        <p className="text-[10px] font-black tracking-[0.2em] text-primary mt-1 truncate">
                           {review.role}
                         </p>
                       </div>

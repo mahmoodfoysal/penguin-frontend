@@ -193,7 +193,7 @@ const MakeAdmin = () => {
         >
           {/* Email Input */}
           <div className="space-y-2 w-full">
-            <label className="text-sm font-black uppercase tracking-widest opacity-50">
+            <label className="text-sm font-black tracking-widest opacity-50">
               User Email
             </label>
             <input
@@ -209,7 +209,7 @@ const MakeAdmin = () => {
 
           {/* Role Dropdown */}
           <div className="space-y-2 w-full">
-            <label className="text-sm font-black uppercase tracking-widest opacity-50">
+            <label className="text-sm font-black tracking-widest opacity-50">
               Access Level
             </label>
             <select
@@ -223,7 +223,7 @@ const MakeAdmin = () => {
                       : JSON.parse(e.target.value),
                 })
               }
-              className={`w-full border-b-2 bg-transparent outline-none py-3 text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${isInvalid && !formData.roleInfo?.role_id ? "border-red-600" : "border-base-content/10 focus:border-accent"}`}
+              className={`w-full border-b-2 bg-transparent outline-none py-3 text-xs font-bold tracking-wider cursor-pointer transition-all ${isInvalid && !formData.roleInfo?.role_id ? "border-red-600" : "border-base-content/10 focus:border-accent"}`}
             >
               <option value="null" className="bg-base-100 text-base-content">
                 Select Role
@@ -243,14 +243,14 @@ const MakeAdmin = () => {
           {/* Submit Button */}
           <button
             onClick={handleSubmitAdmin}
-            className="w-full bg-base-content text-base-100 px-6 py-3 font-heading font-black uppercase tracking-[0.2em] text-xs hover:bg-accent transition-all shadow-lg shadow-black/5 cursor-pointer"
+            className="w-full bg-base-content text-base-100 px-6 py-3 font-heading font-black  tracking-[0.2em] text-xs hover:bg-accent transition-all shadow-lg shadow-black/5 cursor-pointer"
           >
             {isEdit ? "Update" : "Submit"}
           </button>
 
           <button
             onClick={handleCancel}
-            className="w-full bg-base-content text-base-100 px-6 py-3 font-heading font-black uppercase tracking-[0.2em] text-xs hover:bg-accent transition-all shadow-lg shadow-black/5 cursor-pointer"
+            className="w-full bg-base-content text-base-100 px-6 py-3 font-heading font-black  tracking-[0.2em] text-xs hover:bg-accent transition-all shadow-lg shadow-black/5 cursor-pointer"
           >
             {isEdit ? "Cancel" : "Clear"}
           </button>
@@ -271,7 +271,7 @@ const MakeAdmin = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black text-base-content/40">
+              <tr className="bg-base-200/50 font-heading text-[10px] tracking-widest font-black text-base-content/40">
                 <th className="px-3 py-3">SL</th>
                 <th className="px-3 py-3">Super Admin</th>
                 <th className="px-3 py-3">Email</th>
@@ -302,7 +302,7 @@ const MakeAdmin = () => {
                     <td className="px-3 py-3">{item.email}</td>
 
                     <td className="px-3 py-3">
-                      <span className="inline-block border border-base-content/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full group-hover:border-accent group-hover:text-accent transition-colors">
+                      <span className="inline-block border border-base-content/10 px-3 py-1 text-[9px] font-black tracking-widest rounded-full group-hover:border-accent group-hover:text-accent transition-colors">
                         {item.role}
                       </span>
                     </td>

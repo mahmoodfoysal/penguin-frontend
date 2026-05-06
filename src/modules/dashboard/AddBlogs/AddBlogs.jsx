@@ -9,10 +9,20 @@ import {
 } from "../../../components/Alert";
 
 import Pagination from "../../../components/Pagination";
+import ComponentLoader from "../../../pages/ComponentLoader";
 
 const AddBlogs = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [blogList, setBlogList] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isInvalid, setIsInvalid] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoadingButton, setIsLoadingButton] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+  const [isLoading, setIsLoading] = useState(true);
 
   const [formData, setFormData] = useState({
     _id: null,
@@ -28,28 +38,22 @@ const AddBlogs = () => {
   });
 
   const fetchBlogs = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-blog-list`,
       );
       setBlogList(response.data?.list_data || response.data || []);
+      setIsLoading(false);
     } catch (error) {
       console.error("Failed to fetch blogs", error);
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchBlogs();
   }, []);
-
-  const [isEdit, setIsEdit] = useState(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isInvalid, setIsInvalid] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoadingButton, setIsLoadingButton] = useState(false);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
 
   const filteredblogList = useMemo(() => {
     if (!searchQuery) return blogList;
@@ -251,7 +255,7 @@ const AddBlogs = () => {
         </div>
 
         <div className="mb-8 relative max-w-full md:max-w-md">
-          <label className="text-[10px] font-black uppercase tracking-widest opacity-50 block mb-2">
+          <label className="text-[10px] font-black tracking-widest opacity-50 block mb-2">
             Search Blogs
           </label>
           <div className="relative flex items-center">
@@ -281,7 +285,16 @@ const AddBlogs = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
-              {paginatedblogList?.length > 0 ? (
+              {isLoading ? (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="text-center py-12 px-8 text-[10px] font-black uppercase tracking-widest"
+                  >
+                    <ComponentLoader />
+                  </td>
+                </tr>
+              ) : paginatedblogList?.length > 0 ? (
                 paginatedblogList.map((item, index) => (
                   <tr
                     key={item._id}
@@ -401,7 +414,7 @@ const AddBlogs = () => {
 
               <div className="flex-grow space-y-10 overflow-y-auto pr-2 custom-scrollbar">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  <label className="text-[10px] font-black tracking-widest opacity-50">
                     Blog Title <span className="text-red-600">*</span>
                   </label>
                   <input
@@ -421,7 +434,7 @@ const AddBlogs = () => {
 
                 <div className="grid grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Category <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -440,7 +453,7 @@ const AddBlogs = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Date <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -460,7 +473,7 @@ const AddBlogs = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  <label className="text-[10px] font-black tracking-widest opacity-50">
                     Image URL <span className="text-red-600">*</span>
                   </label>
                   <input
@@ -479,7 +492,7 @@ const AddBlogs = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  <label className="text-[10px] font-black tracking-widest opacity-50">
                     Short Description <span className="text-red-600">*</span>
                   </label>
                   <input
@@ -500,7 +513,7 @@ const AddBlogs = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  <label className="text-[10px] font-black tracking-widest opacity-50">
                     Long Description <span className="text-red-600">*</span>
                   </label>
                   <textarea
@@ -522,7 +535,7 @@ const AddBlogs = () => {
 
                 <div className="grid grid-cols-2 gap-8 pt-6 border-t border-base-content/5">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Link Product ID
                     </label>
                     <input
@@ -539,7 +552,7 @@ const AddBlogs = () => {
 
                 <div className="grid grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Parent Category ID
                     </label>
                     <input
@@ -552,7 +565,7 @@ const AddBlogs = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Sub Category ID
                     </label>
                     <input
@@ -570,14 +583,14 @@ const AddBlogs = () => {
               <div className="pt-8 border-t border-base-content/5 flex justify-center gap-4 mt-auto">
                 <button
                   onClick={handleCancel}
-                  className="px-8 border border-base-content/10 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-base-content hover:text-base-100 transition-all cursor-pointer rounded-sm"
+                  className="px-8 border border-base-content/10 py-3 font-heading font-black tracking-widest text-[10px] hover:bg-base-content hover:text-base-100 transition-all cursor-pointer rounded-sm"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={isLoadingButton}
-                  className="px-8 bg-base-content text-base-100 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-accent transition-colors cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
+                  className="px-8 bg-base-content text-base-100 py-3 font-heading font-black tracking-widest text-[10px] hover:bg-accent transition-colors cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
                 >
                   {isLoadingButton ? (
                     <span className="loading loading-spinner loading-xs"></span>

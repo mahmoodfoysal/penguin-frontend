@@ -9,6 +9,7 @@ import {
 
 import Pagination from "../../../components/Pagination";
 import Swal from "sweetalert2";
+import ComponentLoader from "./../../../pages/ComponentLoader";
 
 const CouponDiscount = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
@@ -21,7 +22,8 @@ const CouponDiscount = () => {
         const res = await axios.get(
           `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/admin/get-coupon-list`,
         );
-        const data = res.data?.list_data || (Array.isArray(res.data) ? res.data : []);
+        const data =
+          res.data?.list_data || (Array.isArray(res.data) ? res.data : []);
         setCouponList(data);
       } catch (error) {
         console.error("Failed to fetch coupons", error);
@@ -189,6 +191,7 @@ const CouponDiscount = () => {
         const result = await axios.delete(
           `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/delete-coupon-list/${item._id}`,
         );
+
         if (result.data.status) {
           setCouponList(couponList.filter((c) => c._id !== item._id));
           showSuccess("Deleted!", "Coupon has been removed.");
@@ -224,7 +227,7 @@ const CouponDiscount = () => {
 
       {/* Search */}
       <div className="mb-8 relative max-w-md">
-        <label className="text-[10px] font-black uppercase tracking-widest opacity-50 block mb-2">
+        <label className="text-[10px] font-black tracking-widest opacity-50 block mb-2">
           Search Coupons
         </label>
         <div className="relative flex items-center">
@@ -235,7 +238,7 @@ const CouponDiscount = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             value={searchQuery}
             type="text"
-            placeholder="COUPON CODE OR EMAIL"
+            placeholder="Enter search key"
             className="w-full bg-transparent border-b-2 border-base-content/10 focus:border-accent outline-none py-3 pl-7 text-xs font-bold tracking-widest transition-all"
           />
         </div>
@@ -244,7 +247,7 @@ const CouponDiscount = () => {
       {/* Table */}
       <div className="bg-base-100 border border-base-content/5 rounded-sm shadow-sm overflow-x-auto">
         <table className="w-full text-left border-collapse">
-          <thead className="bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black opacity-40">
+          <thead className="bg-base-200/50 font-heading text-[10px] tracking-widest font-black opacity-40">
             <tr>
               <th className="px-8 py-4">SL</th>
               <th className="px-8 py-4">Coupon Code</th>
@@ -257,8 +260,11 @@ const CouponDiscount = () => {
           <tbody className="divide-y divide-black/5">
             {isLoading ? (
               <tr>
-                <td colSpan="6" className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest">
-                  Loading...
+                <td
+                  colSpan="6"
+                  className="px-8 py-12 text-center text-[10px] font-black uppercase tracking-widest"
+                >
+                  <ComponentLoader />
                 </td>
               </tr>
             ) : !paginatedCouponList.length ? (
@@ -364,7 +370,7 @@ const CouponDiscount = () => {
           <div className="flex-grow space-y-8 overflow-y-auto pr-2 custom-scrollbar">
             {/* Coupon Code */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+              <label className="text-[10px] font-black tracking-widest opacity-50">
                 Coupon Code *
               </label>
               <input
@@ -383,8 +389,8 @@ const CouponDiscount = () => {
 
             {/* Email */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
-                Target Email *
+              <label className="text-[10px] font-black tracking-widest opacity-50">
+                Email *
               </label>
               <input
                 value={formData.email}
@@ -400,7 +406,7 @@ const CouponDiscount = () => {
             {/* Discount & Operator Row */}
             <div className="grid grid-cols-2 gap-8">
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                <label className="text-[10px] font-black tracking-widest opacity-50">
                   Discount (%) *
                 </label>
                 <input
@@ -414,7 +420,7 @@ const CouponDiscount = () => {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                <label className="text-[10px] font-black tracking-widest opacity-50">
                   Operator *
                 </label>
                 <input
@@ -434,14 +440,14 @@ const CouponDiscount = () => {
           <div className="pt-8 border-t border-base-content/5 flex justify-center gap-4 mt-auto">
             <button
               onClick={() => setIsDrawerOpen(false)}
-              className="px-8 border border-base-content/10 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-base-content hover:text-base-100 transition-all rounded-sm cursor-pointer"
+              className="px-8 border border-base-content/10 py-3 font-heading font-black tracking-widest text-[10px] hover:bg-base-content hover:text-base-100 transition-all rounded-sm cursor-pointer"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
               disabled={isLoadingButton}
-              className="px-8 bg-base-content text-base-100 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-accent transition-colors rounded-sm disabled:opacity-50 min-w-[120px] cursor-pointer"
+              className="px-8 bg-base-content text-base-100 py-3 font-heading font-black tracking-widest text-[10px] hover:bg-accent transition-colors rounded-sm disabled:opacity-50 min-w-[120px] cursor-pointer"
             >
               {isLoadingButton ? (
                 <span className="loading loading-spinner loading-xs"></span>

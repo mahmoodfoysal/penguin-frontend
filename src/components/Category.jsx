@@ -26,7 +26,7 @@ const Category = ({
                     : "border-base-content/5 text-base-content hover:border-accent hover:text-accent"
                 }`}
               >
-                <span className="font-heading font-bold text-xs uppercase tracking-wider">
+                <span className="font-heading font-bold text-xs tracking-wider">
                   {category.par_cat_name}
                 </span>
                 <span
@@ -44,7 +44,7 @@ const Category = ({
                     <li
                       key={subIndex}
                       onClick={() => handleSubCategory(subItem)}
-                      className="font-body text-xs uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all block py-1 cursor-pointer"
+                      className="font-body text-xs tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-all block py-1 cursor-pointer"
                     >
                       {subItem.sub_cat_name}
                     </li>

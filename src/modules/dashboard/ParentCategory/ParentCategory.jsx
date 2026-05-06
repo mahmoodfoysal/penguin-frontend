@@ -1,9 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { showSuccess, showError, showConfirmation } from "../../../components/Alert";
+import {
+  showSuccess,
+  showError,
+  showConfirmation,
+} from "../../../components/Alert";
 
 import Pagination from "../../../components/Pagination";
+import ComponentLoader from "../../../pages/ComponentLoader";
 
 const ParentCategory = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
@@ -103,7 +108,7 @@ const ParentCategory = () => {
     }
     const confirmation = await showConfirmation(
       "Are you sure?",
-      "Do you want to submit?"
+      "Do you want to submit?",
     );
 
     const data = {
@@ -124,7 +129,6 @@ const ParentCategory = () => {
         if (result.data.status) {
           showSuccess("Success", result.data.message);
           const obj = {
-
             _id: result.data.id,
             par_cat_id: Number(formData.par_cat_id),
             par_cat_name: formData.par_cat_name,
@@ -151,14 +155,22 @@ const ParentCategory = () => {
         setIsDrawerOpen(false);
       }
     } catch (err) {
-      showError("Submission Error", err.response?.data?.message || err.message || "Failed to submit category");
+      showError(
+        "Submission Error",
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to submit category",
+      );
     } finally {
       setIsLoadingButton(false);
     }
   };
 
   const handleStatusUpdate = async (item) => {
-    const confirmation = await showConfirmation("Are you sure?", "Do you want to update status?");
+    const confirmation = await showConfirmation(
+      "Are you sure?",
+      "Do you want to update status?",
+    );
     const data = {
       _id: item._id,
       status: Number(item.status == 1 ? 0 : 1),
@@ -197,7 +209,10 @@ const ParentCategory = () => {
         }
       }
     } catch (err) {
-      showError("Status Update Failed", err.response?.data?.message || err.message || "Failed to update status");
+      showError(
+        "Status Update Failed",
+        err.response?.data?.message || err.message || "Failed to update status",
+      );
     }
   };
 
@@ -220,7 +235,10 @@ const ParentCategory = () => {
   };
 
   const handleRemove = async (item) => {
-    const confirmation = await showConfirmation("Are you sure?", "Do you want to delete this category?");
+    const confirmation = await showConfirmation(
+      "Are you sure?",
+      "Do you want to delete this category?",
+    );
     try {
       if (confirmation.isConfirmed) {
         const result = await axios.delete(
@@ -240,7 +258,12 @@ const ParentCategory = () => {
         }
       }
     } catch (err) {
-      showError("Deletion Failed", err.response?.data?.message || err.message || "Failed to delete category");
+      showError(
+        "Deletion Failed",
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to delete category",
+      );
     }
   };
 
@@ -272,7 +295,7 @@ const ParentCategory = () => {
 
         {/* --- SEARCH BAR SECTION --- */}
         <div className="mb-8 relative max-w-full md:max-w-md">
-          <label className="text-[10px] font-black uppercase tracking-widest opacity-50 block mb-2">
+          <label className="text-[10px] font-black tracking-widest opacity-50 block mb-2">
             Search Categories
           </label>
           <div className="relative flex items-center">
@@ -294,7 +317,7 @@ const ParentCategory = () => {
         <div className="bg-base-100 border border-base-content/5 rounded-sm shadow-sm overflow-x-auto">
           <table className="w-full text-left border-collapse">
             {/* <thead> equivalent */}
-            <thead className="hidden md:table-header-group bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black opacity-40">
+            <thead className="hidden md:table-header-group bg-base-200/50 font-heading text-[10px] tracking-widest font-black opacity-40">
               <tr>
                 <th className="px-8 py-4">SL</th>
                 <th className="px-8 py-4">Category Name</th>
@@ -309,8 +332,11 @@ const ParentCategory = () => {
             <tbody className="divide-y divide-black/5">
               {isLoading ? (
                 <tr>
-                  <td colSpan="8" className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest">
-                    Loading...
+                  <td
+                    colSpan="8"
+                    className="px-8 py-12 text-center text-[10px] font-black uppercase tracking-widest"
+                  >
+                    <ComponentLoader />
                   </td>
                 </tr>
               ) : !paginatedCategoryList.length ? (
@@ -436,7 +462,7 @@ const ParentCategory = () => {
               <div className="flex-grow space-y-10 overflow-y-auto pr-2 custom-scrollbar">
                 {/* Category Name Input */}
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  <label className="text-[10px] font-black tracking-widest opacity-50">
                     Category Name <span className="text-red-600">*</span>
                   </label>
                   <input
@@ -456,7 +482,7 @@ const ParentCategory = () => {
 
                 {/* Category ID Input */}
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  <label className="text-[10px] font-black tracking-widest opacity-50">
                     Category ID <span className="text-red-600">*</span>
                   </label>
                   <input
@@ -476,7 +502,7 @@ const ParentCategory = () => {
 
                 {/* Status Dropdown */}
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  <label className="text-[10px] font-black tracking-widest opacity-50">
                     Status <span className="text-red-600">*</span>
                   </label>
                   <select
@@ -510,14 +536,14 @@ const ParentCategory = () => {
               <div className="pt-8 border-t border-base-content/5 flex justify-center gap-4 mt-auto">
                 <button
                   onClick={handleCancel}
-                  className="px-8 border border-base-content/10 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-base-content hover:text-base-100 transition-all cursor-pointer rounded-sm"
+                  className="px-8 border border-base-content/10 py-3 font-heading font-black  tracking-widest text-[10px] hover:bg-base-content hover:text-base-100 transition-all cursor-pointer rounded-sm"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={isLoadingButton}
-                  className="px-8 bg-base-content text-base-100 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-accent transition-colors cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
+                  className="px-8 bg-base-content text-base-100 py-3 font-heading font-black  tracking-widest text-[10px] hover:bg-accent transition-colors cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
                 >
                   {isLoadingButton ? (
                     <span className="loading loading-spinner loading-xs"></span>

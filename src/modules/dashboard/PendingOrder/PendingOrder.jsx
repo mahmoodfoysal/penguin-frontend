@@ -13,6 +13,7 @@ import {
 
 import Pagination from "../../../components/Pagination";
 import { formatDateDDMMYYYYHHmm } from "../../../utils/dateFormat";
+import ComponentLoader from "../../../pages/ComponentLoader";
 
 // Static configuration moved outside to preserve memoization
 const ROUTE_CONFIGS = {
@@ -47,7 +48,7 @@ const PendingOrder = () => {
   const [orderList, setOrderList] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
@@ -55,14 +56,17 @@ const PendingOrder = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
+      setIsLoading(true);
       try {
         const res = await axios.get(
           `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-order-list`,
         );
 
         setOrderList(res.data?.list_data || []);
+        setIsLoading(false);
       } catch (error) {
         console.error("Failed to fetch orders", error);
+        setIsLoading(false);
       }
     };
     fetchOrders();
@@ -212,7 +216,16 @@ const PendingOrder = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
-              {paginatedproductList?.length > 0 ? (
+              {isLoading ? (
+                <tr>
+                  <td
+                    colSpan="8"
+                    className="px-8 py-12 text-center text-[10px] font-black uppercase tracking-widest"
+                  >
+                    <ComponentLoader />
+                  </td>
+                </tr>
+              ) : paginatedproductList?.length > 0 ? (
                 paginatedproductList.map((item, index) => (
                   <tr
                     key={item._id}

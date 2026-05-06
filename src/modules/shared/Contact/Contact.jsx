@@ -113,7 +113,7 @@ const Contact = () => {
           {/* LEFT COLUMN: INFO & MAP */}
           <div className="space-y-12 animate-in fade-in slide-in-from-left duration-1000">
             <div>
-              <h2 className="font-heading text-2xl md:text-3xl font-black  tracking-tighter leading-none mb-6">
+              <h2 className="font-heading text-2xl md:text-3xl font-black uppercase  tracking-tighter leading-none mb-6">
                 Our <span className="text-accent text-outline">Location</span>
               </h2>
             </div>
@@ -145,7 +145,7 @@ const Contact = () => {
               <div className="p-8 bg-base-200/50 backdrop-blur-md border-l-4 border-accent space-y-4 hover:bg-base-200 transition-colors cursor-default">
                 <div className="flex items-center gap-3 text-accent">
                   <span className="material-icons text-xl">location_on</span>
-                  <span className="text-[10px] font-black  tracking-[0.3em]">
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em]">
                     Headquarters
                   </span>
                 </div>
@@ -161,7 +161,7 @@ const Contact = () => {
                   <span className="material-icons text-xl">
                     alternate_email
                   </span>
-                  <span className="text-[10px] font-black  tracking-[0.3em]">
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em]">
                     Communication
                   </span>
                 </div>
@@ -249,7 +249,7 @@ const Contact = () => {
                 <button
                   type="submit"
                   disabled={isSending}
-                  className="w-full bg-base-content text-base-100 py-4 font-heading font-black  tracking-[0.5em] text-xs hover:bg-accent hover:text-white transition-all shadow-xl shadow-black/10 relative overflow-hidden group/btn disabled:opacity-50 rounded-full"
+                  className="w-full bg-base-content text-base-100 py-4 font-heading font-black cursor-pointer  tracking-[0.5em] text-xs hover:bg-accent hover:text-white transition-all shadow-xl shadow-black/10 relative overflow-hidden group/btn disabled:opacity-50 rounded-full"
                 >
                   <span className="relative z-10">
                     {isSending ? "Sending..." : "Send Message"}

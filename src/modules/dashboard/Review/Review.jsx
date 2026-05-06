@@ -9,6 +9,7 @@ import {
 } from "../../../components/Alert";
 
 import Pagination from "../../../components/Pagination";
+import ComponentLoader from "../../../pages/ComponentLoader";
 
 const Review = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
@@ -237,7 +238,7 @@ const Review = () => {
         </div>
 
         <div className="mb-8 relative max-w-full md:max-w-md">
-          <label className="text-[10px] font-black uppercase tracking-widest opacity-50 block mb-2">
+          <label className="text-[10px] font-black tracking-widest opacity-50 block mb-2">
             Search Reviews
           </label>
           <div className="relative flex items-center">
@@ -256,7 +257,7 @@ const Review = () => {
 
         <div className="bg-base-100 border border-base-content/5 rounded-sm shadow-sm overflow-x-auto">
           <table className="w-full text-left border-collapse">
-            <thead className="hidden md:table-header-group bg-base-200/50 font-heading text-[10px] uppercase tracking-widest font-black opacity-40">
+            <thead className="hidden md:table-header-group bg-base-200/50 font-heading text-[10px] tracking-widest font-black opacity-40">
               <tr>
                 <th className="px-6 py-4">SL</th>
                 <th className="px-6 py-4">Reviewer</th>
@@ -271,9 +272,9 @@ const Review = () => {
                 <tr>
                   <td
                     colSpan="6"
-                    className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest"
+                    className="px-8 py-12 text-center text-[10px] font-black uppercase tracking-widest"
                   >
-                    Loading...
+                    <ComponentLoader />
                   </td>
                 </tr>
               ) : paginatedReviewList?.length > 0 ? (
@@ -298,7 +299,7 @@ const Review = () => {
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <span className="text-xs font-bold uppercase tracking-tighter">
+                        <span className="text-xs font-bold tracking-tighter">
                           {item.full_name}
                         </span>
                       </div>
@@ -403,7 +404,7 @@ const Review = () => {
               <div className="flex-grow space-y-10 overflow-y-auto pr-2 custom-scrollbar">
                 <div className="grid grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Full Name <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -422,7 +423,7 @@ const Review = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Email Address <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -443,7 +444,7 @@ const Review = () => {
 
                 <div className="grid grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Product ID <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -462,7 +463,7 @@ const Review = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Rating (1-5) <span className="text-red-600">*</span>
                     </label>
                     <select
@@ -487,7 +488,7 @@ const Review = () => {
 
                 <div className="grid grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Parent Category ID <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -506,7 +507,7 @@ const Review = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                    <label className="text-[10px] font-black tracking-widest opacity-50">
                       Sub Category ID <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -526,7 +527,7 @@ const Review = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  <label className="text-[10px] font-black tracking-widest opacity-50">
                     Reviewer Photo URL <span className="text-red-600">*</span>
                   </label>
                   <input
@@ -545,7 +546,7 @@ const Review = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  <label className="text-[10px] font-black tracking-widest opacity-50">
                     Comment <span className="text-red-600">*</span>
                   </label>
                   <textarea
@@ -569,14 +570,14 @@ const Review = () => {
               <div className="pt-8 border-t border-base-content/5 flex justify-center gap-4 mt-auto">
                 <button
                   onClick={handleCancel}
-                  className="px-8 border border-base-content/10 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-base-content hover:text-base-100 transition-all cursor-pointer rounded-sm"
+                  className="px-8 border border-base-content/10 py-3 font-heading font-black tracking-widest text-[10px] hover:bg-base-content hover:text-base-100 transition-all cursor-pointer rounded-sm"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={isLoadingButton}
-                  className="px-8 bg-base-content text-base-100 py-3 font-heading font-black uppercase tracking-widest text-[10px] hover:bg-accent transition-colors cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
+                  className="px-8 bg-base-content text-base-100 py-3 font-heading font-black tracking-widest text-[10px] hover:bg-accent transition-colors cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
                 >
                   {isLoadingButton ? (
                     <span className="loading loading-spinner loading-xs"></span>
@@ -620,7 +621,7 @@ const Review = () => {
                   <h2 className="font-heading text-3xl font-black uppercase tracking-tighter text-base-content">
                     Review <span className="text-accent">Details</span>
                   </h2>
-                  <p className="text-[10px] font-black uppercase tracking-widest opacity-30 mt-2">
+                  <p className="text-[10px] font-black tracking-widest opacity-30 mt-2">
                     Review for Product ID: #{selectedReview.prod_id}
                   </p>
                 </div>
@@ -639,14 +640,14 @@ const Review = () => {
                         />
                       </div>
                       <div>
-                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                        <p className="text-[10px] font-black tracking-widest opacity-40">
                           Reviewer
                         </p>
-                        <p className="font-heading font-bold text-2xl uppercase mt-1 leading-tight tracking-tighter">
+                        <p className="font-heading font-bold text-2xl  mt-1 leading-tight tracking-tighter">
                           {selectedReview.full_name}
                         </p>
                         <p className="text-[11px] font-bold opacity-60 mt-1 lowercase tracking-tight">
-                           {selectedReview.email}
+                          {selectedReview.email}
                         </p>
                         <div className="flex items-center gap-1 text-accent mt-2">
                           {Array.from({ length: 5 }).map((_, i) => (
@@ -664,15 +665,15 @@ const Review = () => {
                     <div className="space-y-6">
                       <div className="grid grid-cols-2 gap-x-6 gap-y-8">
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                          <p className="text-[10px] font-black tracking-widest opacity-40">
                             Product ID
                           </p>
-                          <p className="font-heading font-bold text-sm uppercase mt-1">
+                          <p className="font-heading font-bold text-sm  mt-1">
                             #{selectedReview.prod_id}
                           </p>
                         </div>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                          <p className="text-[10px] font-black tracking-widest opacity-40">
                             Review Date
                           </p>
                           <p className="font-heading font-bold text-sm uppercase mt-1">
@@ -686,25 +687,25 @@ const Review = () => {
                           </p>
                         </div>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                          <p className="text-[10px] font-black tracking-widest opacity-40">
                             Parent Cat ID
                           </p>
-                          <p className="font-heading font-bold text-sm uppercase mt-1">
+                          <p className="font-heading font-bold text-sm mt-1">
                             #{selectedReview.par_cat_id}
                           </p>
                         </div>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                          <p className="text-[10px] font-black tracking-widest opacity-40">
                             Sub Cat ID
                           </p>
-                          <p className="font-heading font-bold text-sm uppercase mt-1">
+                          <p className="font-heading font-bold text-sm mt-1">
                             #{selectedReview.sub_cat_id}
                           </p>
                         </div>
                       </div>
 
                       <div>
-                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                        <p className="text-[10px] font-black tracking-widest opacity-40">
                           Customer Comment
                         </p>
                         <p className="text-sm font-medium leading-relaxed mt-4 opacity-70 border-l-2 border-accent/20 pl-4 py-1 whitespace-pre-wrap">
@@ -718,7 +719,7 @@ const Review = () => {
                 <div className="pt-8 border-t border-base-content/5 mt-auto bg-base-100">
                   <button
                     onClick={() => setIsDetailsOpen(false)}
-                    className="w-full bg-base-content text-base-100 py-5 font-heading font-black uppercase tracking-[0.3em] text-[11px] hover:bg-accent transition-colors rounded-sm"
+                    className="w-full bg-base-content text-base-100 py-5 font-heading font-black tracking-[0.3em] text-[11px] hover:bg-accent transition-colors rounded-sm cursor-pointer"
                   >
                     Close Panel
                   </button>
