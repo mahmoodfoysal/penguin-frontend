@@ -385,14 +385,14 @@ const CustomerProfile = () => {
                                       ? `${(Number(coupon.per_dis_amt) * 100).toFixed(0)}% Off`
                                       : `$${coupon.per_dis_amt} Off`}
                                   </span>
-                                  <span className="text-[10px] font-bold opacity-30 uppercase tracking-widest">
+                                  <span className="text-[10px] font-bold opacity-30 tracking-widest">
                                     {coupon.flag === 1 ? "Used" : "Active"}
                                   </span>
                                 </div>
                                 <h3 className="text-2xl font-heading font-black tracking-widest text-base-content mb-2 select-all">
                                   {coupon.coupon_code}
                                 </h3>
-                                <p className="text-[10px] font-medium opacity-50 uppercase tracking-tight">
+                                <p className="text-[10px] font-medium opacity-50  tracking-tight">
                                   {coupon.flag === 1
                                     ? "Already used this coupon"
                                     : "Applicable on your next order"}
@@ -410,7 +410,7 @@ const CustomerProfile = () => {
                                       "Coupon code copied to clipboard",
                                     );
                                   }}
-                                  className="mt-6 w-full py-3 bg-base-100 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-accent hover:text-white transition-all shadow-sm border border-base-content/5"
+                                  className="mt-6 w-full py-3 bg-base-100 rounded-2xl text-[9px] font-black tracking-widest hover:bg-accent hover:text-white transition-all shadow-sm border border-base-content/5"
                                 >
                                   Copy Code
                                 </button>
