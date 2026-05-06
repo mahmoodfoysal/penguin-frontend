@@ -37,10 +37,11 @@ A full-stack MERN e-commerce platform featuring Redux state management, Firebase
 - Cupon code system
 - Blog Section
 - Dashboard Overview
+- Coupon show in client profile and that coupon only used one user one time. and show total used coupon.
+- New member get 10% off coupon if they claim from landing page newsletter.
 
 ## Protected Routes
 
-- Login and Registration
 - Dashboard
 - Checkout
 - Profile
@@ -71,6 +72,8 @@ A full-stack MERN e-commerce platform featuring Redux state management, Firebase
 - Pagination: It add where many data comes.
 - Products, category, blogs all have a status. If status 1 then only product show. If 0 then product is inactive.
 - Footer have full functional. Footer email address use for promotional massage.
+- Customer profile customer can update info and see his coupon.
+- New member get 10% off coupon if they claim from landing page newsletter and if they already registered then they can claim from their profile. after claim they can not claim again.
 
 ## Setup and Installation
 
