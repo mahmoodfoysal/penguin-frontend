@@ -1,18 +1,102 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import {
+  showProcessing,
+  showError,
+  showSuccess,
+  showConfirmation,
+  closeAlert,
+} from "../../../../components/Alert";
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("idle"); // idle, loading, success
+  const [status, setStatus] = useState("idle");
+  const [couponCode, setCouponCode] = useState("");
+  const userInfo = useSelector((state) => state.auth.userInfo);
+
+  const generateCouponCode = () => {
+    return Math.random().toString(36).substring(2, 8).toUpperCase();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus("loading");
 
-    // Simulate API call to your Node.js backend
-    setTimeout(() => {
-      setStatus("success");
-      setEmail("");
-    }, 1500);
+    if (!userInfo) {
+      showError("Login Required", "Please log in to claim your discount!");
+      return;
+    }
+
+    if (email !== userInfo.email) {
+      showError("Email Mismatch", "Please use your registered account email.");
+      return;
+    }
+
+    const confirmation = await showConfirmation(
+      "Claim Discount?",
+      "Do you want to claim your exclusive 10% discount coupon?",
+    );
+
+    if (!confirmation.isConfirmed) return;
+
+    setStatus("loading");
+    showProcessing("Processing...", "Generating your discount code...");
+
+    try {
+      // 1. Check user status/flag
+      const userRes = await axios.get(
+        `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-user-list/${email}`,
+      );
+
+      // Backend usually returns an array for list endpoints
+      const user = userRes.data?.list_data?.[0];
+
+      if (user && user.flag === 1) {
+        closeAlert();
+        setStatus("already_received");
+        return;
+      }
+
+      if (user && user.flag === 0) {
+        const newCode = generateCouponCode();
+
+        // 2. Generate and store coupon
+        await axios.post(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/admin/insert-update-coupon-list`,
+          {
+            coupon_code: newCode,
+            email: email,
+            flag: 0,
+            per_dis_amt: "0.10",
+            operator: "*",
+          },
+        );
+
+        // 3. Update user flag to 1
+        await axios.patch(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/update-user-list/${user?._id}/${user?.email}`,
+        );
+
+        setCouponCode(newCode);
+        setStatus("success");
+        setEmail("");
+        closeAlert();
+        showSuccess(
+          "Congratulations!",
+          "Your exclusive discount code is ready to use.",
+        );
+      } else {
+        throw new Error("User record not found or invalid.");
+      }
+    } catch (error) {
+      console.error("Newsletter process failed:", error);
+      setStatus("error");
+      showError(
+        "Oops...",
+        error.response?.data?.message ||
+          "Something went wrong! Please try again.",
+      );
+    }
   };
 
   return (
@@ -29,8 +113,27 @@ const Newsletter = () => {
               <h2 className="text-3xl md:text-5xl font-extrabold mb-4">
                 You're in the Colony!
               </h2>
+              <p className="text-lg opacity-90 mb-6">
+                Your 10% discount code is ready:
+              </p>
+              <div className="bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl p-6 inline-block mb-4">
+                <span className="text-4xl md:text-6xl font-black tracking-widest text-white">
+                  {couponCode}
+                </span>
+              </div>
+              <p className="text-sm opacity-70">
+                Copy this code and use it at checkout!
+              </p>
+            </div>
+          ) : status === "already_received" ? (
+            <div className="animate-in fade-in zoom-in duration-500">
+              <div className="text-5xl mb-4">👋</div>
+              <h2 className="text-3xl md:text-5xl font-extrabold mb-4">
+                Already Claimed
+              </h2>
               <p className="text-lg opacity-90">
-                Check your email. Your 10% discount code is flying your way!
+                You've already received your newsletter discount code. Check
+                your previous orders or emails!
               </p>
             </div>
           ) : (
@@ -38,8 +141,8 @@ const Newsletter = () => {
               <span className="bg-primary-content/20 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4 inline-block">
                 Limited Time Offer
               </span>
-              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tighter mb-4">
-                Get 10% Off Your First Order
+              <h2 className="text-3xl md:text-5xl uppercase font-extrabold tracking-tighter mb-4">
+                Get 10% Off your joining coupon
               </h2>
               <p className="text-lg text-primary-content/80 font-medium mb-10 max-w-xl mx-auto">
                 Join 5,000+ shoppers and get exclusive access to new drops,
@@ -66,7 +169,7 @@ const Newsletter = () => {
                   {status === "loading" ? (
                     <span className="loading loading-spinner"></span>
                   ) : (
-                    "Claim Discount"
+                    "Claim Coupon"
                   )}
                 </button>
               </form>

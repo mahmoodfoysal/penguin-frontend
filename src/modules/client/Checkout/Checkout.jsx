@@ -229,7 +229,6 @@ const Checkout = () => {
         cash_on_delivery: paymentMethod === 1 ? "Cash on delivery" : null,
         order_list: orderList,
       };
-      console.log("data", data);
       if (confirmation.isConfirmed) {
         setIsOrderLoading(true);
         try {
