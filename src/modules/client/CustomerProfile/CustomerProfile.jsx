@@ -21,6 +21,7 @@ const CustomerProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [orderData, setOrderData] = useState([]);
+  const [couponData, setCouponData] = useState([]);
 
   const [profileData, setProfileData] = useState({
     full_name: userInfo?.name || "",
@@ -69,6 +70,14 @@ const CustomerProfile = () => {
         );
         if (orderRes.data?.list_data) {
           setOrderData(orderRes.data.list_data);
+        }
+
+        // Fetch coupons
+        const couponRes = await axios.get(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-coupon-list/${userInfo.email}`,
+        );
+        if (couponRes.data?.list_data) {
+          setCouponData(couponRes.data.list_data);
         }
       } catch (err) {
         showError(
@@ -150,7 +159,7 @@ const CustomerProfile = () => {
         "0",
       icon: "🚚",
     },
-    { label: "Reward Points", value: "work in progress ", icon: "✨" },
+    { label: "Coupon", value: couponData.length || "0", icon: "✨" },
   ];
 
   return (
@@ -262,7 +271,7 @@ const CustomerProfile = () => {
                   { id: "overview", label: "Overview", icon: "🎯" },
                   //   { id: "shipping", label: "Shipping Address", icon: "🏠" },
                   //   { id: "security", label: "Security & Login", icon: "🔒" },
-                  //   { id: "preferences", label: "Preferences", icon: "⚙️" },
+                  { id: "coupon", label: "Coupon", icon: "🎉" },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -350,6 +359,75 @@ const CustomerProfile = () => {
                             </div>
                           </div>
                         ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {activeTab === "coupon" && (
+                    <div className="space-y-8 animate-in fade-in duration-500">
+                      <h2 className="text-2xl font-heading font-black uppercase tracking-tighter border-b border-base-content/5 pb-4">
+                        My <span className="text-accent ">Coupons</span>
+                      </h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {couponData.length > 0 ? (
+                          couponData.map((coupon, index) => (
+                            <div
+                              key={index}
+                              className="relative bg-base-200/50 p-6 rounded-3xl border border-dashed border-accent/30 flex flex-col justify-between overflow-hidden group"
+                            >
+                              {/* Decorative Element */}
+                              <div className="absolute -top-4 -right-4 w-12 h-12 bg-accent/10 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
+
+                              <div className="relative z-10">
+                                <div className="flex justify-between items-start mb-4">
+                                  <span className="text-[9px] font-black uppercase tracking-widest bg-accent/20 text-accent px-3 py-1 rounded-full">
+                                    {coupon.operator === "*"
+                                      ? `${(Number(coupon.per_dis_amt) * 100).toFixed(0)}% Off`
+                                      : `$${coupon.per_dis_amt} Off`}
+                                  </span>
+                                  <span className="text-[10px] font-bold opacity-30 uppercase tracking-widest">
+                                    {coupon.flag === 1 ? "Used" : "Active"}
+                                  </span>
+                                </div>
+                                <h3 className="text-2xl font-heading font-black tracking-widest text-base-content mb-2 select-all">
+                                  {coupon.coupon_code}
+                                </h3>
+                                <p className="text-[10px] font-medium opacity-50 uppercase tracking-tight">
+                                  {coupon.flag === 1
+                                    ? "Already used this coupon"
+                                    : "Applicable on your next order"}
+                                </p>
+                              </div>
+
+                              {coupon.flag === 0 && (
+                                <button
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(
+                                      coupon.coupon_code,
+                                    );
+                                    showSuccess(
+                                      "Copied!",
+                                      "Coupon code copied to clipboard",
+                                    );
+                                  }}
+                                  className="mt-6 w-full py-3 bg-base-100 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-accent hover:text-white transition-all shadow-sm border border-base-content/5"
+                                >
+                                  Copy Code
+                                </button>
+                              )}
+                            </div>
+                          ))
+                        ) : (
+                          <div className="col-span-full py-20 flex flex-col items-center justify-center text-center opacity-40">
+                            <span className="text-4xl mb-4">🎟️</span>
+                            <p className="font-heading font-black uppercase text-xs tracking-widest">
+                              No Active Coupons
+                            </p>
+                            <p className="text-[10px] font-bold uppercase mt-2">
+                              Join our newsletter to get your first discount!
+                            </p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
