@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import axios from "axios";
 import {
   showSuccess,
@@ -7,9 +6,16 @@ import {
   showConfirmation,
   showProcessing,
 } from "../../../components/Alert";
+import { getAuth, updateProfile } from "firebase/auth";
+import initilizationAuthentication from "../../../firebase/firebase.init";
+import { setUserInfo } from "../../../store/slice/user";
+import { useDispatch, useSelector } from "react-redux";
 
+initilizationAuthentication();
+const auth = getAuth();
 
 const CustomerProfile = () => {
+  const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [activeTab, setActiveTab] = useState("overview");
   const [isLoading, setIsLoading] = useState(true);
@@ -17,11 +23,24 @@ const CustomerProfile = () => {
   const [orderData, setOrderData] = useState([]);
 
   const [profileData, setProfileData] = useState({
-    full_name: "",
+    full_name: userInfo?.name || "",
     email: userInfo?.email || "",
     address: "",
     phone_no: "",
+    photo: userInfo?.photo || "",
   });
+
+  // Sync profileData with userInfo when userInfo loads
+  useEffect(() => {
+    if (userInfo) {
+      setProfileData((prev) => ({
+        ...prev,
+        full_name: userInfo.name || prev.full_name,
+        email: userInfo.email || prev.email,
+        photo: userInfo.photo || prev.photo,
+      }));
+    }
+  }, [userInfo]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +48,7 @@ const CustomerProfile = () => {
       try {
         setIsLoading(true);
 
-        // Fetch profile info
+        // Fetch profile info from backend to get _id and existing details
         const userRes = await axios.get(
           `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-user-list/${userInfo.email}`,
         );
@@ -37,9 +56,8 @@ const CustomerProfile = () => {
           const user = userRes.data.list_data[0];
           setProfileData((prev) => ({
             ...prev,
-            full_name: user.full_name || prev.full_name,
             address: user.address || prev.address,
-            phone_no: Number(user.phone_no) || Number(prev.phone_no),
+            phone_no: user.phone_no || prev.phone_no,
             _id: user._id,
             createdAt: user.createdAt,
           }));
@@ -55,10 +73,11 @@ const CustomerProfile = () => {
       } catch (err) {
         showError(
           "Data Loading Failed",
-          err.response?.data?.message || err.message || "Failed to load profile data",
+          err.response?.data?.message ||
+            err.message ||
+            "Failed to load profile data",
         );
       } finally {
-
         setIsLoading(false);
       }
     };
@@ -66,15 +85,6 @@ const CustomerProfile = () => {
   }, [userInfo?.email]);
 
   const handleUpdateProfile = async () => {
-    if (!profileData?._id) {
-      showError(
-        "Update Prevented",
-        "User Identity (_id) not found. Please refresh the page.",
-      );
-      return;
-    }
-
-
     const confirmation = await showConfirmation(
       "Are you sure?",
       "Do you want to update your profile?",
@@ -85,7 +95,7 @@ const CustomerProfile = () => {
     try {
       showProcessing("Updating...", "Please wait while we save your changes");
 
-
+      // 1. Update Backend API
       const response = await axios.post(
         `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/insert-update-user-list`,
         {
@@ -99,18 +109,36 @@ const CustomerProfile = () => {
         response.status === 200 ||
         response.status === 201
       ) {
-        await showSuccess("Success", response.data.message || "Profile updated successfully!");
+        // 2. Update Firebase Profile
+        if (auth.currentUser) {
+          await updateProfile(auth.currentUser, {
+            displayName: profileData.full_name,
+            photoURL: profileData.photo,
+          });
+
+          // 3. Update Redux State for immediate visual feedback
+          dispatch(
+            setUserInfo({
+              ...userInfo,
+              name: profileData.full_name,
+              photo: profileData.photo,
+            }),
+          );
+        }
+
+        await showSuccess(
+          "Success",
+          response.data.message || "Profile updated successfully!",
+        );
         setIsEditModalOpen(false);
       } else {
         showError("Error", response.data.message || "Update failed");
       }
-
     } catch (err) {
       const errorMessage =
         err.response?.data?.message || err.message || "Something went wrong";
       showError("Error", errorMessage);
     }
-
   };
 
   const stats = [
@@ -450,6 +478,22 @@ const CustomerProfile = () => {
                         setProfileData({
                           ...profileData,
                           phone_no: Number(e.target.value),
+                        })
+                      }
+                      className="w-full bg-base-200/50 border border-base-content/5 rounded-2xl p-4 font-bold text-sm focus:border-accent outline-none transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                      Photo URL
+                    </label>
+                    <input
+                      type="url"
+                      value={profileData.photo}
+                      onChange={(e) =>
+                        setProfileData({
+                          ...profileData,
+                          photo: e.target.value,
                         })
                       }
                       className="w-full bg-base-200/50 border border-base-content/5 rounded-2xl p-4 font-bold text-sm focus:border-accent outline-none transition-colors"

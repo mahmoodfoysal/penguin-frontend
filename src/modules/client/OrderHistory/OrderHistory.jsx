@@ -132,7 +132,7 @@ const OrderHistory = () => {
                   {/* Status Badge Overlay */}
                   <div className="absolute top-4 right-4 z-10">
                     <span
-                      className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter border ${
+                      className={`px-3 py-1 rounded-full text-[9px] font-black tracking-tighter border ${
                         order.order_status === "C"
                           ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
                           : order.order_status === "R"
@@ -147,7 +147,7 @@ const OrderHistory = () => {
                   <div className="p-8">
                     {/* Order Meta */}
                     <div className="mb-6">
-                      <p className="text-[9px] font-black uppercase opacity-30 tracking-widest mb-1">
+                      <p className="text-[9px] font-black opacity-30 tracking-widest mb-1">
                         Order ID: {order._id.slice(-8).toUpperCase()}
                       </p>
                       <p className="text-[10px] font-bold opacity-60">
@@ -182,16 +182,16 @@ const OrderHistory = () => {
                     {/* Summary */}
                     <div className="flex justify-between items-end border-t border-base-content/5 pt-6">
                       <div>
-                        <p className="text-[10px] font-black uppercase opacity-30 tracking-widest mb-1">
+                        <p className="text-[10px] font-black opacity-30 tracking-widest mb-1">
                           Total Amount
                         </p>
                         <p className="text-2xl font-heading font-black text-accent tracking-tighter">
-                          {order.currency_name} {order.total_amount}
+                          $ {order.total_amount?.toFixed(2)}
                         </p>
                       </div>
                       <button
                         onClick={() => handleViewDetails(order)}
-                        className="bg-base-content text-base-100 p-3 rounded-2xl hover:bg-accent transition-all duration-300 shadow-lg hover:shadow-accent/40"
+                        className="bg-base-content text-base-100 p-3 rounded-2xl hover:bg-accent transition-all duration-300 shadow-lg hover:shadow-accent/40 cursor-pointer"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -270,7 +270,7 @@ const OrderHistory = () => {
                 <h2 className="text-2xl font-heading font-black uppercase tracking-tighter">
                   Order <span className="text-accent ">Details</span>
                 </h2>
-                <p className="text-[9px] font-black uppercase tracking-[0.2em] opacity-40 mt-1">
+                <p className="text-[9px] font-black tracking-[0.2em] opacity-40 mt-1">
                   ID: {selectedOrder._id}
                 </p>
               </div>
@@ -367,12 +367,19 @@ const OrderHistory = () => {
                           />
                         </div>
                         <div className="flex-grow">
-                          <h5 className="text-[11px] font-black uppercase leading-tight mb-1">
+                          <h5 className="text-[11px] font-black leading-tight mb-1">
                             {item.prod_name}
                           </h5>
                           <p className="text-[10px] font-bold opacity-40">
-                            Qty: {item.quantity} × {item.currency_name}{" "}
-                            {item.price}
+                            Qty: {item.quantity} × ${" "}
+                            {item.discount_price
+                              ? item.discount_price
+                              : item.price}{" "}
+                            = ${" "}
+                            {item.quantity *
+                              (item.discount_price
+                                ? item.discount_price
+                                : item.price)}
                           </p>
                         </div>
                       </div>
@@ -412,7 +419,7 @@ const OrderHistory = () => {
                         <span className="text-[10px] font-black uppercase tracking-widest">
                           Total Amount
                         </span>
-                        <span className="text-3xl font-heading font-black text-accent tracking-tighter">
+                        <span className="text-xl font-heading font-black text-accent tracking-tighter">
                           {selectedOrder.currency_name}{" "}
                           {selectedOrder.total_amount}
                         </span>
@@ -425,30 +432,102 @@ const OrderHistory = () => {
                     <h4 className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-6">
                       Shipping Details
                     </h4>
-                    <div className="space-y-4">
-                      <div>
-                        <p className="text-xs font-black uppercase">
-                          {selectedOrder.full_name}
-                        </p>
-                        <p className="text-[10px] font-bold opacity-60 mt-1">
-                          {selectedOrder.address}, {selectedOrder.city},{" "}
-                          {selectedOrder.zip}
-                        </p>
-                        <p className="text-[10px] font-bold opacity-60 mt-1">
-                          {selectedOrder.phone_no}
-                        </p>
-                      </div>
-                      <div className="pt-4 border-t border-base-content/5">
-                        <p className="text-[10px] font-black uppercase opacity-40">
-                          Payment Method
-                        </p>
-                        <p className="text-[11px] font-bold uppercase mt-1">
-                          {selectedOrder.payment_method === 1
-                            ? "Cash on Delivery"
-                            : selectedOrder.payment_method === 2
-                              ? "bKash"
-                              : "Credit Card"}
-                        </p>
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 gap-4">
+                        <div>
+                          <label className="text-[10px] font-black opacity-30 block mb-1 uppercase tracking-widest">
+                            Recipient
+                          </label>
+                          <p className="text-sm font-bold tracking-tight">
+                            {selectedOrder.full_name}
+                          </p>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-black opacity-30 block mb-1 uppercase tracking-widest">
+                            Address
+                          </label>
+                          <p className="text-[11px] font-medium opacity-70 leading-relaxed">
+                            {selectedOrder.address}, {selectedOrder.city},{" "}
+                            {selectedOrder.zip}
+                            {selectedOrder.country_name &&
+                              `, ${selectedOrder.country_name}`}
+                          </p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-[10px] font-black opacity-30 block mb-1 uppercase tracking-widest">
+                              Contact
+                            </label>
+                            <p className="text-[11px] font-mono font-bold">
+                              {selectedOrder.phone_no}
+                            </p>
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-black opacity-30 block mb-1 uppercase tracking-widest">
+                              Payment Method
+                            </label>
+                            <p className="text-[11px] font-bold">
+                              {selectedOrder.payment_method === 1
+                                ? "Cash on Delivery"
+                                : selectedOrder.payment_method === 2
+                                  ? "bKash"
+                                  : "Credit Card"}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Additional Payment Details if applicable */}
+                        {selectedOrder.payment_method === 2 && (
+                          <div className="grid grid-cols-2 gap-4 pt-4 border-t border-base-content/5">
+                            <div>
+                              <label className="text-[9px] font-black opacity-30 block uppercase">
+                                bKash No
+                              </label>
+                              <p className="text-[11px] font-bold">
+                                {selectedOrder.bkash_no}
+                              </p>
+                            </div>
+                            <div>
+                              <label className="text-[9px] font-black opacity-30 block uppercase">
+                                Transaction ID
+                              </label>
+                              <p className="text-[11px] font-bold uppercase">
+                                {selectedOrder.bkash_trns_no}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+
+                        {selectedOrder.payment_method === 3 && (
+                          <div className="grid grid-cols-3 gap-4 pt-4 border-t border-base-content/5">
+                            <div>
+                              <label className="text-[9px] font-black opacity-30 block uppercase">
+                                Card No
+                              </label>
+                              <p className="text-[11px] font-bold">
+                                {selectedOrder.card_no}
+                              </p>
+                            </div>
+                            <div>
+                              <label className="text-[9px] font-black opacity-30 block uppercase">
+                                Exp Date
+                              </label>
+                              <p className="text-[11px] font-bold">
+                                {selectedOrder.card_exp_date}
+                              </p>
+                            </div>
+                            <div>
+                              <label className="text-[9px] font-black opacity-30 block uppercase">
+                                CVC
+                              </label>
+                              <p className="text-[11px] font-bold">
+                                {selectedOrder.card_cvc}
+                              </p>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
