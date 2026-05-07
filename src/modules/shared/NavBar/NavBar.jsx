@@ -106,7 +106,7 @@ const NavBar = () => {
                 src="/penguin_logo.png"
                 alt="Penguin Gear"
               />
-              <span class="hidden md:inline-block">Penguin</span>
+              <span className="hidden md:inline-block">Penguin</span>
             </Link>
           </div>
           <div className="navbar-center hidden lg:flex nav-link-style">
