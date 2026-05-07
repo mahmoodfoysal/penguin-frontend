@@ -100,7 +100,7 @@ const OrderHistory = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-8 py-3 rounded-xl font-heading font-bold uppercase text-[10px] tracking-widest transition-all duration-300 ${
+                className={`px-4 py-3 cursor-pointer rounded-xl font-heading font-bold uppercase text-[10px] tracking-widest transition-all duration-300 ${
                   activeTab === tab
                     ? "bg-base-content text-base-100 shadow-lg"
                     : "opacity-40 hover:opacity-100 hover:bg-base-200"

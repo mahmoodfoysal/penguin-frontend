@@ -43,13 +43,26 @@ const Newsletter = () => {
     showProcessing("Processing...", "Generating your discount code...");
 
     try {
-      // 1. Check user status/flag
       const userRes = await axios.get(
         `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-user-list/${email}`,
       );
 
-      // Backend usually returns an array for list endpoints
-      const user = userRes.data?.list_data?.[0];
+      let user = userRes.data?.list_data?.[0];
+
+      if (!user) {
+        await axios.post(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/insert-update-user-list`,
+          {
+            full_name: userInfo.name || userInfo.displayName || "Customer",
+            email: email,
+          },
+        );
+
+        const recheckRes = await axios.get(
+          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-user-list/${email}`,
+        );
+        user = recheckRes.data?.list_data?.[0];
+      }
 
       if (user && user.flag === 1) {
         closeAlert();
@@ -60,7 +73,6 @@ const Newsletter = () => {
       if (user && user.flag === 0) {
         const newCode = generateCouponCode();
 
-        // 2. Generate and store coupon
         await axios.post(
           `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/admin/insert-update-coupon-list`,
           {
@@ -72,7 +84,6 @@ const Newsletter = () => {
           },
         );
 
-        // 3. Update user flag to 1
         await axios.patch(
           `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/update-user-list/${user?._id}/${user?.email}`,
         );
@@ -86,7 +97,7 @@ const Newsletter = () => {
           "Your exclusive discount code is ready to use.",
         );
       } else {
-        throw new Error("User record not found or invalid.");
+        throw new Error("Unable to process user record. Please try again.");
       }
     } catch (error) {
       console.error("Newsletter process failed:", error);
