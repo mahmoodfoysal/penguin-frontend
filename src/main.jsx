@@ -129,7 +129,7 @@ const router = createBrowserRouter([
             path: "make-admin",
             element: (
               <SuperAdmin>
-                <MakeAdmin />,
+                <MakeAdmin />
               </SuperAdmin>
             ),
           },
@@ -138,7 +138,7 @@ const router = createBrowserRouter([
             path: "parent-category",
             element: (
               <Admin>
-                <ParentCategory />,
+                <ParentCategory />
               </Admin>
             ),
           },
@@ -146,7 +146,7 @@ const router = createBrowserRouter([
             path: "sub-category",
             element: (
               <Admin>
-                <SubCategory />,
+                <SubCategory />
               </Admin>
             ),
           },
@@ -154,7 +154,7 @@ const router = createBrowserRouter([
             path: "add-product",
             element: (
               <Admin>
-                <AddProduct />,
+                <AddProduct />
               </Admin>
             ),
           },
@@ -162,7 +162,7 @@ const router = createBrowserRouter([
             path: "add-blogs",
             element: (
               <Admin>
-                <AddBlogs />,
+                <AddBlogs />
               </Admin>
             ),
           },
@@ -171,7 +171,7 @@ const router = createBrowserRouter([
             path: "coupon-discount",
             element: (
               <Admin>
-                <CouponDiscount />,
+                <CouponDiscount />
               </Admin>
             ),
           },
@@ -179,7 +179,7 @@ const router = createBrowserRouter([
             path: "review",
             element: (
               <SuperAdmin>
-                <Review />,
+                <Review />
               </SuperAdmin>
             ),
           },
@@ -188,7 +188,7 @@ const router = createBrowserRouter([
             path: "pending-order",
             element: (
               <Manager>
-                <PendingOrder />,
+                <PendingOrder />
               </Manager>
             ),
           },
@@ -196,7 +196,7 @@ const router = createBrowserRouter([
             path: "warehouse",
             element: (
               <Manager>
-                <PendingOrder />,
+                <PendingOrder />
               </Manager>
             ),
           },
@@ -204,7 +204,7 @@ const router = createBrowserRouter([
             path: "shipping",
             element: (
               <Manager>
-                <PendingOrder />,
+                <PendingOrder />{" "}
               </Manager>
             ),
           },
@@ -212,7 +212,7 @@ const router = createBrowserRouter([
             path: "delivery",
             element: (
               <Manager>
-                <PendingOrder />,
+                <PendingOrder />
               </Manager>
             ),
           },
@@ -220,7 +220,7 @@ const router = createBrowserRouter([
             path: "completed",
             element: (
               <Manager>
-                <PendingOrder />,
+                <PendingOrder />
               </Manager>
             ),
           },
@@ -228,7 +228,7 @@ const router = createBrowserRouter([
             path: "rejected",
             element: (
               <Manager>
-                <PendingOrder />,
+                <PendingOrder />
               </Manager>
             ),
           },

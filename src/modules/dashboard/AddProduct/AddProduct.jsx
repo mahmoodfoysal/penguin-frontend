@@ -477,7 +477,7 @@ const AddProduct = () => {
                         <span className="text-[11px] font-black opacity-60">
                           #{item.prod_id}
                         </span>
-                        <span className="text-xs font-bold uppercase tracking-tighter">
+                        <span className="text-xs font-bold tracking-tighter">
                           {item.prod_name}
                         </span>
                       </div>
@@ -485,7 +485,7 @@ const AddProduct = () => {
 
                     {/* 4. Product Type */}
                     <td className="px-6 py-4">
-                      <span className="text-[10px] font-bold opacity-70 bg-base-200 px-2 py-1 rounded-sm uppercase">
+                      <span className="text-[10px] font-bold opacity-70 bg-base-200 px-2 py-1 rounded-sm ">
                         {item.prod_type_name}
                       </span>
                     </td>
@@ -557,7 +557,7 @@ const AddProduct = () => {
                 <tr>
                   <td
                     colSpan="9"
-                    className="px-8 py-12 text-center opacity-30 text-[10px] font-black uppercase tracking-widest"
+                    className="px-8 py-12 text-center opacity-30 text-[10px] font-black  tracking-widest"
                   >
                     No products available
                   </td>
@@ -945,12 +945,14 @@ const AddProduct = () => {
                   <label className="text-[10px] font-black tracking-widest opacity-50">
                     Description <span className="text-red-600">*</span>
                   </label>
-                  <input
+                  <textarea
                     value={formData.description}
                     onChange={(e) =>
                       setFormData({ ...formData, description: e.target.value })
                     }
                     type="text-area"
+                    cols="10"
+                    rows="8"
                     placeholder="Enter description"
                     className={`w-full border-b-2 ${
                       isInvalid && !formData.description
@@ -1043,29 +1045,29 @@ const AddProduct = () => {
                     <div className="grid grid-cols-2 gap-y-10 gap-x-6 border-t border-base-content/5 pt-8">
                       {/* Product Name */}
                       <div className="col-span-2">
-                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                        <p className="text-[10px] font-black tracking-widest opacity-40">
                           Product Name
                         </p>
-                        <p className="font-heading font-bold text-2xl uppercase mt-1 leading-none tracking-tighter">
+                        <p className="font-heading font-bold text-2xl mt-1 leading-none tracking-tighter">
                           {selectedProduct.prod_name}
                         </p>
                       </div>
 
                       {/* Brand */}
                       <div>
-                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                        <p className="text-[10px] font-black tracking-widest opacity-40">
                           Brand
                         </p>
-                        <p className="font-heading font-bold text-sm uppercase mt-1 tracking-tight">
+                        <p className="font-heading font-bold text-sm mt-1 tracking-tight">
                           {selectedProduct.prod_brand}
                         </p>
                       </div>
                       {selectedProduct.prod_type === "D" && (
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                          <p className="text-[10px] font-black  tracking-widest opacity-40">
                             Discount
                           </p>
-                          <p className="font-heading font-bold text-sm uppercase mt-1 tracking-tight">
+                          <p className="font-heading font-bold text-sm  mt-1 tracking-tight">
                             {selectedProduct.discount}{" "}
                             <span className="text-[10px] text-base-content/40 ml-1">
                               {selectedProduct.currency_name}
@@ -1076,7 +1078,7 @@ const AddProduct = () => {
 
                       {/* Price */}
                       <div>
-                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                        <p className="text-[10px] font-black  tracking-widest opacity-40">
                           Current Price
                         </p>
                         <p className="font-heading font-black text-xl mt-1 leading-none">
@@ -1089,35 +1091,35 @@ const AddProduct = () => {
 
                       {/* Stock */}
                       <div>
-                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                        <p className="text-[10px] font-black  tracking-widest opacity-40">
                           Availability
                         </p>
                         <div className="flex items-center gap-2 mt-1">
                           <div
                             className={`w-2 h-2 rounded-full ${selectedProduct.stock > 0 ? "bg-green-500 animate-pulse" : "bg-red-500"}`}
                           />
-                          <p className="font-heading font-bold text-sm uppercase ">
+                          <p className="font-heading font-bold text-sm  ">
                             {selectedProduct.stock}{" "}
                             <span className="opacity-50 text-[10px]">
-                              in stock
+                              In stock
                             </span>
                           </p>
                         </div>
                       </div>
 
                       <div>
-                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                        <p className="text-[10px] font-black  tracking-widest opacity-40">
                           Product Type
                         </p>
-                        <p className="font-heading font-bold text-sm uppercase">
+                        <p className="font-heading font-bold text-sm ">
                           {selectedProduct.prod_type_name}{" "}
                         </p>
                       </div>
                       <div>
-                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                        <p className="text-[10px] font-black  tracking-widest opacity-40">
                           Date Added
                         </p>
-                        <p className="font-heading font-bold text-sm uppercase">
+                        <p className="font-heading font-bold text-sm ">
                           {new Date(
                             selectedProduct.createdAt,
                           ).toLocaleDateString("en-GB", {
@@ -1131,12 +1133,12 @@ const AddProduct = () => {
 
                     {/* 3. Category Hierarchy (Technical IDs) */}
                     <div className="border-t border-base-content/5 pt-8">
-                      <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-4">
+                      <p className="text-[10px] font-black tracking-widest opacity-40 mb-4">
                         Category Mapping
                       </p>
                       <div className="flex flex-wrap gap-2">
                         <div className="px-3 py-1 border border-base-content/10 rounded-full flex items-center gap-2">
-                          <span className="text-[8px] font-black opacity-30 uppercase">
+                          <span className="text-[8px] font-black opacity-30 ">
                             Parent
                           </span>
                           <span className="text-[10px] font-bold">
@@ -1144,7 +1146,7 @@ const AddProduct = () => {
                           </span>
                         </div>
                         <div className="px-3 py-1 border border-base-content/10 rounded-full flex items-center gap-2">
-                          <span className="text-[8px] font-black opacity-30 uppercase">
+                          <span className="text-[8px] font-black opacity-30 ">
                             Sub
                           </span>
                           <span className="text-[10px] font-bold">
@@ -1156,7 +1158,7 @@ const AddProduct = () => {
 
                     {/* 4. Description */}
                     <div className="border-t border-base-content/5 pt-4 pb-4">
-                      <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                      <p className="text-[10px] font-black  tracking-widest opacity-40">
                         Description
                       </p>
                       <p className="text-xs font-medium leading-relaxed mt-4 opacity-70 border-l-2 border-accent/20 pl-4 py-1 ">
@@ -1170,7 +1172,7 @@ const AddProduct = () => {
                 <div className="pt-8 border-t border-base-content/5 mt-auto bg-base-100">
                   <button
                     onClick={() => setIsDetailsOpen(false)}
-                    className="w-full bg-base-content text-base-100 py-5 font-heading font-black uppercase tracking-[0.3em] text-[11px] hover:bg-accent transition-colors rounded-sm"
+                    className="w-full bg-base-content text-base-100 py-5 font-heading font-black  tracking-[0.3em] text-[11px] hover:bg-accent transition-colors rounded-sm"
                   >
                     Close Panel
                   </button>
