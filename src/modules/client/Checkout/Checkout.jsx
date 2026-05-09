@@ -4,11 +4,12 @@ import { Link, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { clearCart } from "../../../store/slice/cartSlice";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 import Swal from "sweetalert2";
 import DataNotFound from "../../../pages/DataNotFound";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Checkout = () => {
+  const axiosSecure = useAxiosSecure();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartList = useSelector((state) => state.cart.cart);
@@ -77,8 +78,8 @@ const Checkout = () => {
   const handleCouponCode = async () => {
     setIsCouponLoading(true);
     try {
-      const result = await axios.get(
-        `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-match-coupon-list/${userInfo?.email}/${couponCode}`,
+      const result = await axiosSecure.get(
+        `/api/penguin/get-match-coupon-list/${userInfo?.email}/${couponCode}`,
       );
 
       if (result.data?.is_valid === true && !result.data?.appliedAt) {
@@ -232,21 +233,21 @@ const Checkout = () => {
       if (confirmation.isConfirmed) {
         setIsOrderLoading(true);
         try {
-          const url = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-order-list`;
-          const result = await axios.post(url, data);
+          const url = `/api/admin/insert-update-order-list`;
+          const result = await axiosSecure.post(url, data);
 
           if (result.status) {
             if (couponInfo) {
-              await axios.patch(
-                `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/update-coupon-list/${couponInfo?._id}/${couponInfo?.email}`,
+              await axiosSecure.patch(
+                `/api/penguin/update-coupon-list/${couponInfo?._id}/${couponInfo?.email}`,
               );
             }
 
             const updateStockPromises = cartList?.map(async (item) => {
               const newStock = item.stock - item.quantity;
-              const url = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list/stock/${item?._id}`;
+              const url = `/api/penguin/get-product-list/stock/${item?._id}`;
 
-              return await axios.patch(url, { stock: newStock });
+              return await axiosSecure.patch(url, { stock: newStock });
             });
 
             await Promise.all(updateStockPromises);

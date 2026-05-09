@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -6,8 +5,10 @@ import {
   showError,
   showConfirmation,
 } from "../../../components/Alert";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MakeAdmin = () => {
+  const axiosSecure = useAxiosSecure();
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [adminList, setAdminList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -15,9 +16,7 @@ const MakeAdmin = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-admin-list`,
-        );
+        const res = await axiosSecure.get(`/api/admin/get-admin-list`);
         setAdminList(res.data?.list_data || []);
       } catch (error) {
         console.error("Failed to fetch admin list", error);
@@ -83,8 +82,8 @@ const MakeAdmin = () => {
 
     try {
       if (confirmation.isConfirmed) {
-        const result = await axios.post(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-admin`,
+        const result = await axiosSecure.post(
+          `/api/admin/insert-update-admin`,
           data,
         );
         if (result.data.status) {
@@ -144,8 +143,8 @@ const MakeAdmin = () => {
     );
     try {
       if (confirmation.isConfirmed) {
-        const result = await axios.delete(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/delete-admin-list/${item._id}`,
+        const result = await axiosSecure.delete(
+          `/api/admin/delete-admin-list/${item._id}`,
         );
         if (result.data?.status) {
           const index = adminList.findIndex((list) => list._id === item._id);

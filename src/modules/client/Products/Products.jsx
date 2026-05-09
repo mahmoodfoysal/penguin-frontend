@@ -9,10 +9,11 @@ import Brand from "../../../components/Brand";
 import PageHeader from "../../../components/PageHeader";
 import ComponentLoader from "../../../pages/ComponentLoader";
 import DataNotFound from "../../../pages/DataNotFound";
-import axios from "axios";
 import { showError } from "../../../components/Alert";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Products = () => {
+  const axiosSecure = useAxiosSecure();
   const pageInfo = [
     {
       parent_route_name: "Home",
@@ -33,12 +34,8 @@ const Products = () => {
     const fetchProductsData = async () => {
       try {
         const [productsRes, categoriesRes] = await Promise.all([
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
-          ),
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/client/get-all-categories`,
-          ),
+          axiosSecure.get(`/api/penguin/get-product-list`),
+          axiosSecure.get(`/api/client/get-all-categories`),
         ]);
         setData({
           products: productsRes.data,
@@ -102,9 +99,7 @@ const Products = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list`,
-        );
+        const response = await axiosSecure.get(`/api/penguin/get-review-list`);
         setReviewsList(response.data?.list_data || response.data || []);
       } catch (error) {
         showError(

@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -10,8 +9,10 @@ import {
 
 import Pagination from "../../../components/Pagination";
 import ComponentLoader from "../../../pages/ComponentLoader";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const AddBlogs = () => {
+  const axiosSecure = useAxiosSecure();
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [blogList, setBlogList] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
@@ -40,9 +41,7 @@ const AddBlogs = () => {
   const fetchBlogs = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-blog-list`,
-      );
+      const response = await axiosSecure.get(`/api/penguin/get-blog-list`);
       setBlogList(response.data?.list_data || response.data || []);
       setIsLoading(false);
     } catch (error) {
@@ -132,8 +131,8 @@ const AddBlogs = () => {
       if (confirmation.isConfirmed) {
         setIsLoadingButton(true);
         showProcessing();
-        const result = await axios.post(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/insert-update-blog-list`,
+        const result = await axiosSecure.post(
+          `/api/penguin/insert-update-blog-list`,
           data,
         );
         if (result.data.status) {
@@ -209,8 +208,8 @@ const AddBlogs = () => {
     try {
       if (confirmation.isConfirmed) {
         showProcessing();
-        const result = await axios.delete(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/delete-blog-list/${item._id}`,
+        const result = await axiosSecure.delete(
+          `/api/penguin/delete-blog-list/${item._id}`,
         );
         if (result.data?.status) {
           setBlogList(blogList.filter((b) => b._id !== item._id));

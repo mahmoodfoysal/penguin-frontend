@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -9,8 +8,10 @@ import {
 
 import Pagination from "../../../components/Pagination";
 import ComponentLoader from "../../../pages/ComponentLoader";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ParentCategory = () => {
+  const axiosSecure = useAxiosSecure();
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [categoryList, setCategoryList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,9 +19,7 @@ const ParentCategory = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-parent-category`,
-        );
+        const res = await axiosSecure.get(`/api/admin/get-parent-category`);
         setCategoryList(res.data?.list_data || []);
       } catch (error) {
         console.error("Failed to fetch categories", error);
@@ -122,8 +121,8 @@ const ParentCategory = () => {
     try {
       if (confirmation.isConfirmed) {
         setIsLoadingButton(true);
-        const result = await axios.post(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-parent-category`,
+        const result = await axiosSecure.post(
+          `/api/admin/insert-update-parent-category`,
           data,
         );
         if (result.data.status) {
@@ -179,8 +178,8 @@ const ParentCategory = () => {
 
     try {
       if (confirmation.isConfirmed) {
-        const result = await axios.patch(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/update-parent-category-status/${item._id}`,
+        const result = await axiosSecure.patch(
+          `/api/admin/update-parent-category-status/${item._id}`,
           data,
         );
         if (result.data.status) {
@@ -241,8 +240,8 @@ const ParentCategory = () => {
     );
     try {
       if (confirmation.isConfirmed) {
-        const result = await axios.delete(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/delete-parent-category-list/${item._id}`,
+        const result = await axiosSecure.delete(
+          `/api/admin/delete-parent-category-list/${item._id}`,
         );
         if (result.data?.status) {
           const index = categoryList.findIndex((list) => list._id === item._id);

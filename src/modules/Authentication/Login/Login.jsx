@@ -11,10 +11,8 @@ import initilizationAuthentication from "../../../firebase/firebase.init";
 import { useLocation, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setUser, setRole } from "../../../store/slice/user";
-
-import axios from "axios";
 import { showSuccess, showError } from "../../../components/Alert";
-
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 initilizationAuthentication();
 
@@ -23,8 +21,8 @@ const provider = new GoogleAuthProvider();
 const auth = getAuth();
 
 const Login = () => {
+  const axiosSecure = useAxiosSecure();
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -62,22 +60,23 @@ const Login = () => {
 
         dispatch(setUser({ token: user.accessToken }));
         if (token) {
-          const url = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/admin/get-admin-list/${user.email}`;
-          const response = await axios.get(url);
+          const url = `/admin/get-admin-list/${user.email}`;
+          const response = await axiosSecure.get(url);
           dispatch(setRole(response.data));
         }
         setIsLoading(false);
         await showSuccess("Success!", "Login successful.");
         navigate(location.state?.from?.pathname || "/home");
-
       })
 
       .catch((error) => {
         setIsLoading(false);
         setAuthError(error.message);
-        showError("Authentication Failed", error.message || "Failed to sign in with Google");
+        showError(
+          "Authentication Failed",
+          error.message || "Failed to sign in with Google",
+        );
       });
-
   };
 
   // create account
@@ -97,7 +96,6 @@ const Login = () => {
     setIsLoading(true);
     createUserWithEmailAndPassword(auth, userEmail, userPassword)
       .then(async (userCredential) => {
-
         const user = userCredential.user;
         // Update user profile
         updateProfile(user, {
@@ -113,15 +111,15 @@ const Login = () => {
         setIsInvalid(false);
         await showSuccess("Success!", "Registration successful.");
         navigate(location.state?.from?.pathname || "/home");
-
       })
       .catch((error) => {
         setIsLoading(false);
         setAuthError(error.message);
-        showError("Registration Failed", error.message || "Failed to create account");
+        showError(
+          "Registration Failed",
+          error.message || "Failed to create account",
+        );
       });
-
-
   };
 
   // login
@@ -142,8 +140,8 @@ const Login = () => {
         dispatch(setUser({ token: user.accessToken }));
 
         if (user) {
-          const url = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/admin/get-admin-list/${userEmail}`;
-          const response = await axios.get(url);
+          const url = `/admin/get-admin-list/${userEmail}`;
+          const response = await axiosSecure.get(url);
           dispatch(setRole(response.data));
         }
 
@@ -152,15 +150,12 @@ const Login = () => {
         setIsLoading(false);
         await showSuccess("Success!", "Login successful.");
         navigate(location.state?.from?.pathname || "/home");
-
       })
       .catch((error) => {
         setIsLoading(false);
         setAuthError(error.message);
         showError("Login Failed", error.message || "Failed to sign in");
       });
-
-
   };
 
   return (

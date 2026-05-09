@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -10,8 +9,10 @@ import {
 import Pagination from "../../../components/Pagination";
 import Swal from "sweetalert2";
 import ComponentLoader from "./../../../pages/ComponentLoader";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const CouponDiscount = () => {
+  const axiosSecure = useAxiosSecure();
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [couponList, setCouponList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,9 +20,7 @@ const CouponDiscount = () => {
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/admin/get-coupon-list`,
-        );
+        const res = await axiosSecure.get(`/api/penguin/admin/get-coupon-list`);
         const data =
           res.data?.list_data || (Array.isArray(res.data) ? res.data : []);
         setCouponList(data);
@@ -128,8 +127,8 @@ const CouponDiscount = () => {
 
       try {
         setIsLoadingButton(true);
-        const result = await axios.post(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/admin/insert-update-coupon-list`,
+        const result = await axiosSecure.post(
+          `/api/penguin/admin/insert-update-coupon-list`,
           data,
         );
 
@@ -188,8 +187,8 @@ const CouponDiscount = () => {
     if (confirmation.isConfirmed) {
       try {
         // Guessing the delete path based on convention
-        const result = await axios.delete(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/delete-coupon-list/${item._id}`,
+        const result = await axiosSecure.delete(
+          `/api/penguin/delete-coupon-list/${item._id}`,
         );
 
         if (result.data.status) {

@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
 import ReactApexChart from "react-apexcharts";
-import axios from "axios";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import ComponentLoader from "../../../pages/ComponentLoader";
 import { formatDateDDMonYYYY } from "../../../utils/dateFormat";
 
 const DashboardHome = () => {
+  const axiosSecure = useAxiosSecure();
   const [currentTheme, setCurrentTheme] = useState(
     document.documentElement.getAttribute("data-theme") || "light",
   );
@@ -25,9 +26,7 @@ const DashboardHome = () => {
 
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-order-list`,
-        );
+        const response = await axiosSecure.get(`/api/penguin/get-order-list`);
         setOrderList(response.data?.list_data || []);
       } catch (error) {
         console.error("Failed to fetch orders:", error);

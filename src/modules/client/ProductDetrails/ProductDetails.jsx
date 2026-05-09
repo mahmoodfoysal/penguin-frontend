@@ -13,11 +13,12 @@ import {
 import { setOrderProduct } from "../../../store/slice/buyProduct";
 import ComponentLoader from "../../../pages/ComponentLoader";
 import Swal from "sweetalert2";
-import axios from "axios";
 import { timeCount } from "../../../utils/timeCount";
 import DataNotFound from "../../../pages/DataNotFound";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ProductDetails = () => {
+  const axiosSecure = useAxiosSecure();
   const { id, prod_id: p_id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,15 +35,9 @@ const ProductDetails = () => {
       setIsLoading(true);
       try {
         const [productsRes, detailsRes, commentsRes] = await Promise.all([
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
-          ),
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list/${id}/${p_id}`,
-          ),
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list/${p_id}`,
-          ),
+          axiosSecure.get(`/api/penguin/get-product-list`),
+          axiosSecure.get(`/api/penguin/get-product-list/${id}/${p_id}`),
+          axiosSecure.get(`/api/penguin/get-review-list/${p_id}`),
         ]);
         setData({
           products: productsRes.data,
@@ -209,8 +204,8 @@ const ProductDetails = () => {
     if (confirmation.isConfirmed) {
       setIsReviewLoading(true);
       try {
-        const result = await axios.post(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/insert-update-review-list`,
+        const result = await axiosSecure.post(
+          `/api/penguin/insert-update-review-list`,
           data,
         );
         if (result.status) {

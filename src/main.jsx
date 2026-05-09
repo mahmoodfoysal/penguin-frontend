@@ -249,3 +249,12 @@ createRoot(document.getElementById("root")).render(
     </Provider>
   </StrictMode>,
 );
+
+// Clear any old service workers that might be causing issues in non-incognito mode
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (let registration of registrations) {
+      registration.unregister();
+    }
+  });
+}

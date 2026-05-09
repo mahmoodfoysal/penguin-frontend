@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo } from "react";
-import axios from "axios";
 import BlogCard from "../../../components/BlogCard";
 import SearchBar from "../../../components/SearchBar";
 import Category from "../../../components/Category";
@@ -10,8 +9,10 @@ import DataNotFound from "../../../pages/DataNotFound";
 import Swal from "sweetalert2";
 import SkeletonCard from "../../../pages/SkeletonCard";
 import { Navigate } from "react-router";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Blogs = () => {
+  const axiosSecure = useAxiosSecure();
   const pageInfo = [
     { parent_route_name: "Home", path: "/" },
     { curren_route: "Blogs" },
@@ -31,9 +32,7 @@ const Blogs = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-blog-list`,
-        );
+        const response = await axiosSecure.get(`/api/penguin/get-blog-list`);
         const data = response.data?.list_data || response.data || [];
         const formatted = data.map((b) => ({
           _id: b._id,

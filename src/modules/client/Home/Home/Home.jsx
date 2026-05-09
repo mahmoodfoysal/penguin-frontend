@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import TopBanner from "../TopBanner/TopBanner";
 import Features from "../Features/Features";
 import HomeCategory from "../HomeCategory/HomeCategory";
@@ -13,8 +12,10 @@ import Testimonials from "../Testimonials/Testimonials";
 import BlogPreview from "../BlogPreview/BlogPreview";
 import FAQ from "../FAQ/FAQ";
 import Newsletter from "../Newsletter/Newsletter";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const Home = () => {
+  const axiosSecure = useAxiosSecure();
   const [products, setProducts] = useState(null);
   const [blogs, setBlogs] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,12 +25,8 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const [productsRes, blogsRes] = await Promise.all([
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
-          ),
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-blog-list`,
-          ),
+          axiosSecure.get(`/api/penguin/get-product-list`),
+          axiosSecure.get(`/api/penguin/get-blog-list`),
         ]);
         setProducts({ products: productsRes.data });
         setBlogs({ blogs: blogsRes.data });

@@ -7,20 +7,18 @@ import { Rating } from "@smastrom/react-rating";
 import "swiper/css";
 import "swiper/css/navigation";
 import "@smastrom/react-rating/style.css";
-
-import axios from "axios";
 import SkeletonCard from "../../../../pages/SkeletonCard";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const Testimonials = () => {
+  const axiosSecure = useAxiosSecure();
   const [reviews, setReviews] = useState([]);
 
   // Fetch Reviews
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list`,
-        );
+        const response = await axiosSecure.get(`/api/penguin/get-review-list`);
         const data = response.data?.list_data || response.data || [];
 
         const goodReviews = data

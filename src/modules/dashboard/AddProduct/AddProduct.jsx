@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -10,8 +9,10 @@ import {
 
 import Pagination from "../../../components/Pagination";
 import ComponentLoader from "../../../pages/ComponentLoader";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const AddProduct = () => {
+  const axiosSecure = useAxiosSecure();
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [productList, setProductList] = useState([]);
   const [parentCategoryList, setParentCategoryList] = useState([]);
@@ -22,15 +23,9 @@ const AddProduct = () => {
     const fetchAllData = async () => {
       try {
         const [parentRes, subRes, prodRes] = await Promise.all([
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-parent-category`,
-          ),
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-sub-category`,
-          ),
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list`,
-          ),
+          axiosSecure.get(`/api/admin/get-parent-category`),
+          axiosSecure.get(`/api/admin/get-sub-category`),
+          axiosSecure.get(`/api/penguin/get-product-list`),
         ]);
         setParentCategoryList(parentRes.data?.list_data || []);
         setSubCategoryList(subRes.data?.list_data || []);
@@ -217,8 +212,8 @@ const AddProduct = () => {
     try {
       if (confirmation.isConfirmed) {
         showProcessing();
-        const result = await axios.post(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-product-list`,
+        const result = await axiosSecure.post(
+          `/api/admin/insert-update-product-list`,
           data,
         );
         if (result.data.status) {
@@ -274,8 +269,8 @@ const AddProduct = () => {
     try {
       if (confirmation.isConfirmed) {
         showProcessing();
-        const result = await axios.patch(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/update-product-status/${item._id}`,
+        const result = await axiosSecure.patch(
+          `/api/admin/update-product-status/${item._id}`,
           data,
         );
         if (result.data.status) {
@@ -354,8 +349,8 @@ const AddProduct = () => {
     try {
       if (confirmation.isConfirmed) {
         showProcessing();
-        const result = await axios.delete(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/delete-product-list/${item._id}`,
+        const result = await axiosSecure.delete(
+          `/api/admin/delete-product-list/${item._id}`,
         );
         if (result.data?.status) {
           const index = productList.findIndex((list) => list._id === item._id);

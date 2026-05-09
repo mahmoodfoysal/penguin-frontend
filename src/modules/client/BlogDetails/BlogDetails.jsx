@@ -1,16 +1,16 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import axios from "axios";
-
 import PageHeader from "../../../components/PageHeader";
 import BlogCard from "../../../components/BlogCard";
 import Pagination from "../../../components/Pagination";
 import ComponentLoader from "../../../pages/ComponentLoader";
 import DataNotFound from "../../../pages/DataNotFound";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ITEMS_PER_PAGE = 4;
 
 const BlogDetails = () => {
+  const axiosSecure = useAxiosSecure();
   const { id } = useParams();
   const [data, setData] = useState({ blogs: null, blogDetails: null });
   const [isLoading, setIsLoading] = useState(true);
@@ -21,12 +21,8 @@ const BlogDetails = () => {
       setIsLoading(true);
       try {
         const [blogsRes, detailsRes] = await Promise.all([
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-blog-list`,
-          ),
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-blog-list/${id}`,
-          ),
+          axiosSecure.get(`/api/penguin/get-blog-list`),
+          axiosSecure.get(`/api/penguin/get-blog-list/${id}`),
         ]);
         setData({
           blogs: blogsRes.data,

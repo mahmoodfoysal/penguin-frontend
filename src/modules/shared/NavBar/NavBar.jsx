@@ -57,6 +57,7 @@ const NavBar = () => {
     signOut(auth)
       .then(() => {
         sessionStorage.removeItem("penguin-shopping");
+        sessionStorage.removeItem("token");
         dispatch(logout());
         dispatch(setUserInfo({}));
         navigate("/home");

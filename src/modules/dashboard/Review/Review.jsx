@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -10,8 +9,10 @@ import {
 
 import Pagination from "../../../components/Pagination";
 import ComponentLoader from "../../../pages/ComponentLoader";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Review = () => {
+  const axiosSecure = useAxiosSecure();
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [reviewList, setReviewList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,9 +32,7 @@ const Review = () => {
   const fetchReviews = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list`,
-      );
+      const response = await axiosSecure.get(`/api/penguin/get-review-list`);
       setReviewList(response.data?.list_data || response.data || []);
     } catch (error) {
       console.error("Failed to fetch reviews", error);
@@ -132,8 +131,8 @@ const Review = () => {
       if (confirmation.isConfirmed) {
         setIsLoadingButton(true);
         showProcessing();
-        const result = await axios.post(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/insert-update-review-list`,
+        const result = await axiosSecure.post(
+          `/api/penguin/insert-update-review-list`,
           data,
         );
         if (result.data.status) {
@@ -192,8 +191,8 @@ const Review = () => {
     try {
       if (confirmation.isConfirmed) {
         showProcessing();
-        const result = await axios.delete(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/delete-review-list/${item._id}`,
+        const result = await axiosSecure.delete(
+          `/api/penguin/delete-review-list/${item._id}`,
         );
         if (result.data?.status) {
           setReviewList(reviewList.filter((r) => r._id !== item._id));

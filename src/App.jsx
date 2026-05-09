@@ -15,8 +15,8 @@ import {
 import NavBar from "./modules/shared/NavBar/NavBar.jsx";
 
 import Footer from "./modules/shared/Footer/Footer.jsx";
-import axios from "axios";
 import ScrollToTop from "./components/ScrollToTop";
+import useAxiosSecure from "./hooks/useAxiosSecure";
 
 initilizationAuthentication();
 
@@ -24,6 +24,7 @@ const auth = getAuth();
 
 function App() {
   const dispatch = useDispatch();
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
     dispatch(setIsPageLoading(true));
@@ -45,6 +46,23 @@ function App() {
 
       dispatch(setUserInfo(userData));
 
+      if (firebaseUser) {
+        const loggedUser = { email: firebaseUser?.email };
+
+        fetch(`${import.meta.env.VITE_PENGUIN_BACKEND_URL}/get-token`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(loggedUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            sessionStorage.setItem("token", data.token);
+          })
+          .catch((err) => console.log(err));
+      }
+
       if (sessionUser) {
         dispatch(setUser(JSON.parse(sessionUser)));
       } else {
@@ -52,8 +70,9 @@ function App() {
       }
 
       try {
-        const url = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/admin/get-admin-list/${userData.email}`;
-        const response = await axios.get(url);
+        const response = await axiosSecure.get(
+          `/admin/get-admin-list/${userData.email}`,
+        );
 
         dispatch(setRole(response.data));
       } catch (error) {

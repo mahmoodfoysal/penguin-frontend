@@ -1,10 +1,11 @@
-import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import Pagination from "../../../components/Pagination";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const OrderHistory = () => {
+  const axiosSecure = useAxiosSecure();
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [orderList, setOrderList] = useState([]);
   const [activeTab, setActiveTab] = useState("orders");
@@ -36,8 +37,8 @@ const OrderHistory = () => {
       if (!userInfo?.email) return;
       try {
         setIsLoading(true);
-        const res = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-order-list/${userInfo.email}`,
+        const res = await axiosSecure.get(
+          `/api/penguin/get-order-list/${userInfo.email}`,
         );
         if (res.data?.list_data) {
           setOrderList(res.data.list_data);

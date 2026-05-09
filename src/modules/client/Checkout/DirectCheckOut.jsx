@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setOrderProduct } from "../../../store/slice/buyProduct";
-import axios from "axios";
 import {
   showSuccess,
   showError,
@@ -13,7 +12,9 @@ import {
 } from "../../../components/Alert";
 
 import ComponentLoader from "../../../pages/ComponentLoader";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 const DirectCheckOut = () => {
+  const axiosSecure = useAxiosSecure();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const orderProduct = useSelector((state) => state.buy.orderProduct);
@@ -85,8 +86,8 @@ const DirectCheckOut = () => {
   const handleCouponCode = async () => {
     setIsCouponLoading(true);
     try {
-      const result = await axios.get(
-        `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-match-coupon-list/${userInfo?.email}/${couponCode}`,
+      const result = await axiosSecure.get(
+        `/api/penguin/get-match-coupon-list/${userInfo?.email}/${couponCode}`,
       );
 
       if (result.data?.is_valid === true && !result.data?.appliedAt) {
@@ -200,21 +201,21 @@ const DirectCheckOut = () => {
 
       setIsOrderLoading(true);
       showProcessing();
-      const result = await axios.post(
-        `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update-order-list`,
+      const result = await axiosSecure.post(
+        `/api/admin/insert-update-order-list`,
         data,
       );
 
       if (result.data.status) {
         if (couponInfo) {
-          await axios.patch(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/update-coupon-list/${couponInfo?._id}/${userInfo?.email}`,
+          await axiosSecure.patch(
+            `/api/penguin/update-coupon-list/${couponInfo?._id}/${userInfo?.email}`,
           );
         }
 
         const newStock = orderProduct.stock - orderProduct.quantity;
-        const stockUrl = `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-product-list/stock/${orderProduct?._id}`;
-        await axios.patch(stockUrl, { stock: newStock });
+        const stockUrl = `/api/penguin/get-product-list/stock/${orderProduct?._id}`;
+        await axiosSecure.patch(stockUrl, { stock: newStock });
 
         await showSuccess("Order Success", result.data.message);
         dispatch(setOrderProduct(null));

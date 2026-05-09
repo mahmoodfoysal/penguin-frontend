@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   showSuccess,
   showError,
@@ -10,11 +9,13 @@ import { getAuth, updateProfile } from "firebase/auth";
 import initilizationAuthentication from "../../../firebase/firebase.init";
 import { setUserInfo } from "../../../store/slice/user";
 import { useDispatch, useSelector } from "react-redux";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 initilizationAuthentication();
 const auth = getAuth();
 
 const CustomerProfile = () => {
+  const axiosSecure = useAxiosSecure();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [activeTab, setActiveTab] = useState("overview");
@@ -50,8 +51,8 @@ const CustomerProfile = () => {
         setIsLoading(true);
 
         // Fetch profile info from backend to get _id and existing details
-        const userRes = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-user-list/${userInfo.email}`,
+        const userRes = await axiosSecure.get(
+          `/api/penguin/get-user-list/${userInfo.email}`,
         );
         if (userRes.data?.list_data?.length > 0) {
           const user = userRes.data.list_data[0];
@@ -65,16 +66,16 @@ const CustomerProfile = () => {
         }
 
         // Fetch order stats separately
-        const orderRes = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-order-list/${userInfo.email}`,
+        const orderRes = await axiosSecure.get(
+          `/api/penguin/get-order-list/${userInfo.email}`,
         );
         if (orderRes.data?.list_data) {
           setOrderData(orderRes.data.list_data);
         }
 
         // Fetch coupons
-        const couponRes = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-coupon-list/${userInfo.email}`,
+        const couponRes = await axiosSecure.get(
+          `/api/penguin/get-coupon-list/${userInfo.email}`,
         );
         if (couponRes.data?.list_data) {
           setCouponData(couponRes.data.list_data);
@@ -105,8 +106,8 @@ const CustomerProfile = () => {
       showProcessing("Updating...", "Please wait while we save your changes");
 
       // 1. Update Backend API
-      const response = await axios.post(
-        `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/insert-update-user-list`,
+      const response = await axiosSecure.post(
+        `/api/penguin/insert-update-user-list`,
         {
           ...profileData,
           user_info: userInfo?.email,

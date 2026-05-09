@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -11,8 +10,10 @@ import {
 import Pagination from "../../../components/Pagination";
 import Swal from "sweetalert2";
 import ComponentLoader from "../../../pages/ComponentLoader";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const SubCategory = () => {
+  const axiosSecure = useAxiosSecure();
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [categoryList, setCategoryList] = useState([]);
   const [parentList, setParentList] = useState([]);
@@ -22,12 +23,8 @@ const SubCategory = () => {
     const fetchCategoryData = async () => {
       try {
         const [parentRes, subRes] = await Promise.all([
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-parent-category`,
-          ),
-          axios.get(
-            `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-sub-category`,
-          ),
+          axiosSecure.get(`/api/admin/get-parent-category`),
+          axiosSecure.get(`/api/admin/get-sub-category`),
         ]);
         setParentList(parentRes.data?.list_data || []);
         setCategoryList(subRes.data?.list_data || []);
@@ -144,8 +141,8 @@ const SubCategory = () => {
     try {
       if (confirmation.isConfirmed) {
         setIsLoadingButton(true);
-        const result = await axios.post(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/insert-update/sub-category`,
+        const result = await axiosSecure.post(
+          `/api/admin/insert-update/sub-category`,
           data,
         );
         if (result.data.status) {
@@ -210,8 +207,8 @@ const SubCategory = () => {
     try {
       if (confirmation.isConfirmed) {
         showProcessing();
-        const result = await axios.patch(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/update-sub-category-status/${item._id}`,
+        const result = await axiosSecure.patch(
+          `/api/admin/update-sub-category-status/${item._id}`,
           data,
         );
         if (result.data.status) {
@@ -279,8 +276,8 @@ const SubCategory = () => {
 
     try {
       if (confirmation.isConfirmed) {
-        const result = await axios.delete(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/delete-sub-category-list/${item._id}`,
+        const result = await axiosSecure.delete(
+          `/api/admin/delete-sub-category-list/${item._id}`,
         );
         if (result.data?.status) {
           const index = categoryList.findIndex((list) => list._id === item._id);

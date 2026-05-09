@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
@@ -53,14 +53,13 @@ const PendingOrder = () => {
   const itemsPerPage = 8;
 
   const location = useLocation();
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
     const fetchOrders = async () => {
       setIsLoading(true);
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-order-list`,
-        );
+        const res = await axiosSecure.get("/api/penguin/get-order-list");
 
         setOrderList(res.data?.list_data || []);
         setIsLoading(false);
@@ -137,8 +136,8 @@ const PendingOrder = () => {
     try {
       if (confirmation.isConfirmed) {
         showProcessing();
-        const result = await axios.patch(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/update-order-status/${item._id}`,
+        const result = await axiosSecure.patch(
+          `/api/admin/update-order-status/${item._id}`,
           data,
         );
         if (result.data.status) {

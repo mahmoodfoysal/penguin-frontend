@@ -1,18 +1,17 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import SkeletonCard from "../../../../pages/SkeletonCard";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const HomeCategory = () => {
+  const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const handleImageCategory = async () => {
       try {
-        const result = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/admin/get-image-category`,
-        );
+        const result = await axiosSecure.get(`/api/admin/get-image-category`);
         if (result.data?.list_data?.length) {
           setCategories(result.data.list_data);
         } else {

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
-import axios from "axios";
 import { showSuccess, showError } from "../../../components/Alert";
-
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Footer = () => {
+  const axiosSecure = useAxiosSecure();
   const user = useSelector((state) => state.auth.user);
   const role = useSelector((state) => state.auth.role);
   const [promoEmail, setPromoEmail] = useState("");
@@ -18,26 +18,33 @@ const Footer = () => {
 
     if (!promoEmail || !promoEmail.includes("@")) {
       setIsInvalid(true);
-      showError("Required Field", "Please provide a valid tactical email address.");
+      showError(
+        "Required Field",
+        "Please provide a valid tactical email address.",
+      );
       return;
     }
 
-
     try {
       setIsSubmitting(true);
-      const response = await axios.post(
-        `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/insert-update-clain-promo-list`,
+      const response = await axiosSecure.post(
+        `/api/penguin/insert-update-clain-promo-list`,
         { email: promoEmail },
       );
 
       if (response.data.status) {
-        showSuccess("Promotion Email", "You are now get promotion email from Penguin.");
+        showSuccess(
+          "Promotion Email",
+          "You are now get promotion email from Penguin.",
+        );
         setPromoEmail("");
       }
     } catch (error) {
-      showError("Link Failed", error.response?.data?.message || "Communication disrupted.");
+      showError(
+        "Link Failed",
+        error.response?.data?.message || "Communication disrupted.",
+      );
     } finally {
-
       setIsSubmitting(false);
     }
   };

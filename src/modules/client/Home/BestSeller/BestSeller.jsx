@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import ProductCard from "../../../../components/ProductCard";
-import axios from "axios";
 import SkeletonCard from "../../../../pages/SkeletonCard";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const BestSeller = ({ productsData, isLoading }) => {
+  const axiosSecure = useAxiosSecure();
   const products = productsData?.products;
 
   const [bestSellerProd, setBestSellerProd] = useState([]);
@@ -14,9 +15,7 @@ const BestSeller = ({ productsData, isLoading }) => {
       if (!products?.list_data) return;
 
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-review-list`,
-        );
+        const response = await axiosSecure.get(`/api/penguin/get-review-list`);
         const reviews = response.data?.list_data || response.data || [];
 
         const ratingsMap = {};

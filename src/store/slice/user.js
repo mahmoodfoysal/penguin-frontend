@@ -93,6 +93,7 @@ const authSlice = createSlice({
       state.role = {};
       state.isLoggedIn = false;
       sessionStorage.removeItem("penguin-shopping");
+      sessionStorage.removeItem("token");
     },
   },
 });

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
 import {
   showProcessing,
   showError,
@@ -8,8 +7,10 @@ import {
   showConfirmation,
   closeAlert,
 } from "../../../../components/Alert";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const Newsletter = () => {
+  const axiosSecure = useAxiosSecure();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle");
   const [couponCode, setCouponCode] = useState("");
@@ -43,23 +44,20 @@ const Newsletter = () => {
     showProcessing("Processing...", "Generating your discount code...");
 
     try {
-      const userRes = await axios.get(
-        `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-user-list/${email}`,
+      const userRes = await axiosSecure.get(
+        `/api/penguin/get-user-list/${email}`,
       );
 
       let user = userRes.data?.list_data?.[0];
 
       if (!user) {
-        await axios.post(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/insert-update-user-list`,
-          {
-            full_name: userInfo.name || userInfo.displayName || "Customer",
-            email: email,
-          },
-        );
+        await axiosSecure.post(`/api/penguin/insert-update-user-list`, {
+          full_name: userInfo.name || userInfo.displayName || "Customer",
+          email: email,
+        });
 
-        const recheckRes = await axios.get(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/get-user-list/${email}`,
+        const recheckRes = await axiosSecure.get(
+          `/api/penguin/get-user-list/${email}`,
         );
         user = recheckRes.data?.list_data?.[0];
       }
@@ -73,19 +71,16 @@ const Newsletter = () => {
       if (user && user.flag === 0) {
         const newCode = generateCouponCode();
 
-        await axios.post(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/admin/insert-update-coupon-list`,
-          {
-            coupon_code: newCode,
-            email: email,
-            flag: 0,
-            per_dis_amt: "0.10",
-            operator: "*",
-          },
-        );
+        await axiosSecure.post(`/api/penguin/admin/insert-update-coupon-list`, {
+          coupon_code: newCode,
+          email: email,
+          flag: 0,
+          per_dis_amt: "0.10",
+          operator: "*",
+        });
 
-        await axios.patch(
-          `${import.meta.env.VITE_PENGUIN_BACKEND_URL}/api/penguin/update-user-list/${user?._id}/${user?.email}`,
+        await axiosSecure.patch(
+          `/api/penguin/update-user-list/${user?._id}/${user?.email}`,
         );
 
         setCouponCode(newCode);
