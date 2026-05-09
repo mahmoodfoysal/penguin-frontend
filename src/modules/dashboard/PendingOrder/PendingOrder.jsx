@@ -142,6 +142,7 @@ const PendingOrder = () => {
         );
         if (result.data.status) {
           await showSuccess("Success", result.data.message);
+          setIsDetailsOpen(false);
           const updatedOrder = {
             ...item,
             order_status: result.data?.status_code || newStatus,

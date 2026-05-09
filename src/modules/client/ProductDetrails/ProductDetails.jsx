@@ -460,7 +460,7 @@ const ProductDetails = () => {
                             type="text"
                             placeholder="Name comes from login user"
                             disabled
-                            className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
+                            className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-base-content/10"
                           />
                         </div>
 
@@ -473,7 +473,7 @@ const ProductDetails = () => {
                             type="email"
                             placeholder="Email comes from login user"
                             disabled
-                            className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-black/10"
+                            className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-sm font-bold transition-colors bg-transparent placeholder:text-base-content/10"
                           />
                         </div>
                       </div>
