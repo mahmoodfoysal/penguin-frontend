@@ -11,6 +11,72 @@ const Footer = () => {
   const [promoEmail, setPromoEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isInvalid, setIsInvalid] = useState(false);
+  const [activeModal, setActiveModal] = useState(null);
+
+  const modalContent = {
+    privacy: {
+      title: "Privacy Policy",
+      content: (
+        <>
+          <p>
+            Your privacy is important to us. This Privacy Policy explains how
+            Penguin Gear Ltd. collects, uses, and protects your personal
+            information when you use our website.
+          </p>
+          <p>
+            We collect information such as your name, email address, and
+            shipping details only when you provide them voluntarily during
+            account creation or checkout.
+          </p>
+          <p>
+            We do not share your personal data with third parties except as
+            necessary to fulfill your orders (e.g., sharing your address with
+            shipping partners).
+          </p>
+        </>
+      ),
+    },
+    terms: {
+      title: "Terms & Conditions",
+      content: (
+        <>
+          <p>
+            By accessing and using this website, you agree to comply with and be
+            bound by the following terms and conditions of use.
+          </p>
+          <p>
+            All content on this site is the property of Penguin Gear Ltd. and is
+            protected by international copyright laws.
+          </p>
+          <p>
+            Products purchased from this site are for personal use only and
+            cannot be resold without prior written consent.
+          </p>
+        </>
+      ),
+    },
+    // cookies: {
+    //   title: "Cookie Policy",
+    //   content: (
+    //     <>
+    //       <p>
+    //         We use cookies to enhance your experience on our website. Cookies
+    //         are small text files that are stored on your device when you visit
+    //         certain websites.
+    //       </p>
+    //       <p>
+    //         Our cookies help us remember your preferences, keep you logged in,
+    //         and analyze how our site is used so we can improve it.
+    //       </p>
+    //       <p>
+    //         You can choose to disable cookies in your browser settings, but
+    //         please note that some features of the site may not function
+    //         properly.
+    //       </p>
+    //     </>
+    //   ),
+    // },
+  };
 
   const handlePromoSubmit = async (e) => {
     if (e) e.preventDefault();
@@ -294,24 +360,89 @@ const Footer = () => {
                 © 2026 Penguin Gear Ltd.
               </p>
               <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
-                Develop by Foysal Mahmood
+                All rights reserved by Foysal Mahmood
               </p>
             </div>
 
             <div className="flex gap-6 text-[10px] font-black uppercase tracking-widest">
-              <a href="#" className="hover:text-accent">
+              <button
+                onClick={() => setActiveModal("privacy")}
+                className="hover:text-accent cursor-pointer bg-transparent border-none p-0 uppercase font-black"
+              >
                 Privacy
-              </a>
-              <a href="#" className="hover:text-accent">
-                Terms
-              </a>
-              <a href="#" className="hover:text-accent">
+              </button>
+              <button
+                onClick={() => setActiveModal("terms")}
+                className="hover:text-accent cursor-pointer bg-transparent border-none p-0 uppercase font-black"
+              >
+                Terms & Condition
+              </button>
+              {/* <button
+                onClick={() => setActiveModal("cookies")}
+                className="hover:text-accent cursor-pointer bg-transparent border-none p-0 uppercase font-black"
+              >
                 Cookies
-              </a>
+              </button> */}
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Policy Modal */}
+      <div
+        className={`fixed inset-0 z-[150] flex items-center justify-center p-6 transition-all duration-300 ${activeModal ? "opacity-100 visible" : "opacity-0 invisible"}`}
+      >
+        <div
+          className="absolute inset-0 bg-neutral-focus/60 backdrop-blur-md"
+          onClick={() => setActiveModal(null)}
+        ></div>
+        <div className="bg-base-100 text-base-content relative z-10 w-full max-w-2xl rounded-[2.5rem] shadow-2xl p-10 overflow-y-auto max-h-[80vh] custom-scrollbar animate-in zoom-in duration-300">
+          <button
+            onClick={() => setActiveModal(null)}
+            className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full hover:bg-base-200 transition-colors cursor-pointer"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+
+          {activeModal && (
+            <>
+              <h2 className="font-heading text-4xl font-black uppercase tracking-tighter mb-8">
+                {modalContent[activeModal].title.split(" ")[0]}{" "}
+                <span className="text-accent">
+                  {modalContent[activeModal].title
+                    .split(" ")
+                    .slice(1)
+                    .join(" ")}
+                </span>
+              </h2>
+
+              <div className="space-y-6 text-sm leading-relaxed opacity-80">
+                {modalContent[activeModal].content}
+              </div>
+            </>
+          )}
+
+          <button
+            onClick={() => setActiveModal(null)}
+            className="mt-10 w-full btn btn-primary rounded-2xl h-14 font-heading font-black uppercase tracking-widest cursor-pointer"
+          >
+            I Understand
+          </button>
+        </div>
+      </div>
     </>
   );
 };

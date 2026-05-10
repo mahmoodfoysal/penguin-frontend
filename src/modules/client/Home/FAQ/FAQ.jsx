@@ -10,17 +10,18 @@ const FAQ = () => {
     {
       question: "Do you offer international delivery?",
       answer:
-        "Yes. We offer international delivery to select countries. Countries: Bangladesh, USA, Canada, China",
+        "Yes. We offer international delivery to selected countries. Countries: Bangladesh, USA, Canada, China",
     },
     {
       question: "What is your return policy?",
       answer:
         "We offer a 30-day money-back guarantee. If you're not completely satisfied with your purchase, you can return it within 30 days of delivery for a full refund, minus return shipping costs.",
     },
+
     {
-      question: "Does the furniture come assembled?",
+      question: "Can client use coupon code?",
       answer:
-        "Most of our smaller items come fully assembled. Larger items like beds and wardrobes require partial assembly. We offer a 'White Glove Delivery' service where our team will assemble it for you.",
+        "Yes client can use coupon code. Penguin also offer joining promo coupon code. Please clame it from Newsletter by email.",
     },
     {
       question: "Can I cancel or change my order?",

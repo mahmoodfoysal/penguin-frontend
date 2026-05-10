@@ -14,6 +14,7 @@ const Newsletter = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle");
   const [couponCode, setCouponCode] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const userInfo = useSelector((state) => state.auth.userInfo);
 
   const generateCouponCode = () => {
@@ -183,15 +184,100 @@ const Newsletter = () => {
           )}
 
           <p className="text-sm text-primary-content/60 mt-6">
-            By subscribing, you agree to our{" "}
-            <a
-              href="#"
-              className="underline hover:text-white transition-colors"
+            By joining, you agree to our coupon{" "}
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="underline hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0 inline"
             >
               Privacy Policy
-            </a>
+            </button>
             .
           </p>
+        </div>
+      </div>
+
+      {/* Coupon Policy Modal */}
+      <div
+        className={`fixed inset-0 z-[100] flex items-center justify-center p-6 transition-all duration-300 ${isModalOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
+      >
+        <div
+          className="absolute inset-0 bg-neutral-focus/60 backdrop-blur-md"
+          onClick={() => setIsModalOpen(false)}
+        ></div>
+        <div className="bg-base-100 text-base-content relative z-10 w-full max-w-2xl rounded-[2.5rem] shadow-2xl p-10 overflow-y-auto max-h-[80vh] custom-scrollbar animate-in zoom-in duration-300">
+          <button
+            onClick={() => setIsModalOpen(false)}
+            className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full hover:bg-base-200 transition-colors cursor-pointer"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+
+          <h2 className="font-heading text-4xl font-black uppercase tracking-tighter mb-8">
+            Coupon <span className="text-accent">Policy</span>
+          </h2>
+
+          <div className="space-y-6 text-sm leading-relaxed opacity-80">
+            <section>
+              <h3 className="font-bold text-base-content mb-2 uppercase tracking-widest text-xs">
+                1. Eligibility
+              </h3>
+              <p>
+                Joining coupons are available only to first-time subscribers who
+                have not previously claimed a newsletter discount.
+              </p>
+            </section>
+
+            <section>
+              <h3 className="font-bold text-base-content mb-2 uppercase tracking-widest text-xs">
+                2. Discount Value
+              </h3>
+              <p>
+                The standard joining coupon provides a 10% discount on the total
+                cart value of Regular priced items.
+              </p>
+            </section>
+
+            <section>
+              <h3 className="font-bold text-base-content mb-2 uppercase tracking-widest text-xs">
+                3. Exclusions
+              </h3>
+              <p>
+                Coupons cannot be combined with other offers, sale items, or
+                pre-discounted products. Some premium brands may be excluded
+                from discount eligibility.
+              </p>
+            </section>
+
+            <section>
+              <h3 className="font-bold text-base-content mb-2 uppercase tracking-widest text-xs">
+                4. Validity
+              </h3>
+              <p>
+                Each coupon code is valid for a single use and expires 30 days
+                after the date of issue.
+              </p>
+            </section>
+          </div>
+
+          <button
+            onClick={() => setIsModalOpen(false)}
+            className="mt-10 w-full btn btn-primary rounded-2xl h-14 font-heading font-black uppercase tracking-widest cursor-pointer"
+          >
+            I Understand
+          </button>
         </div>
       </div>
     </section>
