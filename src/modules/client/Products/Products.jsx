@@ -48,7 +48,7 @@ const Products = () => {
       }
     };
     fetchProductsData();
-  }, []);
+  }, [axiosSecure]);
 
   const location = useLocation();
 
@@ -109,7 +109,7 @@ const Products = () => {
       }
     };
     fetchReviews();
-  }, []);
+  }, [axiosSecure]);
 
   // Pre-calculate average ratings
   const ratingsMap = useMemo(() => {

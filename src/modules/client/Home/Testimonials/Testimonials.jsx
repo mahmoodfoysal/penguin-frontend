@@ -40,7 +40,7 @@ const Testimonials = () => {
     };
 
     fetchReviews();
-  }, []);
+  }, [axiosSecure]);
 
   if (reviews.length === 0) return null;
 

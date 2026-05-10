@@ -82,7 +82,7 @@ function App() {
     });
 
     return () => unsubscribe();
-  }, [dispatch]);
+  }, [dispatch, axiosSecure]);
   return (
     <div className="bg-base-100 text-base-content min-h-screen font-body selection:bg-accent selection:text-white relative">
       <ScrollRestoration />

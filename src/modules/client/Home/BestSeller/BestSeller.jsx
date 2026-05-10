@@ -45,7 +45,7 @@ const BestSeller = ({ productsData, isLoading }) => {
     };
 
     fetchBestSellers();
-  }, [products]);
+  }, [products, axiosSecure]);
   return (
     <section className="py-10 px-6 max-w-7xl mx-auto" id="arrivals">
       <div className="flex justify-between items-end mb-16">

@@ -100,7 +100,7 @@ const CustomerProfile = () => {
     // Load wishlist from localStorage
     const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
     setWishlistData(wishlist);
-  }, [userInfo?.email]);
+  }, [userInfo?.email, axiosSecure]);
 
   const handleUpdateProfile = async () => {
     const confirmation = await showConfirmation(

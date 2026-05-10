@@ -31,7 +31,7 @@ const CouponDiscount = () => {
       }
     };
     fetchCoupons();
-  }, []);
+  }, [axiosSecure]);
 
   const [formData, setFormData] = useState({
     _id: null,

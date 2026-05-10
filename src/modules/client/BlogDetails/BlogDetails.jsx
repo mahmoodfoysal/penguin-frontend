@@ -35,7 +35,7 @@ const BlogDetails = () => {
       }
     };
     fetchBlogData();
-  }, [id]);
+  }, [id, axiosSecure]);
 
   // Safely extract blog data
   const blog =

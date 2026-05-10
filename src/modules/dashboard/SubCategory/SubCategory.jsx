@@ -35,7 +35,7 @@ const SubCategory = () => {
       }
     };
     fetchCategoryData();
-  }, []);
+  }, [axiosSecure]);
   const [selectedParentId, setSelectedParentId] = useState("");
 
   const [formData, setFormData] = useState({

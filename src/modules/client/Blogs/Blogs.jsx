@@ -70,7 +70,7 @@ const Blogs = () => {
       }
     };
     fetchBlogs();
-  }, []);
+  }, [axiosSecure]);
 
   const categoryList = useMemo(() => {
     const unique = [

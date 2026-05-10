@@ -25,7 +25,7 @@ const MakeAdmin = () => {
       }
     };
     fetchAdmins();
-  }, []);
+  }, [axiosSecure]);
   const [formData, setFormData] = useState({
     _id: null,
     email: "",

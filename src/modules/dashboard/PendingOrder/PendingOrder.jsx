@@ -69,7 +69,7 @@ const PendingOrder = () => {
       }
     };
     fetchOrders();
-  }, []);
+  }, [axiosSecure]);
 
   // Memoize config to prevent "Existing memoization could not be preserved" error
   const config = useMemo(() => {
@@ -188,8 +188,7 @@ const PendingOrder = () => {
               {filterOrderList.length > 0
                 ? (currentPage - 1) * itemsPerPage + 1
                 : 0}
-              -
-              {Math.min(currentPage * itemsPerPage, filterOrderList.length)}
+              -{Math.min(currentPage * itemsPerPage, filterOrderList.length)}
             </span>{" "}
             of{" "}
             <span className="text-base-content opacity-100">

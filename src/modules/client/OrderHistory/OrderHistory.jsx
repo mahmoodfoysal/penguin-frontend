@@ -50,7 +50,7 @@ const OrderHistory = () => {
       }
     };
     fetchOrders();
-  }, [userInfo?.email]);
+  }, [userInfo?.email, axiosSecure]);
 
   useEffect(() => {
     setCurrentPage(1);

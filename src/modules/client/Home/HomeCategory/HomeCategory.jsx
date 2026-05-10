@@ -22,7 +22,7 @@ const HomeCategory = () => {
       }
     };
     handleImageCategory();
-  }, []);
+  }, [axiosSecure]);
 
   const handleRelatedProducts = (item) => {
     navigate("/products", {

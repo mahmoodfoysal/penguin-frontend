@@ -37,7 +37,7 @@ const Home = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [axiosSecure]);
 
   return (
     <div className="flex flex-col gap-8 md:gap-16 pb-16">

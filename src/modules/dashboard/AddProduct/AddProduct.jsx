@@ -37,7 +37,7 @@ const AddProduct = () => {
       }
     };
     fetchAllData();
-  }, []);
+  }, [axiosSecure]);
 
   const [formData, setFormData] = useState({
     _id: null,

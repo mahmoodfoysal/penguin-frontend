@@ -52,7 +52,7 @@ const ProductDetails = () => {
       }
     };
     fetchDetails();
-  }, [id, p_id]);
+  }, [id, p_id, axiosSecure]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [clientRating, setClientRating] = useState(0);

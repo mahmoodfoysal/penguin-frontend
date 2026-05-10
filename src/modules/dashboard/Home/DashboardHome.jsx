@@ -37,7 +37,7 @@ const DashboardHome = () => {
 
     fetchOrders();
     return () => observer.disconnect();
-  }, []);
+  }, [axiosSecure]);
 
   // Use explicit colors for ApexCharts as it sometimes struggles with CSS variables in SVG
   const textColor = currentTheme === "dark" ? "#E2E8F0" : "#1E293B";
