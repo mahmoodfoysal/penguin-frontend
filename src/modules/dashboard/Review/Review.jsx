@@ -235,6 +235,23 @@ const Review = () => {
             </span>
           </button>
         </div>
+        <div className="md:ml-auto mb-3">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
+            Showing{" "}
+            <span className="text-base-content opacity-100">
+              {filteredReviewList.length > 0
+                ? (currentPage - 1) * itemsPerPage + 1
+                : 0}
+              -
+              {Math.min(currentPage * itemsPerPage, filteredReviewList.length)}
+            </span>{" "}
+            of{" "}
+            <span className="text-base-content opacity-100">
+              {filteredReviewList.length}
+            </span>{" "}
+            Items
+          </p>
+        </div>
 
         <div className="mb-8 relative max-w-full md:max-w-md">
           <label className="text-[10px] font-black tracking-widest opacity-50 block mb-2">

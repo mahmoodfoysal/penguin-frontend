@@ -106,24 +106,44 @@ const AddProduct = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isInvalid, setIsInvalid] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterParentCategory, setFilterParentCategory] = useState("");
+  const [filterSubCategory, setFilterSubCategory] = useState("");
   const [isLoadingButton, setIsLoadingButton] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = 9;
 
   const filteredproductList = useMemo(() => {
-    if (!searchQuery) return productList;
+    let list = productList;
+
+    if (filterParentCategory) {
+      list = list.filter(
+        (item) => Number(item.par_cat_id) === Number(filterParentCategory),
+      );
+    }
+
+    if (filterSubCategory) {
+      list = list.filter(
+        (item) => Number(item.sub_cat_id) === Number(filterSubCategory),
+      );
+    }
+
+    if (!searchQuery) return list;
     const lowSearch = searchQuery.toLowerCase();
-    return productList.filter((item) => {
+    return list.filter((item) => {
       return Object.values(item).some((value) =>
         String(value).toLowerCase().includes(lowSearch),
       );
     });
-  }, [searchQuery, productList]);
+  }, [searchQuery, productList, filterParentCategory, filterSubCategory]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery]);
+  }, [searchQuery, filterParentCategory, filterSubCategory]);
+
+  useEffect(() => {
+    setFilterSubCategory("");
+  }, [filterParentCategory]);
 
   const totalPages = Math.ceil(filteredproductList?.length / itemsPerPage);
 
@@ -377,6 +397,12 @@ const AddProduct = () => {
     setIsDetailsOpen(true);
   };
 
+  const handleClearFilters = () => {
+    setSearchQuery("");
+    setFilterParentCategory("");
+    setFilterSubCategory("");
+  };
+
   return (
     <div>
       <div className="p-4 min-h-screen bg-base-100 relative overflow-x-hidden">
@@ -401,22 +427,114 @@ const AddProduct = () => {
           </button>
         </div>
 
-        <div className="mb-8 relative max-w-full md:max-w-md">
-          <label className="text-[10px] font-black tracking-widest opacity-50 block mb-2">
-            Search Products
-          </label>
-          <div className="relative flex items-center">
-            <span className="material-icons absolute left-0 text-sm opacity-30">
-              search
-            </span>
-            <input
-              onChange={(e) => setSearchQuery(e.target.value)}
-              value={searchQuery}
-              type="text"
-              placeholder="search"
-              className="w-full bg-transparent border-b-2 border-base-content/10 focus:border-accent outline-none py-3 pl-7 text-xs font-bold tracking-widest transition-all placeholder:opacity-20"
-            />
+        <div className="md:ml-auto mb-3">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
+            Showing{" "}
+            <span className="text-base-content opacity-100">
+              {filteredproductList.length > 0
+                ? (currentPage - 1) * itemsPerPage + 1
+                : 0}
+              -
+              {Math.min(currentPage * itemsPerPage, filteredproductList.length)}
+            </span>{" "}
+            of{" "}
+            <span className="text-base-content opacity-100">
+              {filteredproductList.length}
+            </span>{" "}
+            Items
+          </p>
+        </div>
+
+        <div className="mb-8 flex flex-col md:flex-row items-start md:items-end gap-6">
+          <div className="relative w-full md:max-w-md">
+            <label className="text-[10px] font-black tracking-widest opacity-50 block mb-2">
+              Search Products
+            </label>
+            <div className="relative flex items-center">
+              <span className="material-icons absolute left-0 text-sm opacity-30">
+                search
+              </span>
+              <input
+                onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchQuery}
+                type="text"
+                placeholder="search"
+                className="w-full bg-transparent border-b-2 border-base-content/10 focus:border-accent outline-none py-3 pl-7 text-xs font-bold tracking-widest transition-all placeholder:opacity-20"
+              />
+            </div>
           </div>
+
+          <div className="relative w-full md:w-48">
+            <label className="text-[10px] font-black tracking-widest opacity-50 block mb-2">
+              Parent Category
+            </label>
+            <select
+              value={filterParentCategory}
+              onChange={(e) => setFilterParentCategory(e.target.value)}
+              className="w-full bg-transparent border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-xs font-bold tracking-widest transition-all cursor-pointer appearance-none"
+            >
+              <option value="" className="bg-base-100">
+                All Categories
+              </option>
+              {parentCategoryList.map((cat) => (
+                <option
+                  key={cat.par_cat_id}
+                  value={cat.par_cat_id}
+                  className="bg-base-100"
+                >
+                  {cat.par_cat_name}
+                </option>
+              ))}
+            </select>
+            <span className="material-icons absolute right-0 bottom-3 text-sm opacity-30 pointer-events-none">
+              expand_more
+            </span>
+          </div>
+
+          <div className="relative w-full md:w-48">
+            <label className="text-[10px] font-black tracking-widest opacity-50 block mb-2">
+              Sub Category
+            </label>
+            <select
+              value={filterSubCategory}
+              onChange={(e) => setFilterSubCategory(e.target.value)}
+              disabled={!filterParentCategory}
+              className="w-full bg-transparent border-b-2 border-base-content/10 focus:border-accent outline-none py-3 text-xs font-bold tracking-widest transition-all cursor-pointer appearance-none disabled:opacity-20 disabled:cursor-not-allowed"
+            >
+              <option value="" className="bg-base-100">
+                All Sub Categories
+              </option>
+              {subCategoryList
+                .filter(
+                  (cat) =>
+                    Number(cat.par_cat_id) === Number(filterParentCategory),
+                )
+                .map((cat) => (
+                  <option
+                    key={cat.sub_cat_id}
+                    value={cat.sub_cat_id}
+                    className="bg-base-100"
+                  >
+                    {cat.sub_cat_name}
+                  </option>
+                ))}
+            </select>
+            <span className="material-icons absolute right-0 bottom-3 text-sm opacity-30 pointer-events-none">
+              expand_more
+            </span>
+          </div>
+
+          {(searchQuery || filterParentCategory || filterSubCategory) && (
+            <button
+              onClick={handleClearFilters}
+              className="mb-2 px-4 py-2 border-2 border-accent text-accent text-[10px] font-black uppercase tracking-widest hover:bg-accent hover:text-white transition-all rounded-sm flex items-center gap-2 group cursor-pointer"
+            >
+              <span className="material-icons text-sm group-hover:rotate-180 transition-transform">
+                refresh
+              </span>
+              Clear All
+            </button>
+          )}
         </div>
 
         <div className="bg-base-100 border border-base-content/5 rounded-sm shadow-sm overflow-x-auto">

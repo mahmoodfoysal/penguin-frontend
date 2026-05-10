@@ -321,6 +321,26 @@ const SubCategory = () => {
             </span>
           </button>
         </div>
+        <div className="md:ml-auto mb-3">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
+            Showing{" "}
+            <span className="text-base-content opacity-100">
+              {filteredCategoryList.length > 0
+                ? (currentPage - 1) * itemsPerPage + 1
+                : 0}
+              -
+              {Math.min(
+                currentPage * itemsPerPage,
+                filteredCategoryList.length,
+              )}
+            </span>{" "}
+            of{" "}
+            <span className="text-base-content opacity-100">
+              {filteredCategoryList.length}
+            </span>{" "}
+            Items
+          </p>
+        </div>
 
         {/* --- SELECTOR & SEARCH BAR SECTION --- */}
         <div className="flex flex-col md:flex-row gap-8 mb-8 max-w-4xl">
