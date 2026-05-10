@@ -55,6 +55,7 @@ const AddProduct = () => {
     currencyTypeInfo: {},
     status: "",
     discount: "",
+    prod_more_image: [],
   });
 
   const statusList = [
@@ -175,6 +176,7 @@ const AddProduct = () => {
       currencyTypeInfo: {},
       status: 1,
       discount: "",
+      prod_more_image: [],
     });
   };
 
@@ -222,6 +224,7 @@ const AddProduct = () => {
       prod_type_name: formData.prodTypeInfo?.prod_type_name,
       currency_id: Number(formData.currencyTypeInfo?.currency_id),
       currency_name: formData.currencyTypeInfo?.currency_name,
+      prod_more_image: formData.prod_more_image,
       discount:
         formData.prodTypeInfo?.prod_type === "D"
           ? Number(formData.discount)
@@ -351,6 +354,9 @@ const AddProduct = () => {
         currency_name: item.currency_name,
       },
       discount: item.discount || "",
+      prod_more_image: Array.isArray(item.prod_more_image)
+        ? item.prod_more_image
+        : [],
     });
   };
 
@@ -391,9 +397,11 @@ const AddProduct = () => {
   };
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [activeImage, setActiveImage] = useState("");
 
   const handleDetails = (data) => {
     setSelectedProduct(data);
+    setActiveImage(data.prod_image);
     setIsDetailsOpen(true);
   };
 
@@ -1054,6 +1062,73 @@ const AddProduct = () => {
                     />
                   </div>
                 </div>
+                {/* Gallery Images (Dynamic Array) */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <label className="text-[10px] font-black tracking-widest opacity-50 uppercase">
+                      Gallery Images
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setFormData({
+                          ...formData,
+                          prod_more_image: [...formData.prod_more_image, ""],
+                        })
+                      }
+                      className="text-[10px] font-black uppercase text-accent border-b border-accent hover:opacity-70 transition-opacity cursor-pointer"
+                    >
+                      + Add More
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    {formData.prod_more_image.map((url, index) => (
+                      <div key={index} className="flex gap-4 items-end group">
+                        <div className="flex-grow space-y-2">
+                          <label className="text-[9px] font-bold opacity-30 uppercase tracking-tighter">
+                            Image URL #{index + 1}
+                          </label>
+                          <input
+                            value={url}
+                            onChange={(e) => {
+                              const newImages = [...formData.prod_more_image];
+                              newImages[index] = e.target.value;
+                              setFormData({
+                                ...formData,
+                                prod_more_image: newImages,
+                              });
+                            }}
+                            type="url"
+                            placeholder="https://example.com/image.jpg"
+                            className="w-full border-b-2 border-base-content/10 focus:border-accent outline-none py-2 text-sm font-bold transition-colors bg-transparent"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newImages = formData.prod_more_image.filter(
+                              (_, i) => i !== index,
+                            );
+                            setFormData({
+                              ...formData,
+                              prod_more_image: newImages,
+                            });
+                          }}
+                          className="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity pb-2 cursor-pointer"
+                          title="Remove Image"
+                        >
+                          <span className="material-icons text-lg">delete</span>
+                        </button>
+                      </div>
+                    ))}
+                    {formData.prod_more_image.length === 0 && (
+                      <p className="text-[10px] opacity-30 italic py-4 border-2 border-dashed border-base-content/5 text-center rounded-sm">
+                        No additional gallery images added.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
                 <div className="space-y-2  ">
                   <label className="text-[10px] font-black tracking-widest opacity-50">
                     Description <span className="text-red-600">*</span>
@@ -1148,11 +1223,38 @@ const AddProduct = () => {
                     {/* 1. Image Section - Optimized for Dark Mode with a slight tint */}
                     <div className="aspect-square bg-white/[0.03] border border-base-content/5  rounded-sm overflow-hidden relative group">
                       <img
-                        src={selectedProduct.prod_image}
+                        src={activeImage || selectedProduct.prod_image}
                         className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
                         alt={selectedProduct.prod_name}
                       />
                     </div>
+
+                    {/* Additional Images Section */}
+                    {selectedProduct.prod_more_image?.length > 0 && (
+                      <div className="border-t border-base-content/5 pt-8">
+                        <p className="text-[10px] font-black tracking-widest opacity-40 mb-4 uppercase">
+                          Gallery Images
+                        </p>
+                        <div className="grid grid-cols-4 gap-4">
+                          {[
+                            selectedProduct.prod_image,
+                            ...selectedProduct.prod_more_image,
+                          ].map((img, idx) => (
+                            <div
+                              key={idx}
+                              onClick={() => setActiveImage(img)}
+                              className={`aspect-square bg-white/[0.03] border-2 ${activeImage === img ? "border-accent" : "border-base-content/10"} rounded-sm overflow-hidden cursor-pointer transition-all`}
+                            >
+                              <img
+                                src={img}
+                                className="w-full h-full object-cover"
+                                alt={`more-${idx}`}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     {/* 2. Primary Info Grid */}
                     <div className="grid grid-cols-2 gap-y-10 gap-x-6 border-t border-base-content/5 pt-8">
@@ -1268,7 +1370,6 @@ const AddProduct = () => {
                         </div>
                       </div>
                     </div>
-
                     {/* 4. Description */}
                     <div className="border-t border-base-content/5 pt-4 pb-4">
                       <p className="text-[10px] font-black  tracking-widest opacity-40">

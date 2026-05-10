@@ -63,6 +63,7 @@ const ProductDetails = () => {
 
   const productList = data.products?.list_data || [];
   const [commentList, setCommentList] = useState([]);
+  const [activeImage, setActiveImage] = useState("");
 
   const details = data.product_details?.details_data || {};
   const {
@@ -76,7 +77,14 @@ const ProductDetails = () => {
     sub_cat_id,
     prod_id,
     discount,
+    prod_more_image,
   } = details;
+
+  useEffect(() => {
+    if (prod_image) {
+      setActiveImage(prod_image);
+    }
+  }, [prod_image]);
 
   const cartList = useSelector((state) => state.cart.cart);
   const userInfo = useSelector((state) => state.auth.userInfo);
@@ -305,7 +313,7 @@ const ProductDetails = () => {
                   {/* Main Image */}
                   <div className="aspect-square bg-base-200 overflow-hidden border border-base-content/5 rounded-sm relative group">
                     <img
-                      src={prod_image}
+                      src={activeImage || prod_image}
                       className="w-full h-full object-cover  group-hover:scale-110 transition-transform duration-700"
                       alt="Main Product"
                     />
@@ -315,20 +323,23 @@ const ProductDetails = () => {
                   </div>
 
                   {/* Thumbnails (Multiple Image Selection) */}
-                  {/* <div className="grid grid-cols-4 gap-4">
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="aspect-square bg-base-100 border-2 border-base-content/5 hover:border-accent cursor-pointer transition-colors overflow-hidden"
-                  >
-                    <img
-                      src={`https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=200&v=${i}`}
-                      className="w-full h-full object-cover "
-                      alt="thumb"
-                    />
+                  <div className="grid grid-cols-4 gap-4">
+                    {[prod_image, ...(prod_more_image || [])]?.map(
+                      (item, index) => (
+                        <div
+                          key={index}
+                          onClick={() => setActiveImage(item)}
+                          className={`aspect-square bg-base-100 border-2 ${activeImage === item ? "border-accent" : "border-base-content/5"} hover:border-accent cursor-pointer transition-colors overflow-hidden`}
+                        >
+                          <img
+                            src={item}
+                            className="w-full h-full object-cover "
+                            alt="thumb"
+                          />
+                        </div>
+                      ),
+                    )}
                   </div>
-                ))}
-              </div> */}
                 </div>
 
                 {/* RIGHT: PRODUCT INFO */}
