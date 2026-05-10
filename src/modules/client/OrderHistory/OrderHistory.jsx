@@ -81,6 +81,83 @@ const OrderHistory = () => {
     setIsModalOpen(true);
   };
 
+  const isRejectable = (order) => {
+    if (!order || order.order_status !== "P") return false;
+    const createdDate = new Date(order.createdAt);
+    const now = new Date();
+    const diffInHours = (now - createdDate) / (1000 * 60 * 60);
+    return diffInHours <= 2;
+  };
+
+  const handleRejectOrder = async (order) => {
+    const confirmation = await Swal.fire({
+      title: "Reject Order?",
+      text: "Are you sure you want to reject this order? This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#EF4444",
+      cancelButtonColor: "#1F2937",
+      confirmButtonText: "Yes, Reject",
+      background: "var(--b1)",
+      color: "var(--bc)",
+      customClass: {
+        popup: "rounded-[2rem] font-heading",
+        confirmButton: "rounded-xl px-8 py-3 uppercase text-[10px] font-black",
+        cancelButton: "rounded-xl px-8 py-3 uppercase text-[10px] font-black",
+      },
+    });
+
+    if (confirmation.isConfirmed) {
+      try {
+        Swal.fire({
+          title: "Processing...",
+          didOpen: () => Swal.showLoading(),
+          background: "var(--b1)",
+          color: "var(--bc)",
+        });
+
+        const data = {
+          order_status: "R",
+          user_info: userInfo?.email,
+          _id: order._id,
+        };
+
+        const res = await axiosSecure.patch(
+          `/api/admin/update-order-status/${order._id}`,
+          data,
+        );
+
+        if (res.data?.status) {
+          setOrderList((prev) =>
+            prev.map((o) =>
+              o._id === order._id ? { ...o, order_status: "R" } : o,
+            ),
+          );
+          if (selectedOrder?._id === order._id) {
+            setSelectedOrder((prev) => ({ ...prev, order_status: "R" }));
+          }
+          Swal.fire({
+            title: "Rejected",
+            text: "Order has been successfully rejected.",
+            icon: "success",
+            timer: 2000,
+            background: "var(--b1)",
+            color: "var(--bc)",
+          });
+        }
+      } catch (err) {
+        console.error("Rejection failed:", err);
+        Swal.fire({
+          title: "Error",
+          text: "Failed to reject order. Please try again.",
+          icon: "error",
+          background: "var(--b1)",
+          color: "var(--bc)",
+        });
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-base-200 py-12 px-4 sm:px-6 lg:px-8 pt-24">
       <div className="max-w-6xl mx-auto">
@@ -149,7 +226,7 @@ const OrderHistory = () => {
                     {/* Order Meta */}
                     <div className="mb-6">
                       <p className="text-[9px] font-black opacity-30 tracking-widest mb-1">
-                        Order ID: {order._id.slice(-8).toUpperCase()}
+                        Order ID: {order?.order_id?.toUpperCase()}
                       </p>
                       <p className="text-[10px] font-bold opacity-60">
                         Placed on{" "}
@@ -272,7 +349,7 @@ const OrderHistory = () => {
                   Order <span className="text-accent ">Details</span>
                 </h2>
                 <p className="text-[9px] font-black tracking-[0.2em] opacity-40 mt-1">
-                  ID: {selectedOrder._id}
+                  ID: {selectedOrder.order_id}
                 </p>
               </div>
               <button
@@ -398,31 +475,22 @@ const OrderHistory = () => {
                     <div className="space-y-3">
                       <div className="flex justify-between text-[10px] font-bold opacity-60">
                         <span>Subtotal</span>
-                        <span>
-                          {selectedOrder.currency_name}{" "}
-                          {selectedOrder.sub_total}
-                        </span>
+                        <span>$ {selectedOrder.sub_total}</span>
                       </div>
                       <div className="flex justify-between text-[10px] font-bold opacity-60">
                         <span>Shipping</span>
-                        <span>
-                          {selectedOrder.currency_name} {selectedOrder.shipping}
-                        </span>
+                        <span>$ {selectedOrder.shipping}</span>
                       </div>
                       <div className="flex justify-between text-[10px] font-bold opacity-60">
                         <span>VAT</span>
-                        <span>
-                          {selectedOrder.currency_name}{" "}
-                          {selectedOrder.vat_total}
-                        </span>
+                        <span>$ {selectedOrder.vat_total}</span>
                       </div>
                       <div className="flex justify-between items-end pt-6 border-t border-white/10 mt-6">
                         <span className="text-[10px] font-black uppercase tracking-widest">
                           Total Amount
                         </span>
                         <span className="text-xl font-heading font-black text-accent tracking-tighter">
-                          {selectedOrder.currency_name}{" "}
-                          {selectedOrder.total_amount}
+                          $ {selectedOrder.total_amount}
                         </span>
                       </div>
                     </div>
@@ -534,6 +602,24 @@ const OrderHistory = () => {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Footer Actions */}
+            <div className="p-8 border-t border-base-content/5 bg-base-100 flex gap-4 sticky bottom-0">
+              {isRejectable(selectedOrder) && (
+                <button
+                  onClick={() => handleRejectOrder(selectedOrder)}
+                  className="flex-grow bg-rose-500 text-white py-4 rounded-2xl font-heading font-black uppercase tracking-widest text-[11px] hover:bg-rose-600 transition-colors shadow-lg shadow-rose-500/20 cursor-pointer"
+                >
+                  Reject Order
+                </button>
+              )}
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className={`${isRejectable(selectedOrder) ? "w-1/3" : "w-full"} bg-base-content text-base-100 py-4 rounded-2xl font-heading font-black uppercase tracking-widest text-[11px] hover:bg-accent transition-colors cursor-pointer`}
+              >
+                Close Panel
+              </button>
             </div>
           </div>
         </div>
