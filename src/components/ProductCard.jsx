@@ -16,6 +16,24 @@ const ProductCard = ({ product, isBestSeller }) => {
     referenceTime - new Date(product.createdAt).getTime() <
       30 * 24 * 60 * 60 * 1000;
 
+  const [isInWishlist, setIsInWishlist] = useState(() => {
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    return wishlist.some((item) => item._id === product._id);
+  });
+
+  const toggleWishlist = (e) => {
+    e.stopPropagation();
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    let newWishlist;
+    if (isInWishlist) {
+      newWishlist = wishlist.filter((item) => item._id !== product._id);
+    } else {
+      newWishlist = [...wishlist, product];
+    }
+    localStorage.setItem("wishlist", JSON.stringify(newWishlist));
+    setIsInWishlist(!isInWishlist);
+  };
+
   const handleProductDetails = (item) => {
     navigate(`/product-details/${item._id}/${item.prod_id}`);
   };
@@ -47,6 +65,26 @@ const ProductCard = ({ product, isBestSeller }) => {
                 </span>
               )}
             </div>
+            {/* Wishlist Button */}
+            <button
+              onClick={toggleWishlist}
+              className={`absolute top-5 right-5 z-20 w-10 h-10 rounded-full flex cursor-pointer items-center justify-center transition-all duration-300 shadow-lg ${isInWishlist ? "bg-accent text-white" : "bg-base-100/80 text-base-content hover:bg-accent hover:text-white"}`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill={isInWishlist ? "currentColor" : "none"}
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </button>
             {/* Quick-add overlay */}
             <button
               onClick={(e) => {

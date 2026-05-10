@@ -10,6 +10,7 @@ import initilizationAuthentication from "../../../firebase/firebase.init";
 import { setUserInfo } from "../../../store/slice/user";
 import { useDispatch, useSelector } from "react-redux";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import ProductCard from "../../../components/ProductCard";
 
 initilizationAuthentication();
 const auth = getAuth();
@@ -25,6 +26,7 @@ const CustomerProfile = () => {
   const [couponData, setCouponData] = useState([]);
   const [newPassword, setNewPassword] = useState("");
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [wishlistData, setWishlistData] = useState([]);
 
   const [profileData, setProfileData] = useState({
     full_name: userInfo?.name || "",
@@ -94,6 +96,10 @@ const CustomerProfile = () => {
       }
     };
     fetchData();
+
+    // Load wishlist from localStorage
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    setWishlistData(wishlist);
   }, [userInfo?.email]);
 
   const handleUpdateProfile = async () => {
@@ -186,7 +192,8 @@ const CustomerProfile = () => {
       console.error(err);
       let msg = "Failed to update password.";
       if (err.code === "auth/requires-recent-login") {
-        msg = "This operation is sensitive and requires recent authentication. Please log in again and try again.";
+        msg =
+          "This operation is sensitive and requires recent authentication. Please log in again and try again.";
       }
       showError("Error", msg);
     } finally {
@@ -204,6 +211,7 @@ const CustomerProfile = () => {
       icon: "🚚",
     },
     { label: "Coupon", value: couponData.length || "0", icon: "✨" },
+    { label: "Wishlist", value: wishlistData.length || "0", icon: "❤️" },
   ];
 
   return (
@@ -287,7 +295,7 @@ const CustomerProfile = () => {
               </div>
 
               {/* Quick Stats Banner */}
-              <div className="grid grid-cols-3 border-t border-base-content/5 bg-base-200/30">
+              <div className="grid grid-cols-4 border-t border-base-content/5 bg-base-200/30">
                 {stats.map((stat) => (
                   <div
                     key={stat.label}
@@ -315,6 +323,7 @@ const CustomerProfile = () => {
                   { id: "overview", label: "Overview", icon: "🎯" },
                   //   { id: "shipping", label: "Shipping Address", icon: "🏠" },
                   { id: "security", label: "Security & Login", icon: "🔒" },
+                  { id: "wishlist", label: "Wishlist", icon: "❤️" },
                   { id: "coupon", label: "Coupon", icon: "🎉" },
                 ].map((tab) => (
                   <button
@@ -404,6 +413,42 @@ const CustomerProfile = () => {
                           </div>
                         ))}
                       </div>
+                    </div>
+                  )}
+
+                  {activeTab === "wishlist" && (
+                    <div className="space-y-8 animate-in fade-in duration-500">
+                      <div className="flex justify-between items-end border-b border-base-content/5 pb-4">
+                        <div>
+                          <h2 className="text-2xl font-heading font-black uppercase tracking-tighter">
+                            My <span className="text-accent ">Wishlist</span>
+                          </h2>
+                          <p className="text-[9px] font-bold uppercase tracking-widest opacity-30 mt-1">
+                            Products you've saved for later
+                          </p>
+                        </div>
+                      </div>
+
+                      {wishlistData.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          {wishlistData.map((product) => (
+                            <ProductCard
+                              key={product._id}
+                              product={product}
+                            ></ProductCard>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="py-20 flex flex-col items-center justify-center text-center opacity-40">
+                          <span className="text-4xl mb-4">❤️</span>
+                          <p className="font-heading font-black uppercase text-xs tracking-widest">
+                            Your Wishlist is Empty
+                          </p>
+                          <p className="text-[10px] font-bold uppercase mt-2">
+                            Explore our products and save your favorites!
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
 

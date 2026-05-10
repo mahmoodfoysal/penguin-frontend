@@ -59,6 +59,7 @@ const ProductDetails = () => {
   const [clientComment, setClientComment] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
   const [isReviewLoading, setIsReviewLoading] = useState(false);
+  const [isInWishlist, setIsInWishlist] = useState(false);
 
   const productList = data.products?.list_data || [];
   const [commentList, setCommentList] = useState([]);
@@ -139,6 +140,25 @@ const ProductDetails = () => {
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
+  };
+
+  useEffect(() => {
+    if (_id) {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      setIsInWishlist(wishlist.some((item) => item._id === _id));
+    }
+  }, [_id]);
+
+  const toggleWishlist = () => {
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    let newWishlist;
+    if (isInWishlist) {
+      newWishlist = wishlist.filter((item) => item._id !== _id);
+    } else {
+      newWishlist = [...wishlist, details];
+    }
+    localStorage.setItem("wishlist", JSON.stringify(newWishlist));
+    setIsInWishlist(!isInWishlist);
   };
 
   const handleItemIncrement = (product) => {
@@ -423,18 +443,39 @@ const ProductDetails = () => {
                       onClick={() =>
                         handleAddToCart(data.product_details.details_data)
                       }
-                      className="bg-base-content text-base-100 py-4 font-heading font-black  tracking-[0.2em] text-sm hover:bg-accent transition-colors rounded-md cursor-pointer"
+                      className="bg-base-content text-base-100 py-3 font-heading font-black  tracking-[0.2em] text-sm hover:bg-accent transition-colors rounded-md cursor-pointer"
                     >
                       Add to Cart
                     </button>
-                    <button
-                      onClick={() =>
-                        handleBuyNow(data.product_details.details_data)
-                      }
-                      className="bg-accent text-base-100 py-4 font-heading font-black  tracking-[0.2em] text-sm hover:bg-base-content transition-colors rounded-md cursor-pointer"
-                    >
-                      Buy Now
-                    </button>
+                    <div className="flex gap-4">
+                      <button
+                        onClick={() =>
+                          handleBuyNow(data.product_details.details_data)
+                        }
+                        className="flex-grow bg-accent text-base-100 py-3 font-heading font-black  tracking-[0.2em] text-sm hover:bg-base-content transition-colors rounded-md cursor-pointer"
+                      >
+                        Buy Now
+                      </button>
+                      <button
+                        onClick={toggleWishlist}
+                        className={`w-14 h-14 flex items-center justify-center rounded-md border-2 transition-all duration-300 cursor-pointer ${isInWishlist ? "bg-accent border-accent text-white shadow-lg" : "bg-transparent border-base-content/10 text-base-content hover:border-accent hover:text-accent"}`}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6"
+                          fill={isInWishlist ? "currentColor" : "none"}
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
