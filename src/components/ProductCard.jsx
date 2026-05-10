@@ -80,14 +80,14 @@ const ProductCard = ({ product, isBestSeller }) => {
                 {product.prod_brand}
               </span>
               {product?.discount ? (
-                <span className="font-extrabold text-xl text-primary">
+                <span className="font-extrabold text-md text-primary">
                   <span className="line-through text-red-600 mr-2">
                     ${product.price?.toFixed(2)}
                   </span>
                   <span>${product?.discount?.toFixed(2)}</span>
                 </span>
               ) : (
-                <span className="font-extrabold text-xl text-primary">
+                <span className="font-extrabold text-ms text-primary">
                   ${product.price?.toFixed(2)}
                 </span>
               )}

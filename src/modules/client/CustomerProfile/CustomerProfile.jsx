@@ -5,7 +5,7 @@ import {
   showConfirmation,
   showProcessing,
 } from "../../../components/Alert";
-import { getAuth, updateProfile } from "firebase/auth";
+import { getAuth, updateProfile, updatePassword } from "firebase/auth";
 import initilizationAuthentication from "../../../firebase/firebase.init";
 import { setUserInfo } from "../../../store/slice/user";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +23,8 @@ const CustomerProfile = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [orderData, setOrderData] = useState([]);
   const [couponData, setCouponData] = useState([]);
+  const [newPassword, setNewPassword] = useState("");
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
 
   const [profileData, setProfileData] = useState({
     full_name: userInfo?.name || "",
@@ -151,6 +153,47 @@ const CustomerProfile = () => {
     }
   };
 
+  const handleUpdatePassword = async () => {
+    if (!newPassword) {
+      showError("Error", "Please enter a new password");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      showError("Error", "Password should be at least 6 characters");
+      return;
+    }
+
+    const confirmation = await showConfirmation(
+      "Update Password?",
+      "You will need to use your new password for future logins.",
+    );
+
+    if (!confirmation.isConfirmed) return;
+
+    try {
+      setIsUpdatingPassword(true);
+      showProcessing("Updating Password...", "Please wait");
+
+      if (auth.currentUser) {
+        await updatePassword(auth.currentUser, newPassword);
+        showSuccess("Success", "Password updated successfully!");
+        setNewPassword("");
+      } else {
+        showError("Error", "No user is currently signed in");
+      }
+    } catch (err) {
+      console.error(err);
+      let msg = "Failed to update password.";
+      if (err.code === "auth/requires-recent-login") {
+        msg = "This operation is sensitive and requires recent authentication. Please log in again and try again.";
+      }
+      showError("Error", msg);
+    } finally {
+      setIsUpdatingPassword(false);
+    }
+  };
+
   const stats = [
     { label: "Total Orders", value: orderData.length || "0", icon: "📦" },
     {
@@ -271,7 +314,7 @@ const CustomerProfile = () => {
                 {[
                   { id: "overview", label: "Overview", icon: "🎯" },
                   //   { id: "shipping", label: "Shipping Address", icon: "🏠" },
-                  //   { id: "security", label: "Security & Login", icon: "🔒" },
+                  { id: "security", label: "Security & Login", icon: "🔒" },
                   { id: "coupon", label: "Coupon", icon: "🎉" },
                 ].map((tab) => (
                   <button
@@ -457,46 +500,78 @@ const CustomerProfile = () => {
 
                   {activeTab === "security" && (
                     <div className="space-y-8 animate-in fade-in duration-500">
-                      <h2 className="text-2xl font-heading font-black uppercase tracking-tighter border-b border-base-content/5 pb-4">
-                        Security <span className="text-accent ">Settings</span>
-                      </h2>
-                      <div className="space-y-4">
-                        {[
-                          {
-                            title: "Two-Factor Authentication",
-                            status: "Disabled",
-                            color: "text-rose-500",
-                          },
-                          {
-                            title: "Password Status",
-                            status: "Strong",
-                            color: "text-emerald-500",
-                          },
-                          {
-                            title: "Last Login",
-                            status: "2 hours ago from Dhaka",
-                            color: "text-base-content/40",
-                          },
-                        ].map((item) => (
-                          <div
-                            key={item.title}
-                            className="flex justify-between items-center p-6 bg-base-200/30 rounded-[2rem] border border-base-content/5"
+                      <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-base-content/5 pb-4 gap-4">
+                        <div>
+                          <h2 className="text-2xl font-heading font-black uppercase tracking-tighter">
+                            Security{" "}
+                            <span className="text-accent ">Settings</span>
+                          </h2>
+                          <p className="text-[9px] font-bold uppercase tracking-widest opacity-30 mt-1">
+                            Update your password and secure your account
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="p-8 bg-base-200/30 rounded-[3rem] border border-base-content/5">
+                        <div className="max-w-md space-y-6">
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                              New Password
+                            </label>
+                            <input
+                              type="password"
+                              value={newPassword}
+                              onChange={(e) => setNewPassword(e.target.value)}
+                              placeholder="••••••••"
+                              className="w-full bg-base-100 border border-base-content/5 rounded-2xl p-4 font-bold text-sm focus:border-accent outline-none transition-colors"
+                            />
+                            <p className="text-[9px] opacity-40 font-bold uppercase">
+                              Minimum 6 characters
+                            </p>
+                          </div>
+
+                          <button
+                            onClick={handleUpdatePassword}
+                            disabled={isUpdatingPassword}
+                            className="w-full bg-base-content text-base-100 py-4 rounded-2xl font-heading font-black uppercase text-[11px] tracking-widest hover:bg-accent transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                           >
+                            {isUpdatingPassword ? (
+                              <span className="loading loading-spinner loading-xs"></span>
+                            ) : (
+                              "Update Password"
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4 pt-6 border-t border-base-content/5">
+                        <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-30">
+                          Security Status
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="flex justify-between items-center p-6 bg-base-100 rounded-[2rem] border border-base-content/5">
                             <div>
                               <p className="text-[11px] font-black uppercase tracking-widest">
-                                {item.title}
+                                Account Protection
                               </p>
-                              <p
-                                className={`text-[10px] font-bold uppercase mt-1 ${item.color}`}
-                              >
-                                {item.status}
+                              <p className="text-[10px] font-bold uppercase mt-1 text-emerald-500">
+                                Active
                               </p>
                             </div>
-                            <button className="text-accent font-black uppercase text-[9px] tracking-widest">
-                              Update
-                            </button>
+                            <span className="text-xl">🛡️</span>
                           </div>
-                        ))}
+                          <div className="flex justify-between items-center p-6 bg-base-100 rounded-[2rem] border border-base-content/5">
+                            <div>
+                              <p className="text-[11px] font-black uppercase tracking-widest">
+                                Session ID
+                              </p>
+                              <p className="text-[10px] font-bold uppercase mt-1 opacity-40">
+                                {auth.currentUser?.uid?.slice(0, 10)}...
+                              </p>
+                            </div>
+                            <span className="text-xl">🔑</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
