@@ -7,10 +7,10 @@ import Category from "../../../components/Category";
 import PriceRange from "../../../components/PriceRange";
 import Brand from "../../../components/Brand";
 import PageHeader from "../../../components/PageHeader";
-import ComponentLoader from "../../../pages/ComponentLoader";
 import DataNotFound from "../../../pages/DataNotFound";
 import { showError } from "../../../components/Alert";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import SkeletonCard from "./../../../pages/SkeletonCard";
 
 const Products = () => {
   const axiosSecure = useAxiosSecure();
@@ -347,7 +347,11 @@ const Products = () => {
     <>
       <PageHeader pageInfo={pageInfo}></PageHeader>
       {isLoading ? (
-        <ComponentLoader></ComponentLoader>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {[...Array(4)].map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
       ) : (
         <div className="bg-base-100 min-h-screen font-body selection:bg-accent selection:text-white">
           {/* 2. MAIN CONTENT AREA */}
