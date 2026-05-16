@@ -4,7 +4,7 @@ A full-stack MERN e-commerce platform featuring Redux state management, Firebase
 
 ## Live Demo
 
-- Live URL: [https://penguin-ecom.vercel.app](https://penguin-ecom.vercel.app)
+- Live URL: [https://penguin-gear.netlify.app](https://penguin-gear.netlify.app)
 
 ## Repository
 
