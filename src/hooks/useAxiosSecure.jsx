@@ -6,10 +6,26 @@ import { logout, setUserInfo } from "../store/slice/user";
 import { showError } from "../components/Alert";
 import { getAuth, signOut } from "firebase/auth";
 import initilizationAuthentication from "../firebase/firebase.init";
+import axiosRetry from "axios-retry";
 initilizationAuthentication();
 
 const axiosSecure = axios.create({
   baseURL: import.meta.env.VITE_PENGUIN_BACKEND_URL,
+});
+
+axiosRetry(axiosSecure, {
+  retries: 5,
+  retryDelay: (retryCount) => {
+    console.log(`Retry attempt: ${retryCount}`);
+    return retryCount * 3000; // wait 3s, 6s, 9s, 12s, 15s between retries
+  },
+  retryCondition: (error) => {
+    // Retry on network errors or 5xx status codes
+    return (
+      axiosRetry.isNetworkOrIdempotentRequestError(error) ||
+      (error.response && error.response.status >= 500)
+    );
+  },
 });
 
 const useAxiosSecure = () => {

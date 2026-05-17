@@ -49,16 +49,10 @@ function App() {
       if (firebaseUser) {
         const loggedUser = { email: firebaseUser?.email };
 
-        fetch(`${import.meta.env.VITE_PENGUIN_BACKEND_URL}/get-token`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(loggedUser),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            sessionStorage.setItem("token", data.token);
+        axiosSecure
+          .post("/get-token", loggedUser)
+          .then((res) => {
+            sessionStorage.setItem("token", res.data.token);
           })
           .catch((err) => console.log(err));
       }
