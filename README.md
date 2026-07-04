@@ -15,7 +15,7 @@ A full-stack MERN e-commerce platform featuring Redux state management, Firebase
 ## Technologies Used
 
 - React.js
-- Redux
+- Redux Toolkit
 - Firebase
 - Node.js
 - Express.js
@@ -24,21 +24,30 @@ A full-stack MERN e-commerce platform featuring Redux state management, Firebase
 - Daisy UI
 - ApexCharts
 - Material Icons
+- React Rating
+- Google Fonts
 
 ## Key Features
 
-- Advanced filtering (Category, Price, Brand) and sorting
-- Secure Admin & Super Admin dashboard for total site control
-- Dynamic product details with reviews and ratings
-- Customer Profile Section
-- Product Review Section
-- Order Management Section
-- Order tracking system
-- Cupon code system
-- Blog Section
-- Dashboard Overview
-- Coupon show in client profile and that coupon only used one user one time. and show total used coupon.
-- New member get 10% off coupon if they claim from landing page newsletter.
+- Architected a strict, token-verified user matrix that dynamically mutates the sidebar navigation layout, serving restricted administration modules to authorized personnel while maintaining a clean client-facing environment.
+
+- Implemented a highly consistent, atomic inventory deduction algorithm that updates and scales stock volumes automatically per order submission to eliminate over-purchasing bottlenecks.
+
+- Engineered a high-performance discovery pipeline featuring automated New Arrivals and Bestseller flags, coupled with advanced client-side filters (Category, Brand, Price Range) and multi-directional sorting mechanics.
+
+- Built a smart promotional system that automatically distributes welcome incentives to newly registered accounts and validates custom coupon codes securely at the checkout boundary.
+
+- Developed an active transactional tracking lifecycle allowing customers to monitor live order status directly from their panel, backed by a secure 10-day token-expiration security layer that automatically invalidates and flushes dormant user sessions.
+
+- Engineered a time-sensitive server-side guardrail that empowers users with an autonomous, 2-hour post-purchase grace period to safely cancel their delivery before fulfillment processes lock.
+
+- Designed a feature-rich client command center combining persistent product wishlists, active coupon ledgers, real-time profile updates, and encrypted password-rotation mechanisms.
+
+- Created immersive product layout sheets displaying live descriptions, category associations, dynamic star ratings, and community reviews.
+
+- Built a scalable, markdown-compatible blogging ecosystem complete with dedicated content-detail views to drive platform SEO and organic user engagement.
+
+- Implemented strict server-side and client-side route guarding that dynamically shapes the administration dashboard, ensuring operators only see navigation tools and database endpoints matching their exact permission clearance.
 
 ## Protected Routes
 
@@ -56,24 +65,6 @@ A full-stack MERN e-commerce platform featuring Redux state management, Firebase
 - About
 - Contact
 - Cart
-
-## Short Description
-
-- Navbar: switching routing and user information
-- Landing Page: A attractive standard landing page for the e-commerce website. Where customer can see best seller, New arrivals, Featured products, Categories Card, Blogs, Offers, Coupon codes, services
-- Products Page: This page show all products. Here category, brand, price and search filter.
-- Product Details Page: This page show specific product details. Related products also show in the bottom.
-- Customer Authentication: Secure login and registration using Firebase authentication.
-- Order Management: Track and manage orders with detailed status updates.
-- Customer Profile: View and edit profile information with order history.
-- Blog System: Read and interact with blog posts.
-- Blog Details Page: This page show specific blog details. In the bottom show related blog
-- Dashboard Overview: Get insights into sales, orders, add products, add categories add coupon, add admin, add blog.
-- Pagination: It add where many data comes.
-- Products, category, blogs all have a status. If status 1 then only product show. If 0 then product is inactive.
-- Footer have full functional. Footer email address use for promotional massage.
-- Customer profile customer can update info and see his coupon.
-- New member get 10% off coupon if they claim from landing page newsletter and if they already registered then they can claim from their profile. after claim they can not claim again.
 
 ## Setup and Installation
 
