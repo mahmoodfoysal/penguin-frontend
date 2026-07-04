@@ -1,6 +1,6 @@
-# Penguin - A Ecommerce Website
+# Penguin - E-commerce Website
 
-A full-stack MERN e-commerce platform featuring Redux state management, Firebase auth, and a robust admin dashboard.
+Penguin Gear Ltd. is a high-performance e-commerce platform engineered to deliver authentic products at competitive price points. The core architecture focuses on removing common user complexities through smooth, automated workflows and absolute transactional transparency. From user-centric navigation and dynamic filtering to secure payment integration and real-time order tracking, every element is crafted to ensure reliability, scalability, and a seamless buying experience.
 
 ## Live Demo
 
